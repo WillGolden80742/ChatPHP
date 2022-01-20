@@ -25,21 +25,22 @@
 
     $sql = "call messagesWithAttachment('".$userNickName."','".$contactNickName."')";
     $result = mysqli_query($conn, $sql);
-
-    // echo md5($contactNickName);
     
     if (mysqli_num_rows($result) > 0) {
       // output data of each row
+      $message = "";
+      echo '<br>';
       while($row = mysqli_fetch_assoc($result)) {
+        $message= "<h3>".$row["messages"]." ".$row["HourMsg"]."</h3>".$message;  
         if ( strcmp($row["MsgFrom"], $contactNickName) == 0 ) {
-          echo "<h2>From : ".$row["MsgFrom"]."<br>";
+          $message = "From : ".$row["MsgFrom"]."<br>".$message;
         } else {
-          echo "<h2>You : <br>";
+          $message = "You : <br>".$message;
         }
-        echo $row["messages"]." ".$row["HourMsg"]."</h2>";  
       }
+      echo $message;
     } else {
-      echo "<h2> 0 results </h2>";
+      echo "<h3> 0 results </h3>";
     }
 
     mysqli_close($conn);
@@ -49,3 +50,4 @@
 <textarea class="text" name="txtname">
 
 </textarea>
+
