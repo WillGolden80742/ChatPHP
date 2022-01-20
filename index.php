@@ -2,6 +2,14 @@
 <html>
 <head>  
 <style>
+  a {
+    text-decoration:none;
+    color:cornflowerblue;
+  }
+  * {
+
+    font-family: Arial, Helvetica, sans-serif;
+  }
   .messages {
     display: inline-block;
     padding: 0px 10px 10px 10px;
@@ -27,13 +35,6 @@
     border-radius: 10px;
     overflow-y: scroll;
   }  
-  a {
-    text-decoration:none;
-    color:cornflowerblue;
-  }
-  * {
-    font-family: Arial, Helvetica, sans-serif;
-  }
   .text {
     display: inline-block;
     padding: 0px 10px 10px 10px;
@@ -80,40 +81,31 @@
 <body class="container">
 
 <?php
-    require_once 'ConnectionFactory/ConnectionFactory.php';
-    session_start();
-    echo "<h2>".$_SESSION['nickName'];
+    include 'Model/DAO/UsersManager.php';    
+    $user = new UsersManager();
+    echo "<h2>";
+    $userNickName = "";
     if (empty($_SESSION['nickName'])) { 
       echo "<a href='login.php'>Login</a></h2>";
     } else {
+      echo $_SESSION['nickName'];
       echo " <a href='logout.php'>Logout</a></h2>";
-    }
-    $userNickName = $_SESSION['nickName'];
-
-    // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    // Check connection
-    if (!$conn) {
-      die("Connection failed: " . mysqli_connect_error());
+      $userNickName = $_SESSION['nickName'];
     }
 
-    $sql = "call contatos('".$userNickName."')";
-    $result = mysqli_query($conn, $sql);
+    $contacts = $user->contacts($userNickName);
 
-    if (mysqli_num_rows($result) > 0) {
+    if (count($contacts) > 0) {
       // output data of each row
-      echo "<div class='contacts'>";
-      while($row = mysqli_fetch_assoc($result)) { 
-       
-        echo "<a href=\"messages.php?contactNickName=".$row["nickNameContato"]."\"><h2>".$row["nickNameContato"]."</h2></a>";
-
+      echo "<div class='contacts'>"; 
+      foreach ($contacts as $contact)  {
+        echo "<a href=\"messages.php?contactNickName=".$contact."\"><h2>".$contact."</h2></a>";
       }
       echo "</div>";
     } else {
       echo "<h2> 0 results </h2>";
     }
 
-    mysqli_close($conn);
   
 ?>
 
