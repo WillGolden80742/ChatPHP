@@ -33,35 +33,45 @@
             while($row = mysqli_fetch_assoc($result)) { 
                 $contacts[$count++]=$row["nickNameContato"];
             }
-            $this->conFactory->close();
+            $conn->close();
             return $contacts;
         }
 
         function messages ($contactNickName) {
             $conn = $this->conFactory->connect();
-            $sql = "call messagesWithAttachment('".$_SESSION['nickName']."','".$contactNickName."')";
-            $result = $this->conFactory->query($sql);
+            $result = $this->conFactory->query("call messages('".$_SESSION['nickName']."','".$contactNickName."')");
             $messages = array();
             if (mysqli_num_rows($result) > 0) {
               $idMessage = '0';   
               $count=0;
               while($row = mysqli_fetch_assoc($result)) {
                 if (strcmp($row["Idmessage"],$idMessage) !== 0) {
-                    if (strcmp($row["MsgFrom"], $contactNickName) == 0 ) {
-                        $from = "From : ".$row["MsgFrom"];
-                    } else {
-                        $from = "You : ";
-                    } 
-                    $hashArquivo=$row["hashArquivo"];                      
-                    $message = $row["messages"]; 
-                    $hour = $row["HourMsg"];              
+                    if (!empty($row["Messages"])) {
+                        if (strcmp($row["MsgFrom"], $contactNickName) == 0 ) {
+                            $from = "From : ".$row["MsgFrom"];
+                            $left = true;
+                        } else {
+                            $left = false;
+                            $from = "Você : ";
+                        }                      
+                        $message = $row["Messages"]; 
+                        $hour = $row["HourMsg"];  
+                        $messages[$count++] = array($from,$message,$hour,$left); 
+                    }           
                 } 
                 $idMessage = "".$row["Idmessage"];
-                $messages[$count++] = array($from,$hashArquivo,$message,$hour);
               }
             } 
-            $this->conFactory->close();
+            $conn->close();
             return $messages;
+        }
+
+        function createMessage ($msg,$contactNickName) { 
+            $conn = $this->conFactory->connect();
+            $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
+            $conn->close();
+            header("Location: messages.php?contactNickName=".$contactNickName);
+            die(); 
         }
   
     }

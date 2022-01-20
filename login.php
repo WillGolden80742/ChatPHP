@@ -1,8 +1,10 @@
-<form action="login.php" method="post">
-Login: <input type=text name=nick><br>
-Senha: <input type=password name=pass><br>
-<input type=submit value="OK">
+<center><form action="login.php" method="post">
+<h3>Login:</h3><input type=text name=nick><br>
+<h3>Senha: </h3><input type=password name=pass><br>
+<br>
+<input type=submit value="LOGIN">
 </form>
+</center>
 <?php 
     include 'Model/DAO/UsersManager.php';
     $conFactory = new ConnectionFactory();
@@ -11,6 +13,7 @@ Senha: <input type=password name=pass><br>
     $pass = "";
 
     if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
+
         $nick = $_POST["nick"];
         $pass = $_POST["pass"];  
 
@@ -18,7 +21,7 @@ Senha: <input type=password name=pass><br>
             header("Location: index.php");
             die();   
         } else {
-            echo "<h2> Nickname ou senha incorreta </h2>";
+            echo "<center><h3 style=\"color:red;\"> Nickname ou senha incorreta </h3></center>";
         }       
     }       
 ?>

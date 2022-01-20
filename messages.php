@@ -26,14 +26,18 @@
     if (count($messages) > 0) {
       $msgs = "";
       echo '<br>';
-      foreach ($messages as $msg) {         
-          if (empty($msg[1])) {
-            $msgs = "<a href=\"#\">".$msg[1]."</a>".$msgs;   
-          }            
-          $msgs = "<h3>".$msg[2]." ".$msg[2]."<br>".$msg[3]."</h3>".$msgs; 
-          $msgs = $msg[0]."<br>".$msgs;     
+      foreach ($messages as $msg) { 
+        if ($msg[3]) {
+          
+          $float = 'right';
+        } else {
+          $float = 'left';
+        } 
+        echo "<div class=\"msg\" style=\"margin-".$float.":50%;\">";
+        echo $msg[0]."<br>";                  
+        echo "<p>".$msg[1]."<br><span style=\"float:right;\">".$msg[2]."</span>";    
+        echo "</div>";    
       }
-      echo $msgs;
     } else {
       echo "<h3> 0 results </h3>";
     }
@@ -41,7 +45,8 @@
 
 ?>
 </div>
-<textarea class="text" name="txtname">
 
-</textarea>
+<?php 
+  echo "<form action=\"new.php\" method=\"post\"> <textarea id=\"text\" class=\"text\" onkeyup=\"typing()\" name=messageText> </textarea> <input type=\"hidden\" name=\"contactNickName\" value=".$contactNickName."> <input class=\"send\" type=submit value=\">\" > </form>"
+?>
 

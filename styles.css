@@ -1,0 +1,102 @@
+  a {
+    text-decoration:none;
+    color:#44bd3d;
+  }
+  * {
+   font-family: Arial, Helvetica, sans-serif;
+  }
+  .msg {
+    border: 3px solid #077d00; 
+    border-top-left-radius:10px; 
+    padding:10px;
+    max-width:450px;
+    border-bottom-right-radius:10px;  
+    margin:10px;
+  }
+  .messages {
+    display: inline-block;
+    padding: 0px 10px 10px 10px;
+    margin: 5px;
+    position:absolute;
+    top:0px;
+    left:29%;
+    width:67%;
+    height:75%;
+    border-radius: 10px;
+    overflow-y: scroll;
+  }
+  .contacts {
+    padding: 0px 10px 10px 10px;
+    margin: 5px;
+    position:absolute;
+    top:40px;
+    left:0px;
+    width:25%;
+    height:84%;
+    border-radius: 10px;
+    overflow-y: scroll;
+  }  
+  .text {
+    display: inline-block;
+    padding: 0px 10px 10px 10px;
+    background: none;
+    border-top-left-radius:10px; 
+    border-bottom-right-radius:10px;     
+    margin: 5px;
+    position:absolute;
+    top:80%;
+    left:29%;
+    width:61%;
+    height:15%;
+  }
+  textarea { 
+      font-size: 18px; 
+  }
+  
+  .send {
+    position:absolute; 
+    background: none;
+    background: none;
+    border: none;  
+    text-transform: uppercase;    
+    margin-left:0px; 
+    border-radius: 10px;  
+    padding:10px;   
+    width:7%;      
+    top:81%;
+    left:92%;
+  }
+  .contacts, .messages, .text, .send {
+    border: 3px solid #077d00;
+  }
+
+  ::-webkit-scrollbar {
+
+    width:7px;
+    border-radius:10px;
+
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+
+    background:#077d00;
+
+  }   
+
+  ::-webkit-scrollbar-thumb {
+
+    background:white;
+    border-radius:10px;
+    border:solid 1px rgba(0,0,0,0.25);
+
+
+  }
+
+  ::-webkit-scrollbar-track {
+
+    border-radius:10px;
+    box-shadow:inset 0px 0px 5px rgba(0,0,0,0.25);
+
+  }
+
+  
