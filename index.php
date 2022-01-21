@@ -36,13 +36,14 @@
       // output data of each row
       echo "<div class='contacts'>"; 
       foreach ($contacts as $contact)  {
-        echo "<a href=\"messages.php?contactNickName=".$contact."\"><h2 ";
+        echo "<a href=\"messages.php?contactNickName=".$contact."\">";
+        echo "<h2 ";
         if (!empty($_GET['contactNickName'])){
           if (!strcmp($_GET['contactNickName'],$contact)){
             echo "style=\"color:white; background-color: #285d33;\"";
           }
         }
-        echo " >".$contact."</h2></a>";
+        echo " >".$user ->downloadProfilePic($contact)."&nbsp&nbsp".$contact."</h2></a>";
       }
       echo "</div>";
     } else {

@@ -8,6 +8,7 @@
   }
 
   .msg {
+    background:#6c62ff1f;
     border-top-left-radius:10px; 
     padding:10px;
     max-width:450px;
@@ -35,19 +36,26 @@
     height:87%;
     border-radius: 10px;
     overflow-y: scroll;
-
   } 
+
+  .contacts a h2 img {
+    border-radius:100px;
+    height:40px;
+    width:40px;
+  }
+
   .contacts a h2 {
+    font-size: 14px;
     min-width:100px;
     margin: 0;
-    padding:10px;
+    padding:15px;
+    align-items: center;
+    display: flex;
   }
   .contacts a h2:hover, .contacts a h2:active {
-    color:white;
     background-color: #285d33 ;
   }
   
-
   .text {
     display: inline-block;
     padding: 0px 10px 10px 10px;

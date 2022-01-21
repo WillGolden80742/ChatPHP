@@ -67,6 +67,20 @@
             return $messages;
         }
 
+        function downloadProfilePic ($contactNickName) {
+            $conn = $this->conFactory->connect();
+            $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
+            if (mysqli_num_rows($result) > 0) {
+                while($row = mysqli_fetch_assoc($result)) {
+                    $pic = "<img src=\"data:image/jpeg;base64," . base64_encode($row["picture"]) ."\" class=\"picContact\"></img>";
+                }
+            } else {
+                $pic = "<img src=\"Images/profilePic.png\" class=\"picContact\"></img>";
+            }
+            $conn->close();
+            return $pic;
+        }
+
         function createMessage ($msg,$contactNickName) { 
             $conn = $this->conFactory->connect();
             $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
