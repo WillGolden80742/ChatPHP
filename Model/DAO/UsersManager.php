@@ -76,6 +76,9 @@
         }
 
         function deleteMessage ($id,$contactNickName) { 
+            $conn = $this->conFactory->connect();
+            $this->conFactory->query("call deleteMessage(".$id.",'".$_SESSION['nickName']."')");
+            $conn->close();
             header("Location: messages.php?contactNickName=".$contactNickName);
             die(); 
         }

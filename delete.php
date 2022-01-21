@@ -1,5 +1,5 @@
 <?php 
     include 'Model/DAO/UsersManager.php';  
     $message = new UsersManager();
-    echo $_GET['id'];
+    $message->deleteMessage($_GET['id'],$_GET['contactNickName']);
 ?>

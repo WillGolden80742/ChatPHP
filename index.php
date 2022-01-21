@@ -9,7 +9,12 @@
         document.getElementById("text").disabled = false;
       }
     }
-  </script>  
+  </script> 
+  <style>
+    body {
+      background:#6c62ff1f;
+    }
+  </style> 
 </head>    
 <body class="container">
 

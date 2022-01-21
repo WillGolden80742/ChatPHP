@@ -23,6 +23,10 @@
       color:white;
       margin-left:-42px;
     }
+    .msg {
+      color: white;
+      font-weight: bold;
+    }
   </style>  
 <head>   
   <title><?php echo $contactNickName; ?></title>
@@ -49,11 +53,11 @@
           $delete = "30%";
         }        
         echo "<div class='delete' style=\"color:white;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";\">●●●";  
-        echo "<a href=\"delete.php?id=".$msg[3]."\" style=\"background-color:".$color."\"><b>Deletar</b></a>";
+        echo "<a href=\"delete.php?id=".$msg[3]."&contactNickName=".$_GET['contactNickName']."\" style=\"background-color:".$color."\"><b>Deletar</b></a>";
         echo "</div><br>";
         echo "<div class=\"msg\" style=\"background-color:".$color.";margin-".$margin.":50%;\">";
         echo $msg[0];                  
-        echo "<p>".$msg[1]."<br><span style=\"float:right;\">".$msg[2]."</span>";    
+        echo "<p>".$msg[1]."<br><span style=\"float:right;\">".$msg[2]."</span></p>";    
         echo "</div>";    
       }
     } else {
