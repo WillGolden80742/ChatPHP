@@ -48,11 +48,11 @@
                 if (strcmp($row["Idmessage"],$idMessage) !== 0) {
                     if (!empty($row["Messages"])) {
                         if (strcmp($row["MsgFrom"], $contactNickName) == 0 ) {
-                            $from = "From : ".$row["MsgFrom"];
+                            $from = "From : @".$row["MsgFrom"];
                             $left = true;
                         } else {
                             $left = false;
-                            $from = "Você : ";
+                            $from = "You : ";
                         }                      
                         $message = $row["Messages"]; 
                         $hour = $row["HourMsg"];  

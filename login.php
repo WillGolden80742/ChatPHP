@@ -1,28 +1,36 @@
-<center><form action="login.php" method="post">
-<h3>Login:</h3><input type=text name=nick><br>
-<h3>Senha: </h3><input type=password name=pass><br>
+<?php include 'index.php' ?>
+<html>
+<head>  
+</head>    
+<body class="container">
+<div class="login">
+<center>
+<img src="Images/chat.png" />    
+<form action="login.php" method="post">
 <br>
-<input type=submit value="LOGIN">
+<input class="inputNick"  placeholder="Nick Name" type=text name=nick><br>
+<br><input class="inputPassword" placeholder="Password"  type=password name=pass><br>
+<br>
+<input class="inputSubmit" type=submit value="LOGIN">  
 </form>
-</center>
+</center>   
+</div>
 <?php 
-    include 'Model/DAO/UsersManager.php';
     $conFactory = new ConnectionFactory();
     $user = new UsersManager();
     $nick = "";
     $pass = "";
-
     if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
-
+        $_POST['nick'] = preg_replace('/[^[:alpha:]_]/','',$_POST['nick']);
         $nick = $_POST["nick"];
         $pass = $_POST["pass"];  
-
         if ($user->login($nick,$pass)) {  
             header("Location: index.php");
             die();   
         } else {
-            echo "<center><h3 style=\"color:red;\"> Nickname ou senha incorreta </h3></center>";
-        }       
+            echo "<center><h3 style=\"color:red;\"> nickname ou senha incorreta </h3></center>";
+        }      
     }       
 ?>
-
+</body>
+</html>

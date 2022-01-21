@@ -1,6 +1,6 @@
 <DOCTYPE html>
 <html>
-<head>  
+<head>
 <link rel="stylesheet" href="styles.css">
   <script> 
     function typing (){
@@ -24,12 +24,14 @@
     echo "<h2>";
     $userNickName = "";
     if (empty($_SESSION['nickName'])) { 
-      echo "<a href='login.php'>Login</a></h2>";
+      echo "<a href='login.php'>Login</a> <a>|</a> <a href='singup.php'>Sing Up</a>";
     } else {
       echo " <a href='logout.php' >⇤ </a>";
-      echo $_SESSION['nickName']."</h2>";
+      echo "@".$_SESSION['nickName'];
+      echo "  <a href=\"\">•••</a>";
       $userNickName = $_SESSION['nickName'];
     }
+    echo "</h2>";
 
     $contacts = $user->contacts($userNickName);
     if (count($contacts) > 0) {
@@ -43,15 +45,12 @@
             echo "style=\"color:white; background-color: #285d33;\"";
           }
         }
-        echo " >".$user ->downloadProfilePic($contact)."&nbsp&nbsp".$contact."</h2></a>";
+        echo " >".$user ->downloadProfilePic($contact)."&nbsp&nbsp@".$contact."</h2></a>";
       }
       echo "</div>";
-    } else {
-      echo "<h2> 0 results </h2>";
     }
-
   
-?>
+?>   
 
 </body>
 </html>

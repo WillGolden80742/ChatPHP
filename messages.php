@@ -61,7 +61,7 @@
         echo "</div>";    
       }
     } else {
-      echo "<h3> 0 results </h3>";
+      echo "<h3><center>Nenhuma mensagem até o momento </center></h3>";
     }
 
 
@@ -69,6 +69,6 @@
 </div>
 
 <?php 
-  echo "<form action=\"new.php\" method=\"post\"> <textarea id=\"text\" class=\"text\" onkeyup=\"typing()\" name=messageText> </textarea> <input type=\"hidden\" name=\"contactNickName\" value=".$contactNickName."> <input class=\"send\" type=submit value=\">\" > </form>"
+  echo "<form action=\"new.php\" method=\"post\"> <textarea id=\"text\" class=\"text\" onkeyup=\"typing()\" name=messageText> </textarea> <input type=\"hidden\" name=\"contactNickName\" value=".$contactNickName."> <input class=\"send\" type=submit value=\"\"> </form>"
 ?>
 
