@@ -56,7 +56,8 @@
                         }                      
                         $message = $row["Messages"]; 
                         $hour = $row["HourMsg"];  
-                        $messages[$count++] = array($from,$message,$hour,$left); 
+                        $id = $row["Idmessage"];
+                        $messages[$count++] = array($from,$message,$hour,$id,$left); 
                     }           
                 } 
                 $idMessage = "".$row["Idmessage"];
@@ -70,6 +71,11 @@
             $conn = $this->conFactory->connect();
             $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
             $conn->close();
+            header("Location: messages.php?contactNickName=".$contactNickName);
+            die(); 
+        }
+
+        function deleteMessage ($id,$contactNickName) { 
             header("Location: messages.php?contactNickName=".$contactNickName);
             die(); 
         }

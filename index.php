@@ -9,7 +9,7 @@
         document.getElementById("text").disabled = false;
       }
     }
-  </script>
+  </script>  
 </head>    
 <body class="container">
 
@@ -21,18 +21,23 @@
     if (empty($_SESSION['nickName'])) { 
       echo "<a href='login.php'>Login</a></h2>";
     } else {
-      echo $_SESSION['nickName'];
-      echo " <a href='logout.php' ><</a></h2>";
+      echo " <a href='logout.php' >⇤ </a>";
+      echo $_SESSION['nickName']."</h2>";
       $userNickName = $_SESSION['nickName'];
     }
 
     $contacts = $user->contacts($userNickName);
-
     if (count($contacts) > 0) {
       // output data of each row
       echo "<div class='contacts'>"; 
       foreach ($contacts as $contact)  {
-        echo "<a href=\"messages.php?contactNickName=".$contact."\"><h2>".$contact."</h2></a>";
+        echo "<a href=\"messages.php?contactNickName=".$contact."\"><h2 ";
+        if (!empty($_GET['contactNickName'])){
+          if (!strcmp($_GET['contactNickName'],$contact)){
+            echo "style=\"color:white; background-color: #285d33;\"";
+          }
+        }
+        echo " >".$contact."</h2></a>";
       }
       echo "</div>";
     } else {

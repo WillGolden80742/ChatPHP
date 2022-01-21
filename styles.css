@@ -1,12 +1,11 @@
   a {
     text-decoration:none;
-    color:#44bd3d;
+    color:#285d33;
   }
   * {
    font-family: Arial, Helvetica, sans-serif;
   }
   .msg {
-    border: 3px solid #077d00; 
     border-top-left-radius:10px; 
     padding:10px;
     max-width:450px;
@@ -26,16 +25,27 @@
     overflow-y: scroll;
   }
   .contacts {
-    padding: 0px 10px 10px 10px;
     margin: 5px;
     position:absolute;
     top:40px;
     left:0px;
-    width:25%;
-    height:84%;
+    width:27%;
+    height:87%;
     border-radius: 10px;
     overflow-y: scroll;
-  }  
+
+  } 
+  .contacts a h2 {
+    min-width:100px;
+    margin: 0;
+    padding:10px;
+  }
+  .contacts a h2:hover, .contacts a h2:active {
+    color:white;
+    background-color: #285d33 ;
+  }
+  
+
   .text {
     display: inline-block;
     padding: 0px 10px 10px 10px;
@@ -66,8 +76,9 @@
     top:81%;
     left:92%;
   }
-  .contacts, .messages, .text, .send {
-    border: 3px solid #077d00;
+
+  .contacts, .messages, .text, .send, .msg{
+    border: 3px solid #293528;
   }
 
   ::-webkit-scrollbar {
@@ -79,7 +90,7 @@
 
   ::-webkit-scrollbar-thumb:hover {
 
-    background:#077d00;
+    background:#285d33;
 
   }   
 
