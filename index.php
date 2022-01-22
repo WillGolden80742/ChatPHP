@@ -13,7 +13,6 @@
 <?php
     include 'Model/DAO/UsersManager.php';    
     $user = new UsersManager();
-    
     echo "<div  class=\"header\"><h2>";
     $userNickName = "";
     if (empty($_SESSION['nickName'])) { 
@@ -44,6 +43,7 @@
       }
 
     } else {
+      $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
       $contacts = $user->searchContact($_POST["search"]);
       echo "<div class='contacts'>";
       if (count($contacts) > 0) {
