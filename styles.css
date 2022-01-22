@@ -7,10 +7,6 @@
  
   }
 
-  body {
-    background:#ffae621f;
-  }
-
   .msg {
     background:#6c62ff1f;
     border-top-left-radius:10px; 
@@ -145,8 +141,6 @@
     left:7px;
     width:27.5%;
     border: none;
-    align-items: center;
-    padding-left:40px;
     background-repeat: no-repeat;
     background-position-y:5px;
     background-position-x:12px;
@@ -155,7 +149,7 @@
     font-weight: bolder;
     background-image: url("Images/search.png");
     background-repeat: no-repeat;
-    background-color:#6c62ff;
+    background-color:#285d33;
   }
 
 
@@ -169,7 +163,7 @@
     background-position-y:5px;
     background-position-x:12px;
     border-radius:20px;
-    border:solid 2px grey;
+    border:solid 2px #285d33;
     font-weight: bolder;
   }
 
@@ -192,7 +186,7 @@
   }
 
   .inputSubmit:hover {
-    background: grey;
+    background:#285d33;
   }
 
   .singUp {
@@ -203,7 +197,7 @@
   }
 
   .contacts, .messages, .text, .send, .msg{
-      border: 3px solid #293528;
+      border: 3px solid #285d33;
   }
 
   ::-webkit-scrollbar {
@@ -227,6 +221,11 @@
     border-radius:10px;
     box-shadow:inset 0px 0px 5px rgba(0,0,0,0.25);
 
+  }
+
+  ::-webkit-input-placeholder{
+    color: #285d33;
+    font-weight: bold;
   }
 
 

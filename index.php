@@ -2,19 +2,9 @@
 <html>
 <head>
 <link rel="stylesheet" href="styles.css">
-  <script> 
-    function typing () {
-      var sizeSendMsg = document.getElementById("search").value.length;
-      if (sizeSendMsg > 0) {
-        document.getElementById("style").innerHTML+=".search {background-color:#6c62ff1f;}";
-      } else {
-        document.getElementById("style").innerHTML+=".search {background-color:rgba(0,0,0,0);}";
-      }
-    }   
-  </script> 
   <style id="style">
     body {
-      background:#6c62ff1f;
+      background:#002e001f;
     }
   </style> 
 </head>    
@@ -31,7 +21,7 @@
     } else {
       echo "<a href='logout.php' >⇤ </a>";
       echo "<span >@".$_SESSION['nickName']."</span><a href=\"\"> •••</a></h2>";
-      echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" id=\"search\" onkeyup=\"typing();\" type=text name=search></form>";
+      echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" type=text name=search></form>";
       $userNickName = $_SESSION['nickName'];
     }
     echo "</div>";
