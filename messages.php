@@ -61,7 +61,7 @@
         echo "</div>";    
       }
     } else {
-      echo "<h3><center>Nenhuma de @".$contactNickName." mensagem até o momento </center></h3>";
+      echo "<h3><center>Nenhuma mensagem de @".$contactNickName." até o momento </center></h3>";
     }
 
 
