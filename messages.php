@@ -52,7 +52,7 @@
           $float = "right";
           $delete = "30%";
         }        
-        echo "<div class='delete' style=\"color:white;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";\">●●●";  
+        echo "<div class='delete' style=\"color:grey;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";\">●●●";  
         echo "<a href=\"delete.php?id=".$msg[3]."&contactNickName=".$_GET['contactNickName']."\" style=\"background-color:".$color."\"><b>Deletar</b></a>";
         echo "</div><br>";
         echo "<div class=\"msg\" style=\"background-color:".$color.";margin-".$margin.":50%;\">";

@@ -103,7 +103,7 @@
   }
 
   .send:hover {
-    background-color:#293528;
+    background-color:#285d33;
   }
 
   .login {
@@ -195,8 +195,12 @@
     padding-top:5px; 
   }
 
-  .contacts, .messages, .text, .send, .msg{
+  .contacts, .messages, .text, .msg{
       border: 3px solid #285d33;
+  }
+
+  .send {
+    border: 3px solid rgba(0,0,0,0);
   }
 
   ::-webkit-scrollbar {
