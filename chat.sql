@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 05/01/2022 às 16:42
+-- Tempo de geração: 22/01/2022 às 20:18
 -- Versão do servidor: 10.4.22-MariaDB
 -- Versão do PHP: 7.4.27
 
@@ -34,16 +34,20 @@ SELECT COUNT(Idmessage) AS contMSg FROM messages WHERE messages.MsgFrom = contac
 CREATE DEFINER=`root`@`localhost` PROCEDURE `countAnexos` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL
 SELECT count(messages.Idmessage) AS countAnexos From messages INNER JOIN anexo on anexo.mensagem = messages.Idmessage WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteMessage` (IN `idMsg` INT(20), IN `nickName` VARCHAR(20))  DELETE FROM messages WHERE messages.Idmessage = idMsg and messages.MsgFrom = nickName$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `firstMessageWithAttachment` (IN `nickName` VARCHAR(20))  NO SQL
 SELECT messages.Idmessage,messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg FROM messages WHERE messages.MsgTo = nickName AND messages.received = 0 ORDER BY dataOrd DESC LIMIT 0,1$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL
-SELECT *, DATE_FORMAT(messages.date, '%H:%i') as HourMsg From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName ORDER BY DATE_FORMAT(messages.date, '%d/%m/%Y %H:%i:%s') ASC$$
+SELECT *, DATE_FORMAT(messages.date, '%H:%i') as HourMsg From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName ORDER BY DATE_FORMAT(messages.date, '%Y/%m/%d %H:%i:%s') ASC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `messagesWithAttachment` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL
 SELECT messages.Idmessage, "" as messages ,messages.MsgFrom,"",messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, anexo.nome AS NomeArquivo, arquivos.nomeHash AS hashArquivo From messages INNER JOIN anexo on anexo.mensagem = messages.Idmessage INNER JOIN arquivos ON arquivos.nomeHash = anexo.arquivo WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName
 UNION
 SELECT messages.Idmessage, messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, "" AS NomeArquivo, "" AS hashArquivo From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName AND messages.Messages != "" OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName AND messages.Messages != "" ORDER BY dataOrd DESC LIMIT 0,15$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))  SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%")$$
 
 DELIMITER ;
 
@@ -70,6 +74,10 @@ CREATE TABLE `arquivos` (
   `nomeHash` varchar(300) NOT NULL,
   `arquivo` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Despejando dados para a tabela `arquivos`
+--
 
 -- --------------------------------------------------------
 
@@ -101,6 +109,7 @@ INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
 ('pco', 'pco_cooperative', '24ebaad6df398839d63f29cb7eb3b971'),
 ('Pepe BluePill', 'pepe_bluepill', 'd9002957b34ebefa020cca178bd46739'),
 ('Rafael', 'rafa77', 'cbcc887b198ad392cd9f60027f27e37a'),
+('William Dourado', 'willCruz', '447b723176f669919c5f6f13f119eccc'),
 ('Уильям Голден', 'willGolden', '69013773d31191dcc17bf195f73ef2e6'),
 ('wololo', 'wololo', '89b44b8b1515dd349cce0b300029c054');
 
@@ -125,7 +134,6 @@ CREATE TABLE `messages` (
 
 INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `received`) VALUES
 (9, 'E ai bl? Cara', 'ally77', 'willGolden', '2021-03-06 22:48:24', 1),
-(10, 'Blz sim', 'willGolden', 'ally77', '2021-03-06 22:48:24', 1),
 (11, 'E ai blz cara?', 'marlon77', 'willGolden', '2021-03-07 22:48:24', 1),
 (12, 'blz sim mano ', 'willGolden', 'marlon77', '2021-03-07 22:48:24', 1),
 (13, 'E ai mano, blz?', 'rafa77', 'willGolden', '2021-03-08 22:48:24', 1),
@@ -137,7 +145,6 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (24, 'E ai Marlon? ', 'willGolden', 'marlon77', '2021-03-10 21:16:40', 1),
 (25, 'E ai Ally. Blz? ', 'willGolden', 'ally77', '2021-03-10 21:20:09', 1),
 (26, 'E ai Will. Blz?', 'ally77', 'willGolden', '2021-03-10 21:27:36', 1),
-(27, 'blz mano', 'willGolden', 'ally77', '2021-03-10 21:40:20', 1),
 (28, 'maravilha entao ', 'ally77', 'willGolden', '2021-03-10 21:40:29', 1),
 (29, 'E ai ', 'willGolden', 'ally77', '2021-03-10 21:42:18', 1),
 (30, 'To bem mano. E vc?', 'marlon77', 'willGolden', '2021-03-11 02:58:31', 1),
@@ -156,43 +163,43 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (243, 'E ai Will\r\n', 'rafa77', 'willGolden', '2021-03-30 14:37:11', 1),
 (245, 'Olá', 'juhMonique', 'willGolden', '2021-03-30 14:41:48', 1),
 (246, 'E ai ', 'LoboDaEstepe', 'willGolden', '2021-03-30 14:41:48', 1),
-(371, 'Como está?\r\n', 'willGolden', 'mayumi_Sato', '2021-04-02 02:23:19', 1),
 (378, 'Se você não gosta do wolverine, eu sugiro que', 'willGolden', 'logan77', '2021-04-02 14:13:53', 1),
 (417, 'Bom dia\r\n', 'hong_kong77', 'willGolden', '2021-04-03 12:15:28', 1),
 (431, 'Olá\r\n', 'hong_kong77', 'rafa77', '2021-04-03 13:29:07', 1),
 (433, 'Olá, camarada\r\n', 'gvmmo', 'willGolden', '2021-04-03 20:38:43', 1),
 (628, 'Como vai?\r\n', 'rafa77', 'hong_kong77', '2021-04-06 00:15:41', 1),
 (943, 'Tudo bem?\r\n', 'willGolden', 'gvmmo', '2021-04-09 22:15:42', 1),
-(947, '', 'willGolden', 'gvmmo', '2021-04-09 22:23:57', 1),
-(949, '', 'gvmmo', 'willGolden', '2021-04-09 22:31:35', 1),
-(970, '', 'hong_kong77', 'willGolden', '2021-04-09 23:01:11', 1),
-(980, '', 'hong_kong77', 'willGolden', '2021-04-09 23:25:19', 1),
 (981, 'ola\r\n', 'willGolden', 'hong_kong77', '2021-04-09 23:25:37', 1),
-(982, '', 'gvmmo', 'willGolden', '2021-04-09 23:27:20', 1),
 (983, 'Como vai?\r\n', 'gvmmo', 'hong_kong77', '2021-04-09 23:49:50', 1),
 (994, 'Tudo certo por aqui\r\n', 'willGolden', 'gvmmo', '2021-04-10 11:45:53', 1),
-(995, '', 'gvmmo', 'willGolden', '2021-04-10 11:47:12', 1),
-(997, '', 'willGolden', 'gvmmo', '2021-04-10 12:38:59', 1),
-(998, '', 'willGolden', 'gvmmo', '2021-04-10 12:39:52', 1),
-(999, '', 'willGolden', 'gvmmo', '2021-04-10 14:30:25', 1),
 (1001, 'Ola\r\n', 'willGolden', 'gvmmo', '2021-04-10 15:28:09', 1),
-(1024, '', 'willGolden', 'gvmmo', '2021-04-10 20:25:49', 1),
-(1027, '', 'willGolden', 'gvmmo', '2021-04-10 20:32:00', 1),
 (1031, 'Como vai?\r\n', 'pco_cooperative', 'willGolden', '2021-04-11 13:19:39', 1),
 (1034, 'E ai?\r\n', 'willGolden', 'rafa77', '2021-04-11 15:38:14', 1),
 (1035, 'Tudo bem?\r\n', 'willGolden', 'rafa77', '2021-04-11 15:38:57', 1),
 (1036, 'Como vai?\r\n', 'willGolden', 'rafa77', '2021-04-11 15:44:29', 1),
-(1037, '', 'willGolden', 'rafa77', '2021-04-11 19:35:52', 1),
-(1038, '', 'willGolden', 'rafa77', '2021-04-11 20:09:59', 1),
-(1039, '', 'willGolden', 'rafa77', '2021-04-11 20:15:39', 1),
 (1043, 'Olá\r\n', 'wololo', 'rafa77', '2021-04-16 23:02:37', 1),
-(1044, '', 'willGolden', 'mayumi_Sato', '2021-04-17 17:16:10', 1),
 (1188, 'Olá\r\n', 'willGolden', 'mayumi_Sato', '2021-04-18 19:49:44', 1),
-(1190, 'Olá\r\n', 'willGolden', 'mayumi_Sato', '2021-04-18 19:51:39', 1),
 (1218, 'Como vai\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:42:34', 1),
 (1219, 'Olá\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:42:46', 1),
 (1221, 'Houve erro?\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:43:21', 1),
-(1222, 'Engraçado\r\n', 'gvmmo', 'hong_kong77', '2021-04-18 20:43:36', 1);
+(1225, 'E ai ', 'based_Pepe', 'marlon77', '2022-01-19 16:36:20', 0),
+(1226, ' E ai gay', 'willGolden', 'gvmmo', '2022-01-20 16:38:23', 1),
+(1227, ' Tudo bem?\r\n', 'willGolden', 'gvmmo', '2022-01-20 16:40:15', 1),
+(1228, ' Tudo sim\r\n', 'gvmmo', 'willGolden', '2022-01-20 16:59:06', 1),
+(1229, ' Tudo bem', 'willGolden', 'gvmmo', '2022-01-20 17:21:24', 1),
+(1230, ' Eai. Como tá?', 'willGolden', 'ally77', '2022-01-20 17:21:38', 1),
+(1236, ' O que é isso? KKK\r\n', 'willGolden', 'ally77', '2022-01-20 18:10:31', 1),
+(1239, 'E ai', 'willGolden', 'ally77', '2022-01-20 18:32:44', 1),
+(1240, 'Muito bom', 'willGolden', 'ally77', '2022-01-20 18:37:58', 1),
+(1258, ' 🤩😘', 'willGolden', 'ally77', '2022-01-21 16:36:20', 1),
+(1260, ' Fala comigo', 'willGolden', 'mayumi_Sato', '2022-01-21 16:53:41', 1),
+(1262, ' Tudo bem?\r\n', 'willGolden', 'LoboDaEstepe', '2022-01-21 20:18:10', 0),
+(1263, ' Wololo ', 'willGolden', 'pco_cooperative', '2022-01-21 20:25:46', 0),
+(1264, ' Oi gvmmo', 'willGolden', 'gvmmo', '2022-01-22 02:34:42', 0),
+(1265, ' Oi hihi ', 'willCruz', 'gvmmo', '2022-01-22 13:59:50', 0),
+(1266, ' E ai\r\n', 'willGolden', 'willCruz', '2022-01-22 16:07:26', 0),
+(1269, ' E ai ?\r\n', 'willGolden', 'willGolden', '2022-01-22 16:16:10', 0),
+(1270, ' Ha haha \r\n', 'willGolden', 'willGolden', '2022-01-22 16:16:31', 0);
 
 -- --------------------------------------------------------
 
@@ -206,45 +213,88 @@ CREATE TABLE `profilepicture` (
   `format` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Despejando dados para a tabela `profilepicture`
+--
 
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices de tabela `anexo`
+--
 ALTER TABLE `anexo`
   ADD PRIMARY KEY (`anexoId`),
   ADD KEY `arquivoAnexado` (`arquivo`),
   ADD KEY `mensagemAnexada` (`mensagem`);
 
+--
+-- Índices de tabela `arquivos`
+--
 ALTER TABLE `arquivos`
   ADD PRIMARY KEY (`nomeHash`);
 
+--
+-- Índices de tabela `clientes`
+--
 ALTER TABLE `clientes`
   ADD PRIMARY KEY (`nickName`);
 
+--
+-- Índices de tabela `messages`
+--
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`Idmessage`) USING BTREE,
   ADD KEY `msgToCliente` (`MsgTo`),
   ADD KEY `msgFromCliente` (`MsgFrom`),
   ADD KEY `Idmessage` (`Idmessage`);
 
+--
+-- Índices de tabela `profilepicture`
+--
 ALTER TABLE `profilepicture`
   ADD KEY `clienteId` (`clienteId`);
 
+--
+-- AUTO_INCREMENT para tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `anexo`
+--
 ALTER TABLE `anexo`
-  MODIFY `anexoId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=343;
+  MODIFY `anexoId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=345;
 
+--
+-- AUTO_INCREMENT de tabela `messages`
+--
 ALTER TABLE `messages`
-  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1223;
+  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1271;
 
+--
+-- Restrições para tabelas despejadas
+--
+
+--
+-- Restrições para tabelas `anexo`
+--
 ALTER TABLE `anexo`
   ADD CONSTRAINT `arquivoAnexado` FOREIGN KEY (`arquivo`) REFERENCES `arquivos` (`nomeHash`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `mensagemAnexada` FOREIGN KEY (`mensagem`) REFERENCES `messages` (`Idmessage`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Restrições para tabelas `messages`
+--
 ALTER TABLE `messages`
   ADD CONSTRAINT `msgFromCliente` FOREIGN KEY (`MsgFrom`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `msgToCliente` FOREIGN KEY (`MsgTo`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Restrições para tabelas `profilepicture`
+--
 ALTER TABLE `profilepicture`
   ADD CONSTRAINT `clienteId` FOREIGN KEY (`clienteId`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
