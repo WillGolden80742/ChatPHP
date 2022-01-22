@@ -16,11 +16,36 @@
             $this->conFactory->close();
             if (mysqli_num_rows($result) > 0) {
                 $_SESSION['nickName'] = $nick;
+                header("Location: index.php");
+                die();   
+            } else {
+                echo "<center><h3 style=\"color:red;\"> nickname ou senha incorreta </h3></center>";
+            }
+        }
+
+        function singUp ($name,$nick,$pass) { 
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".md5($nick.$pass)."')")) {
+                $this->login($nick,$pass);
+            } 
+        }        
+
+        function checkNick ($nick) {
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."'");  
+            $this->conFactory->close();
+            if (mysqli_num_rows($result) > 0) {
                 return true;
             } else {
                 return false;
             }
-        }
+        }       
 
         function contacts ($nick) {
             $conn = $this->conFactory->connect();
@@ -31,14 +56,33 @@
             $count=0;
             $contacts = array();
             while($row = mysqli_fetch_assoc($result)) { 
-                $contacts[$count++]=$row["nickNameContato"];
+                $contacts[$count++]=array($row["Contato"],$row["nickNameContato"]);
             }
             $conn->close();
             return $contacts;
         }
 
+        function searchContact ($nick) {
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $result =  $this->conFactory->query("call searchContato('".$nick."')");
+            $count=0;
+            $contacts = array();
+            while($row = mysqli_fetch_assoc($result)) { 
+                $contacts[$count++]=array($row["Contato"],$row["nickNameContato"]);
+            }
+            $conn->close();
+            return $contacts;
+        }
+       
+
         function messages ($contactNickName) {
             $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
             $result = $this->conFactory->query("call messages('".$_SESSION['nickName']."','".$contactNickName."')");
             $messages = array();
             if (mysqli_num_rows($result) > 0) {
@@ -69,6 +113,9 @@
 
         function downloadProfilePic ($contactNickName) {
             $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
             $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
@@ -83,6 +130,9 @@
 
         function createMessage ($msg,$contactNickName) { 
             $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
             $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
             $conn->close();
             header("Location: messages.php?contactNickName=".$contactNickName);
@@ -91,6 +141,9 @@
 
         function deleteMessage ($id,$contactNickName) { 
             $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
             $this->conFactory->query("call deleteMessage(".$id.",'".$_SESSION['nickName']."')");
             $conn->close();
             header("Location: messages.php?contactNickName=".$contactNickName);
