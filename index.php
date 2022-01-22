@@ -41,7 +41,6 @@
         }
         echo "</div>"; 
       }
-
     } else {
       $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
       $contacts = $user->searchContact($_POST["search"]);
@@ -58,7 +57,6 @@
           }
           echo " >".$user ->downloadProfilePic($contact[1])."&nbsp&nbsp".$contact[0]."</h2></a>";
         }
-
       }     
       echo "</div>"; 
     }

@@ -7,8 +7,7 @@
             $this->conFactory = new ConnectionFactory();
         }
         
-        function login ($nick,$pass) {
-            
+        function login ($nick,$pass) {    
             $conn = $this->conFactory->connect();
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
@@ -130,14 +129,19 @@
         }
 
         function createMessage ($msg,$contactNickName) { 
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
+            if (!empty($_SESSION['nickName'])) {
+                $conn = $this->conFactory->connect();
+                if (!$conn) {
+                    die("Connection failed: " . mysqli_connect_error());
+                }
+                $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
+                $conn->close();
+                header("Location: messages.php?contactNickName=".$contactNickName);
+                die(); 
+            } else {
+                header("Location: login.php");
+                die(); 
             }
-            $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
-            $conn->close();
-            header("Location: messages.php?contactNickName=".$contactNickName);
-            die(); 
         }
 
         function deleteMessage ($id,$contactNickName) { 
