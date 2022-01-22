@@ -35,10 +35,10 @@
       $userNickName = $_SESSION['nickName'];
     }
     echo "</div>";
-    echo "<div class='contacts'>";
     if (empty($_POST["search"])) {
       $contacts = $user->contacts($userNickName);
       if (count($contacts) > 0) {
+        echo "<div class='contacts'>";
         // output data of each row
         foreach ($contacts as $contact)  {
           echo "<a href=\"messages.php?contactNickName=".$contact[1]."\">";
@@ -50,10 +50,12 @@
           }
           echo " >".$user ->downloadProfilePic($contact[1])."&nbsp&nbsp".$contact[0]."</h2></a>";
         }
-
+        echo "</div>"; 
       }
+
     } else {
       $contacts = $user->searchContact($_POST["search"]);
+      echo "<div class='contacts'>";
       if (count($contacts) > 0) {
         // output data of each row
         foreach ($contacts as $contact)  {
@@ -67,9 +69,10 @@
           echo " >".$user ->downloadProfilePic($contact[1])."&nbsp&nbsp".$contact[0]."</h2></a>";
         }
 
-      }      
+      }     
+      echo "</div>"; 
     }
-    echo "</div>";
+
   
 ?>   
 

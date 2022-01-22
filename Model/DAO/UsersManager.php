@@ -8,6 +8,7 @@
         }
         
         function login ($nick,$pass) {
+            
             $conn = $this->conFactory->connect();
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());

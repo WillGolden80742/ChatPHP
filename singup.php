@@ -20,7 +20,6 @@
 <?php 
     $conFactory = new ConnectionFactory();
     $user = new UsersManager();
-    //if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
     if (!empty($_POST["name"]) || !empty($_POST["nick"]) || !empty($_POST["pass"]) || !empty($_POST["passConfirmation"]) ) {
         $error = "<center><h3 style=\"color:red;\">";
         if (empty($_POST["name"])) {
@@ -52,8 +51,7 @@
         if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
             $user->singUp($_POST["name"],$_POST["nick"],$_POST["pass"]);
         }
-    } 
-    //}       
+    }   
 ?>
 </body>
 </html>
