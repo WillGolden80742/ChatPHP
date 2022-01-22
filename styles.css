@@ -122,7 +122,6 @@
     border: none;
     align-items: center;
     padding-left:40px;
-    background-repeat: no-repeat;
     background-position-y:5px;
     background-position-x:12px;
     border:solid 2px rgba(255, 255, 255, 0);
@@ -145,7 +144,7 @@
     background-position-y:5px;
     background-position-x:12px;
     border-radius:20px;
-    border:solid 2px grey;
+    border:solid 2px #285d33;
     font-weight: bolder;
     background-image: url("Images/search.png");
     background-repeat: no-repeat;
