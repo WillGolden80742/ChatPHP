@@ -55,6 +55,12 @@
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
             }
+            $this->conFactory->query("DELETE FROM profilepicture WHERE clienteId = '".$nick."'");
+            $conn->close();
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
             $this->conFactory->query("INSERT INTO profilepicture (clienteId,picture,format) VALUES ('".$nick."','".$pic."','".$format."')");
             $this->conFactory->close();
         }
