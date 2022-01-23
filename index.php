@@ -19,7 +19,7 @@
       echo "<a href='login.php'>Login</a> <a>|</a> <a href='singup.php'>Sing Up</a>";
     } else {
       echo "<a href='logout.php' >⇤ </a>";
-      echo "<span >@".$_SESSION['nickName']."</span><a href=\"\"> •••</a></h2>";
+      echo "<span >@".$_SESSION['nickName']."</span><a href=\"editProfile.php\"> •••</a></h2>";
       echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" type=text name=search></form>";
       $userNickName = $_SESSION['nickName'];
     }
@@ -37,7 +37,7 @@
               echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
             }
           }
-          echo " >".$user ->downloadProfilePic($contact[1])."&nbsp&nbsp".$contact[0]."</h2></a>";
+          echo " ><img src=".$user ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]."</h2></a>";
         }
         echo "</div>"; 
       }
@@ -55,7 +55,7 @@
               echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
             }
           }
-          echo " >".$user ->downloadProfilePic($contact[1])."&nbsp&nbsp".$contact[0]."</h2></a>";
+          echo " ><img src=".$user ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]."</h2></a>";
         }
       }     
       echo "</div>"; 

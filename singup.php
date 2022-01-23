@@ -3,9 +3,10 @@
 <head>  
 </head>    
 <body class="container">
-<div class="login">
-<center>
-<img src="Images/chat.png" />    
+
+<center>    
+<div class="singUP">
+<img src="Images/chat.png" />
 <form action="singup.php" method="post">
 <br>
 <input class="inputText" placeholder="Name"  type=text name=name><br>

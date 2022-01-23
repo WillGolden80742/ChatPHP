@@ -6,8 +6,9 @@
         function __construct() {
             $this->conFactory = new ConnectionFactory();
         }
-        
+        // USER 
         function login ($nick,$pass) {    
+            $nick= preg_replace('/[^[:alpha:]_]/','',$nick);
             $conn = $this->conFactory->connect();
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
@@ -23,14 +24,84 @@
             }
         }
 
+        function checkLogin ($nick,$pass) {   
+            $nick= preg_replace('/[^[:alpha:]_]/','',$nick);
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".md5($nick.$pass)."'");  
+            $this->conFactory->close();
+            if (mysqli_num_rows($result) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         function singUp ($name,$nick,$pass) { 
             $conn = $this->conFactory->connect();
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
             }
             if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".md5($nick.$pass)."')")) {
+                $this->conFactory->close();
                 $this->login($nick,$pass);
             } 
+        }    
+        
+        function uploadProfilePic ($nick,$pic,$format) {
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $this->conFactory->query("INSERT INTO profilepicture (clienteId,picture,format) VALUES ('".$nick."','".$pic."','".$format."')");
+            $this->conFactory->close();
+        }
+
+        function uploadProfile ($nick,$pass,$newNick,$name) {
+            $nick= preg_replace('/[^[:alpha:]_]/','',$nick);
+            $newNick= preg_replace('/[^[:alpha:]_]/','',$newNick);           
+            if ($this->checkLogin($nick,$pass)) {
+                if (!$this->checkNick ($newNick) || strcmp($nick,$newNick) == 0) {
+                    $conn = $this->conFactory->connect();
+                    if (!$conn) {
+                        die("Connection failed: " . mysqli_connect_error());
+                    }
+                    if($this->conFactory->query("UPDATE clientes SET nickName = '".$newNick."', nomeCliente = '".$name."', senha = '".md5($newNick.$pass)."' WHERE nickName = '".$nick."' ")) {
+                        $_SESSION['nickName']=$newNick;
+                        header("Location: editProfile.php?message=Alteração com sucesso!");
+                        die();
+                    }
+                    $this->conFactory->close();
+                } else if ($this->checkNick ($newNick)) {
+                    header("Location: editProfile.php?error=@".$newNick." já existente");
+                    die();
+                }
+            } else {
+                header("Location: editProfile.php?error=senha incorreta");
+                die();
+            }         
+            echo "Erro de especificações";
+        }
+
+        function uploadPassword ($nick,$pass,$newPass,$newPassConfirmation) {
+            if ($this->checkLogin($nick,$pass)) {
+                if (strcmp($newPass,$newPassConfirmation) == 0) {
+                    $this->conFactory->connect();
+                    if($this->conFactory->query("UPDATE clientes SET senha = '".md5($nick.$newPass)."' WHERE nickName = '".$nick."' ")) {
+                        header("Location: editPassword.php?message=Senha alterada com sucesso!");
+                        die();
+                    }
+                    $this->conFactory->close();
+                } else {
+                    header("Location: editPassword.php?error=senha de confirmação não coincide");
+                    die();
+                }
+            } else {
+                header("Location: editPassword.php?error=senha incorreta");
+                die();
+            }        
         }        
 
         function checkNick ($nick) {
@@ -45,7 +116,18 @@
             } else {
                 return false;
             }
-        }       
+        }   
+        
+        function name($nick) {
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $result =  $this->conFactory->query("SELECT nomeCliente FROM clientes WHERE nickName ='".$nick."'");
+            while($row = mysqli_fetch_assoc($result)) { 
+                return $row["nomeCliente"];
+            }
+        }
 
         function contacts ($nick) {
             $conn = $this->conFactory->connect();
@@ -76,7 +158,26 @@
             $conn->close();
             return $contacts;
         }
-       
+
+
+        function downloadProfilePic ($contactNickName) {
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
+            if (mysqli_num_rows($result) > 0) {
+                while($row = mysqli_fetch_assoc($result)) {
+                    $pic = "data:image/jpeg;base64," . base64_encode($row["picture"]);
+                }
+            } else {
+                $pic = "Images/profilePic.png";
+            }
+            $conn->close();
+            return $pic;
+        }        
+        
+        // MESSAGES 
 
         function messages ($contactNickName) {
             $conn = $this->conFactory->connect();
@@ -109,23 +210,6 @@
             } 
             $conn->close();
             return $messages;
-        }
-
-        function downloadProfilePic ($contactNickName) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
-            $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_assoc($result)) {
-                    $pic = "<img src=\"data:image/jpeg;base64," . base64_encode($row["picture"]) ."\" class=\"picContact\"></img>";
-                }
-            } else {
-                $pic = "<img src=\"Images/profilePic.png\" class=\"picContact\"></img>";
-            }
-            $conn->close();
-            return $pic;
         }
 
         function createMessage ($msg,$contactNickName) { 

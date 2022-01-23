@@ -19,7 +19,7 @@
     $conFactory = new ConnectionFactory();
     $user = new UsersManager();
     if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
-        $_POST['nick'] = preg_replace('/[^[:alpha:]_]/','',$_POST['nick']);
+
         $nick = $_POST["nick"];
         $pass = $_POST["pass"];  
         $user->login($nick,$pass);    
