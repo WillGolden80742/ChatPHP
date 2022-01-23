@@ -19,7 +19,6 @@
 </center>   
 </div>
 <?php 
-    $conFactory = new ConnectionFactory();
     $user = new UsersManager();
     if (!empty($_POST["name"]) || !empty($_POST["nick"]) || !empty($_POST["pass"]) || !empty($_POST["passConfirmation"]) ) {
         $error = "<center><h3 style=\"color:red;\">";

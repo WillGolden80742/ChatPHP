@@ -16,10 +16,8 @@
 </center>   
 </div>
 <?php 
-    $conFactory = new ConnectionFactory();
     $user = new UsersManager();
     if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
-
         $nick = $_POST["nick"];
         $pass = $_POST["pass"];  
         $user->login($nick,$pass);    
