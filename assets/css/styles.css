@@ -6,7 +6,7 @@
     font-family: Arial, Helvetica, sans-serif;
  
   }
-  
+
   .msg {
     border-top-left-radius:10px; 
     padding:10px;
@@ -90,7 +90,7 @@
     height:40px;   
     top:82.5%;
     left:92%;
-    background-image: url("Images/send.png");
+    background-image: url("../../Images/send.png");
     background-repeat: no-repeat;
     background-position-x:10px;
     background-position-y:8px;
@@ -126,7 +126,7 @@
     border:solid 2px rgba(255, 255, 255, 0);
     border-radius:20px;
     font-weight: bolder;
-    background-image: url("Images/search.png");
+    background-image: url("../../Images/search.png");
     background-repeat: no-repeat;
   }
 
@@ -145,7 +145,7 @@
     border-radius:20px;
     border:solid 2px #285d33;
     font-weight: bolder;
-    background-image: url("Images/search.png");
+    background-image: url("../../Images/search.png");
     background-repeat: no-repeat;
     background-color:#285d33;
   }
@@ -167,15 +167,15 @@
 
 
   .inputNick {
-    background-image: url("Images/arrobaIcon-dark.png");  
+    background-image: url("../../Images/arrobaIcon-dark.png");  
   }
 
   .inputText {
-      background-image: url("Images/nameIcon-dark.png");
+      background-image: url("../../Images/nameIcon-dark.png");
   }
 
   .inputPassword {
-      background-image: url("Images/passwordIcon-dark.png");
+      background-image: url("../../Images/passwordIcon-dark.png");
   }
 
   .inputSubmit {

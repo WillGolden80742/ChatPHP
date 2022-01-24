@@ -1,10 +1,23 @@
 <DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="styles.css">
+<script src="assets/js/javascript.js"></script>
+<script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/jquery.js"></script>
+<link rel="stylesheet" href="assets/css/styles.css">
   <style id="style">
     body {
       background:#002e001f;
+    }
+    .newMsg {
+      font-size:14px;
+      width:16px;
+      height:100%;
+      border-radius:100%;
+      color:white;
+      background-color: #285d33 ;
+      align-items: center;
+      display: flex;
     }
   </style> 
 </head>    
@@ -30,14 +43,14 @@
         echo "<div class='contacts'>";
         // output data of each row
         foreach ($contacts as $contact)  {
-          echo "<a href=\"messages.php?contactNickName=".$contact[1]."\">";
+          echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" \" >";
           echo "<h2 ";
           if (!empty($_GET['contactNickName'])){
             if (!strcmp($_GET['contactNickName'],$contact[1])){
               echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
             }
           }
-          echo " ><img src=".$user ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]."</h2></a>";
+          echo " ><img src=".$user ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]." &nbsp".$user->newMgs($contact[1])."</h2></a>";
         }
         echo "</div>"; 
       }
@@ -48,7 +61,7 @@
       if (count($contacts) > 0) {
         // output data of each row
         foreach ($contacts as $contact)  {
-          echo "<a href=\"messages.php?contactNickName=".$contact[1]."\">";
+          echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" >";
           echo "<h2 ";
           if (!empty($_GET['contactNickName'])){
             if (!strcmp($_GET['contactNickName'],$contact[1])){

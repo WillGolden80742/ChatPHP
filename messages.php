@@ -1,4 +1,3 @@
-
 <?php 
     require_once 'index.php';
     $conFactory = new ConnectionFactory();
@@ -27,16 +26,18 @@
       color: white;
       font-weight: bold;
     }
+    <?php 
+      echo "#".$contactNickName." {display:none;}";
+    ?>
   </style>  
 <head>   
   <title><?php echo $contactNickName; ?></title>
 </head>    
-<div class="messages">
+<div class="messages" id="messages">
 <?php
-
     $message = new UsersManager();  
     $messages = $message->messages($contactNickName);
-
+    $message->receivedMsg($contactNickName);
     if (count($messages) > 0) {
       $msgs = "";
       echo '<br>';
@@ -69,6 +70,6 @@
 </div>
 
 <?php 
-  echo "<form action=\"new.php\" method=\"post\"> <textarea id=\"text\" class=\"text\" onkeyup=\"typing()\" name=messageText> </textarea> <input type=\"hidden\" name=\"contactNickName\" value=".$contactNickName."> <input class=\"send\" type=submit value=\"\"> </form>"
+  echo "<form action=\"new.php\" method=\"post\"> <textarea id=\"text\" class=\"text\" name=messageText> </textarea> <input type=\"hidden\" name=\"contactNickName\" value=".$contactNickName."> <input class=\"send\" type=submit value=\"\"> </form>"
 ?>
 

@@ -2,13 +2,14 @@
     include 'ConnectionFactory/ConnectionFactory.php';
     session_start();
     class usersManager {
+        private $regex = '/[^[:alpha:]_0-9]/';
         private $conFactory;
         function __construct() {
             $this->conFactory = new ConnectionFactory();
         }
         // USER 
         function login ($nick,$pass) {    
-            $nick= preg_replace('/[^[:alpha:]_]/','',$nick);
+            $nick= preg_replace($this->regex,'',$nick);
             $conn = $this->conFactory->connect();
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
@@ -25,7 +26,7 @@
         }
 
         function checkLogin ($nick,$pass) {   
-            $nick= preg_replace('/[^[:alpha:]_]/','',$nick);
+            $nick= preg_replace($this->regex,'',$nick);
             $conn = $this->conFactory->connect();
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
@@ -66,8 +67,8 @@
         }
 
         function uploadProfile ($nick,$pass,$newNick,$name) {
-            $nick= preg_replace('/[^[:alpha:]_]/','',$nick);
-            $newNick= preg_replace('/[^[:alpha:]_]/','',$newNick);           
+            $nick= preg_replace($this->regex,'',$nick);
+            $newNick= preg_replace($this->regex,'',$newNick);           
             if ($this->checkLogin($nick,$pass)) {
                 if (!$this->checkNick ($newNick) || strcmp($nick,$newNick) == 0) {
                     $conn = $this->conFactory->connect();
@@ -217,6 +218,35 @@
             $conn->close();
             return $messages;
         }
+
+        function newMgs ($contactNickName) {
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $result = $this->conFactory->query("call newMsg('".$_SESSION['nickName']."','".$contactNickName."')");
+            $count="0";
+            while($row = mysqli_fetch_assoc($result)) {
+                $count = $row["countMsg"];
+                if(preg_replace("[0]","",$count."") == 0){
+                    $count = "";
+                } else {
+                    $count = "<span id=".$contactNickName." class=\"newMsg\">&nbsp".$count."</span>";
+                }
+            }
+            $conn->close();
+            return $count;
+        }
+
+        function receivedMsg ($contactNickName) {
+            $conn = $this->conFactory->connect();
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$_SESSION['nickName']."'");
+            $conn->close();
+        }
+
 
         function createMessage ($msg,$contactNickName) { 
             if (!empty($_SESSION['nickName'])) {

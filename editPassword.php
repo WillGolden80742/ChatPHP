@@ -3,12 +3,6 @@
 <head>  
 </head>    
 <script>
-    function typing() {   
-      document.getElementById('editProfilePic').click();
-    }
-    function display () {
-        document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
-    }
 </script>    
 <style id="stylePic">
     .profilePic {
@@ -46,9 +40,9 @@
                 echo "<p>Tamanho máximo de ".$maxSize." bytes</p>";
             }
         } 
-        echo "<img class=\"profilePic\" src=\"".$user ->downloadProfilePic($_SESSION['nickName'])."\" id=\"profilePic\" onclick=\"typing()\"> </img> ";
+        echo "<img class=\"profilePic\" src=\"".$user ->downloadProfilePic($_SESSION['nickName'])."\" id=\"profilePic\" onclick=\"openfile();\"> </img> ";
     } else {
-        echo "<img src=".$user ->downloadProfilePic($_SESSION['nickName'])." class=\"profilePic\" id=\"profilePic\" onclick=\"typing()\" > </img> ";
+        echo "<img src=".$user ->downloadProfilePic($_SESSION['nickName'])." class=\"profilePic\" id=\"profilePic\" onclick=\"openfile();\" > </img> ";
     }
 ?>
 <form action="editProfile.php" method="post" enctype="multipart/form-data">
