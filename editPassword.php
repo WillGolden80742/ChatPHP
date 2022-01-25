@@ -32,7 +32,7 @@
         $name = time().'.jpg';
         if (move_uploaded_file($pic['tmp_name'], $name)) {
             $size = filesize($name);     
-            $maxSize = 500000;    
+            $maxSize = 10000000;    
             if ($size < $maxSize) {   
                 $mysqlImg = addslashes(fread(fopen($name, "r"), $size));
                 $user->uploadProfilePic($_SESSION['nickName'],$mysqlImg,'jpg');
