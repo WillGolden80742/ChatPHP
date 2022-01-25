@@ -95,7 +95,7 @@
             }
         }
 
-        function contacts ($nick) {
+        function contacts ($nick,$nickNameContact) {
             $result =  $this->conFactory->query("call contatos('".$nick."')");
             $count=0;
             $contacts = array();
@@ -108,8 +108,8 @@
                 foreach ($contacts as $contact)  {
                     $html.= "<a href='messages.php?contactNickName=".$contact[1]."' >";
                     $html.= "<h2 ";
-                  if (!empty($_GET['contactNickName'])){
-                    if (!strcmp($_GET['contactNickName'],$contact[1])){
+                  if (!empty($nickNameContact)){
+                    if (!strcmp($nickNameContact,$contact[1])){
                         $html.= "style='color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);'";
                     }
                   }
@@ -184,7 +184,7 @@
               }
             } 
             if (count($messages) > 0) {
-               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;' width='30px' height='30px' src='Images/down.png'/></center>";
+               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%;' width='30px' height='30px' src='Images/down.png'/></center>";
                $mensagens.= "<br>";
                 foreach ($messages as $msg) { 
                   if ($msg[4]) {
@@ -211,27 +211,45 @@
             return $mensagens;
         }
 
-        function newCurrentMsgs ($nickName,$contactNickName){
-            $result = $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$nickName."' AND messages.received = '0'");
+        function newCurrentMsgs ($contactNickName){
+            $result = $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$_SESSION['nickName']."' AND messages.received = '0'");
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
                     $count = $row["countMsg"];
                     if(preg_replace("[0]","",$count."") == 0){
-                        return "0";
+                        $result = $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$_SESSION['nickName']."' AND messages.received = '2'");
+                        if (mysqli_num_rows($result) > 0) {
+                            while($row = mysqli_fetch_assoc($result)) {
+                                $count = $row["countMsg"];
+                                if(preg_replace("[0]","",$count."") == 0){
+                                    return array("0","0");
+                                } else {
+                                    return array("2",$this->messages ($_SESSION['nickName'],$contactNickName));
+                                }
+                            }                   
+                        }
                     } else {
-                        return $this->messages ($nickName,$contactNickName);
+                        return array("1",$this->messages ($_SESSION['nickName'],$contactNickName));
                     }
                 }                   
             }
         }
 
         function newMg ($contactNickName) {
-            $result = $this->conFactory->query("call newMsg('".$_SESSION['nickName']."','".$contactNickName."')");
+            $result = $this->conFactory->query("call newMsg('".$_SESSION['nickName']."','".$contactNickName."','0')");
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
                 if(preg_replace("[0]","",$count."") == 0){
-                    $count = "";
+                    $result = $this->conFactory->query("call newMsg('".$_SESSION['nickName']."','".$contactNickName."','2')");
+                    while($row = mysqli_fetch_assoc($result)) {
+                        $count = $row["countMsg"];
+                        if(preg_replace("[0]","",$count."") == 0){
+                            $count = "";
+                        } else {
+                            $count = "<span id=".$contactNickName." class='newMsg'>&nbsp1</span>";
+                        }
+                    }
                 } else {
                     $count = "<span id=".$contactNickName." class='newMsg'>&nbsp".$count."</span>";
                 }
@@ -239,7 +257,7 @@
             return $count;
         }
 
-        function newContacts ($nick) {
+        function newContacts ($nickNameContact) {
             $result = $this->conFactory->query("call newMsgs('".$_SESSION['nickName']."')");
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
@@ -248,7 +266,7 @@
                     return "0";
                 } else {
                     $this->conFactory->query("DELETE FROM newMsg WHERE msgTo = '".$_SESSION['nickName']."'");
-                    return $this->contacts($nick);
+                    return $this->contacts($_SESSION['nickName'],$nickNameContact);
                 }
             }
         }        
@@ -272,7 +290,7 @@
         function deleteMessage ($id,$contactNickName) { 
             $this->conFactory->query("call deleteMessage(".$id.",'".$_SESSION['nickName']."')");
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$_SESSION['nickName']."','".$contactNickName."')");
-            $this->conFactory->query("UPDATE messages SET received = 0 WHERE messages.MsgFrom = '".$_SESSION['nickName']."' and messages.MsgTo = '".$contactNickName."'");          
+            $this->conFactory->query("UPDATE messages SET received = '2' WHERE messages.MsgFrom = '".$_SESSION['nickName']."' and messages.MsgTo = '".$contactNickName."'");          
             header("Location: messages.php?contactNickName=".$contactNickName);
             die(); 
         }

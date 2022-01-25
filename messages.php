@@ -3,7 +3,7 @@
     $userNickName = $_SESSION['nickName'];
     $contactNickName = $_GET['contactNickName'];
 ?>
-  <style>
+  <style id="styleMsg">
     .delete a {
       display: none;
     }
@@ -26,13 +26,11 @@
 <head>   
   <title><?php echo $contactNickName; ?></title>
 </head>    
-<div class="messages" id="messages">
+<div class="messages" id="messages" onmouseover="removeButtonDown ();">
   
 <?php
     $message = new UsersManager();  
-    echo "<div id=\"messages\">";
       echo $message->messages($userNickName,$contactNickName);
-    echo "</div>";
 ?>
 </div>
 

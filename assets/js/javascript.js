@@ -4,6 +4,3 @@ function openfile() {
 function display () {
     document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
 }
-window.onload = function() {
-    document.getElementById("messages").scrollTo(0,10000);
-}

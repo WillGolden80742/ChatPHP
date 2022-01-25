@@ -11,18 +11,23 @@
 <script src="assets/js/jquery.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
       <script>
-      
+        var h;
         function down () {
-          document.getElementById("messages").scrollTo(0,10000); 
+          document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
+          document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
           document.getElementById("down").innerHTML="";
+          h =  document.getElementById("messages").scrollTop;
+        }
+        function removeButtonDown () {
+          if (((document.getElementById("messages").scrollTop)/h)*100 >= 90) {
+            down ();
+          }
         }
         $(document).ready(function(){
           down ();
           <?php 
-            $nickname = $_SESSION['nickName'];
             $nickNameContact = $_GET['contactNickName'];
           ?>
-          var nickName = "<?php echo $nickname; ?>";
           var nickNameContact = "<?php echo $nickNameContact; ?>";
           newContact();
           function newContact() {
@@ -30,7 +35,7 @@
               $.ajax({
                 url: 'newContact.php?',
                 method: 'POST',
-                data: {nickName: nickName},
+                data: {nickNameContact: nickNameContact},
                 dataType: 'json'
               }).done(function(result) {
                 if (result !== "0") {
@@ -38,15 +43,21 @@
                   $.ajax({
                     url: 'newMsg.php?',
                     method: 'POST',
-                    data: {nickName: nickName, nickNameContact: nickNameContact},
+                    data: {nickNameContact: nickNameContact},
                     dataType: 'json'
                   }).done(function(result) {
-                    if (result !== "0") {
-                      $height = document.getElementById('messages').scrollHeight
-                      document.getElementById('messages').innerHTML=result;
-                      document.getElementById("messages").scrollTo(0,height);
-                      document.getElementById("style").innerHTML="";
-                      document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;' width='30px' height='30px' src='Images/down.png'/>";
+                    if (result[0] == "1") {
+                      document.getElementById('messages').innerHTML=result[1];
+                      if (((document.getElementById("messages").scrollTop)/h)*100 >= 90) {
+                        down();
+                      } else {
+                        document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
+                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;bottom: 30%;' width='30px' height='30px' src='Images/down.png'/> ";
+                      }
+                    } else if (result[0] == "2")  {
+                      document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
+                      document.getElementById('messages').innerHTML=result[1];
+                      document.getElementById("down").innerHTML="";
                     }
                   });
                 }
@@ -57,7 +68,7 @@
           
         });
    </script> 
-  <style id="style">
+  <style id="styleIndex">
     body {
       background:#002e001f;
     }
@@ -91,7 +102,11 @@
     echo "</div>";
     echo "<div id=\"contacts\">";
       if (empty($_POST["search"])) {
-        echo $user->contacts($userNickName);
+        if (empty($_GET['contactNickName'])) {
+          echo $user->contacts($userNickName,null);
+        } else {
+          echo $user->contacts($userNickName,$_GET['contactNickName']);
+        }
       } else {
         $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
         echo "<div class='contacts'>";  

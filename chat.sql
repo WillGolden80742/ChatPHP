@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 22/01/2022 às 20:18
+-- Tempo de geração: 26/01/2022 às 00:17
 -- Versão do servidor: 10.4.22-MariaDB
 -- Versão do PHP: 7.4.27
 
@@ -47,7 +47,11 @@ SELECT messages.Idmessage, "" as messages ,messages.MsgFrom,"",messages.Date as 
 UNION
 SELECT messages.Idmessage, messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, "" AS NomeArquivo, "" AS hashArquivo From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName AND messages.Messages != "" OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName AND messages.Messages != "" ORDER BY dataOrd DESC LIMIT 0,15$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))  SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%")$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsg` (IN `userNickName` VARCHAR(20), IN `contactuserNickName` VARCHAR(20), IN `received` INT(1))  SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = contactuserNickName AND messages.MsgTo = userNickName AND messages.received = received$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsgs` (IN `userNickName` VARCHAR(20))  SELECT COUNT(newMsg.msgTo) as countMsg FROM newMsg WHERE newMsg.msgTo = userNickName$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))  SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%") OR clientes.nomeCliente LIKE CONCAT("%",contactNickName,"%")$$
 
 DELIMITER ;
 
@@ -96,13 +100,18 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
+('William Dourado', '777', '9f0b278397cc5ece3ee9c2f216cf76f9'),
 ('Alyssom', 'ally77', 'a51696a86ebadde170b7b06e83f1ec82'),
 ('Based Pepe', 'based_Pepe', '7bb8414eeea88d61ddaa90ab732f1c56'),
+('William Dourado', 'dsf', '3efee1dde3f5ef6650ba140596bab9b3'),
+('William ', 'ee', '6feaa74fcc6d06826009f866a2e6b836'),
+('William Dourado', 'ff', '2a60bc1f15995300293f8f7711037b3f'),
 ('Гуммо', 'gvmmo', '46de12bf37a60ee1868826fa8b2f6dd4'),
 ('HongKong77', 'hong_kong77', '9de6f455f1316788a94e36c6db2dff4e'),
 ('Juliana Monique', 'juhMonique', 'dbdf6b52482eeaca1d540116bf42f52a'),
 ('Lobo da Estepe', 'LoboDaEstepe', '8e5f96d94b6446e3e9b497cac95d4540'),
 ('Logan', 'logan77', '401a66b2ed2ee754683da79537eba83d'),
+('Eloa', 'lola', 'a9085b29c5961bc887ed73aaddf8d50f'),
 ('lolo', 'lolo', '8dddc0620fe076293393ad81e3ce86fd'),
 ('Marlon', 'marlon77', 'cefdad4bd12e8c57cdf9cf1d176b429a'),
 ('Mayumi Sato', 'mayumi_Sato', 'fa9e685425a32079d81f024355066df8'),
@@ -110,7 +119,7 @@ INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
 ('Pepe BluePill', 'pepe_bluepill', 'd9002957b34ebefa020cca178bd46739'),
 ('Rafael', 'rafa77', 'cbcc887b198ad392cd9f60027f27e37a'),
 ('William Dourado', 'willCruz', '447b723176f669919c5f6f13f119eccc'),
-('Уильям Голден', 'willGolden', '69013773d31191dcc17bf195f73ef2e6'),
+(' Уилл Голден', 'willGolden', '69013773d31191dcc17bf195f73ef2e6'),
 ('wololo', 'wololo', '89b44b8b1515dd349cce0b300029c054');
 
 -- --------------------------------------------------------
@@ -158,7 +167,6 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (40, 'Como vc tá?', 'ally77', 'willGolden', '2021-03-11 18:28:47', 1),
 (41, 'Traquilo', 'willGolden', 'ally77', '2021-03-11 18:29:47', 1),
 (43, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop', 'ally77', 'willGolden', '2021-03-12 13:03:03', 1),
-(44, '(҂`_´)\n         <,︻╦̵̵̿╤─ ҉     ~  •\n█۞███████]▄▄▄▄▄▄▄▄▄▄▃ ●●●\n▂▄▅█████████▅▄▃▂…\n[███████████████████]\n◥⊙▲⊙▲⊙▲⊙▲⊙▲⊙▲⊙\n', 'willGolden', 'rafa77', '2021-03-12 16:52:45', 1),
 (240, 'Daora', 'ally77', 'willGolden', '2021-03-27 18:45:20', 1),
 (243, 'E ai Will\r\n', 'rafa77', 'willGolden', '2021-03-30 14:37:11', 1),
 (245, 'Olá', 'juhMonique', 'willGolden', '2021-03-30 14:41:48', 1),
@@ -166,11 +174,10 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (378, 'Se você não gosta do wolverine, eu sugiro que', 'willGolden', 'logan77', '2021-04-02 14:13:53', 1),
 (417, 'Bom dia\r\n', 'hong_kong77', 'willGolden', '2021-04-03 12:15:28', 1),
 (431, 'Olá\r\n', 'hong_kong77', 'rafa77', '2021-04-03 13:29:07', 1),
-(433, 'Olá, camarada\r\n', 'gvmmo', 'willGolden', '2021-04-03 20:38:43', 1),
 (628, 'Como vai?\r\n', 'rafa77', 'hong_kong77', '2021-04-06 00:15:41', 1),
 (943, 'Tudo bem?\r\n', 'willGolden', 'gvmmo', '2021-04-09 22:15:42', 1),
 (981, 'ola\r\n', 'willGolden', 'hong_kong77', '2021-04-09 23:25:37', 1),
-(983, 'Como vai?\r\n', 'gvmmo', 'hong_kong77', '2021-04-09 23:49:50', 1),
+(983, 'Como vai?\r\n', 'gvmmo', 'hong_kong77', '2021-04-09 23:49:50', 0),
 (994, 'Tudo certo por aqui\r\n', 'willGolden', 'gvmmo', '2021-04-10 11:45:53', 1),
 (1001, 'Ola\r\n', 'willGolden', 'gvmmo', '2021-04-10 15:28:09', 1),
 (1031, 'Como vai?\r\n', 'pco_cooperative', 'willGolden', '2021-04-11 13:19:39', 1),
@@ -182,7 +189,7 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (1218, 'Como vai\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:42:34', 1),
 (1219, 'Olá\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:42:46', 1),
 (1221, 'Houve erro?\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:43:21', 1),
-(1225, 'E ai ', 'based_Pepe', 'marlon77', '2022-01-19 16:36:20', 0),
+(1225, 'E ai ', 'based_Pepe', 'marlon77', '2022-01-19 16:36:20', 1),
 (1226, ' E ai gay', 'willGolden', 'gvmmo', '2022-01-20 16:38:23', 1),
 (1227, ' Tudo bem?\r\n', 'willGolden', 'gvmmo', '2022-01-20 16:40:15', 1),
 (1228, ' Tudo sim\r\n', 'gvmmo', 'willGolden', '2022-01-20 16:59:06', 1),
@@ -192,14 +199,99 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (1239, 'E ai', 'willGolden', 'ally77', '2022-01-20 18:32:44', 1),
 (1240, 'Muito bom', 'willGolden', 'ally77', '2022-01-20 18:37:58', 1),
 (1258, ' 🤩😘', 'willGolden', 'ally77', '2022-01-21 16:36:20', 1),
-(1260, ' Fala comigo', 'willGolden', 'mayumi_Sato', '2022-01-21 16:53:41', 1),
 (1262, ' Tudo bem?\r\n', 'willGolden', 'LoboDaEstepe', '2022-01-21 20:18:10', 0),
 (1263, ' Wololo ', 'willGolden', 'pco_cooperative', '2022-01-21 20:25:46', 0),
-(1264, ' Oi gvmmo', 'willGolden', 'gvmmo', '2022-01-22 02:34:42', 0),
-(1265, ' Oi hihi ', 'willCruz', 'gvmmo', '2022-01-22 13:59:50', 0),
-(1266, ' E ai\r\n', 'willGolden', 'willCruz', '2022-01-22 16:07:26', 0),
-(1269, ' E ai ?\r\n', 'willGolden', 'willGolden', '2022-01-22 16:16:10', 0),
-(1270, ' Ha haha \r\n', 'willGolden', 'willGolden', '2022-01-22 16:16:31', 0);
+(1265, ' Oi hihi ', 'willCruz', 'gvmmo', '2022-01-22 13:59:50', 1),
+(1271, ' E ai', 'dsf', 'willCruz', '2022-01-22 17:06:33', 0),
+(1272, ' E ai ', '777', 'willCruz', '2022-01-22 17:38:03', 0),
+(1280, ' E ai\r\n', 'marlon77', 'willGolden', '2022-01-23 23:10:43', 1),
+(1281, ' E ai\r\n', 'willGolden', 'gvmmo', '2022-01-23 23:21:16', 1),
+(1284, ' E ai\r\n', 'willGolden', 'mayumi_Sato', '2022-01-24 13:47:28', 1),
+(1285, ' E ai corno\r\n', 'mayumi_Sato', 'willGolden', '2022-01-24 13:47:59', 1),
+(1286, ' Boa\r\n', 'willGolden', 'mayumi_Sato', '2022-01-24 14:09:02', 1),
+(1289, ' Tudo bem?', 'gvmmo', 'willGolden', '2022-01-24 18:05:05', 1),
+(1296, ' Gau ', 'gvmmo', 'willGolden', '2022-01-24 18:27:44', 1),
+(1297, ' Er', 'gvmmo', 'willGolden', '2022-01-24 18:29:43', 1),
+(1298, ' R', 'gvmmo', 'willGolden', '2022-01-24 18:32:24', 1),
+(1299, ' Serio?', 'gvmmo', 'willGolden', '2022-01-24 18:32:37', 1),
+(1300, ' Sério po kkk\r\n', 'willGolden', 'gvmmo', '2022-01-24 18:32:52', 1),
+(1310, ' E ai', 'ally77', 'willGolden', '2022-01-24 18:40:03', 1),
+(1316, ' Zoado', 'ally77', 'willGolden', '2022-01-24 18:44:02', 1),
+(1317, ' Rtt', 'ally77', 'willGolden', '2022-01-24 18:56:29', 1),
+(1333, ' Wdf', 'gvmmo', 'willGolden', '2022-01-24 19:07:47', 1),
+(1334, ' E ao', 'gvmmo', 'willGolden', '2022-01-24 19:08:08', 1),
+(1335, ' Oi bebe\r\n', 'gvmmo', 'willGolden', '2022-01-24 19:08:29', 1),
+(1336, ' Tudo bem bb? ', 'willGolden', 'gvmmo', '2022-01-24 19:08:37', 1),
+(1338, ' Ta ', 'gvmmo', 'willGolden', '2022-01-24 19:09:29', 1),
+(1341, ' To to bem bb', 'gvmmo', 'willGolden', '2022-01-24 19:10:51', 1),
+(1342, ' Seu app e muito legal ', 'gvmmo', 'willGolden', '2022-01-24 19:11:22', 1),
+(1343, ' obrigado bb!!!\r\n', 'willGolden', 'gvmmo', '2022-01-24 19:11:31', 1),
+(1345, ' 🥰🥰🥰🥰🥰', 'willGolden', 'gvmmo', '2022-01-24 19:11:49', 1),
+(1346, ' Oiii\r\n', 'willGolden', 'gvmmo', '2022-01-24 19:12:16', 1),
+(1347, ' oi bb\r\n', 'lola', 'willGolden', '2022-01-24 19:13:17', 1),
+(1348, ' Ea ', 'willGolden', 'lola', '2022-01-24 19:50:56', 1),
+(1400, ' Wff', 'gvmmo', 'willCruz', '2022-01-24 21:33:05', 0),
+(1401, ' Sf', 'gvmmo', 'willCruz', '2022-01-24 21:33:59', 0),
+(1483, ' Rr', 'gvmmo', 'willGolden', '2022-01-24 23:54:49', 1),
+(1484, ' Dff', 'gvmmo', 'willGolden', '2022-01-24 23:54:55', 1),
+(1491, ' Oi bb\r\n', 'willGolden', 'gvmmo', '2022-01-25 00:13:07', 1),
+(1492, ' Oiiii', 'gvmmo', 'willGolden', '2022-01-25 00:13:12', 1),
+(1493, ' Tudo bem?\r\n', 'willGolden', 'gvmmo', '2022-01-25 00:13:20', 1),
+(1494, ' Sim e vc', 'gvmmo', 'willGolden', '2022-01-25 00:13:26', 1),
+(1495, ' Agora não acontece aquilo de ficar sumindo a mensagem ', 'willGolden', 'gvmmo', '2022-01-25 00:13:39', 1),
+(1496, ' e verdade', 'gvmmo', 'willGolden', '2022-01-25 00:14:13', 1),
+(1497, ' Uhhuuu ', 'willGolden', 'gvmmo', '2022-01-25 00:14:22', 1),
+(1498, ' Muito melhor', 'gvmmo', 'willGolden', '2022-01-25 00:14:26', 1),
+(1499, ' 😅', 'gvmmo', 'willGolden', '2022-01-25 00:14:35', 1),
+(1500, ' @', 'gvmmo', 'willGolden', '2022-01-25 00:14:49', 1),
+(1501, ' Er', 'gvmmo', 'willGolden', '2022-01-25 00:15:04', 1),
+(1502, ' Dff', 'gvmmo', 'willGolden', '2022-01-25 00:15:07', 1),
+(1505, ' Oiiiii', 'gvmmo', 'hong_kong77', '2022-01-25 00:16:19', 0),
+(1506, ' Ta.me vemdo willam', 'gvmmo', 'hong_kong77', '2022-01-25 00:16:55', 0),
+(1507, ' Olá Eloá ', 'willGolden', 'gvmmo', '2022-01-25 00:19:13', 1),
+(1544, ' Oiii', 'lola', 'willGolden', '2022-01-25 01:42:06', 1),
+(1545, ' Ta funcionando ai?', 'willGolden', 'lola', '2022-01-25 01:42:24', 1),
+(1546, ' Sim ', 'lola', 'willGolden', '2022-01-25 01:42:35', 1),
+(1547, ' Muito bem', 'lola', 'willGolden', '2022-01-25 01:42:41', 1),
+(1548, ' Que ótimo 🤩🤩🤩🤩', 'willGolden', 'lola', '2022-01-25 01:42:45', 1),
+(1549, ' Adorei', 'lola', 'willGolden', '2022-01-25 01:42:52', 1),
+(1550, ' Para bens', 'lola', 'willGolden', '2022-01-25 01:43:08', 1),
+(1551, ' Boa noite\r\n bb', 'willGolden', 'lola', '2022-01-25 01:43:23', 1),
+(1552, ' Oi', 'willGolden', 'lola', '2022-01-25 01:50:55', 1),
+(1610, ' olá\r\n', 'willGolden', 'gvmmo', '2022-01-25 19:07:04', 1),
+(1625, ' Fgg', 'gvmmo', 'willGolden', '2022-01-25 19:22:30', 1),
+(1628, ' 566', 'gvmmo', 'willGolden', '2022-01-25 19:23:10', 1),
+(1629, ' Dggf', 'gvmmo', 'willGolden', '2022-01-25 19:24:06', 1),
+(1631, ' 567', 'gvmmo', 'willGolden', '2022-01-25 19:24:33', 1),
+(1632, ' Ty88', 'gvmmo', 'willGolden', '2022-01-25 19:24:43', 1),
+(1633, ' Ydtr', 'gvmmo', 'willGolden', '2022-01-25 19:26:09', 1),
+(1634, ' Ghh', 'gvmmo', 'willGolden', '2022-01-25 19:26:14', 1),
+(1646, ' Tre', 'lola', 'willGolden', '2022-01-25 19:48:42', 1),
+(1680, ' Rrt', 'lola', 'willGolden', '2022-01-25 20:12:29', 1),
+(1681, ' Drr', 'lola', 'willGolden', '2022-01-25 20:12:37', 1),
+(1682, ' Sff', 'lola', 'willGolden', '2022-01-25 20:14:16', 1),
+(1683, ' E au', 'gvmmo', 'willGolden', '2022-01-25 20:14:34', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `newMsg`
+--
+
+CREATE TABLE `newMsg` (
+  `msgFrom` varchar(20) NOT NULL,
+  `msgTo` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Despejando dados para a tabela `newMsg`
+--
+
+INSERT INTO `newMsg` (`msgFrom`, `msgTo`) VALUES
+('gvmmo', 'willCruz'),
+('gvmmo', 'willCruz'),
+('gvmmo', 'hong_kong77'),
+('gvmmo', 'hong_kong77');
 
 -- --------------------------------------------------------
 
@@ -216,7 +308,6 @@ CREATE TABLE `profilepicture` (
 --
 -- Despejando dados para a tabela `profilepicture`
 --
-
 --
 -- Índices para tabelas despejadas
 --
@@ -251,6 +342,13 @@ ALTER TABLE `messages`
   ADD KEY `Idmessage` (`Idmessage`);
 
 --
+-- Índices de tabela `newMsg`
+--
+ALTER TABLE `newMsg`
+  ADD KEY `msgFrom_Fk` (`msgFrom`),
+  ADD KEY `msgTo_Fk` (`msgTo`);
+
+--
 -- Índices de tabela `profilepicture`
 --
 ALTER TABLE `profilepicture`
@@ -270,7 +368,7 @@ ALTER TABLE `anexo`
 -- AUTO_INCREMENT de tabela `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1271;
+  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1684;
 
 --
 -- Restrições para tabelas despejadas
@@ -289,6 +387,13 @@ ALTER TABLE `anexo`
 ALTER TABLE `messages`
   ADD CONSTRAINT `msgFromCliente` FOREIGN KEY (`MsgFrom`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `msgToCliente` FOREIGN KEY (`MsgTo`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `newMsg`
+--
+ALTER TABLE `newMsg`
+  ADD CONSTRAINT `msgFrom_Fk` FOREIGN KEY (`msgFrom`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `msgTo_Fk` FOREIGN KEY (`msgTo`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para tabelas `profilepicture`
