@@ -1,3 +1,8 @@
+<?php 
+    include 'Model/DAO/UsersManager.php';   
+    
+    $user = new UsersManager(); 
+?>
 <DOCTYPE html>
 <html>
 <head>
@@ -5,6 +10,53 @@
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/jquery.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
+      <script>
+      
+        function down () {
+          document.getElementById("messages").scrollTo(0,10000); 
+          document.getElementById("down").innerHTML="";
+        }
+        $(document).ready(function(){
+          down ();
+          <?php 
+            $nickname = $_SESSION['nickName'];
+            $nickNameContact = $_GET['contactNickName'];
+          ?>
+          var nickName = "<?php echo $nickname; ?>";
+          var nickNameContact = "<?php echo $nickNameContact; ?>";
+          newContact();
+          function newContact() {
+            setTimeout(function () {
+              $.ajax({
+                url: 'newContact.php?',
+                method: 'POST',
+                data: {nickName: nickName},
+                dataType: 'json'
+              }).done(function(result) {
+                if (result !== "0") {
+                  document.getElementById('contacts').innerHTML=result;
+                  $.ajax({
+                    url: 'newMsg.php?',
+                    method: 'POST',
+                    data: {nickName: nickName, nickNameContact: nickNameContact},
+                    dataType: 'json'
+                  }).done(function(result) {
+                    if (result !== "0") {
+                      $height = document.getElementById('messages').scrollHeight
+                      document.getElementById('messages').innerHTML=result;
+                      document.getElementById("messages").scrollTo(0,height);
+                      document.getElementById("style").innerHTML="";
+                      document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;' width='30px' height='30px' src='Images/down.png'/>";
+                    }
+                  });
+                }
+                newContact();
+              });
+            }, 1000);
+          }      
+          
+        });
+   </script> 
   <style id="style">
     body {
       background:#002e001f;
@@ -19,13 +71,13 @@
       align-items: center;
       display: flex;
     }
-  </style> 
+  </style>  
+
 </head>    
 <body class="container">
 
 <?php
-    include 'Model/DAO/UsersManager.php';    
-    $user = new UsersManager();
+
     echo "<div  class=\"header\"><h2>";
     $userNickName = "";
     if (empty($_SESSION['nickName'])) { 
@@ -37,42 +89,16 @@
       $userNickName = $_SESSION['nickName'];
     }
     echo "</div>";
-    if (empty($_POST["search"])) {
-      $contacts = $user->contacts($userNickName);
-      if (count($contacts) > 0) {
-        echo "<div class='contacts'>";
-        // output data of each row
-        foreach ($contacts as $contact)  {
-          echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" \" >";
-          echo "<h2 ";
-          if (!empty($_GET['contactNickName'])){
-            if (!strcmp($_GET['contactNickName'],$contact[1])){
-              echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
-            }
-          }
-          echo " ><img src=".$user ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]." &nbsp".$user->newMgs($contact[1])."</h2></a>";
-        }
+    echo "<div id=\"contacts\">";
+      if (empty($_POST["search"])) {
+        echo $user->contacts($userNickName);
+      } else {
+        $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
+        echo "<div class='contacts'>";  
+        $contacts = $user->searchContact($_POST["search"]);
         echo "</div>"; 
       }
-    } else {
-      $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
-      $contacts = $user->searchContact($_POST["search"]);
-      echo "<div class='contacts'>";
-      if (count($contacts) > 0) {
-        // output data of each row
-        foreach ($contacts as $contact)  {
-          echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" >";
-          echo "<h2 ";
-          if (!empty($_GET['contactNickName'])){
-            if (!strcmp($_GET['contactNickName'],$contact[1])){
-              echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
-            }
-          }
-          echo " ><img src=".$user ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]."</h2></a>";
-        }
-      }     
-      echo "</div>"; 
-    }
+    echo "</div>"
 
   
 ?>   

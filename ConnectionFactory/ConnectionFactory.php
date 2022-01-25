@@ -1,5 +1,8 @@
-<?php 
-    class ConnectionFactory {
+<?php
+
+use JetBrains\PhpStorm\ArrayShape;
+
+class ConnectionFactory {
         private $servername;
         private $username;
         private $password;
@@ -14,7 +17,13 @@
         }
 
         function query ($sql) {
-            return mysqli_query($this->connection,$sql);
+            $conn = $this->connect() ;
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            $query = mysqli_query($this->connection,$sql);
+            $this->close();
+            return $query;
         }
 
         function connect() {

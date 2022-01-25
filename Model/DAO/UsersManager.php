@@ -10,12 +10,7 @@
         // USER 
         function login ($nick,$pass) {    
             $nick= preg_replace($this->regex,'',$nick);
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".md5($nick.$pass)."'");  
-            $this->conFactory->close();
             if (mysqli_num_rows($result) > 0) {
                 $_SESSION['nickName'] = $nick;
                 header("Location: index.php");
@@ -27,12 +22,7 @@
 
         function checkLogin ($nick,$pass) {   
             $nick= preg_replace($this->regex,'',$nick);
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".md5($nick.$pass)."'");  
-            $this->conFactory->close();
             if (mysqli_num_rows($result) > 0) {
                 return true;
             } else {
@@ -41,29 +31,14 @@
         }
 
         function singUp ($name,$nick,$pass) { 
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".md5($nick.$pass)."')")) {
-                $this->conFactory->close();
                 $this->login($nick,$pass);
             } 
         }    
         
         function uploadProfilePic ($nick,$pic,$format) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $this->conFactory->query("DELETE FROM profilepicture WHERE clienteId = '".$nick."'");
-            $conn->close();
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $this->conFactory->query("INSERT INTO profilepicture (clienteId,picture,format) VALUES ('".$nick."','".$pic."','".$format."')");
-            $this->conFactory->close();
         }
 
         function uploadProfile ($nick,$pass,$newNick,$name) {
@@ -71,16 +46,11 @@
             $newNick= preg_replace($this->regex,'',$newNick);           
             if ($this->checkLogin($nick,$pass)) {
                 if (!$this->checkNick ($newNick) || strcmp($nick,$newNick) == 0) {
-                    $conn = $this->conFactory->connect();
-                    if (!$conn) {
-                        die("Connection failed: " . mysqli_connect_error());
-                    }
                     if($this->conFactory->query("UPDATE clientes SET nickName = '".$newNick."', nomeCliente = '".$name."', senha = '".md5($newNick.$pass)."' WHERE nickName = '".$nick."' ")) {
                         $_SESSION['nickName']=$newNick;
                         header("Location: editProfile.php?message=Alteração com sucesso!");
                         die();
                     }
-                    $this->conFactory->close();
                 } else if ($this->checkNick ($newNick)) {
                     header("Location: editProfile.php?error=@".$newNick." já existente");
                     die();
@@ -95,12 +65,10 @@
         function uploadPassword ($nick,$pass,$newPass,$newPassConfirmation) {
             if ($this->checkLogin($nick,$pass)) {
                 if (strcmp($newPass,$newPassConfirmation) == 0) {
-                    $this->conFactory->connect();
                     if($this->conFactory->query("UPDATE clientes SET senha = '".md5($nick.$newPass)."' WHERE nickName = '".$nick."' ")) {
                         header("Location: editPassword.php?message=Senha alterada com sucesso!");
                         die();
                     }
-                    $this->conFactory->close();
                 } else {
                     header("Location: editPassword.php?error=senha de confirmação não coincide");
                     die();
@@ -112,12 +80,7 @@
         }        
 
         function checkNick ($nick) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."'");  
-            $this->conFactory->close();
             if (mysqli_num_rows($result) > 0) {
                 return true;
             } else {
@@ -126,10 +89,6 @@
         }   
         
         function name($nick) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $result =  $this->conFactory->query("SELECT nomeCliente FROM clientes WHERE nickName ='".$nick."'");
             while($row = mysqli_fetch_assoc($result)) { 
                 return $row["nomeCliente"];
@@ -137,41 +96,54 @@
         }
 
         function contacts ($nick) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $result =  $this->conFactory->query("call contatos('".$nick."')");
             $count=0;
             $contacts = array();
             while($row = mysqli_fetch_assoc($result)) { 
                 $contacts[$count++]=array($row["Contato"],$row["nickNameContato"]);
             }
-            $conn->close();
-            return $contacts;
+            $html="";
+            if (count($contacts) > 0) {
+                $html.= "<div class='contacts' >";
+                foreach ($contacts as $contact)  {
+                    $html.= "<a href='messages.php?contactNickName=".$contact[1]."' >";
+                    $html.= "<h2 ";
+                  if (!empty($_GET['contactNickName'])){
+                    if (!strcmp($_GET['contactNickName'],$contact[1])){
+                        $html.= "style='color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);'";
+                    }
+                  }
+                  $html.= " ><img src='".$this ->downloadProfilePic($contact[1])."' class='picContact'/>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg($contact[1])."</h2></a>";
+                }
+                $html.= "</div>"; 
+            }    
+            return $html;        
         }
 
         function searchContact ($nick) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $result =  $this->conFactory->query("call searchContato('".$nick."')");
             $count=0;
             $contacts = array();
             while($row = mysqli_fetch_assoc($result)) { 
                 $contacts[$count++]=array($row["Contato"],$row["nickNameContato"]);
             }
-            $conn->close();
-            return $contacts;
+            if (count($contacts) > 0) {
+                // output data of each row
+                foreach ($contacts as $contact)  {
+                  echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" >";
+                  echo "<h2 ";
+                  if (!empty($_GET['contactNickName'])){
+                    if (!strcmp($_GET['contactNickName'],$contact[1])){
+                      echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
+                    }
+                  }
+                  echo " ><img src=".$this ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]."</h2></a>";
+                }
+             }   
         }
 
 
         function downloadProfilePic ($contactNickName) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
@@ -180,18 +152,14 @@
             } else {
                 $pic = "Images/profilePic.png";
             }
-            $conn->close();
             return $pic;
         }        
         
         // MESSAGES 
-
-        function messages ($contactNickName) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
-            $result = $this->conFactory->query("call messages('".$_SESSION['nickName']."','".$contactNickName."')");
+        
+        function messages ($nickName,$contactNickName) {
+            $this->receivedMsg($contactNickName );
+            $result = $this->conFactory->query("call messages('".$nickName."','".$contactNickName."')");
             $messages = array();
             if (mysqli_num_rows($result) > 0) {
               $idMessage = '0';   
@@ -215,15 +183,49 @@
                 $idMessage = "".$row["Idmessage"];
               }
             } 
-            $conn->close();
-            return $messages;
+            if (count($messages) > 0) {
+               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;' width='30px' height='30px' src='Images/down.png'/></center>";
+               $mensagens.= "<br>";
+                foreach ($messages as $msg) { 
+                  if ($msg[4]) {
+                    $color = "#285d33";
+                    $margin = "right";
+                    $float = "left";
+                  } else {
+                    $color = "#1d8634";
+                    $margin = "left";
+                    $float = "right";
+                    $mensagens.= "<div class='delete' style='color:grey;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
+                    $mensagens.= "<a href='delete.php?id=".$msg[3]."&contactNickName=".$contactNickName."' style='background-color:".$color."'><b>Deletar</b></a>";
+                    $mensagens.= "</div>";
+                  }        
+                  $mensagens.= "<br>";
+                  $mensagens.= "<div class='msg' style='background-color:".$color.";margin-".$margin.":50%;'>";
+                  $mensagens.= $msg[0];                  
+                  $mensagens.= "<p>".$msg[1]."<br><span style='float:right;'>".$msg[2]."</span></p>";    
+                  $mensagens.= "</div>";    
+                }
+            } else {
+               $mensagens= "<h3><center>Nenhuma mensagem de @".$contactNickName." até o momento<br>Faça seu primeiro envio!</center></h3>";
+            }
+            return $mensagens;
         }
 
-        function newMgs ($contactNickName) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
+        function newCurrentMsgs ($nickName,$contactNickName){
+            $result = $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$nickName."' AND messages.received = '0'");
+            if (mysqli_num_rows($result) > 0) {
+                while($row = mysqli_fetch_assoc($result)) {
+                    $count = $row["countMsg"];
+                    if(preg_replace("[0]","",$count."") == 0){
+                        return "0";
+                    } else {
+                        return $this->messages ($nickName,$contactNickName);
+                    }
+                }                   
             }
+        }
+
+        function newMg ($contactNickName) {
             $result = $this->conFactory->query("call newMsg('".$_SESSION['nickName']."','".$contactNickName."')");
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
@@ -231,31 +233,34 @@
                 if(preg_replace("[0]","",$count."") == 0){
                     $count = "";
                 } else {
-                    $count = "<span id=".$contactNickName." class=\"newMsg\">&nbsp".$count."</span>";
+                    $count = "<span id=".$contactNickName." class='newMsg'>&nbsp".$count."</span>";
                 }
             }
-            $conn->close();
             return $count;
         }
 
-        function receivedMsg ($contactNickName) {
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
+        function newContacts ($nick) {
+            $result = $this->conFactory->query("call newMsgs('".$_SESSION['nickName']."')");
+            $count="0";
+            while($row = mysqli_fetch_assoc($result)) {
+                $count = $row["countMsg"];
+                if(preg_replace("[0]","",$count."") == 0){
+                    return "0";
+                } else {
+                    $this->conFactory->query("DELETE FROM newMsg WHERE msgTo = '".$_SESSION['nickName']."'");
+                    return $this->contacts($nick);
+                }
             }
-            $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$_SESSION['nickName']."'");
-            $conn->close();
-        }
+        }        
 
+        function receivedMsg ($contactNickName) {
+            $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$_SESSION['nickName']."'");
+        }
 
         function createMessage ($msg,$contactNickName) { 
             if (!empty($_SESSION['nickName'])) {
-                $conn = $this->conFactory->connect();
-                if (!$conn) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
                 $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
-                $conn->close();
+                $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$_SESSION['nickName']."','".$contactNickName."')");
                 header("Location: messages.php?contactNickName=".$contactNickName);
                 die(); 
             } else {
@@ -265,12 +270,9 @@
         }
 
         function deleteMessage ($id,$contactNickName) { 
-            $conn = $this->conFactory->connect();
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
             $this->conFactory->query("call deleteMessage(".$id.",'".$_SESSION['nickName']."')");
-            $conn->close();
+            $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$_SESSION['nickName']."','".$contactNickName."')");
+            $this->conFactory->query("UPDATE messages SET received = 0 WHERE messages.MsgFrom = '".$_SESSION['nickName']."' and messages.MsgTo = '".$contactNickName."'");          
             header("Location: messages.php?contactNickName=".$contactNickName);
             die(); 
         }
