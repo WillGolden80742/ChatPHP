@@ -32,7 +32,7 @@
         $name = time().'.jpg';
         if (move_uploaded_file($pic['tmp_name'], $name)) {
             $size = filesize($name);     
-            $maxSize = 10000000;    
+            $maxSize = 1000000;    
             if ($size < $maxSize) {   
                 $mysqlImg = addslashes(fread(fopen($name, "r"), $size));
                 $user->uploadProfilePic($_SESSION['nickName'],$mysqlImg,'jpg');
@@ -40,12 +40,12 @@
                 echo "<p>Tamanho máximo de ".$maxSize." bytes</p>";
             }
         } 
-        echo "<img class=\"profilePic\" src=\"".$user ->downloadProfilePic($_SESSION['nickName'])."\" id=\"profilePic\" onclick=\"openfile();\"> </img> ";
+        echo "<div ><img src='Images/blank.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic($_SESSION['nickName']).");' onclick='openfile();' /></div>";
     } else {
-        echo "<img src=".$user ->downloadProfilePic($_SESSION['nickName'])." class=\"profilePic\" id=\"profilePic\" onclick=\"openfile();\" > </img> ";
+        echo "<div ><img src='Images/blank.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic($_SESSION['nickName']).");' onclick='openfile();' /></div>";
     }
 ?>
-<form action="editProfile.php" method="post" enctype="multipart/form-data">
+<form action="editPassword.php" method="post" enctype="multipart/form-data">
     <input id="editProfilePic" accept=".jpg,.png,.jpge" onchange="display();" style="display:none;" id="editProfile" type="file" name="pic"> 
     <input class="inputSubmit salvar" type=submit value="SALVAR">
 </form>

@@ -38,9 +38,9 @@
                 echo "<p>Tamanho máximo de ".$maxSize." bytes</p>";
             }
         } 
-        echo "<img class=\"profilePic\" src=\"".$user ->downloadProfilePic($_SESSION['nickName'])."\" id=\"profilePic\" onclick=\"openfile();\"> </img> ";
+        echo "<div ><img src='Images/blank.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic($_SESSION['nickName']).");' onclick='openfile();' /></div>";
     } else {
-        echo "<img src=".$user ->downloadProfilePic($_SESSION['nickName'])." class=\"profilePic\" id=\"profilePic\" onclick=\"openfile();\" > </img> ";
+        echo "<div ><img src='Images/blank.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic($_SESSION['nickName']).");' onclick='openfile();' /></div>";
     }
 ?>
 <form action="editProfile.php" method="post" enctype="multipart/form-data">
