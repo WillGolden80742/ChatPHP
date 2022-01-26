@@ -137,7 +137,7 @@
                       echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
                     }
                   }
-                  echo " ><img src=".$this ->downloadProfilePic($contact[1])." class=\"picContact\"/>&nbsp&nbsp".$contact[0]."</h2></a>";
+                  echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(".$this ->downloadProfilePic($contact[1]).");' /></div>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg($contact[1])."</h2></a>"; 
                 }
              }   
         }
