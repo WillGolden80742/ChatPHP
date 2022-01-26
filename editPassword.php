@@ -12,7 +12,9 @@
         width:150px;
         height:150px;
         background-image: url("Images/profileMedium.png");
-        background-size: 100%;   
+        background-size: 100vw auto;
+        background-position-x:50%;
+        background-size: cover;   
     }
     .salvar {
         display:none;
