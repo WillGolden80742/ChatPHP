@@ -22,8 +22,6 @@
 <div class="editProfile">
 <center> 
 <?php 
-    $conFactory = new ConnectionFactory();
-    $user = new UsersManager();
     $pic=null;
     if (!empty($_FILES["pic"])) {
         $pic=$_FILES["pic"];

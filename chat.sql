@@ -166,7 +166,7 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (39, 'blz mano', 'ally77', 'willGolden', '2021-03-11 18:28:45', 1),
 (40, 'Como vc tá?', 'ally77', 'willGolden', '2021-03-11 18:28:47', 1),
 (41, 'Traquilo', 'willGolden', 'ally77', '2021-03-11 18:29:47', 1),
-(43, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop', 'ally77', 'willGolden', '2021-03-12 13:03:03', 1),
+(43, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop', 'ally77', 'willGolden', '2021-03-12 13:03:03', 1),
 (240, 'Daora', 'ally77', 'willGolden', '2021-03-27 18:45:20', 1),
 (243, 'E ai Will\r\n', 'rafa77', 'willGolden', '2021-03-30 14:37:11', 1),
 (245, 'Olá', 'juhMonique', 'willGolden', '2021-03-30 14:41:48', 1),

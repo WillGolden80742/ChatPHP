@@ -1,40 +1,15 @@
 <?php
-    include 'ConnectionFactory/ConnectionFactory.php';
-    session_start();
+    include 'Autenticate.php';
     class usersManager {
         private $regex = '/[^[:alpha:]_0-9]/';
         private $conFactory;
+        private $auth;
         function __construct() {
             $this->conFactory = new ConnectionFactory();
+            $this->auth = new AuthManager();
+            $this->auth->isLogged();
         }
-        // USER 
-        function login ($nick,$pass) {    
-            $nick= preg_replace($this->regex,'',$nick);
-            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".md5($nick.$pass)."'");  
-            if (mysqli_num_rows($result) > 0) {
-                $_SESSION['nickName'] = $nick;
-                header("Location: index.php");
-                die();   
-            } else {
-                echo "<center><h3 style=\"color:red;\"> nickname ou senha incorreta </h3></center>";
-            }
-        }
-
-        function checkLogin ($nick,$pass) {   
-            $nick= preg_replace($this->regex,'',$nick);
-            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".md5($nick.$pass)."'");  
-            if (mysqli_num_rows($result) > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        function singUp ($name,$nick,$pass) { 
-            if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".md5($nick.$pass)."')")) {
-                $this->login($nick,$pass);
-            } 
-        }    
+        // USER    
         
         function uploadProfilePic ($nick,$pic,$format) {
             $this->conFactory->query("DELETE FROM profilepicture WHERE clienteId = '".$nick."'");
@@ -44,14 +19,14 @@
         function uploadProfile ($nick,$pass,$newNick,$name) {
             $nick= preg_replace($this->regex,'',$nick);
             $newNick= preg_replace($this->regex,'',$newNick);           
-            if ($this->checkLogin($nick,$pass)) {
-                if (!$this->checkNick ($newNick) || strcmp($nick,$newNick) == 0) {
+            if ($this->auth->checkLogin($nick,$pass)) {
+                if (!$this->auth->checkNick ($newNick) || strcmp($nick,$newNick) == 0) {
                     if($this->conFactory->query("UPDATE clientes SET nickName = '".$newNick."', nomeCliente = '".$name."', senha = '".md5($newNick.$pass)."' WHERE nickName = '".$nick."' ")) {
                         $_SESSION['nickName']=$newNick;
                         header("Location: editProfile.php?message=Alteração com sucesso!");
                         die();
                     }
-                } else if ($this->checkNick ($newNick)) {
+                } else if ($this->auth->checkNick ($newNick)) {
                     header("Location: editProfile.php?error=@".$newNick." já existente");
                     die();
                 }
@@ -63,7 +38,7 @@
         }
 
         function uploadPassword ($nick,$pass,$newPass,$newPassConfirmation) {
-            if ($this->checkLogin($nick,$pass)) {
+            if ($this->auth->checkLogin($nick,$pass)) {
                 if (strcmp($newPass,$newPassConfirmation) == 0) {
                     if($this->conFactory->query("UPDATE clientes SET senha = '".md5($nick.$newPass)."' WHERE nickName = '".$nick."' ")) {
                         header("Location: editPassword.php?message=Senha alterada com sucesso!");
@@ -79,15 +54,6 @@
             }        
         }        
 
-        function checkNick ($nick) {
-            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."'");  
-            if (mysqli_num_rows($result) > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }   
-        
         function name($nick) {
             $result =  $this->conFactory->query("SELECT nomeCliente FROM clientes WHERE nickName ='".$nick."'");
             while($row = mysqli_fetch_assoc($result)) { 

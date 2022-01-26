@@ -1,4 +1,4 @@
-<?php include 'index.php' ?>
+<?php include 'autenticate.php' ?>
 <html>
 <head>  
 </head>    
@@ -16,7 +16,6 @@
 </center>   
 </div>
 <?php 
-    $user = new UsersManager();
     if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
         $nick = $_POST["nick"];
         $pass = $_POST["pass"];  

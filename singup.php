@@ -1,4 +1,4 @@
-<?php include 'index.php' ?>
+<?php include 'autenticate.php' ?>
 <html>
 <head>  
 </head>    
@@ -19,7 +19,6 @@
 </center>   
 </div>
 <?php 
-    $user = new UsersManager();
     if (!empty($_POST["name"]) || !empty($_POST["nick"]) || !empty($_POST["pass"]) || !empty($_POST["passConfirmation"]) ) {
         $error = "<center><h3 style=\"color:red;\">";
         if (empty($_POST["name"])) {
