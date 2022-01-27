@@ -37,6 +37,7 @@
       center h3 {
             font-size:32px;
       }
+      
     }
   </style>  
 
