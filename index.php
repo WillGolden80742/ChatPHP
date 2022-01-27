@@ -1,6 +1,5 @@
 <?php 
     include 'Model/DAO/UsersManager.php';   
-    
     $user = new UsersManager(); 
 ?>
 <DOCTYPE html>
@@ -26,7 +25,10 @@
         $(document).ready(function(){
           down ();
           <?php 
-            $nickNameContact = $_GET['contactNickName'];
+            $nickNameContact = "";
+            if (!empty($_GET['contactNickName'])) {
+              $nickNameContact = $_GET['contactNickName'];
+            }
           ?>
           var nickNameContact = "<?php echo $nickNameContact; ?>";
           newContact();
@@ -90,29 +92,24 @@
 <?php
 
     echo "<div  class=\"header\"><h2>";
-    $userNickName = "";
-    if (empty($_SESSION['nickName'])) { 
-      echo "<a href='login.php'>Login</a> <a>|</a> <a href='singup.php'>Sing Up</a>";
-    } else {
-      echo "<a href='logout.php' >⇤ </a>";
-      echo "<span >@".$_SESSION['nickName']."</span><a href=\"editProfile.php\"> •••</a></h2>";
-      echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" type=text name=search></form>";
-      $userNickName = $_SESSION['nickName'];
-    }
+    echo "<a href='logout.php' >⇤ </a>";
+    echo "<span >@".$_SESSION['nickName']."</span><a href=\"editProfile.php\"> •••</a></h2>";
+    echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" type=text name=search></form>";
+    $userNickName = $_SESSION['nickName'];
     echo "</div>";
     echo "<div id=\"contacts\">";
-      if (empty($_POST["search"])) {
-        if (empty($_GET['contactNickName'])) {
-          echo $user->contacts($userNickName,null);
-        } else {
-          echo $user->contacts($userNickName,$_GET['contactNickName']);
-        }
+    if (empty($_POST["search"])) {
+      if (empty($_GET['contactNickName'])) {
+        echo $user->contacts($userNickName,null);
       } else {
-        $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
-        echo "<div class='contacts'>";  
-        $contacts = $user->searchContact($_POST["search"]);
-        echo "</div>"; 
+        echo $user->contacts($userNickName,$_GET['contactNickName']);
       }
+    } else {
+      $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
+      echo "<div class='contacts'>";  
+      $contacts = $user->searchContact($_POST["search"]);
+      echo "</div>"; 
+    }
     echo "</div>"
 
   
