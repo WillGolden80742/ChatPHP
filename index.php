@@ -88,30 +88,26 @@
         });
    </script> 
   <style id="styleIndex">
-    .back  {
-      display:none;
-    }
-    .back img, .logout img{
-      width:15px;
-    }
 
     @media only screen and (max-width: 1080px) {
       .contacts, .search:hover {
         width:97%;
-        height:80%;
+      }
+      .contacts {
+        height: 82%;
       }
       .search {
         height:65px; 
-        background-size:100%;
-        background-position-y:8px;
+        background-image: url("Images/search-dark.png");
+        background-position-y:12px;
         background-position-x:0px;
         left:92%;
+        font-size:32px;
       }
       .search:hover{
-        height:65px; 
-        background-size:4%;
-        background-position-y:9px;
-        background-position-x:12px;
+        background-image: url("Images/search-dark.png");
+        background-position-y:12px; 
+        border-radius:40px;
       }
       .contacts a h2 img {
         width:80px;
@@ -140,8 +136,14 @@
     echo "<div  class=\"header\"><h2>";
     echo "<a class='logout' href='logout.php' ><img src=\"Images/left-arrow.png\" /></a>";
     echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    
-    echo "<span class='user' >@".$_SESSION['nickName']."<a href=\"editProfile.php\"> •••</a></span></h2>";
-    echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" type=text name=search></form>";
+    if (!empty($_GET['contactNickName'])) {
+      echo "<a class='picMessage'>";
+      echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($_GET['contactNickName']).");' />";
+      echo "<a class='userName'>".$user->name($_GET['contactNickName'])."</a>";
+      echo "</a>";
+    }
+    echo "<span class='user' >&nbsp;@".$_SESSION['nickName']."<a href=\"editProfile.php\"> •••</a></span></h2>";
+    echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contados ...' type=text name=search></form>";
     $userNickName = $_SESSION['nickName'];
     echo "</div>";
     echo "<div id=\"contacts\">";

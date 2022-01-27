@@ -7,6 +7,10 @@
  
   }
 
+  .from {
+    opacity:0.5;
+  }
+
   body {
     background:#002e001f;
   }
@@ -16,7 +20,7 @@
     width:16px;
     height:100%;
     border-radius:100%;
-    color:white;
+    color:black;
     background-color: #285d33 ;
     align-items: center;
     display: flex;
@@ -97,6 +101,7 @@
     background-position-x:50%;
     background-size: cover;
   }
+
   textarea { 
     font-size: 18px; 
   }
@@ -117,10 +122,11 @@
     width:40px;   
     height:40px;   
     left:92%;
-    background-image: url("../../Images/send.png");
+    background-image: url("../../Images/send_vectorized.png");
     background-repeat: no-repeat;
     background-position-x:10px;
     background-position-y:8px;
+    background-size:70%;
   }
 
   .header {
@@ -154,12 +160,13 @@
     border: none;
     align-items: center;
     padding-left:40px;
-    background-position-y:5px;
+    background-position-y:4px;
     background-position-x:12px;
     border:solid 2px rgba(255, 255, 255, 0);
     border-radius:20px;
     font-weight: bolder;
     background-image: url("../../Images/search.png");
+
     background-repeat: no-repeat;
   }
 
@@ -172,7 +179,7 @@
     width:27.5%;
     border: none;
     background-position-y:5px;
-    background-position-x:12px;
+    background-position-x:5px;
     border-radius:20px;
     border:solid 2px #285d33;
     font-weight: bolder;
@@ -204,16 +211,52 @@
     display:block;
     padding:10px;
     border: 3px solid #293528;
-    color:white;
+    color:black;
     margin-left:-42px;
   }
   .msg {
-    color: white;
+    color:black;
     font-weight: bold;
   }
   .imgEmoji {
     margin-top:1.5%;
     margin-right:10.5%;
+  }
+
+  .back  {
+    display:none;
+  }
+  .back img, .logout img{
+    width:15px;
+  }
+
+  .picMessage img {
+    border-radius:100px;
+    background-image: url("Images/profilePic.png");
+    height:65px;
+    width:65px;
+    display: inline;
+    background-size:100%;
+    position:absolute;
+    top:5px;
+    margin-left:40px;
+  }
+
+  @-moz-document url-prefix() {
+    .picMessage img {
+      top:1px;
+    }
+  }
+
+  .userName {
+    position:absolute;
+    top:15px;
+    margin-left:115px;
+    font-size:38;
+    color:black;
+  }
+  .userName, .picMessage img {
+    display:none;
   }
 
   .inputNick {
@@ -239,7 +282,7 @@
   }
 
   .singUp {
-    color:white;
+    color:black;
     padding:5px;
     padding-bottom:10px;
     padding-top:5px; 
@@ -254,7 +297,7 @@
 
   .send {
     border: 3px solid rgba(0,0,0,0);
-  }
+  } 
 
   ::-webkit-scrollbar {
     width:7px;
@@ -283,6 +326,8 @@
     color: #285d33;
     font-weight: bold;
   }
+
+
 
 
     

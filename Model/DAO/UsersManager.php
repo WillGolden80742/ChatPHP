@@ -134,11 +134,11 @@
                 if (strcmp($row["Idmessage"],$idMessage) !== 0) {
                     if (!empty($row["Messages"])) {
                         if (strcmp($row["MsgFrom"], $contactNickName) == 0 ) {
-                            $from = "From : @".$row["MsgFrom"];
+                            $from = "<span class='from'>From : @".$row["MsgFrom"]."</span>";
                             $left = true;
                         } else {
                             $left = false;
-                            $from = "You : ";
+                            $from = "<span class='from'>You : </span>";
                         }                      
                         $message = $row["Messages"]; 
                         $hour = $row["HourMsg"];  

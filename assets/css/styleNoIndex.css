@@ -1,13 +1,15 @@
 @media only screen and (max-width: 1080px) {
     * {
-        font-size: 32px;
-    }    
+        font-size:24px;
+    } 
+
     .contacts, .search {
       display: none;
     } 
+
     .messages {
       width:97%;
-      height:57%;
+      height:61%;
       left:-0.8%;
     }
     .text {
@@ -18,27 +20,24 @@
     .send {
         width:70px;   
         height:70px;
-        background-size:70%;
         background-position-x:13px;
     }
     .back {
       margin-top:22px;
       display: block;
     }
-    .logout {
+
+    .logout , .user {
       display: none;
     }
+
+    .userName , .picMessage img {  
+      display:block;
+    }
+
     .header {
-      height:45px;
+      height:50px;
     }
-    .user {
-      display: none;
-    }
-
-    .messages p {
-        font-size: 24px;
-    }
-
     .inputText,.inputNick, .inputPassword, .inputSubmit {
         font-size: 32px;
         padding:20px;
