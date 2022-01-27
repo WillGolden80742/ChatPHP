@@ -34,6 +34,9 @@
       .header a {
         font-size: 32px;
       }
+      center h3 {
+            font-size:32px;
+      }
     }
   </style>  
 
