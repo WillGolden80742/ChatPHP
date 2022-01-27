@@ -26,8 +26,11 @@
         .editPic {
             display: block;
         }
+        center h3 {
+            font-size:32px;
+        }
     } 
-    
+
 </style>    
 <body class="container">
 <div class="editProfile">

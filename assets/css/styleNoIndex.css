@@ -42,12 +42,13 @@
         height:70px;
         background-position-y:22px;
         padding-left:40px;
+        border-radius:40px;
     }
 
     .inputSubmit {
         padding:20px;
         padding-top:15px;
-     }
+    }
 
      .editPic img, .editPass img, .editPro img {
         height:50px;
