@@ -113,6 +113,12 @@
     border-radius:10px; 
   }
 
+  @-moz-document url-prefix() {
+    .header {
+      margin-top:-10px;
+    }
+  }
+
   .send:hover {
     background-color:#285d33;
   }
