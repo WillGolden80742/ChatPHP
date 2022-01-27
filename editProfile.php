@@ -1,6 +1,7 @@
 <?php include 'index.php' ?>
 <html>
 <head>  
+<link rel="stylesheet" href="assets/css/styleNoIndex.css">
 </head>     
 <style id="stylePic">
     .profilePic {
@@ -14,9 +15,19 @@
         background-position-x:50%;
         background-size: cover;   
     }
-    .salvar {
+    .salvar, .editPic{
         display:none;
     }
+
+    @media only screen and (max-width: 1080px) {
+        .profilePic {
+            display: none;
+        }
+        .editPic {
+            display: block;
+        }
+    } 
+    
 </style>    
 <body class="container">
 <div class="editProfile">
@@ -43,6 +54,7 @@
         echo "<div ><img src='Images/blank.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic($_SESSION['nickName']).");' onclick='openfile();' /></div>";
     }
 ?>
+<a href="editProfilePic.php" class="editPic"><img src="Images/imageMediumIcon.png" ></a>
 <form action="editProfile.php" method="post" enctype="multipart/form-data">
     <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="display();" style="display:none;" id="editProfile" type="file" name="pic"> 
     <input class="inputSubmit salvar" type=submit value="SALVAR">
@@ -53,7 +65,7 @@
     <input class="inputPassword" placeholder="Password"  type=password name=pass><br><br>
     <input class="inputSubmit" type=submit value="ATUALIZAR"> 
 </form>
-<a href="editPassword.php"><img src="Images/passwordIcon-dark.png"></a>
+<a href="editPassword.php" class="editPass"><img src="Images/passwordMediumIcon-dark.png"></a>
 <?php
     if (!empty($_GET['error'])) {
         echo "<center><h3 style=\"color:red;\">".$_GET['error']."</h3></center>";

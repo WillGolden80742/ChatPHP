@@ -30,7 +30,8 @@
     margin:10px;
     box-shadow: 0px 10px 10px 0px rgb(0 0 0 / 35%);
   }
-  
+
+
   .messages {
     padding: 0px 10px 10px 10px;
     margin: 5px;
@@ -51,6 +52,7 @@
     position: absolute;
   } 
   
+
   .contacts a h2 {
     font-size: 14px;
     min-width:100px;
@@ -72,7 +74,6 @@
     border-top-left-radius:10px; 
     border-bottom-right-radius:10px;     
     margin: 5px;
-    top:80%;
     left:29%;
     width:61%;
     height:17%;
@@ -115,7 +116,6 @@
     padding:10px;   
     width:40px;   
     height:40px;   
-    top:82.5%;
     left:92%;
     background-image: url("../../Images/send.png");
     background-repeat: no-repeat;
@@ -168,11 +168,9 @@
     top:5px;
     margin-top: 0px;
     background:none;
-    height:35px;
     left:7px;
     width:27.5%;
     border: none;
-    background-repeat: no-repeat;
     background-position-y:5px;
     background-position-x:12px;
     border-radius:20px;
@@ -198,26 +196,26 @@
     font-weight: bolder;
   }
 
-    .delete a {
-      display: none;
-    }
-    .delete:hover a {
-      position: absolute;
-      display:block;
-      padding:10px;
-      border: 3px solid #293528;
-      color:white;
-      margin-left:-42px;
-    }
-    .msg {
-      color: white;
-      font-weight: bold;
-    }
-    .imgEmoji {
-      margin-top:1.5%;
-      margin-right:10.5%;
-    }
-    
+  .delete a {
+    display: none;
+  }
+  .delete:hover a {
+    position: absolute;
+    display:block;
+    padding:10px;
+    border: 3px solid #293528;
+    color:white;
+    margin-left:-42px;
+  }
+  .msg {
+    color: white;
+    font-weight: bold;
+  }
+  .imgEmoji {
+    margin-top:1.5%;
+    margin-right:10.5%;
+  }
+
   .inputNick {
     background-image: url("../../Images/arrobaIcon-dark.png");  
   }
@@ -247,6 +245,9 @@
     padding-top:5px; 
   }
 
+  .editPic img, .editPass img, .editPro img {
+    height:18px;
+  }
   .contacts, .messages, .text, .msg{
       border: 3px solid #285d33;
   }

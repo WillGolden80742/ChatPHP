@@ -10,27 +10,44 @@
 <script src="assets/js/jquery.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
       <script>
+        <?php 
+          $nickNameContact = "";
+          if (!empty($_GET['contactNickName'])) {
+            $nickNameContact = $_GET['contactNickName'];
+          }
+        ?>
+        var nickNameContact = "<?php echo $nickNameContact; ?>";
         var h;
+
         function down () {
           document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
           document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
           document.getElementById("down").innerHTML="";
           h =  document.getElementById("messages").scrollTop;
-        }
+        }     
+
         function removeButtonDown () {
-          if (((document.getElementById("messages").scrollTop)/h)*100 >= 90) {
-            down ();
+          if (((document.getElementById("messages").scrollTop)/h)*100 >= 99) {
+            document.getElementById("down").innerHTML="";
+            document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
+            h =  document.getElementById("messages").scrollTop;
           }
         }
+
+        function deleteMessage (id) {
+          $.ajax({
+            url: 'delete.php?id='+id,
+            method: 'POST',
+            data: {nickNameContact: nickNameContact},
+            dataType: 'json'
+          }).done(function(result) {
+              document.getElementById('messages').innerHTML=result;
+              document.getElementById("down").innerHTML="";
+          });
+        }
+
         $(document).ready(function(){
           down ();
-          <?php 
-            $nickNameContact = "";
-            if (!empty($_GET['contactNickName'])) {
-              $nickNameContact = $_GET['contactNickName'];
-            }
-          ?>
-          var nickNameContact = "<?php echo $nickNameContact; ?>";
           newContact();
           function newContact() {
             setTimeout(function () {
@@ -54,7 +71,7 @@
                         down();
                       } else {
                         document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
-                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;bottom: 30%;' width='30px' height='30px' src='Images/down.png'/> ";
+                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%;' width='50px' src='Images/down.png'/> ";
                       }
                     } else if (result[0] == "2")  {
                       document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
@@ -71,7 +88,48 @@
         });
    </script> 
   <style id="styleIndex">
+    .back  {
+      display:none;
+    }
+    .back img, .logout img{
+      width:15px;
+    }
 
+    @media only screen and (max-width: 1080px) {
+      .contacts, .search:hover {
+        width:97%;
+        height:80%;
+      }
+      .search {
+        height:65px; 
+        background-size:100%;
+        background-position-y:8px;
+        background-position-x:0px;
+        left:92%;
+      }
+      .search:hover{
+        height:65px; 
+        background-size:4%;
+        background-position-y:9px;
+        background-position-x:12px;
+      }
+      .contacts a h2 img {
+        width:80px;
+        height:80px;
+      }
+      .contacts a h2, .user  {
+        font-size:48px;
+      }
+      .header {
+        height:60px;
+      }
+      .back img, .logout img{
+        width:30px;
+      }
+      .down {
+        top:0px;
+      }
+    }    
   </style>  
 
 </head>    
@@ -80,8 +138,9 @@
 <?php
 
     echo "<div  class=\"header\"><h2>";
-    echo "<a href='logout.php' >⇤ </a>";
-    echo "<span >@".$_SESSION['nickName']."</span><a href=\"editProfile.php\"> •••</a></h2>";
+    echo "<a class='logout' href='logout.php' ><img src=\"Images/left-arrow.png\" /></a>";
+    echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    
+    echo "<span class='user' >@".$_SESSION['nickName']."<a href=\"editProfile.php\"> •••</a></span></h2>";
     echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" type=text name=search></form>";
     $userNickName = $_SESSION['nickName'];
     echo "</div>";

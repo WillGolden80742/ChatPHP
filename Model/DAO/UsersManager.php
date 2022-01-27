@@ -53,7 +53,7 @@
                 die();
             }        
         }        
-
+        
         function name($nick) {
             $result =  $this->conFactory->query("SELECT nomeCliente FROM clientes WHERE nickName ='".$nick."'");
             while($row = mysqli_fetch_assoc($result)) { 
@@ -150,7 +150,7 @@
               }
             } 
             if (count($messages) > 0) {
-               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%;' width='30px' height='30px' src='Images/down.png'/></center>";
+               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%;' width='50px' src='Images/down.png'/></center>";
                $mensagens.= "<br>";
                 foreach ($messages as $msg) { 
                   if ($msg[4]) {
@@ -162,7 +162,7 @@
                     $margin = "left";
                     $float = "right";
                     $mensagens.= "<div class='delete' style='color:grey;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
-                    $mensagens.= "<a href='delete.php?id=".$msg[3]."&contactNickName=".$contactNickName."' style='background-color:".$color."'><b>Deletar</b></a>";
+                    $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[3].");'><b>Deletar</b></a>";
                     $mensagens.= "</div>";
                   }        
                   $mensagens.= "<br>";
@@ -257,8 +257,7 @@
             $this->conFactory->query("call deleteMessage(".$id.",'".$_SESSION['nickName']."')");
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$_SESSION['nickName']."','".$contactNickName."')");
             $this->conFactory->query("UPDATE messages SET received = '2' WHERE messages.MsgFrom = '".$_SESSION['nickName']."' and messages.MsgTo = '".$contactNickName."'");          
-            header("Location: messages.php?contactNickName=".$contactNickName);
-            die(); 
+            return $this->messages($_SESSION['nickName'],$contactNickName);
         }
   
     }

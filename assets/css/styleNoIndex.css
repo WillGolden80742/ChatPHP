@@ -1,0 +1,56 @@
+@media only screen and (max-width: 1080px) {
+    .contacts, .search {
+      display: none;
+    } 
+    .messages {
+      width:97%;
+      height:57%;
+      left:-0.8%;
+    }
+    .text {
+      width:90%;
+      height:19%;
+      left:-0.8%;
+    }
+    .send {
+        width:70px;   
+        height:70px;
+        background-size:70%;
+        background-position-x:13px;
+    }
+    .back {
+      margin-top:22px;
+      display: block;
+    }
+    .logout {
+      display: none;
+    }
+    .header {
+      height:45px;
+    }
+    .user {
+      display: none;
+    }
+
+    .messages p {
+        font-size: 24px;
+    }
+
+    .inputText,.inputNick, .inputPassword, .inputSubmit {
+        font-size: 32px;
+        padding:20px;
+        height:70px;
+        background-position-y:22px;
+        padding-left:40px;
+    }
+
+    .inputSubmit {
+        padding:20px;
+        padding-top:15px;
+     }
+
+     .editPic img, .editPass img, .editPro img {
+        height:50px;
+     }
+
+  } 
