@@ -9,25 +9,7 @@
     }
 ?>
   <style id="styleMsg">
-    .delete a {
-      display: none;
-    }
-    .delete:hover a {
-      position: absolute;
-      display:block;
-      padding:10px;
-      border: 3px solid #293528;
-      color:white;
-      margin-left:-42px;
-    }
-    .msg {
-      color: white;
-      font-weight: bold;
-    }
-    .imgEmoji {
-      margin-top:1.5%;
-      margin-right:10.5%;
-    }
+
 
     <?php 
       echo "#".$contactNickName." {display:none;}";

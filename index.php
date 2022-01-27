@@ -71,19 +71,7 @@
         });
    </script> 
   <style id="styleIndex">
-    body {
-      background:#002e001f;
-    }
-    .newMsg {
-      font-size:14px;
-      width:16px;
-      height:100%;
-      border-radius:100%;
-      color:white;
-      background-color: #285d33 ;
-      align-items: center;
-      display: flex;
-    }
+
   </style>  
 
 </head>    

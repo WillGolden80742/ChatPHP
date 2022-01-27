@@ -46,7 +46,7 @@
     }
 ?>
 <form action="editPassword.php" method="post" enctype="multipart/form-data">
-    <input id="editProfilePic" accept=".jpg,.png,.jpge" onchange="display();" style="display:none;" id="editProfile" type="file" name="pic"> 
+    <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="display();" style="display:none;" id="editProfile" type="file" name="pic"> 
     <input class="inputSubmit salvar" type=submit value="SALVAR">
 </form>
 <form action="uploadPassword.php" method="post" >
