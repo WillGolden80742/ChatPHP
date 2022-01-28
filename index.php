@@ -118,27 +118,27 @@
         height: 90%;
       }
       .search {
-        height:65px; 
+        height:82px; 
         background-image: url("Images/search-dark.png");
-        background-position-y:12px;
+        background-position-y:20px;
         background-position-x:0px;
         left:92%;
         font-size:32px;
       }
       .search:hover{
         background-image: url("Images/search-dark.png");
-        background-position-y:12px; 
+        background-position-y:20px;
         border-radius:40px;
       }
       .contacts a h2 img {
-        width:80px;
-        height:80px;
+        width:128px;
+        height:128px;
       }
       .contacts a h2, .user  {
-        font-size:48px;
+        font-size:64px;
       }
       .header {
-        height:60px;
+        height:80px;
       }
       .back img, .logout img{
         width:30px;

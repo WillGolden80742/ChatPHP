@@ -9,9 +9,10 @@
 
     .messages {
       width:97%;
-      height:68%;
+      height:60%;
       left:-0.8%;
     }
+
     .delete {
       font-size:18px;
     }
@@ -21,11 +22,13 @@
     .delete:hover a {
       margin-left:-100px;
     }
+
     .text {
       width:90%;
       height:19%;
       left:-0.8%;
     }
+
     .send {
         width:70px;   
         height:70px;
@@ -33,8 +36,9 @@
         background-position-y:9px;
         left:90%;
     }
+
     .back {
-      margin-top:22px;
+      margin-top:64px;
       display: block;
     }
 
@@ -47,8 +51,9 @@
     }
 
     .header {
-      height:50px;
+      height:92px;
     }
+
     .inputText,.inputNick, .inputPassword, .inputSubmit {
         font-size: 32px;
         padding:20px;

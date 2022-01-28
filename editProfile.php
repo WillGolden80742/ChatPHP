@@ -27,6 +27,12 @@
         center h3 {
             font-size:32px;
         }
+        .header {
+            height:50px;
+        }
+        .back {
+            margin-top:36px;
+        }
     } 
 
 </style>    

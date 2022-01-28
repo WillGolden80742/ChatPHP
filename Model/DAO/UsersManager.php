@@ -1,7 +1,6 @@
 <?php
     include 'Autenticate.php';
     class usersManager {
-        private $regex = '/[^[:alpha:]_0-9]/';
         private $conFactory;
         private $auth;
         function __construct() {
