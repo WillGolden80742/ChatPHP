@@ -27,8 +27,7 @@
 </div>
 
 <?php 
-  echo "<form action=\"new.php\" method=\"post\"> <textarea id=\"text\" class=\"text\" name=messageText> </textarea> <input type=\"hidden\" name=\"contactNickName\" value=".$contactNickName."> <input class=\"send\" type=submit value=\"\">";
-  echo "</form>"
+  echo "<textarea id=\"text\" class=\"text\" name=messageText> </textarea> <input class=\"send\" type=submit onclick=\"createMessage();\" value=\"\">";
 ?>
   
 <div>

@@ -16,9 +16,9 @@
   }
 
   .newMsg {
-    font-size:14px;
-    width:16px;
-    height:100%;
+    font-size:18px;
+    width:20px;
+    height:20px;
     border-radius:100%;
     color:black;
     background-color: #285d33 ;
@@ -125,7 +125,7 @@
     background-image: url("../../Images/send_vectorized.png");
     background-repeat: no-repeat;
     background-position-x:10px;
-    background-position-y:8px;
+    background-position-y:6px;
     background-size:70%;
   }
 
@@ -156,7 +156,6 @@
     background:none;
     height:35px;
     left:24%;
-    width:0px;
     border: none;
     align-items: center;
     padding-left:40px;
@@ -166,7 +165,6 @@
     border-radius:20px;
     font-weight: bolder;
     background-image: url("../../Images/search.png");
-
     background-repeat: no-repeat;
   }
 
@@ -288,7 +286,7 @@
     padding-top:5px; 
   }
 
-  .editPic img, .editPass img, .editPro img {
+  .editPass img, .editPro img {
     height:18px;
   }
   .contacts, .messages, .text, .msg{
@@ -327,7 +325,13 @@
     font-weight: bold;
   }
 
+  .back, .logout, .messages, .text, .send, .contacts a h2, .user, .contacts, .search, .profilePic, .inputSubmit, .inputPassword, .inputText, .inputNick {
+    transition:0.125s; 
+    animation-delay: 0.25s;
+  }
 
-
+  .search  {
+    width: 40px;
+  }
 
     

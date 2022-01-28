@@ -78,7 +78,7 @@
                     if (!strcmp($nickNameContact,$contact[1])){
                         $html.= "style='color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);'";
                     }
-                  }
+                  } 
                   $html.= " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(".$this ->downloadProfilePic($contact[1]).");' /></div>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg($contact[1])."</h2></a>";
                 }
                 $html.= "</div>"; 
@@ -161,7 +161,7 @@
                     $margin = "left";
                     $float = "right";
                     $mensagens.= "<div class='delete' style='color:grey;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
-                    $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[3].");'><b>Deletar</b></a>";
+                    $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[3].");'><b>Apagar</b></a>";
                     $mensagens.= "</div>";
                   }        
                   $mensagens.= "<br>";
@@ -241,14 +241,12 @@
         }
 
         function createMessage ($msg,$contactNickName) { 
-            if (!empty($_SESSION['nickName'])) {
+            if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
                 $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
                 $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$_SESSION['nickName']."','".$contactNickName."')");
-                header("Location: messages.php?contactNickName=".$contactNickName);
-                die(); 
+                return $this->messages($_SESSION['nickName'],$contactNickName);
             } else {
-                header("Location: login.php");
-                die(); 
+                return "0";
             }
         }
 

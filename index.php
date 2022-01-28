@@ -46,8 +46,30 @@
           });
         }
 
+        function createMessage () {
+          var messageText = document.getElementById('text').value;
+          console.log(messageText);
+          $.ajax({
+            url: 'new.php',
+            method: 'POST',
+            data: {nickNameContact: nickNameContact, messageText: messageText},
+            dataType: 'json'
+          }).done(function(result) {
+            if (result !== "0") {
+              document.getElementById('messages').innerHTML=result;
+              document.getElementById('text').value="";
+              document.getElementById("down").innerHTML="";
+              document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
+            }
+          });
+        }        
+
         $(document).ready(function(){
-          down ();
+          <?php
+            if (!empty($_GET['contactNickName'])) {
+              echo "down ();";
+            } 
+          ?>
           newContact();
           function newContact() {
             setTimeout(function () {
@@ -88,13 +110,12 @@
         });
    </script> 
   <style id="styleIndex">
-
     @media only screen and (max-width: 1080px) {
       .contacts, .search:hover {
         width:97%;
       }
       .contacts {
-        height: 82%;
+        height: 90%;
       }
       .search {
         height:65px; 

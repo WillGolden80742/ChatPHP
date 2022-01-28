@@ -25,10 +25,8 @@
     }
     @media only screen and (max-width: 1080px) {
         .profilePic {
-            display: none;
-        }
-        .editPic {
-            display: block;
+          width:320px;
+          height:320px;
         }
         center h3 {
             font-size:32px;
@@ -61,7 +59,6 @@
         echo "<div ><img src='Images/blank.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic($_SESSION['nickName']).");' onclick='openfile();' /></div>";
     }
 ?>
-<a href="editProfilePic.php" class="editPic"><img src="Images/imageMediumIcon.png" ></a>
 <form action="editPassword.php" method="post" enctype="multipart/form-data">
     <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="display();" style="display:none;" id="editProfile" type="file" name="pic"> 
     <input class="inputSubmit salvar" type=submit value="SALVAR">
