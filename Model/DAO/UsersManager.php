@@ -8,8 +8,7 @@
             $this->conFactory = new ConnectionFactory();
             $this->auth = new AuthManager();
             $this->auth->isLogged();
-        }
-        // USER    
+        } 
         
         function uploadProfilePic ($nick,$pic,$format) {
             $this->conFactory->query("DELETE FROM profilepicture WHERE clienteId = '".$nick."'");
@@ -39,13 +38,14 @@
 
         function uploadPassword ($nick,$pass,$newPass,$newPassConfirmation) {
             if ($this->auth->checkLogin($nick,$pass)) {
-                if (strcmp($newPass,$newPassConfirmation) == 0) {
+                $passCertification = $this->auth->passCertification($newPass,$newPassConfirmation);
+                if ($passCertification[0]) {
                     if($this->conFactory->query("UPDATE clientes SET senha = '".md5($nick.$newPass)."' WHERE nickName = '".$nick."' ")) {
                         header("Location: editPassword.php?message=Senha alterada com sucesso!");
                         die();
                     }
                 } else {
-                    header("Location: editPassword.php?error=senha de confirmação não coincide");
+                    header("Location: editPassword.php?error=".$passCertification[1]);
                     die();
                 }
             } else {
@@ -108,7 +108,6 @@
              }   
         }
 
-
         function downloadProfilePic ($contactNickName) {
             $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
             if (mysqli_num_rows($result) > 0) {
@@ -150,7 +149,7 @@
               }
             } 
             if (count($messages) > 0) {
-               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%;' width='50px' src='Images/down.png'/></center>";
+               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.png'/></center>";
                $mensagens.= "<br>";
                 foreach ($messages as $msg) { 
                   if ($msg[4]) {
