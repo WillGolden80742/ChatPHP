@@ -16,14 +16,17 @@
         }
 
         function uploadProfile ($nick,$pass,$newNick,$name) {
-            $nick= preg_replace($this->regex,'',$nick);
-            $newNick= preg_replace($this->regex,'',$newNick);           
+            $nick=$this->auth->clearString($nick);
+            $newNick=$this->auth->clearString($newNick);           
             if ($this->auth->checkLogin($nick,$pass)) {
                 if (!$this->auth->checkNick ($newNick) || strcmp($nick,$newNick) == 0) {
-                    if($this->conFactory->query("UPDATE clientes SET nickName = '".$newNick."', nomeCliente = '".$name."', senha = '".md5($newNick.$pass)."' WHERE nickName = '".$nick."' ")) {
+                    if($this->conFactory->query("UPDATE clientes SET nickName = '".$newNick."', nomeCliente = '".$name."', senha = '".$this->auth->encrypt($newNick.$pass)."' WHERE nickName = '".$nick."' ")) {
                         $_SESSION['nickName']=$newNick;
                         header("Location: editProfile.php?message=Alteração com sucesso!");
                         die();
+                    } else {
+                        header("Location: editProfile.php");
+                        die(); 
                     }
                 } else if ($this->auth->checkNick ($newNick)) {
                     header("Location: editProfile.php?error=@".$newNick." já existente");
@@ -33,14 +36,13 @@
                 header("Location: editProfile.php?error=senha incorreta");
                 die();
             }         
-            echo "Erro de especificações";
         }
 
         function uploadPassword ($nick,$pass,$newPass,$newPassConfirmation) {
             if ($this->auth->checkLogin($nick,$pass)) {
                 $passCertification = $this->auth->passCertification($newPass,$newPassConfirmation);
                 if ($passCertification[0]) {
-                    if($this->conFactory->query("UPDATE clientes SET senha = '".md5($nick.$newPass)."' WHERE nickName = '".$nick."' ")) {
+                    if($this->conFactory->query("UPDATE clientes SET senha = '".$this->auth-> encrypt($nick.$newPass)."' WHERE nickName = '".$nick."' ")) {
                         header("Location: editPassword.php?message=Senha alterada com sucesso!");
                         die();
                     }
@@ -55,6 +57,7 @@
         }        
         
         function name($nick) {
+            $nick=$this->auth->clearString($nick);
             $result =  $this->conFactory->query("SELECT nomeCliente FROM clientes WHERE nickName ='".$nick."'");
             while($row = mysqli_fetch_assoc($result)) { 
                 return $row["nomeCliente"];
@@ -62,6 +65,8 @@
         }
 
         function contacts ($nick,$nickNameContact) {
+            $nick = $this->auth->clearString($nick);
+            $nickNameContact = $this->auth->clearString($nickNameContact);
             $result =  $this->conFactory->query("call contatos('".$nick."')");
             $count=0;
             $contacts = array();
@@ -87,6 +92,7 @@
         }
 
         function searchContact ($nick) {
+            $nick = $this->auth->clearString($nick);
             $result =  $this->conFactory->query("call searchContato('".$nick."')");
             $count=0;
             $contacts = array();
@@ -98,17 +104,13 @@
                 foreach ($contacts as $contact)  {
                   echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" >";
                   echo "<h2 ";
-                  if (!empty($_GET['contactNickName'])){
-                    if (!strcmp($_GET['contactNickName'],$contact[1])){
-                      echo "style=\"color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);\"";
-                    }
-                  }
                   echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(".$this ->downloadProfilePic($contact[1]).");' /></div>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg($contact[1])."</h2></a>"; 
                 }
              }   
         }
 
         function downloadProfilePic ($contactNickName) {
+            $contactNickName = $this->auth->clearString($contactNickName);
             $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
@@ -123,6 +125,8 @@
         // MESSAGES 
         
         function messages ($nickName,$contactNickName) {
+            $nickName = $this->auth->clearString($nickName);
+            $contactNickName = $this->auth->clearString($contactNickName);
             $this->receivedMsg($contactNickName );
             $result = $this->conFactory->query("call messages('".$nickName."','".$contactNickName."')");
             $messages = array();
@@ -177,6 +181,7 @@
         }
 
         function newCurrentMsgs ($contactNickName){
+            $contactNickName = $this->auth->clearString($contactNickName);
             $result = $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$_SESSION['nickName']."' AND messages.received = '0'");
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
@@ -201,6 +206,7 @@
         }
 
         function newMg ($contactNickName) {
+            $contactNickName = $this->auth->clearString($contactNickName);
             $result = $this->conFactory->query("call newMsg('".$_SESSION['nickName']."','".$contactNickName."','0')");
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
@@ -223,6 +229,7 @@
         }
 
         function newContacts ($nickNameContact) {
+            $nickNameContact = $this->auth->clearString($nickNameContact);
             $result = $this->conFactory->query("call newMsgs('".$_SESSION['nickName']."')");
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
@@ -237,10 +244,12 @@
         }        
 
         function receivedMsg ($contactNickName) {
+            $contactNickName = $this->auth->clearString($contactNickName);
             $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$_SESSION['nickName']."'");
         }
 
         function createMessage ($msg,$contactNickName) { 
+            $contactNickName = $this->auth->clearString($contactNickName);
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
                 $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");
                 $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$_SESSION['nickName']."','".$contactNickName."')");
@@ -251,6 +260,8 @@
         }
 
         function deleteMessage ($id,$contactNickName) { 
+            $id = $this->auth->clearString($id);
+            $contactNickName = $this->auth->clearString($contactNickName);
             $this->conFactory->query("call deleteMessage(".$id.",'".$_SESSION['nickName']."')");
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$_SESSION['nickName']."','".$contactNickName."')");
             $this->conFactory->query("UPDATE messages SET received = '2' WHERE messages.MsgFrom = '".$_SESSION['nickName']."' and messages.MsgTo = '".$contactNickName."'");          

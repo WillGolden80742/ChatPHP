@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 26/01/2022 às 00:17
+-- Tempo de geração: 28/01/2022 às 22:36
 -- Versão do servidor: 10.4.22-MariaDB
 -- Versão do PHP: 7.4.27
 
@@ -79,10 +79,6 @@ CREATE TABLE `arquivos` (
   `arquivo` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Despejando dados para a tabela `arquivos`
---
-
 -- --------------------------------------------------------
 
 --
@@ -92,7 +88,7 @@ CREATE TABLE `arquivos` (
 CREATE TABLE `clientes` (
   `nomeCliente` varchar(20) NOT NULL,
   `nickName` varchar(20) NOT NULL,
-  `senha` varchar(64) NOT NULL
+  `senha` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -100,27 +96,21 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
-('William Dourado', '777', '9f0b278397cc5ece3ee9c2f216cf76f9'),
-('Alyssom', 'ally77', 'a51696a86ebadde170b7b06e83f1ec82'),
-('Based Pepe', 'based_Pepe', '7bb8414eeea88d61ddaa90ab732f1c56'),
-('William Dourado', 'dsf', '3efee1dde3f5ef6650ba140596bab9b3'),
-('William ', 'ee', '6feaa74fcc6d06826009f866a2e6b836'),
-('William Dourado', 'ff', '2a60bc1f15995300293f8f7711037b3f'),
-('Гуммо', 'gvmmo', '46de12bf37a60ee1868826fa8b2f6dd4'),
-('HongKong77', 'hong_kong77', '9de6f455f1316788a94e36c6db2dff4e'),
-('Juliana Monique', 'juhMonique', 'dbdf6b52482eeaca1d540116bf42f52a'),
-('Lobo da Estepe', 'LoboDaEstepe', '8e5f96d94b6446e3e9b497cac95d4540'),
-('Logan', 'logan77', '401a66b2ed2ee754683da79537eba83d'),
-('Eloa', 'lola', 'a9085b29c5961bc887ed73aaddf8d50f'),
-('lolo', 'lolo', '8dddc0620fe076293393ad81e3ce86fd'),
-('Marlon', 'marlon77', 'cefdad4bd12e8c57cdf9cf1d176b429a'),
-('Mayumi Sato', 'mayumi_Sato', 'fa9e685425a32079d81f024355066df8'),
-('pco', 'pco_cooperative', '24ebaad6df398839d63f29cb7eb3b971'),
-('Pepe BluePill', 'pepe_bluepill', 'd9002957b34ebefa020cca178bd46739'),
-('Rafael', 'rafa77', 'cbcc887b198ad392cd9f60027f27e37a'),
-('William Dourado', 'willCruz', '447b723176f669919c5f6f13f119eccc'),
-(' Уилл Голден', 'willGolden', '69013773d31191dcc17bf195f73ef2e6'),
-('wololo', 'wololo', '89b44b8b1515dd349cce0b300029c054');
+('Alyssom', 'ally77', 'f6541153606baa043898e9286252be3da213b53bf88371f07172449974967ae1cfa02eb32939df66a9cdb465fe2b15cbf5c5cb8324b4b0d6ca2596d641e395e7'),
+('Based Pepe', 'based_Pepe', 'bf829a012991fe8380ee52dde9349ade67c3e748eb2851d66842e8275d205cb973794f6626816c6428b184ee118dddaeb68b9cabcd195028c106820ced31de1c'),
+('Гуммо', 'gvmmo', '649620a4b72e5c7a9536703ac9b56ba96f872cc698bdf1e21bda4492b1cbb1f71d1da987e9c2cd8c20aac34609cf5a0856776e0722781a73f259a9d4528d49ee'),
+('HongKong77', 'hong_kong77', 'cf3e55a4fb06be6f89aab4d93f0ff97eb8d804134e7667519343d492436458a9441b96aa4e7e4ad9c361d3cb5cecd66565fa112a39a0a7e7bbf5303a50c06511'),
+('Juliana Monique', 'juhMonique', 'b996c1d402f3d4a42f74219b2e2d0e65c264552dac45bbe94fdffb169d42b3ef85273f6646b01429362ac0b86dff9f9182e86711694575e821e079e7b01a40be'),
+('Lobo da Estepe', 'LoboDaEstepe', '0703f0fbf102bd37bb4397e094ab109c79580516973e5e6715b1dd4155033732247204b307cc98dc516d3a4f63a204a78ce10b3a01635fb8dfa4014ebca2e4ba'),
+('Logan', 'logan77', 'a2d7f3ddaa4f7737d5b09efd35aacb9fd46d65aa55abf97ba59afcb702d0e6e4b57a5c8c0fd5dcba795572039296e51d5421c7d8757e7440d830641c732a3d81'),
+('Eloa', 'lola', '9306e5a07857d057df506cb4be4dab89f714ff038f47494f9c0ae1fa436b09cdaa8660568920c1f57aa0496987d752457e9885d62859f1ac27167d0500c3c4f0'),
+('Marlon', 'marlon77', '7547cb5edd847874d6096a7834a6bc8cc361d5a1747255b0be2f9af381f2ecc23af7738aec80a6ac62f0e299c5cf862e6e7d2aa66347af5c803f725649159d6d'),
+('Mayumi Sato', 'mayumi_Sato', '253ec8f659ab7560acd2ae12490af2299c12f4b771d6b2c55fea3f6e277e588121fd13654b1966f5f4c52f7a6fdc3e8ea7d817b1838c00485f71240d8a54fb74'),
+('pco', 'pco_cooperative', '45546472d49c709ad4cf6a4258da21cf462dc764b48ec1895f6095eaa5d0b03e06a5b927ee5f7d6ece1f1e328bb8a1429227087db503ab0d758afc91ab3550c7'),
+('Pepe BluePill', 'pepe_bluepill', 'ca3ac3b326622426f5954fd543a043e5cc6b4c8b2ad6455a2a6ffa7c40594cca6f094b6d8d0a7bf78d898703ab5169e08d52190ea9454ba7e72efd2f9f6a1671'),
+('Rafael', 'rafa77', '82f86d39196c5d8c2dcda74c3a7e4cf94c12d0fb2c7f66947e9f538116d1c1d6e7520eb1cd066e2d2088f3c602be8dacbdc838ec7521fc4b10385118f833ad1c'),
+('William Dourado', 'willCruz', 'e04deea2cac576f39302a073c511ae7ce3d4fd9d3fa8151e289c67eedfd34c70bd9ca01a0cddf0890496e15dcffb19f5ba184cbe11d52f5bca532f254659bdb1'),
+(' Уилл Голден', 'willGolden', 'cfe7e31d64fd6dff8c27d8e51ea4424a985e8434795859cdc21de9a20c3220dfe3d5ee19143d6e58eadfb60e1d100751edf2edf279f928715e486d0942fe9c31');
 
 -- --------------------------------------------------------
 
@@ -142,135 +132,12 @@ CREATE TABLE `messages` (
 --
 
 INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `received`) VALUES
-(9, 'E ai bl? Cara', 'ally77', 'willGolden', '2021-03-06 22:48:24', 1),
-(11, 'E ai blz cara?', 'marlon77', 'willGolden', '2021-03-07 22:48:24', 1),
-(12, 'blz sim mano ', 'willGolden', 'marlon77', '2021-03-07 22:48:24', 1),
-(13, 'E ai mano, blz?', 'rafa77', 'willGolden', '2021-03-08 22:48:24', 1),
-(15, 'Maravilha então', 'rafa77', 'willGolden', '2021-03-09 22:48:24', 1),
-(16, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'rafa77', 'willGolden', '2021-03-10 18:27:19', 1),
-(19, 'E ai Rafa. Blz?', 'willGolden', 'rafa77', '2021-03-10 21:09:34', 1),
-(20, 'E ai Will. Blz? ', 'rafa77', 'willGolden', '2021-03-10 21:10:05', 1),
-(21, 'E ai Will. Blz? ', 'rafa77', 'willGolden', '2021-03-10 21:10:10', 1),
-(24, 'E ai Marlon? ', 'willGolden', 'marlon77', '2021-03-10 21:16:40', 1),
-(25, 'E ai Ally. Blz? ', 'willGolden', 'ally77', '2021-03-10 21:20:09', 1),
-(26, 'E ai Will. Blz?', 'ally77', 'willGolden', '2021-03-10 21:27:36', 1),
-(28, 'maravilha entao ', 'ally77', 'willGolden', '2021-03-10 21:40:29', 1),
-(29, 'E ai ', 'willGolden', 'ally77', '2021-03-10 21:42:18', 1),
-(30, 'To bem mano. E vc?', 'marlon77', 'willGolden', '2021-03-11 02:58:31', 1),
-(31, 'To tranquilo', 'willGolden', 'marlon77', '2021-03-11 02:58:43', 1),
-(32, 'Que ótimo então', 'marlon77', 'willGolden', '2021-03-11 02:59:05', 1),
-(33, 'Ainda bem ', 'marlon77', 'willGolden', '2021-03-11 03:00:58', 1),
-(34, 'E vc como está?', 'willGolden', 'marlon77', '2021-03-11 03:10:43', 1),
-(35, 'To bem ', 'marlon77', 'willGolden', '2021-03-11 03:10:52', 1),
-(36, 'Ok então', 'marlon77', 'willGolden', '2021-03-11 03:11:07', 1),
-(39, 'blz mano', 'ally77', 'willGolden', '2021-03-11 18:28:45', 1),
-(40, 'Como vc tá?', 'ally77', 'willGolden', '2021-03-11 18:28:47', 1),
-(41, 'Traquilo', 'willGolden', 'ally77', '2021-03-11 18:29:47', 1),
-(43, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop', 'ally77', 'willGolden', '2021-03-12 13:03:03', 1),
-(240, 'Daora', 'ally77', 'willGolden', '2021-03-27 18:45:20', 1),
-(243, 'E ai Will\r\n', 'rafa77', 'willGolden', '2021-03-30 14:37:11', 1),
-(245, 'Olá', 'juhMonique', 'willGolden', '2021-03-30 14:41:48', 1),
-(246, 'E ai ', 'LoboDaEstepe', 'willGolden', '2021-03-30 14:41:48', 1),
-(378, 'Se você não gosta do wolverine, eu sugiro que', 'willGolden', 'logan77', '2021-04-02 14:13:53', 1),
-(417, 'Bom dia\r\n', 'hong_kong77', 'willGolden', '2021-04-03 12:15:28', 1),
-(431, 'Olá\r\n', 'hong_kong77', 'rafa77', '2021-04-03 13:29:07', 1),
-(628, 'Como vai?\r\n', 'rafa77', 'hong_kong77', '2021-04-06 00:15:41', 1),
-(943, 'Tudo bem?\r\n', 'willGolden', 'gvmmo', '2021-04-09 22:15:42', 1),
-(981, 'ola\r\n', 'willGolden', 'hong_kong77', '2021-04-09 23:25:37', 1),
-(983, 'Como vai?\r\n', 'gvmmo', 'hong_kong77', '2021-04-09 23:49:50', 0),
-(994, 'Tudo certo por aqui\r\n', 'willGolden', 'gvmmo', '2021-04-10 11:45:53', 1),
-(1001, 'Ola\r\n', 'willGolden', 'gvmmo', '2021-04-10 15:28:09', 1),
-(1031, 'Como vai?\r\n', 'pco_cooperative', 'willGolden', '2021-04-11 13:19:39', 1),
-(1034, 'E ai?\r\n', 'willGolden', 'rafa77', '2021-04-11 15:38:14', 1),
-(1035, 'Tudo bem?\r\n', 'willGolden', 'rafa77', '2021-04-11 15:38:57', 1),
-(1036, 'Como vai?\r\n', 'willGolden', 'rafa77', '2021-04-11 15:44:29', 1),
-(1043, 'Olá\r\n', 'wololo', 'rafa77', '2021-04-16 23:02:37', 1),
-(1188, 'Olá\r\n', 'willGolden', 'mayumi_Sato', '2021-04-18 19:49:44', 1),
-(1218, 'Como vai\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:42:34', 1),
-(1219, 'Olá\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:42:46', 1),
-(1221, 'Houve erro?\r\n', 'gvmmo', 'willGolden', '2021-04-18 20:43:21', 1),
-(1225, 'E ai ', 'based_Pepe', 'marlon77', '2022-01-19 16:36:20', 1),
-(1226, ' E ai gay', 'willGolden', 'gvmmo', '2022-01-20 16:38:23', 1),
-(1227, ' Tudo bem?\r\n', 'willGolden', 'gvmmo', '2022-01-20 16:40:15', 1),
-(1228, ' Tudo sim\r\n', 'gvmmo', 'willGolden', '2022-01-20 16:59:06', 1),
-(1229, ' Tudo bem', 'willGolden', 'gvmmo', '2022-01-20 17:21:24', 1),
-(1230, ' Eai. Como tá?', 'willGolden', 'ally77', '2022-01-20 17:21:38', 1),
-(1236, ' O que é isso? KKK\r\n', 'willGolden', 'ally77', '2022-01-20 18:10:31', 1),
-(1239, 'E ai', 'willGolden', 'ally77', '2022-01-20 18:32:44', 1),
-(1240, 'Muito bom', 'willGolden', 'ally77', '2022-01-20 18:37:58', 1),
-(1258, ' 🤩😘', 'willGolden', 'ally77', '2022-01-21 16:36:20', 1),
-(1262, ' Tudo bem?\r\n', 'willGolden', 'LoboDaEstepe', '2022-01-21 20:18:10', 0),
-(1263, ' Wololo ', 'willGolden', 'pco_cooperative', '2022-01-21 20:25:46', 0),
-(1265, ' Oi hihi ', 'willCruz', 'gvmmo', '2022-01-22 13:59:50', 1),
-(1271, ' E ai', 'dsf', 'willCruz', '2022-01-22 17:06:33', 0),
-(1272, ' E ai ', '777', 'willCruz', '2022-01-22 17:38:03', 0),
-(1280, ' E ai\r\n', 'marlon77', 'willGolden', '2022-01-23 23:10:43', 1),
-(1281, ' E ai\r\n', 'willGolden', 'gvmmo', '2022-01-23 23:21:16', 1),
-(1284, ' E ai\r\n', 'willGolden', 'mayumi_Sato', '2022-01-24 13:47:28', 1),
-(1285, ' E ai corno\r\n', 'mayumi_Sato', 'willGolden', '2022-01-24 13:47:59', 1),
-(1286, ' Boa\r\n', 'willGolden', 'mayumi_Sato', '2022-01-24 14:09:02', 1),
-(1289, ' Tudo bem?', 'gvmmo', 'willGolden', '2022-01-24 18:05:05', 1),
-(1296, ' Gau ', 'gvmmo', 'willGolden', '2022-01-24 18:27:44', 1),
-(1297, ' Er', 'gvmmo', 'willGolden', '2022-01-24 18:29:43', 1),
-(1298, ' R', 'gvmmo', 'willGolden', '2022-01-24 18:32:24', 1),
-(1299, ' Serio?', 'gvmmo', 'willGolden', '2022-01-24 18:32:37', 1),
-(1300, ' Sério po kkk\r\n', 'willGolden', 'gvmmo', '2022-01-24 18:32:52', 1),
-(1310, ' E ai', 'ally77', 'willGolden', '2022-01-24 18:40:03', 1),
-(1316, ' Zoado', 'ally77', 'willGolden', '2022-01-24 18:44:02', 1),
-(1317, ' Rtt', 'ally77', 'willGolden', '2022-01-24 18:56:29', 1),
-(1333, ' Wdf', 'gvmmo', 'willGolden', '2022-01-24 19:07:47', 1),
-(1334, ' E ao', 'gvmmo', 'willGolden', '2022-01-24 19:08:08', 1),
-(1335, ' Oi bebe\r\n', 'gvmmo', 'willGolden', '2022-01-24 19:08:29', 1),
-(1336, ' Tudo bem bb? ', 'willGolden', 'gvmmo', '2022-01-24 19:08:37', 1),
-(1338, ' Ta ', 'gvmmo', 'willGolden', '2022-01-24 19:09:29', 1),
-(1341, ' To to bem bb', 'gvmmo', 'willGolden', '2022-01-24 19:10:51', 1),
-(1342, ' Seu app e muito legal ', 'gvmmo', 'willGolden', '2022-01-24 19:11:22', 1),
-(1343, ' obrigado bb!!!\r\n', 'willGolden', 'gvmmo', '2022-01-24 19:11:31', 1),
-(1345, ' 🥰🥰🥰🥰🥰', 'willGolden', 'gvmmo', '2022-01-24 19:11:49', 1),
-(1346, ' Oiii\r\n', 'willGolden', 'gvmmo', '2022-01-24 19:12:16', 1),
-(1347, ' oi bb\r\n', 'lola', 'willGolden', '2022-01-24 19:13:17', 1),
-(1348, ' Ea ', 'willGolden', 'lola', '2022-01-24 19:50:56', 1),
-(1400, ' Wff', 'gvmmo', 'willCruz', '2022-01-24 21:33:05', 0),
-(1401, ' Sf', 'gvmmo', 'willCruz', '2022-01-24 21:33:59', 0),
-(1483, ' Rr', 'gvmmo', 'willGolden', '2022-01-24 23:54:49', 1),
-(1484, ' Dff', 'gvmmo', 'willGolden', '2022-01-24 23:54:55', 1),
-(1491, ' Oi bb\r\n', 'willGolden', 'gvmmo', '2022-01-25 00:13:07', 1),
-(1492, ' Oiiii', 'gvmmo', 'willGolden', '2022-01-25 00:13:12', 1),
-(1493, ' Tudo bem?\r\n', 'willGolden', 'gvmmo', '2022-01-25 00:13:20', 1),
-(1494, ' Sim e vc', 'gvmmo', 'willGolden', '2022-01-25 00:13:26', 1),
-(1495, ' Agora não acontece aquilo de ficar sumindo a mensagem ', 'willGolden', 'gvmmo', '2022-01-25 00:13:39', 1),
-(1496, ' e verdade', 'gvmmo', 'willGolden', '2022-01-25 00:14:13', 1),
-(1497, ' Uhhuuu ', 'willGolden', 'gvmmo', '2022-01-25 00:14:22', 1),
-(1498, ' Muito melhor', 'gvmmo', 'willGolden', '2022-01-25 00:14:26', 1),
-(1499, ' 😅', 'gvmmo', 'willGolden', '2022-01-25 00:14:35', 1),
-(1500, ' @', 'gvmmo', 'willGolden', '2022-01-25 00:14:49', 1),
-(1501, ' Er', 'gvmmo', 'willGolden', '2022-01-25 00:15:04', 1),
-(1502, ' Dff', 'gvmmo', 'willGolden', '2022-01-25 00:15:07', 1),
-(1505, ' Oiiiii', 'gvmmo', 'hong_kong77', '2022-01-25 00:16:19', 0),
-(1506, ' Ta.me vemdo willam', 'gvmmo', 'hong_kong77', '2022-01-25 00:16:55', 0),
-(1507, ' Olá Eloá ', 'willGolden', 'gvmmo', '2022-01-25 00:19:13', 1),
-(1544, ' Oiii', 'lola', 'willGolden', '2022-01-25 01:42:06', 1),
-(1545, ' Ta funcionando ai?', 'willGolden', 'lola', '2022-01-25 01:42:24', 1),
-(1546, ' Sim ', 'lola', 'willGolden', '2022-01-25 01:42:35', 1),
-(1547, ' Muito bem', 'lola', 'willGolden', '2022-01-25 01:42:41', 1),
-(1548, ' Que ótimo 🤩🤩🤩🤩', 'willGolden', 'lola', '2022-01-25 01:42:45', 1),
-(1549, ' Adorei', 'lola', 'willGolden', '2022-01-25 01:42:52', 1),
-(1550, ' Para bens', 'lola', 'willGolden', '2022-01-25 01:43:08', 1),
-(1551, ' Boa noite\r\n bb', 'willGolden', 'lola', '2022-01-25 01:43:23', 1),
-(1552, ' Oi', 'willGolden', 'lola', '2022-01-25 01:50:55', 1),
-(1610, ' olá\r\n', 'willGolden', 'gvmmo', '2022-01-25 19:07:04', 1),
-(1625, ' Fgg', 'gvmmo', 'willGolden', '2022-01-25 19:22:30', 1),
-(1628, ' 566', 'gvmmo', 'willGolden', '2022-01-25 19:23:10', 1),
-(1629, ' Dggf', 'gvmmo', 'willGolden', '2022-01-25 19:24:06', 1),
-(1631, ' 567', 'gvmmo', 'willGolden', '2022-01-25 19:24:33', 1),
-(1632, ' Ty88', 'gvmmo', 'willGolden', '2022-01-25 19:24:43', 1),
-(1633, ' Ydtr', 'gvmmo', 'willGolden', '2022-01-25 19:26:09', 1),
-(1634, ' Ghh', 'gvmmo', 'willGolden', '2022-01-25 19:26:14', 1),
-(1646, ' Tre', 'lola', 'willGolden', '2022-01-25 19:48:42', 1),
-(1680, ' Rrt', 'lola', 'willGolden', '2022-01-25 20:12:29', 1),
-(1681, ' Drr', 'lola', 'willGolden', '2022-01-25 20:12:37', 1),
-(1682, ' Sff', 'lola', 'willGolden', '2022-01-25 20:14:16', 1),
-(1683, ' E au', 'gvmmo', 'willGolden', '2022-01-25 20:14:34', 1);
+(1686, ' Oi bb\r\n', 'lola', 'willGolden', '2022-01-26 17:42:58', 1),
+(1700, ' Oi\r\n', 'ally77', 'lola', '2022-01-27 10:26:07', 1),
+(1795, ' Oi', 'ally77', 'lola', '2022-01-27 20:10:13', 1),
+(1828, 'Oi', 'ally77', 'lola', '2022-01-28 13:50:17', 1),
+(1861, ' Fffmfkf', 'lola', 'ally77', '2022-01-28 14:53:39', 2),
+(1870, ' OI bb', 'willGolden', 'lola', '2022-01-28 17:58:49', 2);
 
 -- --------------------------------------------------------
 
@@ -288,10 +155,31 @@ CREATE TABLE `newMsg` (
 --
 
 INSERT INTO `newMsg` (`msgFrom`, `msgTo`) VALUES
-('gvmmo', 'willCruz'),
-('gvmmo', 'willCruz'),
 ('gvmmo', 'hong_kong77'),
-('gvmmo', 'hong_kong77');
+('gvmmo', 'hong_kong77'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola');
 
 -- --------------------------------------------------------
 
@@ -368,7 +256,7 @@ ALTER TABLE `anexo`
 -- AUTO_INCREMENT de tabela `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1684;
+  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1873;
 
 --
 -- Restrições para tabelas despejadas

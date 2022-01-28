@@ -66,7 +66,7 @@
 
         $(document).ready(function(){
           <?php
-            if (!empty($_GET['contactNickName'])) {
+            if (!empty($nickNameContact)) {
               echo "down ();";
             } 
           ?>
@@ -157,10 +157,10 @@
     echo "<div  class=\"header\"><h2>";
     echo "<a class='logout' href='logout.php' ><img src=\"Images/left-arrow.png\" /></a>";
     echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    
-    if (!empty($_GET['contactNickName'])) {
+    if (!empty($nickNameContact)) {
       echo "<a class='picMessage'>";
-      echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($_GET['contactNickName']).");' />";
-      echo "<a class='userName'>".$user->name($_GET['contactNickName'])."</a>";
+      echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($nickNameContact).");' />";
+      echo "<a class='userName'>".$user->name($nickNameContact)."</a>";
       echo "</a>";
     }
     echo "<span class='user' >&nbsp;@".$_SESSION['nickName']."<a href=\"editProfile.php\"> •••</a></span></h2>";
@@ -169,13 +169,12 @@
     echo "</div>";
     echo "<div id=\"contacts\">";
     if (empty($_POST["search"])) {
-      if (empty($_GET['contactNickName'])) {
+      if (empty($nickNameContact)) {
         echo $user->contacts($userNickName,null);
       } else {
-        echo $user->contacts($userNickName,$_GET['contactNickName']);
+        echo $user->contacts($userNickName,$nickNameContact);
       }
-    } else {
-      $_POST['search'] = preg_replace('/[^[:alpha:]_]/','',$_POST['search']);
+    } else {  
       echo "<div class='contacts'>";  
       $contacts = $user->searchContact($_POST["search"]);
       echo "</div>"; 

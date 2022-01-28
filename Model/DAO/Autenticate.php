@@ -21,7 +21,7 @@
 
         function checkLogin ($nick,$pass) {   
             $nick= preg_replace($this->regex,'',$nick);
-            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".md5($nick.$pass)."'");  
+            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".$this-> encrypt($nick.$pass)."'");  
             if (mysqli_num_rows($result) > 0) {
                 return true;
             } else {
@@ -35,7 +35,7 @@
             $nickCertification = $this->nickCertification($nick);
             $passCertification = $this->passCertification ($pass,$passConfirmation);
             if ($nameCertification[0] && $nickCertification[0] && $passCertification[0]) {
-                if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".md5($nick.$pass)."')")) {
+                if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".$this-> encrypt($nick.$pass)."')")) {
                     $this->login($nick,$pass);
                 } 
             } else {
@@ -92,6 +92,7 @@
         }
 
         function checkNick ($nick) {
+            $nick = $this->clearString($nick);
             $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."'");  
             if (mysqli_num_rows($result) > 0) {
                 return true;
@@ -108,6 +109,14 @@
             } else {
                 return true;
             }
+        }
+
+        function encrypt($value) {
+            return hash("sha512", $value,false);
+        }
+
+        function clearString ($value) {
+            return preg_replace($this->regex,'',$value);
         }
   
     }
