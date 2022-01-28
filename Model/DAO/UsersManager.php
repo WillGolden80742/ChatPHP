@@ -249,6 +249,8 @@
         }
 
         function createMessage ($msg,$contactNickName) { 
+            $msg = preg_replace('[\']','',$msg);
+            $msg = preg_replace('[\--]','',$msg);
             $contactNickName = $this->auth->clearString($contactNickName);
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
                 $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$_SESSION['nickName']."', '".$contactNickName."')");

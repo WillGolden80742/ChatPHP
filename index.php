@@ -153,7 +153,6 @@
 <body class="container">
 
 <?php
-
     echo "<div  class=\"header\"><h2>";
     echo "<a class='logout' href='logout.php' ><img src=\"Images/left-arrow.png\" /></a>";
     echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    
