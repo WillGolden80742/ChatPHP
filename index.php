@@ -162,7 +162,7 @@
       echo "<a class='userName'>".$user->name($nickNameContact)."</a>";
       echo "</a>";
     }
-    echo "<span class='user' >&nbsp;@".$_SESSION['nickName']."<a href=\"editProfile.php\"> •••</a></span></h2>";
+    echo "<span class='user' >&nbsp;".$user->name($_SESSION['nickName'])."<a href=\"editProfile.php\"> •••</a></span></h2>";
     echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
     $userNickName = $_SESSION['nickName'];
     echo "</div>";
