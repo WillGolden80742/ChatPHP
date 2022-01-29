@@ -3,7 +3,6 @@
     include 'CleanString.php';
     session_start();
     class AuthManager {
-        private $regex = '/[^[:alpha:]_0-9]/';
         private $conFactory;
         function __construct() {
             $this->conFactory = new ConnectionFactory();
