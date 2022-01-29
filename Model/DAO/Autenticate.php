@@ -1,5 +1,6 @@
 <?php
     include 'ConnectionFactory/ConnectionFactory.php';
+    include 'CleanString.php';
     session_start();
     class AuthManager {
         private $regex = '/[^[:alpha:]_0-9]/';
@@ -8,9 +9,8 @@
             $this->conFactory = new ConnectionFactory();
         }
         // USER 
-        function login ($nick,$pass) {    
-            $nick= preg_replace($this->regex,'',$nick);
-            if ($this->checkLogin ($nick,$pass)) {
+        function login (CleanString $nick,$pass) {    
+            if ($this->checkLogin (new CleanString($nick),$pass)) {
                 $_SESSION['nickName'] = $nick;
                 header("Location: index.php");
                 die();   
@@ -19,8 +19,7 @@
             }
         }
 
-        function checkLogin ($nick,$pass) {   
-            $nick= preg_replace($this->regex,'',$nick);
+        function checkLogin (CleanString $nick,$pass) {   
             $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".$this-> encrypt($nick.$pass)."'");  
             if (mysqli_num_rows($result) > 0) {
                 return true;
@@ -36,7 +35,7 @@
             $passCertification = $this->passCertification ($pass,$passConfirmation);
             if ($nameCertification[0] && $nickCertification[0] && $passCertification[0]) {
                 if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".$this-> encrypt($nick.$pass)."')")) {
-                    $this->login($nick,$pass);
+                    $this->login(new CleanString($nick),$pass);
                 } 
             } else {
                 $error = "<center><h3 style=\"color:red;\">";
@@ -68,7 +67,7 @@
                 $error.=" nickname não pode ser vazia,";
             }  else if (!preg_match("/^[a-zA-Z0-9_]+$/", $nick)) {
                 $error.=" permitido apenas _, aA a zZ e 0 a 9 para nick name,";
-            } else if ($this->checkNick($nick)) {
+            } else if ($this->checkNick(new CleanString($nick))) {
                 $error.=" nickname já existente,";
             } else {
                 $nickTreated = true;
@@ -91,8 +90,7 @@
             return array ($passTreated,$error);
         }
 
-        function checkNick ($nick) {
-            $nick = $this->clearString($nick);
+        function checkNick (CleanString $nick) {
             $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."'");  
             if (mysqli_num_rows($result) > 0) {
                 return true;
@@ -113,10 +111,6 @@
 
         function encrypt($value) {
             return hash("sha512", $value,false);
-        }
-
-        function clearString ($value) {
-            return preg_replace($this->regex,'',$value);
         }
   
     }

@@ -1,4 +1,5 @@
 <?php include 'autenticate.php' ?>
+
 <html>
 <head>  
 </head>    
@@ -19,7 +20,7 @@
     if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
         $nick = $_POST["nick"];
         $pass = $_POST["pass"];  
-        $user->login($nick,$pass);    
+        $user->login(new CleanString($nick),$pass);    
     }       
 ?>
 </body>

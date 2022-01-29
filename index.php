@@ -13,7 +13,7 @@
         <?php 
           $nickNameContact = "";
           if (!empty($_GET['contactNickName'])) {
-            $nickNameContact = $_GET['contactNickName'];
+            $nickNameContact = new CleanString($_GET['contactNickName']);
           }
         ?>
         var nickNameContact = "<?php echo $nickNameContact; ?>";
@@ -165,20 +165,20 @@
       echo "<a class='userName'>".$user->name($nickNameContact)."</a>";
       echo "</a>";
     }
-    echo "<span class='user' >&nbsp;".$user->name($_SESSION['nickName'])."<a href=\"editProfile.php\"> •••</a></span></h2>";
+    echo "<span class='user' >&nbsp;".$user->name(new CleanString($_SESSION['nickName']))."<a href=\"editProfile.php\"> •••</a></span></h2>";
     echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
-    $userNickName = $_SESSION['nickName'];
+    $userNickName = new CleanString($_SESSION['nickName']);
     echo "</div>";
     echo "<div id=\"contacts\">";
     if (empty($_POST["search"])) {
       if (empty($nickNameContact)) {
-        echo $user->contacts($userNickName,null);
+        echo $user->contacts($userNickName,new CleanString(null));
       } else {
         echo $user->contacts($userNickName,$nickNameContact);
       }
     } else {  
       echo "<div class='contacts'>";  
-      $contacts = $user->searchContact($_POST["search"]);
+      $contacts = $user->searchContact(new CleanString($_POST["search"]));
       echo "</div>"; 
     }
     echo "</div>"

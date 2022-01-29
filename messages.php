@@ -3,9 +3,9 @@
     $message = new UsersManager();  
     $userNickName = "";
     $contactNickName = "";
-    $userNickName = $_SESSION['nickName'];
+    $userNickName = new CleanString($_SESSION['nickName']);
     if (!empty($_GET['contactNickName'])) {
-      $contactNickName = $_GET['contactNickName'];
+      $contactNickName = new CleanString($_GET['contactNickName']);
     }
 ?>
   <style id="styleMsg">
