@@ -110,6 +110,7 @@
         });
    </script> 
   <style id="styleIndex">
+
     @media only screen and (max-width: 1080px) {
       .contacts, .search:hover {
         width:97%;
@@ -146,7 +147,9 @@
       .down {
         top:0px;
       }
-    }    
+
+    } 
+
   </style>  
 
 </head>    
@@ -157,7 +160,7 @@
     echo "<a class='logout' href='logout.php' ><img src=\"Images/left-arrow.png\" /></a>";
     echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    
     if (!empty($nickNameContact)) {
-      echo "<a class='picMessage'>";
+      echo "<a class='picMessage' >";
       echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($nickNameContact).");' />";
       echo "<a class='userName'>".$user->name($nickNameContact)."</a>";
       echo "</a>";

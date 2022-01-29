@@ -221,13 +221,10 @@
     margin-right:10.5%;
   }
 
-  .back  {
-    display:none;
-  }
-
-  .back img, .logout img{
+  .back img, .logout img {
     width:15px;
   }
+
 
   .picMessage img {
     border-radius:100px;
@@ -255,9 +252,9 @@
     color:black;
   }
 
-  .userName, .picMessage img {
+  .userName, .back,  .picMessage img {
     display:none;
-  }
+  }    
 
   .inputNick {
     background-image: url("../../Images/arrobaIcon-dark.png");  
@@ -300,7 +297,7 @@
   } 
 
 
-  .back, .header, .logout, .messages, .text, .send, .contacts a h2, .user, .contacts, .search, .profilePic, .inputSubmit, .inputPassword, .inputText, .inputNick {
+  .back, .header, .logout, .messages, .picMessage img , .text, .send, .contacts a h2, .user, .contacts, .search, .profilePic, .inputSubmit, .inputPassword, .inputText, .inputNick {
     transition:0.125s; 
     animation-delay: 0.25s;
   }
@@ -325,10 +322,8 @@
   }
 
   ::-webkit-scrollbar-track {
-
     border-radius:10px;
     box-shadow:inset 0px 0px 5px rgba(0,0,0,0.25);
-
   }
 
   ::-webkit-input-placeholder{
