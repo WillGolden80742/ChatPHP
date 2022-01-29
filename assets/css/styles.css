@@ -300,7 +300,7 @@
   } 
 
 
-  .back, .logout, .messages, .text, .send, .contacts a h2, .user, .contacts, .search, .profilePic, .inputSubmit, .inputPassword, .inputText, .inputNick {
+  .back, .header, .logout, .messages, .text, .send, .contacts a h2, .user, .contacts, .search, .profilePic, .inputSubmit, .inputPassword, .inputText, .inputNick {
     transition:0.125s; 
     animation-delay: 0.25s;
   }
