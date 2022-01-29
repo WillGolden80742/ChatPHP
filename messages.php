@@ -2,7 +2,7 @@
     require_once 'index.php';
     $message = new UsersManager();  
     $userNickName = "";
-    $contactNickName = "";
+    $contactNickName = new CleanString("");
     $userNickName = new CleanString($_SESSION['nickName']);
     if (!empty($_GET['contactNickName'])) {
       $contactNickName = new CleanString($_GET['contactNickName']);
