@@ -1,6 +1,5 @@
 <?php 
-    require_once 'index.php';
-    $message = new UsersManager();  
+    require_once 'index.php'; 
     $userNickName = "";
     $contactNickName = new CleanString("");
     $userNickName = new CleanString($_SESSION['nickName']);
@@ -22,7 +21,7 @@
 <div class="messages" id="messages" onscroll="removeButtonDown ();">
   
 <?php
-    echo $message->messages($userNickName,$contactNickName);
+    echo $user->messages($userNickName,$contactNickName);
 ?>
 </div>
 
