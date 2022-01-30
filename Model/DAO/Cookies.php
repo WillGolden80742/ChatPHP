@@ -13,6 +13,10 @@
                 return $_SESSION[$key->__toString()];
             }
         }
+
+        function clearCookie($key) {
+            $_SESSION[$key->__toString()] = "";
+        }
     }
 
 ?>    

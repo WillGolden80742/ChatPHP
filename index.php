@@ -14,6 +14,8 @@
           $nickNameContact = "";
           if (!empty($_GET['contactNickName'])) {
             $nickNameContact = new StringT($_GET['contactNickName']);
+            $cookies = new Cookies();
+            $cookies->clearCookie($nickNameContact);
           }
         ?>
         var nickNameContact = "<?php echo $nickNameContact; ?>";
