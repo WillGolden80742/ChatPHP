@@ -108,6 +108,12 @@
             }
         }
 
+        function logout () {
+            $_SESSION['nickName'] = "";
+            header("Location: login.php");
+            die();
+        }
+
         function encrypt($value) {
             return hash("sha512", $value,false);
         }

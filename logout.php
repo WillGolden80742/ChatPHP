@@ -1,6 +1,5 @@
 <?php 
-    session_start();
-    $_SESSION['nickName'] = "";
-    header("Location: login.php");
-    die();
+    include 'Model/DAO/Autenticate.php';
+    $auth = new AuthManager(); 
+    $auth->logout();
 ?>

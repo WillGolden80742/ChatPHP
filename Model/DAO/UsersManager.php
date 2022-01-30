@@ -6,6 +6,7 @@
         function __construct() {
             $this->conFactory = new ConnectionFactory();
             $this->auth = new AuthManager();
+            $this->cookies = new Cookies();
             $this->auth->isLogged();
         } 
         
@@ -104,6 +105,23 @@
 
         function downloadProfilePic (StringT $contactNickName) {
             $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
+            if (empty($this->cookies->getCookie($contactNickName))) {
+                if (mysqli_num_rows($result) > 0) {
+                    while($row = mysqli_fetch_assoc($result)) {
+                        $pic = "data:image/jpeg;base64," . base64_encode($row["picture"]);
+                    }
+                } else {
+                    $pic = "Images/profilePic.png";
+                }
+                $this->cookies->setCookie($contactNickName,$pic);
+            } else {
+                $pic = $this->cookies->getCookie($contactNickName);
+            }
+            return $pic;
+        }  
+
+        function downloadProfilePicWithoutCookie (StringT $contactNickName) {
+            $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
                     $pic = "data:image/jpeg;base64," . base64_encode($row["picture"]);
@@ -112,7 +130,7 @@
                 $pic = "Images/profilePic.png";
             }
             return $pic;
-        }        
+        }
         
         // MESSAGES 
         

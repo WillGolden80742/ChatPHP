@@ -60,9 +60,9 @@
                 echo "<p>Tamanho máximo de ".$maxSize." bytes</p>";
             }
         } 
-        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
+        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePicWithoutCookie(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
     } else {
-        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
+        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePicWithoutCookie(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
     }
 ?>
 <form action="editPassword.php" method="post" enctype="multipart/form-data">
