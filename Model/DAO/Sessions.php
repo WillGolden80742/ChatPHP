@@ -1,12 +1,12 @@
 <?php
    
-    class Cookies {
+    class Sessions {
         
-        function setCookie($key,$value) {
+        function setSession($key,$value) {
             $_SESSION[$key->__toString()] = $value;
         }
 
-        function getCookie($key) {
+        function getSession($key) {
             if (empty($_SESSION[$key->__toString()])) {
                 return "";
             } else {
@@ -14,7 +14,7 @@
             }
         }
 
-        function clearCookie($key) {
+        function clearSession($key) {
             $_SESSION[$key->__toString()] = "";
         }
     }

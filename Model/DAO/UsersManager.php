@@ -1,20 +1,21 @@
 <?php
     include 'Autenticate.php';
-    include 'Cookies.php';
+    include 'Sessions.php';
     class usersManager {
         private $conFactory;
         private $auth;
-        private $cookies;
+        private $sessions;
         function __construct() {
             $this->conFactory = new ConnectionFactory();
             $this->auth = new AuthManager();
-            $this->cookies = new Cookies();
+            $this->sessions = new Sessions();
             $this->auth->isLogged();
         } 
         
         function uploadProfilePic (StringT $nick,$pic,$format) {
             $this->conFactory->query("DELETE FROM profilepicture WHERE clienteId = '".$nick."'");
             $this->conFactory->query("INSERT INTO profilepicture (clienteId,picture,format) VALUES ('".$nick."','".$pic."','".$format."')");
+            $this->sessions->clearSession($nick);
         }
 
         function uploadProfile (StringT $nick,$pass,StringT $newNick,$name) {      
@@ -107,7 +108,7 @@
 
         function downloadProfilePic (StringT $contactNickName) {
             $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
-            if (empty($this->cookies->getCookie($contactNickName))) {
+            if (empty($this->sessions->getSession($contactNickName))) {
                 if (mysqli_num_rows($result) > 0) {
                     while($row = mysqli_fetch_assoc($result)) {
                         $pic = "data:image/jpeg;base64," . base64_encode($row["picture"]);
@@ -115,24 +116,12 @@
                 } else {
                     $pic = "Images/profilePic.png";
                 }
-                $this->cookies->setCookie($contactNickName,$pic);
+                $this->sessions->setSession($contactNickName,$pic);
             } else {
-                $pic = $this->cookies->getCookie($contactNickName);
+                $pic = $this->sessions->getSession($contactNickName);
             }
             return $pic;
         }  
-
-        function downloadProfilePicWithoutCookie (StringT $contactNickName) {
-            $result = $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_assoc($result)) {
-                    $pic = "data:image/jpeg;base64," . base64_encode($row["picture"]);
-                }
-            } else {
-                $pic = "Images/profilePic.png";
-            }
-            return $pic;
-        }
         
         // MESSAGES 
         
