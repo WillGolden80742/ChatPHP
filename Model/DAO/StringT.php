@@ -1,6 +1,6 @@
 <?php
    
-    class CleanString {
+    class StringT {
         private $value;
         private $regex = '/[^[:alpha:]_0-9]/';
         function __construct($value) {

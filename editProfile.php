@@ -51,14 +51,14 @@
             $maxSize = 1000000;    
             if ($size < $maxSize) {   
                 $mysqlImg = addslashes(fread(fopen($name, "r"), $size));
-                $user->uploadProfilePic(new CleanString($_SESSION['nickName']),$mysqlImg,'jpg');
+                $user->uploadProfilePic(new StringT($_SESSION['nickName']),$mysqlImg,'jpg');
             } else {
                 echo "<p>Tamanho máximo de ".$maxSize." bytes</p>";
             }
         } 
-        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new CleanString($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
+        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
     } else {
-        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new CleanString($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
+        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
     }
 ?>
 <form action="editProfile.php" method="post" enctype="multipart/form-data">
@@ -66,7 +66,7 @@
     <input class="inputSubmit salvar" type=submit value="SALVAR">
 </form>
 <form action="uploadProfile.php" method="post" enctype="multipart/form-data">
-    <input class="inputText" placeholder="Name"  type=text value="<?php echo $user->name(new CleanString($_SESSION['nickName'])) ?>" name=name><br>
+    <input class="inputText" placeholder="Name"  type=text value="<?php echo $user->name(new StringT($_SESSION['nickName'])) ?>" name=name><br>
     <br><input class="inputNick" placeholder="Nick Name" type=text value="<?php echo $_SESSION['nickName'] ?>" name=nick><br><br>
     <input class="inputPassword" placeholder="Password"  type=password name=pass><br><br>
     <input class="inputSubmit" type=submit value="ATUALIZAR"> 

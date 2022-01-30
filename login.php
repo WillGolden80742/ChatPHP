@@ -20,7 +20,7 @@
     if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
         $nick = $_POST["nick"];
         $pass = $_POST["pass"];  
-        $user->login(new CleanString($nick),$pass);    
+        $user->login(new StringT($nick),$pass);    
     }       
 ?>
 </body>

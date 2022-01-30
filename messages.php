@@ -1,10 +1,10 @@
 <?php 
     require_once 'index.php'; 
     $userNickName = "";
-    $contactNickName = new CleanString("");
-    $userNickName = new CleanString($_SESSION['nickName']);
+    $contactNickName = new StringT("");
+    $userNickName = new StringT($_SESSION['nickName']);
     if (!empty($_GET['contactNickName'])) {
-      $contactNickName = new CleanString($_GET['contactNickName']);
+      $contactNickName = new StringT($_GET['contactNickName']);
     }
 ?>
   <style id="styleMsg">
