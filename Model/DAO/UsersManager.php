@@ -1,8 +1,10 @@
 <?php
     include 'Autenticate.php';
+    include 'Cookies.php';
     class usersManager {
         private $conFactory;
         private $auth;
+        private $cookies;
         function __construct() {
             $this->conFactory = new ConnectionFactory();
             $this->auth = new AuthManager();

@@ -1,7 +1,7 @@
 <?php
    
     class Cookies {
-
+        
         function setCookie($key,$value) {
             $_SESSION[$key->__toString()] = $value;
         }
