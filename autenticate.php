@@ -1,6 +1,6 @@
 <?php 
-    include 'Model/DAO/Autenticate.php';   
-    $user = new AuthManager(); 
+    include 'Controller/AutenticateController.php';   
+    $user = new AutenticateController(); 
 ?>
 <DOCTYPE html>
 <html>

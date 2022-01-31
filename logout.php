@@ -1,5 +1,5 @@
 <?php 
-    include 'Model/DAO/Autenticate.php';
-    $auth = new AuthManager(); 
+    include 'Controller/AutenticateController.php';
+    $auth = new AutenticateController(); 
     $auth->logout();
 ?>

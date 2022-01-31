@@ -3,19 +3,22 @@
     class Sessions {
         
         function setSession($key,$value) {
-            $_SESSION[$key->__toString()] = $value;
+            $key="a".$key;
+            $_SESSION[$key] = $value;
         }
 
         function getSession($key) {
-            if (empty($_SESSION[$key->__toString()])) {
+            $key="a".$key;
+            if (empty($_SESSION[$key])) {
                 return "";
             } else {
-                return $_SESSION[$key->__toString()];
+                return $_SESSION[$key];
             }
         }
 
         function clearSession($key) {
-            $_SESSION[$key->__toString()] = "";
+            $key="a".$key;
+            $_SESSION[$key] = "";
         }
     }
 

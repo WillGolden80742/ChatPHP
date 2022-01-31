@@ -1,10 +1,9 @@
 <?php
-    include 'ConnectionFactory/ConnectionFactory.php';
-    include 'StringT.php';
-    session_start();
-    class AuthManager {
+    include 'Model/AutenticateModel.php';
+    class AutenticateController {
         private $conFactory;
         function __construct() {
+            $this->authModel = new AutenticateModel();
             $this->conFactory = new ConnectionFactory();
         }
         // USER 
@@ -19,7 +18,7 @@
         }
 
         function checkLogin (StringT $nick,$pass) {   
-            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".$this-> encrypt($nick.$pass)."'");  
+            $result = $this->authModel->checkLogin($nick,$this-> encrypt($nick.$pass));  
             if (mysqli_num_rows($result) > 0) {
                 return true;
             } else {
@@ -33,7 +32,7 @@
             $nickCertification = $this->nickCertification($nick);
             $passCertification = $this->passCertification ($pass,$passConfirmation);
             if ($nameCertification[0] && $nickCertification[0] && $passCertification[0]) {
-                if ($this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".$this-> encrypt($nick.$pass)."')")) {
+                if ($this->authModel->singUp($name,$nick,$this-> encrypt($nick.$pass))) {
                     $this->login(new StringT($nick),$pass);
                 } 
             } else {
@@ -90,7 +89,7 @@
         }
 
         function checkNick (StringT $nick) {
-            $result = $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."'");  
+            $result = $this->authModel->checkNick($nick);  
             if (mysqli_num_rows($result) > 0) {
                 return true;
             } else {

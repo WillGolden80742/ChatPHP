@@ -1,6 +1,6 @@
 <?php 
-    include 'Model/DAO/UsersManager.php';   
-    $user = new UsersManager(); 
+    include 'Controller/UsersController.php';   
+    $user = new UsersController(); 
 ?>
 <DOCTYPE html>
 <html>
@@ -74,7 +74,6 @@
           ?>
           newContact();
           function newContact() {
-            setTimeout(function () {
               $.ajax({
                 url: 'newContact.php?',
                 method: 'POST',
@@ -106,9 +105,7 @@
                 }
                 newContact();
               });
-            }, 1000);
           }      
-          
         });
    </script> 
   <style id="styleIndex">

@@ -1,5 +1,5 @@
 <?php
-    include 'Model/DAO/UsersManager.php';  
-    $user = new UsersManager();
+    include 'Controller/UsersController.php';  
+    $user = new UsersController();
     $user->uploadProfile(new StringT($_SESSION['nickName']),$_POST['pass'],new StringT($_POST['nick']),$_POST['name']);
 ?>
