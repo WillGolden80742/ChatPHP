@@ -1,6 +1,7 @@
 <?php
     include 'Controller/AutenticateController.php';
     include 'Controller/Sessions.php';
+    include 'Controller/Message.php';
     class UsersModel {
         private $conFactory;
         private $auth;
@@ -21,7 +22,7 @@
             return $this->conFactory->query("UPDATE clientes SET nickName = '".$newNick."', nomeCliente = '".$name."', senha = '".$pass."' WHERE nickName = '".$nick."' ");      
         }
 
-        function uploadPassword ($nick,$newPass) { 
+        function uploadPassword (StringT $nick,$newPass) { 
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("UPDATE clientes SET senha = '".$newPass."' WHERE nickName = '".$nick."' ");    
         }        
@@ -68,22 +69,22 @@
             return $this->conFactory->query("call newMsg('".$nick."','".$contactNickName."','".$value."')");
         }
 
-        function newContacts ($nick) {
+        function newContacts (StringT $nick) {
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("call newMsgs('".$nick."')");
         }  
         
-        function delMsg ($nick) {
+        function delMsg (StringT $nick) {
             // Recomendado uso de prepare statement 
             $this->conFactory->query("DELETE FROM newMsg WHERE msgTo = '".$nick."'");
         }
 
-        function receivedMsg ($contactNickName,$nick) {
+        function receivedMsg (StringT $contactNickName,StringT $nick) {
             // Recomendado uso de prepare statement 
             $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$nick."'");
         }
 
-        function createMessage ($msg,$contactNickName,$nick) { 
+        function createMessage (Message $msg,$contactNickName,$nick) { 
             // Recomendado uso de prepare statement 
             $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$nick."', '".$contactNickName."')");
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");

@@ -245,9 +245,7 @@
             $this->user->receivedMsg($contactNickName,$_SESSION['nickName']);
         }
 
-        function createMessage ($msg,StringT $contactNickName) { 
-            $msg = preg_replace('[\']','',$msg);
-            $msg = preg_replace('[\--]','',$msg);
+        function createMessage (Message $msg,StringT $contactNickName) { 
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
                 $this->user->createMessage($msg,$contactNickName,$_SESSION['nickName']);
                 return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));

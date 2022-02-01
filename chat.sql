@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 28/01/2022 às 22:36
+-- Tempo de geração: 01/02/2022 às 05:19
 -- Versão do servidor: 10.4.22-MariaDB
 -- Versão do PHP: 7.4.27
 
@@ -96,6 +96,7 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
+('William Dourado', '324', '49acae3f64f68683b7d3b29129452202be9df718b102cea556f5da254bb0bf3860d83a8fb3e2868fc1de85bd6b0de0d69d5ad5d421f0fe6f5748d81a2bba44e0'),
 ('Alyssom', 'ally77', 'f6541153606baa043898e9286252be3da213b53bf88371f07172449974967ae1cfa02eb32939df66a9cdb465fe2b15cbf5c5cb8324b4b0d6ca2596d641e395e7'),
 ('Based Pepe', 'based_Pepe', 'bf829a012991fe8380ee52dde9349ade67c3e748eb2851d66842e8275d205cb973794f6626816c6428b184ee118dddaeb68b9cabcd195028c106820ced31de1c'),
 ('Гуммо', 'gvmmo', '649620a4b72e5c7a9536703ac9b56ba96f872cc698bdf1e21bda4492b1cbb1f71d1da987e9c2cd8c20aac34609cf5a0856776e0722781a73f259a9d4528d49ee'),
@@ -110,7 +111,9 @@ INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
 ('Pepe BluePill', 'pepe_bluepill', 'ca3ac3b326622426f5954fd543a043e5cc6b4c8b2ad6455a2a6ffa7c40594cca6f094b6d8d0a7bf78d898703ab5169e08d52190ea9454ba7e72efd2f9f6a1671'),
 ('Rafael', 'rafa77', '82f86d39196c5d8c2dcda74c3a7e4cf94c12d0fb2c7f66947e9f538116d1c1d6e7520eb1cd066e2d2088f3c602be8dacbdc838ec7521fc4b10385118f833ad1c'),
 ('William Dourado', 'willCruz', 'e04deea2cac576f39302a073c511ae7ce3d4fd9d3fa8151e289c67eedfd34c70bd9ca01a0cddf0890496e15dcffb19f5ba184cbe11d52f5bca532f254659bdb1'),
-(' Уилл Голден', 'willGolden', 'cfe7e31d64fd6dff8c27d8e51ea4424a985e8434795859cdc21de9a20c3220dfe3d5ee19143d6e58eadfb60e1d100751edf2edf279f928715e486d0942fe9c31');
+(' Уилл Голден', 'willGolden', 'cfe7e31d64fd6dff8c27d8e51ea4424a985e8434795859cdc21de9a20c3220dfe3d5ee19143d6e58eadfb60e1d100751edf2edf279f928715e486d0942fe9c31'),
+('William Dourado', 'willGolden65', '58ac7d9f2d41bc370f31c5b444a1b903e8249a14dcc17d525e14f6a45ce9f703581d3e64fda708b9f8b2bb8b80c073230dbc29fa05a501f36a52592c5dfbc58d'),
+('WilliamDourado', 'willGolden7', 'd2d9834d23900330405cd0ce6c6cddaf4eeee85f7171465cc3b2597741a44866630854d1e49d2c0caddb18f246db83b26f828e9420f1bc82cf5970a78865a585');
 
 -- --------------------------------------------------------
 
@@ -120,7 +123,7 @@ INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
 
 CREATE TABLE `messages` (
   `Idmessage` int(20) NOT NULL,
-  `Messages` varchar(500) NOT NULL,
+  `Messages` varchar(600) NOT NULL,
   `MsgFrom` varchar(20) NOT NULL,
   `MsgTo` varchar(20) NOT NULL,
   `Date` varchar(20) NOT NULL DEFAULT current_timestamp(),
@@ -135,9 +138,18 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (1686, ' Oi bb\r\n', 'lola', 'willGolden', '2022-01-26 17:42:58', 1),
 (1700, ' Oi\r\n', 'ally77', 'lola', '2022-01-27 10:26:07', 1),
 (1795, ' Oi', 'ally77', 'lola', '2022-01-27 20:10:13', 1),
-(1828, 'Oi', 'ally77', 'lola', '2022-01-28 13:50:17', 1),
-(1861, ' Fffmfkf', 'lola', 'ally77', '2022-01-28 14:53:39', 2),
-(1870, ' OI bb', 'willGolden', 'lola', '2022-01-28 17:58:49', 2);
+(1908, ' Oi', 'willGolden', 'willGolden', '2022-01-29 01:53:41', 1),
+(1922, ' OI\n', 'willGolden', 'lola', '2022-01-29 22:04:31', 1),
+(1923, 'Olá', 'willGolden', 'lola', '2022-01-29 22:04:37', 1),
+(1930, ' Ooi', 'lola', 'ally77', '2022-01-30 13:53:56', 1),
+(1932, 'Oxe ', 'lola', 'willGolden', '2022-01-30 13:57:35', 1),
+(1936, ' Oi\n', 'willGolden', 'ally77', '2022-01-30 20:19:36', 1),
+(1937, ' Oi', 'willGolden', 'lola', '2022-01-30 20:19:46', 1),
+(2017, ' OI ', 'lola', 'willGolden', '2022-02-01 01:14:28', 1),
+(2018, 'g f', 'lola', 'willGolden', '2022-02-01 01:14:49', 1),
+(2019, 'fdfg ', 'lola', 'willGolden', '2022-02-01 01:15:10', 1),
+(2020, ' Oi ', 'ally77', 'willGolden', '2022-02-01 01:16:13', 1),
+(2021, 'ds gf ', 'ally77', 'willGolden', '2022-02-01 01:16:17', 1);
 
 -- --------------------------------------------------------
 
@@ -156,30 +168,7 @@ CREATE TABLE `newMsg` (
 
 INSERT INTO `newMsg` (`msgFrom`, `msgTo`) VALUES
 ('gvmmo', 'hong_kong77'),
-('gvmmo', 'hong_kong77'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola');
+('gvmmo', 'hong_kong77');
 
 -- --------------------------------------------------------
 
@@ -190,12 +179,14 @@ INSERT INTO `newMsg` (`msgFrom`, `msgTo`) VALUES
 CREATE TABLE `profilepicture` (
   `clienteId` varchar(20) NOT NULL,
   `picture` longblob NOT NULL,
-  `format` varchar(20) NOT NULL
+  `format` varchar(20) NOT NULL,
+  `updated` varchar(20) NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Despejando dados para a tabela `profilepicture`
 --
+
 --
 -- Índices para tabelas despejadas
 --
@@ -218,7 +209,8 @@ ALTER TABLE `arquivos`
 -- Índices de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  ADD PRIMARY KEY (`nickName`);
+  ADD PRIMARY KEY (`nickName`),
+  ADD KEY `nickName` (`nickName`);
 
 --
 -- Índices de tabela `messages`
@@ -227,7 +219,8 @@ ALTER TABLE `messages`
   ADD PRIMARY KEY (`Idmessage`) USING BTREE,
   ADD KEY `msgToCliente` (`MsgTo`),
   ADD KEY `msgFromCliente` (`MsgFrom`),
-  ADD KEY `Idmessage` (`Idmessage`);
+  ADD KEY `Idmessage` (`Idmessage`),
+  ADD KEY `Idmessage_2` (`Idmessage`);
 
 --
 -- Índices de tabela `newMsg`
@@ -240,7 +233,8 @@ ALTER TABLE `newMsg`
 -- Índices de tabela `profilepicture`
 --
 ALTER TABLE `profilepicture`
-  ADD KEY `clienteId` (`clienteId`);
+  ADD KEY `clienteId` (`clienteId`),
+  ADD KEY `clienteId_2` (`clienteId`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
@@ -256,7 +250,7 @@ ALTER TABLE `anexo`
 -- AUTO_INCREMENT de tabela `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1873;
+  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2023;
 
 --
 -- Restrições para tabelas despejadas
