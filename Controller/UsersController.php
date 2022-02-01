@@ -181,12 +181,12 @@
 
         function newCurrentMsgs (StringT $contactNickName){
             usleep(500000);
-            $result = $this->user->newCurrentMsgs($contactNickName,$_SESSION['nickName']);
+            $result = $this->user->newCurrentMsgs($contactNickName,new StringT($_SESSION['nickName']));
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
                     $count = $row["countMsg"];
                     if(preg_replace("[0]","",$count."") == 0){
-                        $result = $this->user->isDeleteMessage($contactNickName,$_SESSION['nickName']);
+                        $result = $this->user->isDeleteMessage($contactNickName,new StringT($_SESSION['nickName']));
                         if (mysqli_num_rows($result) > 0) {
                             while($row = mysqli_fetch_assoc($result)) {
                                 $count = $row["countMsg"];
@@ -205,12 +205,12 @@
         }
 
         function newMg (StringT $contactNickName) {
-            $result = $this->user->newMsg($contactNickName,$_SESSION['nickName'],0);
+            $result = $this->user->newMsg($contactNickName,new StringT($_SESSION['nickName']),0);
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
                 if(preg_replace("[0]","",$count."") == 0){
-                    $result =  $this->user->newMsg($contactNickName,$_SESSION['nickName'],2);
+                    $result =  $this->user->newMsg($contactNickName,new StringT($_SESSION['nickName']),2);
                     while($row = mysqli_fetch_assoc($result)) {
                         $count = $row["countMsg"];
                         if(preg_replace("[0]","",$count."") == 0){
@@ -247,7 +247,7 @@
 
         function createMessage (Message $msg,StringT $contactNickName) { 
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
-                $this->user->createMessage($msg,$contactNickName,$_SESSION['nickName']);
+                $this->user->createMessage($msg,$contactNickName,new StringT($_SESSION['nickName']));
                 return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));
             } else {
                 return "0";
@@ -255,7 +255,7 @@
         }
 
         function deleteMessage (StringT $id,StringT $contactNickName) {
-            $this->user->deleteMessage($id,$contactNickName,$_SESSION['nickName']);          
+            $this->user->deleteMessage($id,$contactNickName,new StringT($_SESSION['nickName']));          
             return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));
         }
   

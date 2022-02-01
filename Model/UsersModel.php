@@ -42,7 +42,7 @@
             return $this->conFactory->query("call searchContato('".$nick."')");
         }
 
-        function downloadProfilePic ($contactNickName) {
+        function downloadProfilePic (StringT $contactNickName) {
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("SELECT * FROM profilepicture WHERE clienteId = '".$contactNickName."'");
         }  
@@ -54,17 +54,17 @@
             return $this->conFactory->query("call messages('".$nickName."','".$contactNickName."')");
         }
 
-        function newCurrentMsgs (StringT $contactNickName,$nick){
+        function newCurrentMsgs (StringT $contactNickName,StringT $nick){
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$nick."' AND messages.received = '0'");
         }
 
-        function isDeleteMessage (StringT $contactNickName,$nick) {
+        function isDeleteMessage (StringT $contactNickName,StringT $nick) {
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$nick."' AND messages.received = '2'");
         }
 
-        function newMsg (StringT $contactNickName,$nick,$value) {
+        function newMsg (StringT $contactNickName,StringT $nick,$value) {
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("call newMsg('".$nick."','".$contactNickName."','".$value."')");
         }
@@ -84,13 +84,13 @@
             $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$nick."'");
         }
 
-        function createMessage (Message $msg,$contactNickName,$nick) { 
+        function createMessage (Message $msg,StringT $contactNickName,StringT $nick) { 
             // Recomendado uso de prepare statement 
             $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$nick."', '".$contactNickName."')");
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");
         }
 
-        function deleteMessage (StringT $id,StringT $contactNickName,$nick) {
+        function deleteMessage (StringT $id,StringT $contactNickName,StringT $nick) {
             // Recomendado uso de prepare statement 
             $this->conFactory->query("call deleteMessage(".$id.",'".$nick."')");
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");
