@@ -9,11 +9,11 @@
         }
         // USER 
 
-        function checkLogin ($nick,$pass) {
+        function checkLogin (StringT $nick,$pass) {
             return $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".$pass."'");   
         }
 
-        function singUp ($name,$nick,$pass) { 
+        function singUp (StringT $name,StringT $nick,$pass) { 
             return $this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".$pass."')");
         }    
 

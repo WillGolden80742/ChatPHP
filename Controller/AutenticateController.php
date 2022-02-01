@@ -32,7 +32,7 @@
             $nickCertification = $this->nickCertification($nick);
             $passCertification = $this->passCertification ($pass,$passConfirmation);
             if ($nameCertification[0] && $nickCertification[0] && $passCertification[0]) {
-                if ($this->authModel->singUp($name,$nick,$this-> encrypt($nick.$pass))) {
+                if ($this->authModel->singUp(new StringT($name),new StringT($nick),$this-> encrypt($nick.$pass))) {
                     $this->login(new StringT($nick),$pass);
                 } 
             } else {
