@@ -1,5 +1,5 @@
 <?php 
-    include 'Controller/UsersController.php';   
+    include 'Controller/UsersController.php';    
     $user = new UsersController(); 
 ?>
 <DOCTYPE html>
@@ -187,3 +187,4 @@
 
 </body>
 </html>
+

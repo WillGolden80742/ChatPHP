@@ -1,7 +1,7 @@
 <?php
 
 use JetBrains\PhpStorm\ArrayShape;
-
+include 'global.php';  
 class ConnectionFactory {
         private $servername;
         private $username;
@@ -10,10 +10,10 @@ class ConnectionFactory {
         private $connection;
 
         function __construct() {
-            $this->servername = "localhost";
-            $this->username = "root";
-            $this->password = "";
-            $this->dbname = "Chat";
+            $this->servername = getenv('MYSQL_SERVER');
+            $this->username = getenv('MYSQL_USER');
+            $this->password = getenv('MYSQL_PASSWORD');
+            $this->dbname = getenv('MYSQL_DB');
         }
 
         function query ($sql) {
