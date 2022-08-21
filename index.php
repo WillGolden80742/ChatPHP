@@ -110,7 +110,6 @@
         });
    </script> 
   <style id="styleIndex">
-
     @media only screen and (max-width: 1080px) {
       .contacts, .search:hover {
         width:97%;
@@ -138,6 +137,7 @@
       .contacts a h2, .user  {
         font-size:64px;
       }
+
       .header {
         height:80px;
       }
@@ -147,7 +147,9 @@
       .down {
         top:0px;
       }
-
+      .userName {
+        display: block;
+      }
     } 
 
   </style>  
@@ -163,10 +165,14 @@
     if (!empty($nickNameContact)) {
       echo "<a class='picMessage' >";
       echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($nickNameContact).");' />";
-      echo "<a class='userName'>".$user->name($nickNameContact)."</a>";
+      echo "<a class='userName'>";
+        echo $user->name($nickNameContact);
+      echo "</a>";
       echo "</a>";
     }
-    echo "<span class='user' >&nbsp;".$user->name(new StringT($_SESSION['nickName']))."<a href=\"editProfile.php\"> •••</a></span></h2>";
+    echo "<span class='user' >&nbsp;";
+    echo $user->name(new StringT($_SESSION['nickName']));
+    echo "<a href=\"editProfile.php\"> •••</a></span></h2>";
     echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
     $userNickName = new StringT($_SESSION['nickName']);
     echo "</div>";

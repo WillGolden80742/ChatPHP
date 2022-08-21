@@ -1,9 +1,16 @@
-<?php include 'index.php' ?>
+<?php 
+    include 'index.php';
+    include 'Controller/FileController.php';
+?>
 <html>
 <head>  
 <link rel="stylesheet" href="assets/css/styleNoIndex.css">
 </head>     
 <style id="stylePic">
+    .salvar, .editPic{
+        display:none;
+    }
+
     .profilePic {
         background:none;
         border:solid 3px #285d33;
@@ -14,9 +21,6 @@
         background-size: 100vw auto;
         background-position-x:50%;
         background-size: cover;   
-    }
-    .salvar, .editPic{
-        display:none;
     }
 
     @media only screen and (max-width: 1080px) {
@@ -42,20 +46,13 @@
 <?php 
     $pic=null;
     if (!empty($_FILES["pic"])) {
-        $pic=$_FILES["pic"];
-    } 
-    if($pic != NULL) {
-        $name = time().'.jpg';
-        if (move_uploaded_file($pic['tmp_name'], $name)) {
-            $size = filesize($name);     
-            $maxSize = 1000000;    
-            if ($size < $maxSize) {   
-                $mysqlImg = addslashes(fread(fopen($name, "r"), $size));
-                $user->uploadProfilePic(new StringT($_SESSION['nickName']),$mysqlImg,'jpg');
-            } else {
-                echo "<p>Tamanho máximo de ".$maxSize." bytes</p>";
-            }
-        } 
+        $fileController = new FileController($_FILES["pic"]);
+        $file = $fileController->getFile();
+        if ($file) {
+            $user->uploadProfilePic(new StringT($_SESSION['nickName']),$file,'jpg');
+        } else {
+            echo $fileController->getError();
+        }
         echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
     } else {
         echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile();' /></div>";
@@ -74,10 +71,10 @@
 <a href="editPassword.php" class="editPass"><img src="Images/passwordMediumIcon-dark.png"></a>
 <?php
     if (!empty($_GET['error'])) {
-        echo "<center><h3 style=\"color:red;\">".$_GET['error']."</h3></center>";
+        echo "<center class='statusMsg'><h3 style=\"color:red;\">".$_GET['error']."</h3></center>";
     }
     if (!empty($_GET['message'])) {
-        echo "<center><h3 style=\"color:green;\">".$_GET['message']."</h3></center>";
+        echo "<center class='statusMsg'><h3 style=\"color:green;\">".$_GET['message']."</h3></center>";
     }
 ?>
 </center>   

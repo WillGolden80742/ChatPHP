@@ -19,7 +19,7 @@
             $this->user->uploadProfilePic($nick,$pic,$format);
             $this->sessions->clearSession($nick);
         }
-
+        
         function uploadProfile ($pass,StringT $newNick,$name) {      
             if ($this->auth->checkLogin(new StringT($this->auth->getNickByToken()),$pass)) {
                 if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->auth->getNickByToken(),$newNick) == 0) {
@@ -59,10 +59,10 @@
             }        
         }        
         
-        function name(StringT $nick) {
-            $result =  $this->user->name($nick);
-            while($row = mysqli_fetch_assoc($result)) { 
-                return $row["nomeCliente"];
+        function name (StringT $nick) {
+            $result = $this->user->name($nick); 
+            foreach($result as $value) {
+                echo  $value;
             }
         }
 
@@ -110,20 +110,15 @@
 
         function downloadProfilePic (StringT $contactNickName) {
             $result = $this->user->downloadProfilePic($contactNickName);
-            if (empty($this->sessions->getSession($contactNickName))) {
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_assoc($result)) {
-                        $pic = "data:image/jpeg;base64," . base64_encode($row["picture"]);
-                    }
-                } else {
-                    $pic = "Images/profilePic.png";
+            if (!empty($result) > 0) {
+                foreach($result as $value) {
+                    $pic = "data:image/jpeg;base64," . base64_encode($value["picture"]);
                 }
-                $this->sessions->setSession($contactNickName,$pic);
             } else {
-                $pic = $this->sessions->getSession($contactNickName);
+                $pic = "Images/profilePic.png";
             }
             return $pic;
-        }  
+        } 
         
         // MESSAGES 
         
