@@ -1,6 +1,7 @@
 <?php 
     include 'Controller/UsersController.php';    
-    $user = new UsersController(); 
+    $user = new UsersController();  
+    $auth = new AutenticateModel();
 ?>
 <DOCTYPE html>
 <html>
@@ -155,7 +156,7 @@
 <body class="container">
 
 <?php
-
+  
     echo "<div  class=\"header\"><h2>";
     echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.png\" /></a>";
     echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    

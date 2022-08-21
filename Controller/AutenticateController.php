@@ -8,7 +8,7 @@
         }
         // USER 
         function login (StringT $nick,$pass) {    
-            if ($this->checkLogin (new StringT($nick),$pass)) {
+            if ($this->checkLogin ($nick,$pass)) {
                 $_SESSION['nickName'] = $nick;
                 $this->authModel->createToken();
                 header("Location: index.php");
@@ -87,6 +87,10 @@
                 $passTreated = true;
             }
             return array ($passTreated,$error);
+        }
+
+        function getNickByToken() {
+            return $this->authModel->getNickByToken();
         }
 
         function checkNick (StringT $nick) {

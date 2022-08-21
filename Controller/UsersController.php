@@ -12,16 +12,18 @@
             $this->sessions = new Sessions();
             $this->auth->isLogged();
         } 
+        #$this->auth->getNickByToken();
+        #_SESSION['nickName']
         
         function uploadProfilePic (StringT $nick,$pic,$format) {
             $this->user->uploadProfilePic($nick,$pic,$format);
             $this->sessions->clearSession($nick);
         }
 
-        function uploadProfile (StringT $nick,$pass,StringT $newNick,$name) {      
-            if ($this->auth->checkLogin($nick,$pass)) {
-                if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($nick,$newNick) == 0) {
-                    if($this->user->uploadProfile($nick,$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
+        function uploadProfile ($pass,StringT $newNick,$name) {      
+            if ($this->auth->checkLogin(new StringT($this->auth->getNickByToken()),$pass)) {
+                if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->auth->getNickByToken(),$newNick) == 0) {
+                    if($this->user->uploadProfile(new StringT($this->auth->getNickByToken()),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
                         $_SESSION['nickName']=$newNick;
                         header("Location: editProfile.php?message=Alteração com sucesso!");
                         die();
@@ -39,11 +41,11 @@
             }         
         }
 
-        function uploadPassword ($nick,$pass,$newPass,$newPassConfirmation) {
-            if ($this->auth->checkLogin(new StringT($nick),$pass)) {
+        function uploadPassword ($pass,$newPass,$newPassConfirmation) {
+            if ($this->auth->checkLogin(new StringT($this->auth->getNickByToken()),$pass)) {
                 $passCertification = $this->auth->passCertification($newPass,$newPassConfirmation);
                 if ($passCertification[0]) {
-                    if($this->user->uploadPassword($nick,$this->auth-> encrypt($nick.$newPass))) {
+                    if($this->user->uploadPassword(new StringT($this->auth->getNickByToken()),$this->auth-> encrypt($this->auth->getNickByToken().$newPass))) {
                         header("Location: editPassword.php?message=Senha alterada com sucesso!");
                         die();
                     }
@@ -181,36 +183,36 @@
 
         function newCurrentMsgs (StringT $contactNickName){
             usleep(500000);
-            $result = $this->user->newCurrentMsgs($contactNickName,new StringT($_SESSION['nickName']));
+            $result = $this->user->newCurrentMsgs($contactNickName,new StringT($this->auth->getNickByToken()));
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
                     $count = $row["countMsg"];
                     if(strpos($count, "0") !== false){
-                        $result = $this->user->isDeleteMessage($contactNickName,new StringT($_SESSION['nickName']));
+                        $result = $this->user->isDeleteMessage($contactNickName,new StringT($this->auth->getNickByToken()));
                         if (mysqli_num_rows($result) > 0) {
                             while($row = mysqli_fetch_assoc($result)) {
                                 $count = $row["countMsg"];
                                 if(strpos($count, "0") !== false){
                                     return array("0","0");
                                 } else {
-                                    return array("2",$this->messages (new StringT($_SESSION['nickName']),$contactNickName));
+                                    return array("2",$this->messages (new StringT($this->auth->getNickByToken()),$contactNickName));
                                 }
                             }                   
                         }
                     } else {
-                        return array("1",$this->messages (new StringT($_SESSION['nickName']),$contactNickName));
+                        return array("1",$this->messages (new StringT($this->auth->getNickByToken()),$contactNickName));
                     }
                 }                   
             }
         }
 
         function newMg (StringT $contactNickName) {
-            $result = $this->user->newMsg($contactNickName,new StringT($_SESSION['nickName']),0);
+            $result = $this->user->newMsg($contactNickName,new StringT($this->auth->getNickByToken()),0);
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
                 if(strpos($count, "0") !== false){
-                    $result =  $this->user->newMsg($contactNickName,new StringT($_SESSION['nickName']),2);
+                    $result =  $this->user->newMsg($contactNickName,new StringT($this->auth->getNickByToken()),2);
                     while($row = mysqli_fetch_assoc($result)) {
                         $count = $row["countMsg"];
                         if(strpos($count, "0") !== false){
@@ -228,35 +230,35 @@
 
         function newContacts (StringT $nickNameContact) {
             usleep(500000);
-            $result = $this->user->newContacts(new StringT($_SESSION['nickName']));
+            $result = $this->user->newContacts(new StringT($this->auth->getNickByToken()));
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
                 if (strpos($count, "0") !== false) {
                     return "0";
                 } else {
-                    $this->user->delMsg(new StringT($_SESSION['nickName']));
-                    return $this->contacts(new StringT($_SESSION['nickName']),new StringT($nickNameContact));
+                    $this->user->delMsg(new StringT($this->auth->getNickByToken()));
+                    return $this->contacts(new StringT($this->auth->getNickByToken()),new StringT($nickNameContact));
                 }
             }
         }        
 
         function receivedMsg (StringT $contactNickName) {
-            $this->user->receivedMsg($contactNickName,new StringT($_SESSION['nickName']));
+            $this->user->receivedMsg($contactNickName,new StringT($this->auth->getNickByToken()));
         }
 
         function createMessage (Message $msg,StringT $contactNickName) { 
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
-                $this->user->createMessage($msg,$contactNickName,new StringT($_SESSION['nickName']));
-                return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));
+                $this->user->createMessage($msg,$contactNickName,new StringT($this->auth->getNickByToken()));
+                return $this->messages(new StringT($this->auth->getNickByToken()),new StringT($contactNickName));
             } else {
                 return "0";
             }
         }
 
         function deleteMessage (StringT $id,StringT $contactNickName) {
-            $this->user->deleteMessage($id,$contactNickName,new StringT($_SESSION['nickName']));          
-            return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));
+            $this->user->deleteMessage($id,$contactNickName,new StringT($this->auth->getNickByToken()));          
+            return $this->messages(new StringT($this->auth->getNickByToken()),new StringT($contactNickName));
         }
   
     }

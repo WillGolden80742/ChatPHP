@@ -44,6 +44,16 @@
             return $connection->execute($query)->fetch(PDO::FETCH_ASSOC);
         }
 
+        function getNickByToken() {
+            $connection = $this->conFactoryPDO;
+            $query =  $connection->query("SELECT * FROM token where tokenHash = :token");
+            $query->bindParam(':token',$_SESSION['token'], PDO::PARAM_STR);
+            $result = $connection->execute($query)->fetch(PDO::FETCH_ASSOC);
+            foreach ($result as $value) {
+                return $value;
+            }
+        }
+
         function deleteToken() {
             $connection = $this->conFactoryPDO;
             $query = $connection->query("DELETE FROM token WHERE clienteId =:nick");
