@@ -209,11 +209,11 @@
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
-                if(preg_replace("[0]","",$count."") == 0){
+                if(strpos($count, "0") !== false){
                     $result =  $this->user->newMsg($contactNickName,new StringT($_SESSION['nickName']),2);
                     while($row = mysqli_fetch_assoc($result)) {
                         $count = $row["countMsg"];
-                        if(preg_replace("[0]","",$count."") == 0){
+                        if(strpos($count, "0") !== false){
                             $count = "";
                         } else {
                             $count = "<span id=".$contactNickName." class='newMsg'>&nbsp1</span>";
@@ -232,7 +232,7 @@
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
-                if(preg_replace("[0]","",$count."") == 0){
+                if (strpos($count, "0") !== false) {
                     return "0";
                 } else {
                     $this->user->delMsg($_SESSION['nickName']);
