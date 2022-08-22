@@ -16,7 +16,7 @@
             $name = "tmp/".md5(rand()).time().".jpg";
             if (move_uploaded_file($this->file['tmp_name'], $name)) {
                 $size = filesize($name);      
-                if ($size < $this->maxSize) {    
+                if ($size < $this->maxSize) {   
                     $bytes = addslashes(fread(fopen($name, "r"), $size));
                     shell_exec("rm -rf ".$name);
                     return $bytes;

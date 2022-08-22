@@ -1,5 +1,6 @@
 <?php 
     require "EnvLoad/Environment.php"; 
+    require "vendor/autoload.php";
     $iniEnv = new Environment();
     $iniEnv->load(__DIR__);
     #show erros in php
