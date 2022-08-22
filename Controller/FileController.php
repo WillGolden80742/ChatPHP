@@ -3,7 +3,7 @@
     class FileController {
         private $file; 
         private $error; 
-        private $maxSize = 1000000;  
+        private $maxSize = 1024000;  
         
         function __construct($f) {
             $this->file = $f;
@@ -21,11 +21,15 @@
                     shell_exec("rm -rf ".$name);
                     return $bytes;
                 }  else {
-                    $this->error = "<p>Tamanho máximo de ".$this->maxSize." bytes</p>";
+                    $this->error = "<p>Tamanho máximo de ".$this->formatMB($this->maxSize)." <br> Imagem tem ".$this->formatMB($size)." </p>";
                     shell_exec("rm -rf ".$name);
                     return false;
                 }
             }
+        }
+
+        function formatMB ($size) {
+            return round(($size/1024000),2)." MBs";
         }
 
         function getError () {
