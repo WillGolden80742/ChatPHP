@@ -60,6 +60,11 @@
             $query->bindParam(':user',$contactNickName, PDO::PARAM_STR);
             return $connection->execute($query)->fetchAll(); 
         }  
+
+        function searchContact (StringT $nick) {
+            // Recomendado uso de prepare statement 
+            return $this->conFactory->query("call searchContato('".$nick."')");
+        }
         
         function contacts (StringT $nick) {
             // Recomendado uso de prepare statement 
