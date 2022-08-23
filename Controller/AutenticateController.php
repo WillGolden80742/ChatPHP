@@ -89,9 +89,6 @@
             return array ($passTreated,$error);
         }
 
-        function getNickByToken() {
-            return $this->authModel->getNickByToken();
-        }
 
         function checkNick (StringT $nick) {
             $result = $this->authModel->checkNick($nick);  
