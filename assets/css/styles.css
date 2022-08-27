@@ -26,6 +26,20 @@
     display: flex;
   }
 
+  .thumb-video {
+    height:200px;
+    width:100%;
+    border:solid 2px #285d33;
+    background-size:100%;  
+  } 
+
+  .thumb-video img {
+    background-size:100%;
+    left:0;
+    background-position-y:50%;
+    width:100%;
+  } 
+
   .messages {
     padding: 0px 10px 10px 10px;
     margin: 10px;

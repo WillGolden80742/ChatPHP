@@ -10,19 +10,23 @@
             $this->msg = str_replace("\"", "&quot;",$this->msg);
             $urlY1 = "youtube.com/";
             $urlY2 = "youtu.be/";
-            $urlY3 = "m.youtube.com/";
 
             if (str_contains($this->msg,$urlY1) || str_contains($this->msg,$urlY2)) {
 
                 $this->msg = str_replace("&feature=youtu.be", "",$this->msg);
 
                 if (str_contains($this->msg,$urlY2)) {
-                    $id=explode("youtu.be/",$this->msg)[1];
+                    $id = explode("youtu.be/",$this->msg)[1]; 
+                    $id = explode("\n",$id)[0];
+                    $id = explode(" ",$id)[0];
                 } else if (str_contains($this->msg,$urlY1))  {
                     $id=explode("watch?v=",$this->msg)[1];
+                    $id = explode("\n",$id)[0];
+                    $id = explode(" ",$id)[0];
                 }
 
-                $link = "<a href=\"https://youtu.be/".$id."\" target=\"_blank\"><img width=\"100%\" src=\"https://img.youtube.com/vi/".$id."/0.jpg\"/></a>";
+                $this->msg.="<style> .thumb-video img { background-image:url(\"https://img.youtube.com/vi/".$id."/0.jpg\"); } </style>";
+                $link="<div class='thumb-video' id=\"thumb-video$id\"><center><a href=\"https://youtu.be/".$id."\" target=\"_blank\"><img  height=100% src=\"Images/play.png\"/></a></center></div>";
 
                 $this->msg.=$link;
             }            
