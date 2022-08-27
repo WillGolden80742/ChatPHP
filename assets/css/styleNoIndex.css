@@ -74,6 +74,7 @@
       max-width:70%;
     }
 
+
     .inputText,.inputNick, .inputPassword, .inputSubmit {
         font-size: 32px;
         padding:20px;
@@ -99,5 +100,9 @@
      .editPic img, .editPass img, .editPro img {
         height:50px;
      }
+
+     .thumb-video {
+      height:250px;  
+    } 
 
 } 

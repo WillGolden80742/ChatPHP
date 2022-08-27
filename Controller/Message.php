@@ -25,8 +25,8 @@
                     $id = explode(" ",$id)[0];
                 }
 
-                $this->msg.="<style> .thumb-video img { background-image:url(\"https://img.youtube.com/vi/".$id."/0.jpg\"); } </style>";
-                $link="<div class='thumb-video' id=\"thumb-video$id\"><center><a href=\"https://youtu.be/".$id."\" target=\"_blank\"><img  height=100% src=\"Images/play.png\"/></a></center></div>";
+                $this->msg.="<style> .thumb-video #$id { background-image:url(\"https://img.youtube.com/vi/".$id."/0.jpg\"); } </style>";
+                $link="<div class='thumb-video' id=\"thumb-video$id\"><center><a href=\"https://youtu.be/".$id."\" target=\"_blank\"><img  id=\"$id\" height=100% src=\"Images/play.svg\"/></a></center></div>";
 
                 $this->msg.=$link;
             }            
