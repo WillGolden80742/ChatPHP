@@ -137,7 +137,7 @@
                             $left = false;
                             $from = "<span class='from'>You : </span>";
                         }                      
-                        $message = $row["Messages"]; 
+                        $message = new Message($row["Messages"]); 
                         $hour = $row["HourMsg"];  
                         $id = $row["Idmessage"];
                         $messages[$count++] = array($from,$message,$hour,$id,$left); 
@@ -240,7 +240,7 @@
             $this->user->receivedMsg($contactNickName,new StringT($_SESSION['nickName']));
         }
 
-        function createMessage (Message $msg,StringT $contactNickName) { 
+        function createMessage ($msg,StringT $contactNickName) { 
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
                 $this->user->createMessage($msg,$contactNickName,new StringT($_SESSION['nickName']));
                 return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));

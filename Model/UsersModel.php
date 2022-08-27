@@ -106,10 +106,15 @@
             // Recomendado uso de prepare statement 
             $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$nick."'");
         }
-
-        function createMessage (Message $msg,StringT $contactNickName,StringT $nick) { 
+        
+        function createMessage ($msg,StringT $contactNickName,StringT $nick) { 
             // Recomendado uso de prepare statement 
-            $this->conFactory->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES ('".$msg."', '".$nick."', '".$contactNickName."')");
+            $connection = $this->conFactoryPDO;
+            $query = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, :nick,:contactNickName)");
+            $query->bindParam(':msg',$msg);
+            $query->bindParam(':nick',$nick);
+            $query->bindParam(':contactNickName',$contactNickName);
+            $connection->execute($query);  
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");
         }
 
