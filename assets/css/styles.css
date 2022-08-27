@@ -225,6 +225,10 @@
     font-weight: bold;
   }
 
+  .msg a {
+    color:white;
+  }
+
   .msg-left {
     margin-left:50%;
   }

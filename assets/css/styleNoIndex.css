@@ -87,7 +87,10 @@
       margin-left:30%;
     }
   
-
+    .msg a {
+      color:white;
+    }
+    
     .inputSubmit {
         padding:20px;
         padding-top:15px;
