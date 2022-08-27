@@ -6,7 +6,7 @@
 <body class="container">
 <div class="login">
 <center>
-<img src="Images/chat.png" />    
+<img src="Images/chat.svg" />    
 <form action="login.php" method="post">
 <br>
 <input class="inputNick"  placeholder="Nick Name" type=text name=nick><br>

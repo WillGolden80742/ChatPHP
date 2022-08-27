@@ -34,6 +34,14 @@
         .header {
             height:50px;
         }
+
+        .header {
+            height:0;
+            border-bottom:0;
+            border-radius:0;
+            position:fixed;
+            box-shadow: none;
+        }
         .back {
             margin-top:36px;
         }

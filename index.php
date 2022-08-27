@@ -115,7 +115,7 @@
         width:97%;
       }
       .contacts {
-        height: 90%;
+        height: 87%;
       }
       .search {
         height:82px; 
@@ -142,7 +142,7 @@
         height:80px;
       }
       .back img, .logout img{
-        width:30px;
+        width:40px;
       }
       .down {
         top:0px;

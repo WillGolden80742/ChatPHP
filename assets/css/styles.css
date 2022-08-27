@@ -26,19 +26,9 @@
     display: flex;
   }
 
-  .msg {
-    border-top-left-radius:10px; 
-    padding:10px;
-    max-width:450px;
-    border-bottom-right-radius:10px;  
-    margin:10px;
-    box-shadow: 0px 10px 10px 0px rgb(0 0 0 / 35%);
-  }
-
-
   .messages {
     padding: 0px 10px 10px 10px;
-    margin: 5px;
+    margin: 10px;
     left:29%;
     width:67%;
     height:70%;
@@ -80,7 +70,7 @@
     margin: 5px;
     left:29%;
     width:61%;
-    height:17%;
+    height:15%;
   }
 
   @-moz-document url-prefix() {
@@ -131,7 +121,12 @@
 
   .header {
     height:30px;
-    border-radius:10px; 
+  }
+
+  .header h2 a:hover {
+    transition:0.5s; 
+    animation-delay: 0.5s;
+    color:#fff;
   }
 
   @-moz-document url-prefix() {
@@ -205,6 +200,7 @@
     display: none;
   }
   .delete:hover a {
+    z-index:1000;
     position: absolute;
     display:block;
     padding:10px;
@@ -212,10 +208,19 @@
     color:black;
     margin-left:-42px;
   }
+
   .msg {
+    border-top-left-radius:10px; 
+    padding:10px;
+    max-width:450px;
+    border-bottom-right-radius:10px;  
+    margin:10px;
+    box-shadow: 0px 10px 10px 0px rgb(0 0 0 / 35%);
     color:black;
     font-weight: bold;
   }
+
+
   .imgEmoji {
     margin-top:1.5%;
     margin-right:10.5%;
