@@ -109,50 +109,7 @@
           }      
         });
    </script> 
-  <style id="styleIndex">
-    @media only screen and (max-width: 1080px) {
-      .contacts, .search:hover {
-        width:97%;
-      }
-      .contacts {
-        height: 87%;
-      }
-      .search {
-        height:82px; 
-        background-image: url("Images/search-dark.png");
-        background-position-y:20px;
-        background-position-x:0px;
-        left:92%;
-        font-size:32px;
-      }
-      .search:hover{
-        background-image: url("Images/search-dark.png");
-        background-position-y:20px;
-        border-radius:40px;
-      }
-      .contacts a h2 img {
-        width:128px;
-        height:128px;
-      }
-      .contacts a h2, .user  {
-        font-size:64px;
-      }
-
-      .header {
-        height:80px;
-      }
-      .back img, .logout img{
-        width:40px;
-      }
-      .down {
-        top:0px;
-      }
-      .userName {
-        display: block;
-      }
-    } 
-
-  </style>  
+  <style id="styleIndex"></style>  
 
 </head>    
 <body class="container">

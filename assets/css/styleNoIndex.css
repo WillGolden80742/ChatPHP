@@ -70,6 +70,10 @@
       box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);
     }
 
+    .msg {
+      max-width:70%;
+    }
+
     .inputText,.inputNick, .inputPassword, .inputSubmit {
         font-size: 32px;
         padding:20px;
@@ -78,6 +82,11 @@
         padding-left:40px;
         border-radius:40px;
     }
+
+    .msg-left {
+      margin-left:30%;
+    }
+  
 
     .inputSubmit {
         padding:20px;
@@ -88,4 +97,4 @@
         height:50px;
      }
 
-  } 
+} 

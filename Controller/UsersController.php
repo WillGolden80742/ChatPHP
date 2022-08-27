@@ -163,7 +163,7 @@
                     $mensagens.= "</div>";
                   }        
                   $mensagens.= "<br>";
-                  $mensagens.= "<div class='msg' style='background-color:".$color.";margin-".$margin.":50%;'>";
+                  $mensagens.= "<div class='msg msg-".$margin."' style='background-color:".$color.";'>";
                   $mensagens.= $msg[0];                  
                   $mensagens.= "<p>".$msg[1]."<br><span style='float:right;'>".$msg[2]."</span></p>";    
                   $mensagens.= "</div>";    
