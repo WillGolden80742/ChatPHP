@@ -1,5 +1,5 @@
 <?php
-   
+
     class Message {
         private $msg;
         function __construct($msg) {
@@ -14,12 +14,20 @@
             if (str_contains($this->msg,$urlY1) || str_contains($this->msg,$urlY2)) {
                 
                 if (str_contains($this->msg,$urlY2)) {
-                    $url = "https://www.".$urlY1."embed/".explode("youtu.be/",$this->msg)[1];
+                    $id=explode("youtu.be/",$this->msg)[1];
                 } else if (str_contains($this->msg,$urlY1))  {
-                    $url = "https://www.".$urlY1."embed/".explode("watch?v=",$this->msg)[1];
+                    $id=explode("watch?v=",$this->msg)[1];
                 }
+               
+                $this->msg= str_replace("https://www.","",$this->msg);
+                $this->msg= str_replace("youtu.be","",$this->msg);
+                $this->msg= str_replace("youtube.com/","",$this->msg);
+                $this->msg= str_replace("watch?v=","",$this->msg);
+                $this->msg= str_replace($id,"<a href='https://youtu.be/".$id."' target=\"_blank\" >youtu.be/".$id."</a>",$this->msg);
 
-                $this->msg = "<iframe width=\"100%\" height=\"300px\" src=\"".$url."\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";   
+                $link = "<a href=\"https://youtu.be/".$id."\" target=\"_blank\"><img width=\"100%\" src=\"https://img.youtube.com/vi/".$id."/0.jpg\"/></a>";
+
+                $this->msg.=$link;
             }            
         }
         public function __toString():string {
