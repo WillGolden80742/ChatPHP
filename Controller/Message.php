@@ -66,7 +66,6 @@
 
             $urlY1 = "youtube.com/";
             $urlY2 = "youtu.be/";
-            
            
             $text = str_replace("&feature=youtu.be","",$text);
              
