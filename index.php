@@ -28,7 +28,6 @@
           document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
           document.getElementById("down").innerHTML="";
           h =  document.getElementById("messages").scrollTop;
-          
         } 
 
 
@@ -107,7 +106,7 @@
                         down();
                       } else {
                         document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
-                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:5%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.png'/> ";
+                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.png'/> ";
                       }
                     } else if (result[0] == "2")  {
                       document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
