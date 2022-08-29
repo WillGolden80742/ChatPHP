@@ -1,5 +1,7 @@
 <?php
 
+    use Goutte\Client;
+    use Symfony\Component\HttpClient\HttpClient;
     class Message {
 
         private $msg;
@@ -21,12 +23,18 @@
         }
 
         function get_title($url){
-            $str = file_get_contents($url);
-            if(strlen($str)>0){
-            $str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
-            preg_match("/\<title\>(.*)\<\/title\>/i",$str,$title); // ignore case
-            return $title[1];
-            }
+
+                $str = file_get_contents($url);
+                if(strlen($str)>0){
+                    $str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
+                    preg_match("/\<title\>(.*)\<\/title\>/i",$str,$title); // ignore case
+                    if (array_key_exists(1,$title)){
+                        return $title[1]." | ";
+                    } else {
+                        return "";
+                    }
+
+                }
         }
 
         function link ($text,$async) {
@@ -53,9 +61,9 @@
 
                 $linkId = microtime(true).random_int(0, 999);
                 if ($async) {
-                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))." | <span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
+                    #$text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
                 } else {
-                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text)."<script> link (); function link (){ arrayLink = document.getElementById('$linkId'); link = arrayLink.innerHTML; $.ajax({ url: 'getTitle.php', method: 'GET', data: {link: link}, dataType: 'json' }).done(function(result) { link = document.getElementById('$linkId').innerHTML; document.getElementById('$linkId').innerHTML = result+\" | <span style='opacity:0.5;'>\"+link+\"</span>\" }); }</script>";
+                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text)."<script> link (); function link (){ arrayLink = document.getElementById('$linkId'); link = arrayLink.innerHTML; $.ajax({ url: 'getTitle.php', method: 'GET', data: {link: link}, dataType: 'json' }).done(function(result) { link = document.getElementById('$linkId').innerHTML; document.getElementById('$linkId').innerHTML = result+\"<span style='opacity:0.5;'>\"+link+\"</span>\" }); }</script>";
                 }  
             }
             

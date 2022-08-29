@@ -12,6 +12,7 @@
             $this->sessions = new Sessions();
             $this->auth->isLogged();
         } 
+        
 
         function uploadProfilePic (StringT $nick,$pic,$format) {
             $this->user->uploadProfilePic($nick,$pic,$format);

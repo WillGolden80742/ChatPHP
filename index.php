@@ -58,10 +58,12 @@
         function createMessage () {
           loading (true);
           var messageText = document.getElementById('text').value;
-          currentDate = new Date();
-          document.getElementById('text').value="";
-          document.getElementById('messages').innerHTML+="<br><div class=\"msg msg-left\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+messageText+"<br><span style=\"float:right;\">"+currentDate.getHours()+":"+currentDate.getMinutes()+"</span></p></div>"
-          console.log(messageText);
+          if (messageText.length > 0 && messageText.length <= 500) {
+              currentDate = new Date();
+              document.getElementById('text').value="";
+              document.getElementById('messages').innerHTML+="<br><div class=\"msg msg-left\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+messageText+"<br><span style=\"float:right;\">"+currentDate.getHours()+":"+currentDate.getMinutes()+"</span></p></div>"
+              down ();
+          }
           $.ajax({
             url: 'new.php',
             method: 'POST',
