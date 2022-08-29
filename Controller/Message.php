@@ -1,7 +1,5 @@
 <?php
 
-    use Goutte\Client;
-    use Symfony\Component\HttpClient\HttpClient;
     class Message {
 
         private $msg;
@@ -11,8 +9,19 @@
             $this->msg = str_replace("<", "&lt;",$this->msg);
             $this->msg = str_replace(">", "&gt;",$this->msg);
             $this->msg = str_replace("\"", "&quot;",$this->msg);
+            $this->links($this->msg,$async);
+        }
 
-            $msg = $this->msg;
+        
+        function get_title($url){
+            $currentURL = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+            $arrURL = explode("/",$currentURL);
+            $sizeArrURL = count ($arrURL)-1;
+            $currentURL = str_replace($arrURL[$sizeArrURL],"",$currentURL);
+            return json_decode(file_get_contents( $currentURL."getTitle.php?link=".$url));
+        }
+        
+        function links ($msg,$async) {
             if ($this->isYoutube ($msg)) {
                 $msg = $this->youtube ($msg);
                 $msgArray = explode("<style id=\"embed\">",$msg); 
@@ -21,12 +30,6 @@
                 $this->msg = $this->link ($this->msg,$async);
             }
         }
-
-        
-        function get_title($url){
-            return "";
-        }
-        
 
         function link ($text,$async) {
 
@@ -52,7 +55,7 @@
 
                 $linkId = microtime(true).random_int(0, 999);
                 if ($async) {
-                    #$text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
+                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
                 } else {
                     $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text)."<script> link (); function link (){ arrayLink = document.getElementById('$linkId'); link = arrayLink.innerHTML; $.ajax({ url: 'getTitle.php', method: 'GET', data: {link: link}, dataType: 'json' }).done(function(result) { link = document.getElementById('$linkId').innerHTML; document.getElementById('$linkId').innerHTML = result+\"<span style='opacity:0.5;'>\"+link+\"</span>\" }); }</script>";
                 }  

@@ -30,7 +30,6 @@
           h =  document.getElementById("messages").scrollTop;
         } 
 
-
         function removeButtonDown () {
           if (((document.getElementById("messages").scrollTop)/h)*100 >= 99) {
             document.getElementById("down").innerHTML="";
@@ -42,6 +41,7 @@
         function deleteMessage (id) {
           document.getElementById("msg"+id).remove();
           document.getElementById("del"+id).remove();
+          document.getElementById("br"+id).remove();
           loading (true);
           $.ajax({
             url: 'delete.php?id='+id,
@@ -49,9 +49,7 @@
             data: {nickNameContact: nickNameContact},
             dataType: 'json'
           }).done(function(result) {
-              document.getElementById('messages').innerHTML=result;
-              document.getElementById("down").innerHTML="";
-              loading (false);
+            loading (false);
           });
         }
 
@@ -59,24 +57,28 @@
           loading (true);
           var messageText = document.getElementById('text').value;
           if (messageText.length > 0 && messageText.length <= 500) {
-              currentDate = new Date();
-              document.getElementById('text').value="";
-              document.getElementById('messages').innerHTML+="<br><div class=\"msg msg-left\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+messageText+"<br><span style=\"float:right;\">"+currentDate.getHours()+":"+currentDate.getMinutes()+"</span></p></div>"
-              down ();
+              $.ajax({
+                url: 'new.php',
+                method: 'POST',
+                data: {nickNameContact: nickNameContact, messageText: messageText},
+                dataType: 'json'
+              }).done(function(result) {
+                    id = result;
+                    $.ajax({
+                      url: 'getThumb.php?',
+                      method: 'GET',
+                      data: {msg: messageText},
+                      dataType: 'html'
+                    }).done(function(text) {
+                      currentDate = new Date();
+                      document.getElementById('text').value="";
+                      document.getElementById('messages').innerHTML+="<div class='delete' id=\"del"+id+"\" style='color:grey;margin-left:45%;margin-right:2%;float:right;'> ●●●<a href='#' style='background-color:#1d8634' onclick=\"deleteMessage('"+id+"');\"><b>Apagar</b></a></div><br id='br"+id+"'><div class=\"msg msg-left\" id=\"msg"+id+"\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+text+"<br><span style=\"float:right;\">"+currentDate.getHours()+":"+currentDate.getMinutes()+"</span></p></div>"
+                      down ();
+                    });
+                    loading (false);
+              });
+
           }
-          $.ajax({
-            url: 'new.php',
-            method: 'POST',
-            data: {nickNameContact: nickNameContact, messageText: messageText},
-            dataType: 'json'
-          }).done(function(result) {
-            if (result !== "0") {
-              document.getElementById('messages').innerHTML=result;
-              document.getElementById("down").innerHTML="";
-              document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
-            }
-            loading (false);
-          });
         }        
 
         $(document).ready(function(){
@@ -137,6 +139,7 @@
 <body class="container">
 
 <?php
+
     echo "<div  class=\"header\"><h2>";
     echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.png\" /></a>";
     echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    

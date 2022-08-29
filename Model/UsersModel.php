@@ -77,6 +77,7 @@
             return $this->conFactory->query("call messages('".$nickName."','".$contactNickName."')");
         }
 
+
         function newCurrentMsgs (StringT $contactNickName,StringT $nick){
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$nick."' AND messages.received = '0'");
@@ -107,6 +108,10 @@
             $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '".$contactNickName."' and messages.MsgTo = '".$nick."'");
         }
         
+        function lasIdMessage ($nick,$contactNickName) {
+            return $this->conFactory->query("SELECT MAX(messages.Idmessage) as LastID From messages WHERE MsgFrom = '$nick' AND MsgTo = '$contactNickName'");  
+        }
+
         function createMessage ($msg,StringT $contactNickName,StringT $nick) { 
             // Recomendado uso de prepare statement 
             $connection = $this->conFactoryPDO;

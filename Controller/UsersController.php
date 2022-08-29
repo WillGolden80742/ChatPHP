@@ -162,7 +162,7 @@
                     $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[3].");'><b>Apagar</b></a>";
                     $mensagens.= "</div>";
                   }        
-                  $mensagens.= "<br>";
+                  $mensagens.= "<br id=\"br$msg[3]\" >";
                   $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[3]\" style='background-color:".$color.";'>";
                   $mensagens.= $msg[0];                  
                   $mensagens.= "<p>".$msg[1]."<br><span style='float:right;'>".$msg[2]."</span></p>";    
@@ -240,18 +240,22 @@
             $this->user->receivedMsg($contactNickName,new StringT($_SESSION['nickName']));
         }
 
+        function lasIdMessage ($nick,$contactNickName) {
+            $row = mysqli_fetch_assoc($this->user->lasIdMessage($nick,$contactNickName));
+            return $row["LastID"];
+        }
+
         function createMessage ($msg,StringT $contactNickName) { 
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
                 $this->user->createMessage($msg,$contactNickName,new StringT($_SESSION['nickName']));
-                return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName),true);
+                return $this->lasIdMessage(new StringT($_SESSION['nickName']),$contactNickName);
             } else {
                 return "0";
             }
         }
 
         function deleteMessage (StringT $id,StringT $contactNickName) {
-            $this->user->deleteMessage($id,$contactNickName,new StringT($_SESSION['nickName']));          
-            return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName),true);
+            return $this->user->deleteMessage($id,$contactNickName,new StringT($_SESSION['nickName']));          
         }
   
     }
