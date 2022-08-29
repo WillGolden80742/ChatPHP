@@ -50,7 +50,7 @@
             $connection = $this->conFactoryPDO;
             $query = $connection->query("SELECT nomeCliente FROM clientes WHERE nickName = :user ");
             $query->bindParam(':user',$nick, PDO::PARAM_STR);
-            return $connection->execute($query)->fetch(PDO::FETCH_ASSOC); 
+            return $connection->execute($query)->fetch(PDO::FETCH_ASSOC);    
         }
 
         function downloadProfilePic (StringT $contactNickName) {
