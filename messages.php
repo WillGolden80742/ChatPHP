@@ -21,7 +21,7 @@
 <div class="messages" id="messages" onscroll="removeButtonDown ();">
   
 <?php
-    echo $user->messages($userNickName,$contactNickName);
+    echo $user->messages($userNickName,$contactNickName,false);
 ?>
 </div>
 

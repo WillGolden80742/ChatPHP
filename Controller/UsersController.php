@@ -120,7 +120,7 @@
         
         // MESSAGES 
         
-        function messages (StringT $nickName,StringT $contactNickName) {
+        function messages (StringT $nickName,StringT $contactNickName,$async) {
             $this->receivedMsg($contactNickName );
             $result = $this->user->messages($nickName,$contactNickName);
             $messages = array();
@@ -137,7 +137,7 @@
                             $left = false;
                             $from = "<span class='from'>You : </span>";
                         }                      
-                        $message = new Message($row["Messages"]); 
+                        $message = new Message($row["Messages"],$async); 
                         $hour = $row["HourMsg"];  
                         $id = $row["Idmessage"];
                         $messages[$count++] = array($from,$message,$hour,$id,$left); 
@@ -158,12 +158,12 @@
                     $color = "#1d8634";
                     $margin = "left";
                     $float = "right";
-                    $mensagens.= "<div class='delete' style='color:grey;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
+                    $mensagens.= "<div class='delete' id=\"del$msg[3]\" style='color:grey;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
                     $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[3].");'><b>Apagar</b></a>";
                     $mensagens.= "</div>";
                   }        
                   $mensagens.= "<br>";
-                  $mensagens.= "<div class='msg msg-".$margin."' style='background-color:".$color.";'>";
+                  $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[3]\" style='background-color:".$color.";'>";
                   $mensagens.= $msg[0];                  
                   $mensagens.= "<p>".$msg[1]."<br><span style='float:right;'>".$msg[2]."</span></p>";    
                   $mensagens.= "</div>";    
@@ -188,12 +188,12 @@
                                 if(strpos($count, "0") !== false){
                                     return array("0","0");
                                 } else {
-                                    return array("2",$this->messages (new StringT($_SESSION['nickName']),$contactNickName));
+                                    return array("2",$this->messages (new StringT($_SESSION['nickName']),$contactNickName,true));
                                 }
                             }                   
                         }
                     } else {
-                        return array("1",$this->messages (new StringT($_SESSION['nickName']),$contactNickName));
+                        return array("1",$this->messages (new StringT($_SESSION['nickName']),$contactNickName,true));
                     }
                 }                   
             }
@@ -243,7 +243,7 @@
         function createMessage ($msg,StringT $contactNickName) { 
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
                 $this->user->createMessage($msg,$contactNickName,new StringT($_SESSION['nickName']));
-                return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));
+                return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName),true);
             } else {
                 return "0";
             }
@@ -251,7 +251,7 @@
 
         function deleteMessage (StringT $id,StringT $contactNickName) {
             $this->user->deleteMessage($id,$contactNickName,new StringT($_SESSION['nickName']));          
-            return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName));
+            return $this->messages(new StringT($_SESSION['nickName']),new StringT($contactNickName),true);
         }
   
     }

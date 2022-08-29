@@ -23,11 +23,14 @@
         var h;
 
         function down () {
+
           document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
           document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
           document.getElementById("down").innerHTML="";
           h =  document.getElementById("messages").scrollTop;
-        }     
+          
+        } 
+
 
         function removeButtonDown () {
           if (((document.getElementById("messages").scrollTop)/h)*100 >= 99) {
@@ -38,6 +41,9 @@
         }
 
         function deleteMessage (id) {
+          document.getElementById("msg"+id).remove();
+          document.getElementById("del"+id).remove();
+          loading (true);
           $.ajax({
             url: 'delete.php?id='+id,
             method: 'POST',
@@ -46,11 +52,16 @@
           }).done(function(result) {
               document.getElementById('messages').innerHTML=result;
               document.getElementById("down").innerHTML="";
+              loading (false);
           });
         }
 
         function createMessage () {
+          loading (true);
           var messageText = document.getElementById('text').value;
+          currentDate = new Date();
+          document.getElementById('text').value="";
+          document.getElementById('messages').innerHTML+="<br><div class=\"msg msg-left\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+messageText+"<br><span style=\"float:right;\">"+currentDate.getHours()+":"+currentDate.getMinutes()+"</span></p></div>"
           console.log(messageText);
           $.ajax({
             url: 'new.php',
@@ -60,10 +71,10 @@
           }).done(function(result) {
             if (result !== "0") {
               document.getElementById('messages').innerHTML=result;
-              document.getElementById('text').value="";
               document.getElementById("down").innerHTML="";
               document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
             }
+            loading (false);
           });
         }        
 
@@ -82,6 +93,7 @@
                 dataType: 'json'
               }).done(function(result) {
                 if (result !== "0") {
+                  loading (true);
                   document.getElementById('contacts').innerHTML=result;
                   $.ajax({
                     url: 'newMsg.php?',
@@ -95,19 +107,28 @@
                         down();
                       } else {
                         document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
-                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.png'/> ";
+                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:5%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.png'/> ";
                       }
                     } else if (result[0] == "2")  {
                       document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
                       document.getElementById('messages').innerHTML=result[1];
                       document.getElementById("down").innerHTML="";
                     }
+                    loading (false);
                   });
                 }
                 newContact();
               });
           }      
         });
+
+        function loading (b) {
+          if (b) {
+            document.getElementById("styleIndex").innerHTML+=".send {background:none; background-size:100%; background-repeat:no-repeat; background-image: url(\"Images/loading.gif\"); background-position-y: 42%; background-position-x: 50%; }";
+          } else {
+            document.getElementById("styleIndex").innerHTML="";
+          }
+        }  
    </script> 
   <style id="styleIndex"></style>  
 
