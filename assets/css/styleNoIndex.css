@@ -40,6 +40,10 @@
         left:90%;
     }
 
+    .down {
+      z-index: 1000;
+    }
+
     .back {
       margin-top:64px;
       display: block;

@@ -158,7 +158,7 @@
                     $color = "#1d8634";
                     $margin = "left";
                     $float = "right";
-                    $mensagens.= "<div class='delete' id=\"del$msg[3]\" style='color:grey;margin-top:10px;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
+                    $mensagens.= "<div class='delete' id=\"del$msg[3]\" style='color:grey;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
                     $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[3].");'><b>Apagar</b></a>";
                     $mensagens.= "</div>";
                   }        

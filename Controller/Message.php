@@ -9,6 +9,7 @@
             $this->msg = str_replace("<", "&lt;",$this->msg);
             $this->msg = str_replace(">", "&gt;",$this->msg);
             $this->msg = str_replace("\"", "&quot;",$this->msg);
+
             $msg = $this->msg;
             if ($this->isYoutube ($msg)) {
                 $msg = $this->youtube ($msg);
@@ -66,6 +67,9 @@
             $urlY1 = "youtube.com/";
             $urlY2 = "youtu.be/";
             
+           
+            $text = str_replace("&feature=youtu.be","",$text);
+             
             if (str_contains($text,"&")) {
                 $text  = "https://www.youtube.com/watch?".$this->splitLink(explode("&",$text)[1]);
             } 

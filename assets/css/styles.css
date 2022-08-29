@@ -394,12 +394,15 @@
     .header {
       height:80px;
     }
+    
     .back img, .logout img{
       width:40px;
     }
+
     .down {
       top:0px;
     }
+
     .userName {
       display: block;
     }
