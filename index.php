@@ -56,6 +56,7 @@
         function createMessage () {
           loading (true);
           var messageText = document.getElementById('text').value;
+          document.getElementById('text').value="";
           if (messageText.length > 0 && messageText.length <= 500) {
               $.ajax({
                 url: 'new.php',
@@ -71,7 +72,6 @@
                       dataType: 'html'
                     }).done(function(text) {
                       currentDate = new Date();
-                      document.getElementById('text').value="";
                       document.getElementById('messages').innerHTML+="<div class='delete' id=\"del"+id+"\" style='color:grey;margin-left:45%;margin-right:2%;float:right;'> ●●●<a href='#' style='background-color:#1d8634' onclick=\"deleteMessage('"+id+"');\"><b>Apagar</b></a></div><br id='br"+id+"'><div class=\"msg msg-left\" id=\"msg"+id+"\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+text+"<br><span style=\"float:right;\">"+currentDate.getHours()+":"+currentDate.getMinutes()+"</span></p></div>"
                       down ();
                     });

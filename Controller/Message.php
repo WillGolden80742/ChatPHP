@@ -1,5 +1,4 @@
 <?php
-
     class Message {
 
         private $msg;
@@ -9,25 +8,44 @@
             $this->msg = str_replace("<", "&lt;",$this->msg);
             $this->msg = str_replace(">", "&gt;",$this->msg);
             $this->msg = str_replace("\"", "&quot;",$this->msg);
-            $this->links($this->msg,$async);
+            $this->msg = $this->links($this->msg,$async);
         }
 
         
         function get_title($url){
-            $currentURL = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-            $arrURL = explode("/",$currentURL);
-            $sizeArrURL = count ($arrURL)-1;
-            $currentURL = str_replace($arrURL[$sizeArrURL],"",$currentURL);
-            return json_decode(file_get_contents( $currentURL."getTitle.php?link=".$url));
+            if (empty($this->getSession($url))) {
+                $currentURL = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+                $arrURL = explode("/",$currentURL);
+                $sizeArrURL = count ($arrURL)-1;
+                $currentURL = str_replace($arrURL[$sizeArrURL],"",$currentURL);
+                $title = json_decode(file_get_contents( $currentURL."getTitle.php?link=".$url));
+                $this->setSession($url,$title);
+            } else {
+                return $this->getSession($url);
+            }
         }
-        
+
+        function setSession($key,$value) {
+            $key="a".$key;
+            $_SESSION[$key] = $value;
+        }
+
+        function getSession($key) {
+            $key="a".$key;
+            if (empty($_SESSION[$key])) {
+                return "";
+            } else {
+                return $_SESSION[$key];
+            }
+        }
+
         function links ($msg,$async) {
             if ($this->isYoutube ($msg)) {
                 $msg = $this->youtube ($msg);
                 $msgArray = explode("<style id=\"embed\">",$msg); 
-                $this->msg = $this->link ($msgArray[0],$async)."<style id=\"embed\">".$msgArray[1];
+                return $this->link ($msgArray[0],$async)."<style id=\"embed\">".$msgArray[1];
             } else {
-                $this->msg = $this->link ($this->msg,$async);
+                return $this->link ($this->msg,$async);
             }
         }
 
@@ -57,7 +75,7 @@
                 if ($async) {
                     $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
                 } else {
-                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text)."<script> link (); function link (){ arrayLink = document.getElementById('$linkId'); link = arrayLink.innerHTML; $.ajax({ url: 'getTitle.php', method: 'GET', data: {link: link}, dataType: 'json' }).done(function(result) { link = document.getElementById('$linkId').innerHTML; document.getElementById('$linkId').innerHTML = result+\"<span style='opacity:0.5;'>\"+link+\"</span>\" }); }</script>";
+                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text)."<script> link (); function link (){ arrayLink = document.getElementById('$linkId'); link = arrayLink.innerHTML; $.ajax({ url: 'getTitle.php?', method: 'GET', data: {link: link}, dataType: 'json' }).done(function(result) { link = document.getElementById('$linkId').innerHTML; document.getElementById('$linkId').innerHTML = result+\"<span style='opacity:0.5;'>\"+link+\"</span>\" }); }</script>";
                 }  
             }
             
