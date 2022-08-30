@@ -20,6 +20,7 @@
                 $currentURL = str_replace($arrURL[$sizeArrURL],"",$currentURL);
                 $title = json_decode(file_get_contents( $currentURL."getTitle.php?link=".$url));
                 $this->setSession($url,$title);
+                return $title;
             } else {
                 return $this->getSession($url);
             }
