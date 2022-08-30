@@ -372,14 +372,14 @@
     }
     .search {
       height:82px; 
-      background-image: url("Images/search-dark.png");
+      background-image: url("../../Images/search-dark.png");
       background-position-y:20px;
       background-position-x:0px;
       left:92%;
       font-size:32px;
     }
     .search:hover{
-      background-image: url("Images/search-dark.png");
+      background-image: url("../../Images/search-dark.png");
       background-position-y:20px;
       border-radius:40px;
     }
