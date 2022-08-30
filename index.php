@@ -96,7 +96,6 @@
                 dataType: 'json'
               }).done(function(result) {
                 if (result !== "0") {
-                  loading (true);
                   document.getElementById('contacts').innerHTML=result;
                   $.ajax({
                     url: 'newMsg.php?',
@@ -117,7 +116,6 @@
                       document.getElementById('messages').innerHTML=result[1];
                       document.getElementById("down").innerHTML="";
                     }
-                    loading (false);
                   });
                 }
                 newContact();

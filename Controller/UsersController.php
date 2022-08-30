@@ -2,7 +2,6 @@
     include 'Model/UsersModel.php';
 
     class UsersController {
-        private $conFactory;
         private $auth;
         private $sessions;
         function __construct() {
@@ -11,6 +10,7 @@
             $this->user = new UsersModel();
             $this->sessions = new Sessions();
             $this->auth->isLogged();
+            $this->nickSession = $_SESSION['nickName'];
         } 
 
         function uploadProfilePic (StringT $nick,$pic,$format) {
@@ -19,10 +19,10 @@
         }
         
         function uploadProfile ($pass,StringT $newNick,$name) {      
-            if ($this->auth->checkLogin(new StringT($_SESSION['nickName']),$pass)) {
-                if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($_SESSION['nickName'],$newNick) == 0) {
-                    if($this->user->uploadProfile(new StringT($_SESSION['nickName']),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
-                        $_SESSION['nickName']=$newNick;
+            if ($this->auth->checkLogin(new StringT($this->nickSession),$pass)) {
+                if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->nickSession,$newNick) == 0) {
+                    if($this->user->uploadProfile(new StringT($this->nickSession),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
+                        $this->nickSession=$newNick;
                         header("Location: editProfile.php?message=Alteração com sucesso!");
                         die();
                     } else {
@@ -40,10 +40,10 @@
         }
 
         function uploadPassword ($pass,$newPass,$newPassConfirmation) {
-            if ($this->auth->checkLogin(new StringT($_SESSION['nickName']),$pass)) {
+            if ($this->auth->checkLogin(new StringT($this->nickSession),$pass)) {
                 $passCertification = $this->auth->passCertification($newPass,$newPassConfirmation);
                 if ($passCertification[0]) {
-                    if($this->user->uploadPassword(new StringT($_SESSION['nickName']),$this->auth-> encrypt($_SESSION['nickName'].$newPass))) {
+                    if($this->user->uploadPassword(new StringT($this->nickSession),$this->auth-> encrypt($this->nickSession.$newPass))) {
                         header("Location: editPassword.php?message=Senha alterada com sucesso!");
                         die();
                     }
@@ -119,15 +119,22 @@
         } 
         
         // MESSAGES 
-        
-        function messages (StringT $nickName,StringT $contactNickName,$async) {
+        function allMessages (StringT $contactNickName) {
+            $query = $this->allMessagesQuery($contactNickName);
+            return $this->messages ($query,$contactNickName,false);
+        }     
+
+        function allMessagesQuery (StringT $contactNickName) {
+            return $this->user->messages(new StringT($this->nickSession),$contactNickName);
+        }          
+
+        function messages ($queryMessages,StringT $contactNickName,$async) {
             $this->receivedMsg($contactNickName );
-            $result = $this->user->messages($nickName,$contactNickName);
             $messages = array();
-            if (mysqli_num_rows($result) > 0) {
+            if (mysqli_num_rows($queryMessages) > 0) {
               $idMessage = '0';   
               $count=0;
-              while($row = mysqli_fetch_assoc($result)) {
+              while($row = mysqli_fetch_assoc($queryMessages)) {
                 if (strcmp($row["Idmessage"],$idMessage) !== 0) {
                     if (!empty($row["Messages"])) {
                         if (strcmp($row["MsgFrom"], $contactNickName) == 0 ) {
@@ -176,36 +183,37 @@
 
         function newCurrentMsgs (StringT $contactNickName){
             usleep(500000);
-            $result = $this->user->newCurrentMsgs($contactNickName,new StringT($_SESSION['nickName']));
+            $query = $this->allMessagesQuery($contactNickName);
+            $result = $this->user->newCurrentMsgs($contactNickName,new StringT($this->nickSession));
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
                     $count = $row["countMsg"];
                     if(strpos($count, "0") !== false){
-                        $result = $this->user->isDeleteMessage($contactNickName,new StringT($_SESSION['nickName']));
+                        $result = $this->user->isDeleteMessage($contactNickName,new StringT($this->nickSession));
                         if (mysqli_num_rows($result) > 0) {
                             while($row = mysqli_fetch_assoc($result)) {
                                 $count = $row["countMsg"];
                                 if(strpos($count, "0") !== false){
                                     return array("0","0");
                                 } else {
-                                    return array("2",$this->messages (new StringT($_SESSION['nickName']),$contactNickName,true));
+                                    return array("2",$this->messages($query,$contactNickName,true));
                                 }
                             }                   
                         }
                     } else {
-                        return array("1",$this->messages (new StringT($_SESSION['nickName']),$contactNickName,true));
+                        return array("1",$this->messages ($query,$contactNickName,true));
                     }
                 }                   
             }
         }
 
         function newMg (StringT $contactNickName) {
-            $result = $this->user->newMsg($contactNickName,new StringT($_SESSION['nickName']),0);
+            $result = $this->user->newMsg($contactNickName,new StringT($this->nickSession),0);
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
                 if(strpos($count, "0") !== false){
-                    $result =  $this->user->newMsg($contactNickName,new StringT($_SESSION['nickName']),2);
+                    $result =  $this->user->newMsg($contactNickName,new StringT($this->nickSession),2);
                     while($row = mysqli_fetch_assoc($result)) {
                         $count = $row["countMsg"];
                         if(strpos($count, "0") !== false){
@@ -223,21 +231,21 @@
 
         function newContacts (StringT $nickNameContact) {
             usleep(500000);
-            $result = $this->user->newContacts(new StringT($_SESSION['nickName']));
+            $result = $this->user->newContacts(new StringT($this->nickSession));
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];
                 if (strpos($count, "0") !== false) {
                     return "0";
                 } else {
-                    $this->user->delMsg(new StringT($_SESSION['nickName']));
-                    return $this->contacts(new StringT($_SESSION['nickName']),new StringT($nickNameContact));
+                    $this->user->delMsg(new StringT($this->nickSession));
+                    return $this->contacts(new StringT($this->nickSession),new StringT($nickNameContact));
                 }
             }
         }        
 
         function receivedMsg (StringT $contactNickName) {
-            $this->user->receivedMsg($contactNickName,new StringT($_SESSION['nickName']));
+            $this->user->receivedMsg($contactNickName,new StringT($this->nickSession));
         }
 
         function lasIdMessage ($nick,$contactNickName) {
@@ -247,15 +255,15 @@
 
         function createMessage ($msg,StringT $contactNickName) { 
             if (strlen($msg) > 1 && strlen($msg) <= 500 && !empty($contactNickName)) {
-                $this->user->createMessage($msg,$contactNickName,new StringT($_SESSION['nickName']));
-                return $this->lasIdMessage(new StringT($_SESSION['nickName']),$contactNickName);
+                $this->user->createMessage($msg,$contactNickName,new StringT($this->nickSession));
+                return $this->lasIdMessage(new StringT($this->nickSession),$contactNickName);
             } else {
                 return "0";
             }
         }
 
         function deleteMessage (StringT $id,StringT $contactNickName) {
-            return $this->user->deleteMessage($id,$contactNickName,new StringT($_SESSION['nickName']));          
+            return $this->user->deleteMessage($id,$contactNickName,new StringT($this->nickSession));          
         }
   
     }

@@ -18,10 +18,10 @@
 <link rel="stylesheet" href="assets/css/styleNoIndex.css">
   <title><?php echo $contactNickName; ?></title>
 </head>    
-<div class="messages" id="messages" onscroll="removeButtonDown ();">
+<div class="messages" id="messages" onscroll="removeButtonDown();">
   
 <?php
-    echo $user->messages($userNickName,$contactNickName,false);
+    echo $user->allMessages($contactNickName);
 ?>
 </div>
 
