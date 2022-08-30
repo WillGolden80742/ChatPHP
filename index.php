@@ -54,10 +54,10 @@
         }
 
         function createMessage () {
-          loading (true);
           var messageText = document.getElementById('text').value;
-          document.getElementById('text').value="";
           if (messageText.length > 0 && messageText.length <= 500) {
+              loading (true);
+              document.getElementById('text').value="";
               $.ajax({
                 url: 'new.php',
                 method: 'POST',
