@@ -56,15 +56,10 @@
 
         function getDate () {
           currentDate = new Date();
-          h = currentDate.getHours();
-          m = currentDate.getMinutes();
-          if (h.length==1) { 
-            h="0"+h;
-          }
-          if (m.length==1) {
-            m="0"+m;
-          }
-          return h+":"+m;
+          currentDate = currentDate.toLocaleString('pt-BR');
+          currentDate = currentDate.split(" ")[1];
+          currentDate = currentDate.split(":")[0]+":"+currentDate.split(":")[1];
+          return currentDate;
         }
 
 
@@ -79,6 +74,7 @@
                 data: {nickNameContact: nickNameContact, messageText: messageText},
                 dataType: 'json'
               }).done(function(result) {
+                    date = getDate();
                     id = result;
                     $.ajax({
                       url: 'getThumb.php?',
@@ -87,7 +83,7 @@
                       dataType: 'html'
                     }).done(function(text) {
                       currentDate = new Date();
-                      document.getElementById('messages').innerHTML+="<div class='delete' id=\"del"+id+"\" style='color:grey;margin-left:45%;margin-right:2%;float:right;'> ●●●<a href='#' style='background-color:#1d8634' onclick=\"deleteMessage('"+id+"');\"><b>Apagar</b></a></div><br id='br"+id+"'><div class=\"msg msg-left\" id=\"msg"+id+"\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+text+"<br><span style=\"float:right;\">"+ getDate () +"</span></p></div>"
+                      document.getElementById('messages').innerHTML+="<div class='delete' id=\"del"+id+"\" style='color:grey;margin-left:45%;margin-right:2%;float:right;'> ●●●<a href='#' style='background-color:#1d8634' onclick=\"deleteMessage('"+id+"');\"><b>Apagar</b></a></div><br id='br"+id+"'><div class=\"msg msg-left\" id=\"msg"+id+"\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+text+"<br><span style=\"float:right;\">"+ date +"</span></p></div>"
                       down ();
                     });
                     loading (false);
