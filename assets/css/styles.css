@@ -290,15 +290,15 @@
   }    
 
   .inputNick {
-    background-image: url("../../Images/arrobaIcon-dark.png");  
+    background-image: url("../../Images/arrobaIcon-dark.svg");  
   }
 
   .inputText {
-      background-image: url("../../Images/nameIcon-dark.png");
+      background-image: url("../../Images/nameIcon-dark.svg");
   }
 
   .inputPassword {
-      background-image: url("../../Images/passwordIcon-dark.png");
+      background-image: url("../../Images/passwordIcon-dark.svg");
   }
 
   .inputSubmit {
