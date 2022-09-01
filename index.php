@@ -28,6 +28,7 @@
           document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
           document.getElementById("down").innerHTML="";
           h =  document.getElementById("messages").scrollTop;
+          
         } 
 
         function removeButtonDown () {
@@ -74,7 +75,7 @@
                 data: {nickNameContact: nickNameContact, messageText: messageText},
                 dataType: 'json'
               }).done(function(result) {
-                    date = getDate();
+                    date = getDate ();
                     id = result;
                     $.ajax({
                       url: 'getThumb.php?',
@@ -150,19 +151,19 @@
 <?php
 
     echo "<div  class=\"header\"><h2>";
-    echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.png\" /></a>";
-    echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.png\" /></a>";    
+    echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.svg\" /></a>";
+    echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.svg\" /></a>";    
     if (!empty($nickNameContact)) {
       echo "<a class='picMessage' >";
       echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($nickNameContact).");' />";
       echo "<a class='userName'>";
-        echo $user->name($nickNameContact);
+      echo $user->name($nickNameContact);
       echo "</a>";
       echo "</a>";
     }
     echo "<span class='user' >&nbsp;";
     echo $user->name(new StringT($_SESSION['nickName']));
-    echo "<a href=\"editProfile.php\"> •••</a></span></h2>";
+    echo "<a href=\"editProfile.php\"> ••• </a></span></h2>";
     echo "&nbsp&nbsp<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
     $userNickName = new StringT($_SESSION['nickName']);
     echo "</div>";
