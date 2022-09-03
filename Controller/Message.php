@@ -106,7 +106,7 @@
             } 
 
             $text.="<style id=\"embed\"> .thumb-video #$id { background-image:url(\"https://img.youtube.com/vi/".$id."/0.jpg\"); } </style>";
-            $link="<div class='thumb-video' id=\"thumb-video$id\"><center><a href=\"https://youtu.be/".$id."\" target=\"_blank\"><img  id=\"$id\" height=100% src=\"Images/play.svg\"/></a></center></div>";
+            $link="<div class='thumb-video' id=\"thumb-video$id\"><center><a><img  id=\"$id\" onClick=\"embedYoutube('$id')\" height=100% src=\"Images/play.svg\"/></a></center></div>";
 
             $text.=$link;
             

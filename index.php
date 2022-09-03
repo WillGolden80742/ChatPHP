@@ -11,6 +11,9 @@
 <script src="assets/js/jquery.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
       <script>
+        msgsContents = "";
+        fetchNewMessages = true;
+        scrollPos = 0;
         <?php 
           $nickNameContact = "";
           if (!empty($_GET['contactNickName'])) {
@@ -101,37 +104,39 @@
           ?>
           newContact();
           function newContact() {
-              $.ajax({
-                url: 'newContact.php?',
-                method: 'POST',
-                data: {nickNameContact: nickNameContact},
-                dataType: 'json'
-              }).done(function(result) {
-                if (result !== "0") {
-                  document.getElementById('contacts').innerHTML=result;
-                  $.ajax({
-                    url: 'newMsg.php?',
-                    method: 'POST',
-                    data: {nickNameContact: nickNameContact},
-                    dataType: 'json'
-                  }).done(function(result) {
-                    if (result[0] == "1") {
-                      document.getElementById('messages').innerHTML=result[1];
-                      if (((document.getElementById("messages").scrollTop)/h)*100 >= 90) {
-                        down();
-                      } else {
-                        document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
-                        document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.png'/> ";
+            if (fetchNewMessages) {
+                $.ajax({
+                  url: 'newContact.php?',
+                  method: 'POST',
+                  data: {nickNameContact: nickNameContact},
+                  dataType: 'json'
+                }).done(function(result) {
+                  if (result !== "0") {
+                    document.getElementById('contacts').innerHTML=result;
+                    $.ajax({
+                      url: 'newMsg.php?',
+                      method: 'POST',
+                      data: {nickNameContact: nickNameContact},
+                      dataType: 'json'
+                    }).done(function(result) {
+                      if (result[0] == "1") {
+                        document.getElementById('messages').innerHTML=result[1];
+                        if (((document.getElementById("messages").scrollTop)/h)*100 >= 90) {
+                          down();
+                        } else {
+                          document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
+                          document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.png'/> ";
+                        }
+                      } else if (result[0] == "2")  {
+                        document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
+                        document.getElementById('messages').innerHTML=result[1];
+                        document.getElementById("down").innerHTML="";
                       }
-                    } else if (result[0] == "2")  {
-                      document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
-                      document.getElementById('messages').innerHTML=result[1];
-                      document.getElementById("down").innerHTML="";
-                    }
-                  });
-                }
-                newContact();
-              });
+                    });
+                  }
+                  newContact();
+                });
+            }    
           }      
         });
 
@@ -142,6 +147,19 @@
             document.getElementById("styleIndex").innerHTML="";
           }
         }  
+
+        function embedYoutube (id) {
+          fetchNewMessages=false;
+          scrollPos = document.getElementById('messages').scrollTop;
+          msgsContents=document.getElementById('messages').innerHTML;
+          style = "z-index: 1000; position: absolute; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%); width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(32px);";
+          document.getElementById('messages').innerHTML="<a href=\"https://youtu.be/"+id+"\" target=\"_blank\" style=\""+style+"left:2.5%;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeYoutube()\" style=\""+style+";right:2.5%;background-image: url('Images/close.svg');\" ></div><iframe width=90% height=90% style=\"position: absolute; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:90%; height:90%; margin-left: auto; margin-right: auto;\" src=\"https://www.youtube.com/embed/"+id+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+        }
+        function closeYoutube () {
+          fetchNewMessages=true;
+          document.getElementById('messages').innerHTML=msgsContents;
+          document.getElementById('messages').scrollTo(0, scrollPos);
+        }
    </script> 
   <style id="styleIndex"></style>  
 
