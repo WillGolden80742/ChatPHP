@@ -102,8 +102,10 @@
               echo "down ();";
             } 
           ?>
-          newContact();
-          function newContact() {
+          newContact();     
+        });
+        
+        function newContact() {
             if (fetchNewMessages) {
                 $.ajax({
                   url: 'newContact.php?',
@@ -137,8 +139,7 @@
                   newContact();
                 });
             }    
-          }      
-        });
+          }         
 
         function loading (b) {
           if (b) {
@@ -157,8 +158,10 @@
         }
         function closeYoutube () {
           fetchNewMessages=true;
+          newContact();
           document.getElementById('messages').innerHTML=msgsContents;
           document.getElementById('messages').scrollTo(0, scrollPos);
+          newContact();
         }
    </script> 
   <style id="styleIndex"></style>  
