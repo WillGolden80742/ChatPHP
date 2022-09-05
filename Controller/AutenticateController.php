@@ -1,7 +1,6 @@
 <?php
     include 'Model/AutenticateModel.php';
     class AutenticateController {
-        private $conFactory;
         function __construct() {
             $this->authModel = new AutenticateModel();
             $this->conFactory = new ConnectionFactory();
