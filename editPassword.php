@@ -26,7 +26,7 @@
         background-position-x:50%;
         background-size: cover;   
     }      
-    @media only screen and (max-width: 1080px) {
+    @media (orientation: portrait) {
         .profilePic {
           width:320px;
           height:320px;
