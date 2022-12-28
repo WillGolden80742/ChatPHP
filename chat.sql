@@ -1,40 +1,51 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Tempo de geração: 28/12/2022 às 02:00
+-- Versão do servidor: 10.4.27-MariaDB
+-- Versão do PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Banco de dados: `ChatPHP`
+--
+
 DELIMITER $$
 --
 -- Procedimentos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `contatos` (IN `userNickName` VARCHAR(20))  NO SQL
-select clientes.nickName as nickNameContato, clientes.nomeCliente AS Contato, messages.Messages, max(messages.date) as DateFormated FROM clientes INNER JOIN messages on messages .MsgFrom = clientes.nickName or messages.MsgTo = clientes.nickName WHERE (messages.MsgFrom = userNickName AND clientes.nickName != userNickName) OR  (messages.MsgTo = userNickName AND clientes.nickName != userNickName) GROUP BY Contato ORDER BY DateFormated DESC$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `contatos` (IN `userNickName` VARCHAR(20))  NO SQL select clientes.nickName as nickNameContato, clientes.nomeCliente AS Contato, messages.Messages, max(messages.date) as DateFormated FROM clientes INNER JOIN messages on messages .MsgFrom = clientes.nickName or messages.MsgTo = clientes.nickName WHERE (messages.MsgFrom = userNickName AND clientes.nickName != userNickName) OR  (messages.MsgTo = userNickName AND clientes.nickName != userNickName) GROUP BY Contato ORDER BY DateFormated DESC$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `contNotReceived` (IN `contactNickName` VARCHAR(20))  NO SQL
-SELECT COUNT(Idmessage) AS contMSg FROM messages WHERE messages.MsgFrom = contactNickName AND received = 0 OR messages.MsgFrom = contactNickName AND received = 2$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `contNotReceived` (IN `contactNickName` VARCHAR(20))  NO SQL SELECT COUNT(Idmessage) AS contMSg FROM messages WHERE messages.MsgFrom = contactNickName AND received = 0 OR messages.MsgFrom = contactNickName AND received = 2$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `countAnexos` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL
-SELECT count(messages.Idmessage) AS countAnexos From messages INNER JOIN anexo on anexo.mensagem = messages.Idmessage WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `countAnexos` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT count(messages.Idmessage) AS countAnexos From messages INNER JOIN anexo on anexo.mensagem = messages.Idmessage WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteMessage` (IN `idMsg` INT(20), IN `nickName` VARCHAR(20))  DELETE FROM messages WHERE messages.Idmessage = idMsg and messages.MsgFrom = nickName$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteMessage` (IN `idMsg` INT(20), IN `nickName` VARCHAR(20))   DELETE FROM messages WHERE messages.Idmessage = idMsg and messages.MsgFrom = nickName$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `firstMessageWithAttachment` (IN `nickName` VARCHAR(20))  NO SQL
-SELECT messages.Idmessage,messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg FROM messages WHERE messages.MsgTo = nickName AND messages.received = 0 ORDER BY dataOrd DESC LIMIT 0,1$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `firstMessageWithAttachment` (IN `nickName` VARCHAR(20))  NO SQL SELECT messages.Idmessage,messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg FROM messages WHERE messages.MsgTo = nickName AND messages.received = 0 ORDER BY dataOrd DESC LIMIT 0,1$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL
-SELECT *, DATE_FORMAT(messages.date, '%H:%i') as HourMsg From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName ORDER BY DATE_FORMAT(messages.date, '%Y/%m/%d %H:%i:%s') ASC$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT *, DATE_FORMAT(messages.date, '%H:%i') as HourMsg From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName ORDER BY DATE_FORMAT(messages.date, '%Y/%m/%d %H:%i:%s') ASC$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `messagesWithAttachment` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL
-SELECT messages.Idmessage, "" as messages ,messages.MsgFrom,"",messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, anexo.nome AS NomeArquivo, arquivos.nomeHash AS hashArquivo From messages INNER JOIN anexo on anexo.mensagem = messages.Idmessage INNER JOIN arquivos ON arquivos.nomeHash = anexo.arquivo WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName
+CREATE DEFINER=`root`@`localhost` PROCEDURE `messagesWithAttachment` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT messages.Idmessage, "" as messages ,messages.MsgFrom,"",messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, anexo.nome AS NomeArquivo, arquivos.nomeHash AS hashArquivo From messages INNER JOIN anexo on anexo.mensagem = messages.Idmessage INNER JOIN arquivos ON arquivos.nomeHash = anexo.arquivo WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName
 UNION
 SELECT messages.Idmessage, messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, "" AS NomeArquivo, "" AS hashArquivo From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName AND messages.Messages != "" OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName AND messages.Messages != "" ORDER BY dataOrd DESC LIMIT 0,15$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsg` (IN `userNickName` VARCHAR(20), IN `contactuserNickName` VARCHAR(20), IN `received` INT(1))  SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = contactuserNickName AND messages.MsgTo = userNickName AND messages.received = received$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsg` (IN `userNickName` VARCHAR(20), IN `contactuserNickName` VARCHAR(20), IN `received` INT(1))   SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = contactuserNickName AND messages.MsgTo = userNickName AND messages.received = received$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsgs` (IN `userNickName` VARCHAR(20))  SELECT COUNT(newMsg.msgTo) as countMsg FROM newMsg WHERE newMsg.msgTo = userNickName$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsgs` (IN `userNickName` VARCHAR(20))   SELECT COUNT(newMsg.msgTo) as countMsg FROM newMsg WHERE newMsg.msgTo = userNickName$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))  SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%") OR clientes.nomeCliente LIKE CONCAT("%",contactNickName,"%")$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))   SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%") OR clientes.nomeCliente LIKE CONCAT("%",contactNickName,"%")$$
 
 DELIMITER ;
 
@@ -49,7 +60,7 @@ CREATE TABLE `anexo` (
   `nome` varchar(260) DEFAULT '',
   `arquivo` varchar(300) NOT NULL,
   `mensagem` int(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -60,7 +71,7 @@ CREATE TABLE `anexo` (
 CREATE TABLE `arquivos` (
   `nomeHash` varchar(300) NOT NULL,
   `arquivo` longblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -72,7 +83,7 @@ CREATE TABLE `clientes` (
   `nomeCliente` varchar(20) NOT NULL,
   `nickName` varchar(20) NOT NULL,
   `senha` varchar(128) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `clientes`
@@ -94,7 +105,7 @@ INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
 ('Pepe BluePill', 'pepe_bluepill', 'ca3ac3b326622426f5954fd543a043e5cc6b4c8b2ad6455a2a6ffa7c40594cca6f094b6d8d0a7bf78d898703ab5169e08d52190ea9454ba7e72efd2f9f6a1671'),
 ('Rafael', 'rafa77', '82f86d39196c5d8c2dcda74c3a7e4cf94c12d0fb2c7f66947e9f538116d1c1d6e7520eb1cd066e2d2088f3c602be8dacbdc838ec7521fc4b10385118f833ad1c'),
 ('William Dourado', 'willCruz', 'e04deea2cac576f39302a073c511ae7ce3d4fd9d3fa8151e289c67eedfd34c70bd9ca01a0cddf0890496e15dcffb19f5ba184cbe11d52f5bca532f254659bdb1'),
-(' Уилл Голден', 'willGolden', 'cfe7e31d64fd6dff8c27d8e51ea4424a985e8434795859cdc21de9a20c3220dfe3d5ee19143d6e58eadfb60e1d100751edf2edf279f928715e486d0942fe9c31'),
+(' Уилл Голден', 'willGolden', 'a8d853d9087fe946983f10db963a28488a1ee6474a0684ad29111d5c948b431b5fa0d1f5a33335ebf0615fc3c540ecaec687783f62ff58c48ed6cb2badb8f4e4'),
 ('William Dourado', 'willGolden65', '58ac7d9f2d41bc370f31c5b444a1b903e8249a14dcc17d525e14f6a45ce9f703581d3e64fda708b9f8b2bb8b80c073230dbc29fa05a501f36a52592c5dfbc58d'),
 ('WilliamDourado', 'willGolden7', 'd2d9834d23900330405cd0ce6c6cddaf4eeee85f7171465cc3b2597741a44866630854d1e49d2c0caddb18f246db83b26f828e9420f1bc82cf5970a78865a585');
 
@@ -111,7 +122,7 @@ CREATE TABLE `messages` (
   `MsgTo` varchar(20) NOT NULL,
   `Date` varchar(20) NOT NULL DEFAULT current_timestamp(),
   `received` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `messages`
@@ -122,17 +133,20 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 (1700, ' Oi\r\n', 'ally77', 'lola', '2022-01-27 10:26:07', 1),
 (1795, ' Oi', 'ally77', 'lola', '2022-01-27 20:10:13', 1),
 (1908, ' Oi', 'willGolden', 'willGolden', '2022-01-29 01:53:41', 1),
-(1922, ' OI\n', 'willGolden', 'lola', '2022-01-29 22:04:31', 1),
-(1923, 'Olá', 'willGolden', 'lola', '2022-01-29 22:04:37', 1),
+(1922, ' OI\n', 'willGolden', 'lola', '2022-01-29 22:04:31', 2),
+(1923, 'Olá', 'willGolden', 'lola', '2022-01-29 22:04:37', 2),
 (1930, ' Ooi', 'lola', 'ally77', '2022-01-30 13:53:56', 1),
 (1932, 'Oxe ', 'lola', 'willGolden', '2022-01-30 13:57:35', 1),
 (1936, ' Oi\n', 'willGolden', 'ally77', '2022-01-30 20:19:36', 1),
-(1937, ' Oi', 'willGolden', 'lola', '2022-01-30 20:19:46', 1),
+(1937, ' Oi', 'willGolden', 'lola', '2022-01-30 20:19:46', 2),
 (2017, ' OI ', 'lola', 'willGolden', '2022-02-01 01:14:28', 1),
 (2018, 'g f', 'lola', 'willGolden', '2022-02-01 01:14:49', 1),
 (2019, 'fdfg ', 'lola', 'willGolden', '2022-02-01 01:15:10', 1),
 (2020, ' Oi ', 'ally77', 'willGolden', '2022-02-01 01:16:13', 1),
-(2021, 'ds gf ', 'ally77', 'willGolden', '2022-02-01 01:16:17', 1);
+(2021, 'ds gf ', 'ally77', 'willGolden', '2022-02-01 01:16:17', 1),
+(2023, ' https://www.youtube.com/watch?v=gAfCJcoqQAY\n', 'willGolden', 'lola', '2022-12-27 21:37:20', 2),
+(2024, 'https://www.youtube.com/watch?v=SgI0mJqARIs\n', 'willGolden', 'lola', '2022-12-27 21:37:55', 2),
+(2029, ' https://symfony.com/doc/current/setup.html\n', 'willGolden', 'lola', '2022-12-27 21:54:57', 2);
 
 -- --------------------------------------------------------
 
@@ -143,7 +157,7 @@ INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `re
 CREATE TABLE `newMsg` (
   `msgFrom` varchar(20) NOT NULL,
   `msgTo` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `newMsg`
@@ -151,7 +165,18 @@ CREATE TABLE `newMsg` (
 
 INSERT INTO `newMsg` (`msgFrom`, `msgTo`) VALUES
 ('gvmmo', 'hong_kong77'),
-('gvmmo', 'hong_kong77');
+('gvmmo', 'hong_kong77'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola'),
+('willGolden', 'lola');
 
 -- --------------------------------------------------------
 
@@ -164,11 +189,25 @@ CREATE TABLE `profilepicture` (
   `picture` longblob NOT NULL,
   `format` varchar(20) NOT NULL,
   `updated` varchar(20) NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 
 --
--- Despejando dados para a tabela `profilepicture`
+-- Estrutura para tabela `token`
 --
+
+CREATE TABLE `token` (
+  `clienteID` varchar(256) NOT NULL,
+  `tokenHash` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `token`
+--
+
+INSERT INTO `token` (`clienteID`, `tokenHash`) VALUES
+('willGolden', 'e9a570a4908caa96b652f4104c6aa087a0d5e525d66a6f680eb04c931cc693b77d85385cb31d60d4c190c2fe78e8f0745e5f04cb5ef34d30f4ab3ff23ce2b718');
 
 --
 -- Índices para tabelas despejadas
@@ -233,7 +272,7 @@ ALTER TABLE `anexo`
 -- AUTO_INCREMENT de tabela `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2023;
+  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2030;
 
 --
 -- Restrições para tabelas despejadas
@@ -267,3 +306,6 @@ ALTER TABLE `profilepicture`
   ADD CONSTRAINT `clienteId` FOREIGN KEY (`clienteId`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

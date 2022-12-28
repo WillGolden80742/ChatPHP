@@ -1,3 +1,5 @@
 {
-
+    "require": {
+        "fabpot/goutte": "^4.0"
+    }
 }
