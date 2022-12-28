@@ -364,7 +364,7 @@
     font-weight: bold;
   }
 
-  @media only screen and (max-width: 1080px) {
+  @media (orientation: portrait) {
     .contacts, .search:hover {
       width:97%;
     }
