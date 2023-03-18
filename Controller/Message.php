@@ -2,15 +2,10 @@
     class Message {
 
         private $msg;
-        function __construct($msg,$async) {
-            $this->msg = preg_replace('[\']','',$msg);
-            $this->msg = preg_replace('[\--]','',$this->msg);
-            $this->msg = str_replace("<", "&lt;",$this->msg);
-            $this->msg = str_replace(">", "&gt;",$this->msg);
-            $this->msg = str_replace("\"", "&quot;",$this->msg);
-            $this->msg = $this->links($this->msg,$async);
+        function __construct($msg, $async) {
+            $this->msg = htmlspecialchars($msg, ENT_QUOTES);
+            $this->msg = $this->links($this->msg, $async);
         }
-
         
         function get_title($url){
             if (empty($this->getSession($url))) {
