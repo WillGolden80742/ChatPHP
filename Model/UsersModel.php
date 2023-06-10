@@ -66,9 +66,10 @@
             $query = $connection->query("SELECT arquivo FROM arquivos WHERE nomeHash = :nomeHash");
             $query->bindParam(':nomeHash', $nomeHash,PDO::PARAM_STR);
             $resultado = $connection->execute($query)->fetchAll();
-   
+
+      
             foreach ($resultado as $r) {
-                echo $r['arquivo'];
+                echo base64_encode($r['arquivo']);
             }
         }
         

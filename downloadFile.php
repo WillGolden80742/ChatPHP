@@ -4,5 +4,5 @@
     $auth = new AutenticateModel();
     
     if (!empty($_GET['hashName'])) {
-        $user->downloadFile($_GET['hashName']);
+        echo $user->downloadFile($_GET['hashName']);
     } 

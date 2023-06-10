@@ -78,28 +78,32 @@
           }
         }
 
-        function downloadFile(nomeHash,nome) {
+        function downloadFile(nomeHash, nome) {
           var xhr = new XMLHttpRequest();
-          xhr.open('GET', 'downloadFile.php?hashName=' + nomeHash, true);
-          xhr.responseType = 'blob';
+          var url = 'downloadFile.php?hashName=' + nomeHash;
 
-          xhr.onload = function () {
-            if (xhr.status === 200) {
-              var blob = xhr.response;
-              var url = URL.createObjectURL(blob);
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              var base64Data = xhr.responseText;
+              var byteCharacters = atob(base64Data);
+              var byteNumbers = new Array(byteCharacters.length);
 
-              var link = document.createElement('a');
-              link.href = url;
-              link.setAttribute('download', nome);
-              link.style.display = 'none';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
+              for (var i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+              }
 
-              URL.revokeObjectURL(url);
+              var byteArray = new Uint8Array(byteNumbers);
+              var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+              // Cria um link para download e simula o clique nele
+              var downloadLink = document.createElement('a');
+              downloadLink.href = window.URL.createObjectURL(blob);
+              downloadLink.download = nome;
+              downloadLink.click();
             }
           };
 
+          xhr.open('GET', url, true);
           xhr.send();
         }
 
