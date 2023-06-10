@@ -19,7 +19,7 @@
             } else {
                 return $this->getSession($url);
             }
-        }
+        } 
 
         function setSession($key,$value) {
             $key="a".$key;

@@ -13,6 +13,16 @@
             $this->nickSession = $_SESSION['nickName'];
         } 
 
+        function uploadFile($file,$msg,$nickName, $contactNickName) {
+            $this->user->uploadFile($file,$msg,$nickName,$contactNickName);
+            header("Location: messages.php?contactNickName=".$contactNickName);
+            die();
+        }
+
+        function downloadFile ($nomeHash) { 
+            $this->user->downloadFile ($nomeHash);
+        }
+
         function uploadProfilePic (StringT $nick,$pic,$format) {
             $this->user->uploadProfilePic($nick,$pic,$format);
             $this->sessions->clearSession($nick);
@@ -132,27 +142,28 @@
             $this->receivedMsg($contactNickName );
             $messages = array();
             if (mysqli_num_rows($queryMessages) > 0) {
-              $idMessage = '0';   
-              $count=0;
-              while($row = mysqli_fetch_assoc($queryMessages)) {
-                if (strcmp($row["Idmessage"],$idMessage) !== 0) {
-                    if (!empty($row["Messages"])) {
-                        if (strcmp($row["MsgFrom"], $contactNickName) == 0 ) {
-                            $from = "<span class='from'>From : @".$row["MsgFrom"]."</span>";
-                            $left = true;
-                        } else {
-                            $left = false;
-                            $from = "<span class='from'>You : </span>";
-                        }                      
-                        $message = new Message($row["Messages"],$async); 
-                        $hour = $row["HourMsg"];  
-                        $id = $row["Idmessage"];
-                        $messages[$count++] = array($from,$message,$hour,$id,$left); 
-                    }           
-                } 
-                $idMessage = "".$row["Idmessage"];
-              }
-            } 
+                $idMessage = '0';
+                $count = 0;
+                while ($row = mysqli_fetch_assoc($queryMessages)) {
+                    if (strcmp($row["Idmessage"], $idMessage) !== 0) {
+                        if (!empty($row["Messages"])) {
+                            if (strcmp($row["MsgFrom"], $contactNickName) == 0) {
+                                $from = "<span class='from'>From : @" . $row["MsgFrom"] . "</span>";
+                                $left = true;
+                            } else {
+                                $left = false;
+                                $from = "<span class='from'>You : </span>";
+                            }
+                            $message = new Message($row["Messages"], $async);
+                            $hour = $row["HourMsg"];
+                            $id = $row["Idmessage"];
+                            $nome_anexo = !empty($row["nome_anexo"]) ? "<div class=\"attachment_file\"><img src=\"Images/filesIcon.png\"/><a href=\"#\" onclick=\"downloadFile('".$row["arquivo_anexo"]."','".$row["nome_anexo"]."')\">" . $row["nome_anexo"] . "</a></div>" : "";
+                            $messages[$count++] = array($from, $message.$nome_anexo, $hour, $id, $left);
+                        }
+                    }
+                    $idMessage = "" . $row["Idmessage"];
+                }
+            }
             if (count($messages) > 0) {
                $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.png'/></center>";
                $mensagens.= "<br>";

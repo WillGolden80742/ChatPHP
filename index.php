@@ -66,10 +66,51 @@
           return currentDate;
         }
 
+        function messageValidate() {
+          var textLength = document.getElementById("text").value.length;
+          var inputFile = document.getElementById('file');
+          var sendButton = document.getElementById('send');
+
+          if (textLength > 500 || textLength < 1 && inputFile.files.length == 0) {
+            sendButton.disabled = true;
+          } else {
+            sendButton.disabled = false;
+          }
+        }
+
+        function downloadFile(nomeHash,nome) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', 'downloadFile.php?hashName=' + nomeHash, true);
+          xhr.responseType = 'blob';
+
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              var blob = xhr.response;
+              var url = URL.createObjectURL(blob);
+
+              var link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', nome);
+              link.style.display = 'none';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+
+              URL.revokeObjectURL(url);
+            }
+          };
+
+          xhr.send();
+        }
 
         function createMessage () {
+          var inputFile = document.getElementById('file');
+
+          // Verifica se foi selecionado pelo menos um arquivo
+
           var messageText = document.getElementById('text').value;
-          if (messageText.length > 0 && messageText.length <= 500) {
+
+          if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText  == " " ) {
               loading (true);
               document.getElementById('text').value="";
               $.ajax({
@@ -200,9 +241,8 @@
       $contacts = $user->searchContact(new StringT($_POST["search"]));
       echo "</div>"; 
     }
-    echo "</div>"
+    echo "</div>";
 
-  
 ?>   
 
 </body>

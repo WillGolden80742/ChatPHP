@@ -12,6 +12,68 @@
             $this->auth->isLogged();
         } 
         
+
+        function uploadFile($file,$msg,$nickName, $contactNickName) {
+
+            if (!empty($msg)) {
+                $this->createMessage($msg,new StringT($contactNickName),new StringT($nickName));
+            } else {
+                $this->createMessage(" ",new StringT($contactNickName),new StringT($nickName));
+            }
+
+            $row = mysqli_fetch_assoc($this->lasIdMessage($nickName, $contactNickName));
+            
+            if ($this->getNumberOfAttachments($row['LastID']) == 0) {
+            
+                $nomeHash = md5_file($file['tmp_name']) . '.' . $file['size'] . '.'. pathinfo($file['name'], PATHINFO_EXTENSION);
+            
+                // Verificar se o arquivo já existe na tabela 'arquivos'
+                $connection = $this->conFactoryPDO;
+                $query = $connection->query("SELECT nomeHash FROM arquivos WHERE nomeHash = :nomeHash");
+                $query->bindParam(':nomeHash', $nomeHash);
+                $connection->execute($query);
+
+                $connection = $this->conFactoryPDO;
+            
+                if (!($query->rowCount() > 0))  {
+                    // Inserir o arquivo na tabela 'arquivos'
+                                
+
+                    
+                    $query = $connection->query("INSERT INTO arquivos (nomeHash, arquivo) VALUES (:nomeHash, :arquivo)");
+                    $query->bindParam(':nomeHash', $nomeHash);
+                    
+                    $arquivo = file_get_contents($file['tmp_name']);
+                    $query->bindParam(':arquivo', $arquivo);
+                    
+                    $connection->execute($query);
+                }  
+
+
+                // Inserir o registro na tabela 'anexo'
+                $query = $connection->query("INSERT INTO anexo (nome, arquivo, mensagem) VALUES (:nome, :arquivo, :mensagem)");
+                $query->bindParam(':nome', $file['name']);
+                $query->bindParam(':arquivo', $nomeHash);
+                $query->bindParam(':mensagem', $row['LastID']);
+                $connection->execute($query);
+            }
+            
+        }  
+
+
+        function downloadFile($nomeHash) {
+            $connection = $this->conFactoryPDO;
+            $query = $connection->query("SELECT arquivo FROM arquivos WHERE nomeHash = :nomeHash");
+            $query->bindParam(':nomeHash', $nomeHash,PDO::PARAM_STR);
+            $resultado = $connection->execute($query)->fetchAll();
+   
+            foreach ($resultado as $r) {
+                echo $r['arquivo'];
+            }
+        }
+        
+
+
         function uploadProfilePic (StringT $nick,$pic,$format) {
             // Recomendado uso de prepare statement 
             $connection = $this->conFactoryPDO;
@@ -130,6 +192,22 @@
             $this->conFactory->query("UPDATE messages SET received = '2' WHERE messages.MsgFrom = '".$nick."' and messages.MsgTo = '".$contactNickName."'");       
         }
         
+        function getNumberOfAttachments($lasIdMessage) {
+            $connection = $this->conFactoryPDO;
+        
+            // Consultar o número de anexos vinculados à mensagem
+            $query = $connection->query("SELECT COUNT(*) AS num_anexos FROM anexo WHERE mensagem = :mensagem");
+            $query->bindParam(':mensagem', $lasIdMessage);
+            $connection->execute($query);
+        
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            $numAnexos = $result['num_anexos'];
+        
+            return $numAnexos;
+        }
   
+
     }
+
+
 ?>
