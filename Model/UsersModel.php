@@ -69,7 +69,7 @@
 
       
             foreach ($resultado as $r) {
-                echo base64_encode($r['arquivo']);
+                return base64_encode($r['arquivo']);
             }
         }
         

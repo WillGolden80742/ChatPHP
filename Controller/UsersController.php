@@ -20,7 +20,7 @@
         }
 
         function downloadFile ($nomeHash) { 
-            $this->user->downloadFile ($nomeHash);
+           return $this->user->downloadFile ($nomeHash);
         }
 
         function uploadProfilePic (StringT $nick,$pic,$format) {
@@ -157,7 +157,7 @@
                             $message = new Message($row["Messages"], $async);
                             $hour = $row["HourMsg"];
                             $id = $row["Idmessage"];
-                            $nome_anexo = !empty($row["nome_anexo"]) ? "<div class=\"attachment_file\"><img src=\"Images/filesIcon.png\"/><a href=\"#\" onclick=\"downloadFile('".$row["arquivo_anexo"]."','".$row["nome_anexo"]."')\">" . $row["nome_anexo"] . "</a></div>" : "";
+                            $nome_anexo = $this->getMedia($row["nome_anexo"],$row["arquivo_anexo"]);
                             $messages[$count++] = array($from, $message.$nome_anexo, $hour, $id, $left);
                         }
                     }
@@ -190,6 +190,57 @@
                $mensagens= "<h3><center>Nenhuma mensagem de @".$contactNickName." até o momento<br>Faça seu primeiro envio!</center></h3>";
             }
             return $mensagens;
+        }
+
+        function getMedia ($nome,$hash) {
+            $extensao = pathinfo($nome, PATHINFO_EXTENSION);
+            
+            if (!empty($nome)) {
+                if ($this->isVideo($extensao)) {
+                    return "<div class=\"audio_file\">
+                                <center>
+                                    <video width=\"100%\" controls> <source src=\"data:video/".$extensao.";base64," .($this->downloadFile($hash)). "\" type=\"video/" . $extensao . "\"> Seu navegador não suporta a reprodução deste vídeo. </video>
+                                </center>
+                            </div>";
+                } elseif ($this->isAudio($extensao)) {
+                    return "<div>
+                                <center> 
+                                    <audio controls> <source src=\"data:audio/".$extensao.";base64," . ($this->downloadFile($hash)). "\" type=\"audio/" . $extensao . "\"> Seu navegador não suporta a reprodução deste áudio. </audio>
+                                </center>
+                            </div>";
+                } elseif ($this->isImage($extensao)) {
+                    return "<div class=\"media_file\">
+                                <center>
+                                    <img src=\"data:image/".$extensao.";base64," . ($this->downloadFile($hash)). "\" width=\"100%\" alt=\"" . $nome . "\">
+                                </center>
+                            </div>";
+                } else {
+                    return "<div class=\"attachment_file\">
+                                <img class=\"fileIcon\" src=\"Images/filesIcon.png\"/>
+                                <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
+                            </div>";
+                }
+            } else {
+                return '';
+            }
+        }
+
+        private function isVideo($extensao) {
+            $videoExtensions = array('mp4', 'webm'); // Adicione aqui as extensões de vídeo suportadas
+
+            return in_array($extensao, $videoExtensions);
+        }
+
+        private function isAudio($extensao) {
+            $audioExtensions = array('mp3', 'wav', 'ogg'); // Adicione aqui as extensões de áudio suportadas
+
+            return in_array($extensao, $audioExtensions);
+        }
+
+        private function isImage($extensao) {
+            $imageExtensions = array('jpg', 'jpeg', 'png', 'gif'); // Adicione aqui as extensões de imagem suportadas
+
+            return in_array($extensao, $imageExtensions);
         }
 
         function newCurrentMsgs (StringT $contactNickName){

@@ -166,7 +166,23 @@
     border-radius:5px;
   }
 
-  .attachment_file img {
+  .media_file {
+    margin-top:5px;
+    background-color: rgba(127,127,127,0.5);
+    width: 99%;
+    border:solid 2px #285d33;
+    border-radius:5px;
+  }
+
+  .audio_file {
+    margin-top:5px;
+    background-color: rgba(127,127,127,0.5);
+    width: 99%;
+    border:solid 2px #285d33;
+    border-radius:5px;
+  }
+
+  .fileIcon {
     width:15px;
     height:15px;
     background-size:100%;
