@@ -200,7 +200,7 @@
                     if ($this->isVideo($extensao)) {
                         return "<div class=\"video_file\">
                                     <center>
-                                        <video width=\"100%\" id=\"$hash\"  controls> Seu navegador não suporta a reprodução deste vídeo. </video>
+                                        <video width=\"100%\" id=\"$hash\" height=\"300px\" controls> Seu navegador não suporta a reprodução deste vídeo. </video>
                                     </center>
                                 </div>".$this->source ($hash);
                     } elseif ($this->isAudio($extensao)) {
@@ -212,7 +212,7 @@
                     } elseif ($this->isImage($extensao)) {
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$hash\" src=\"\" width=\"100%\" alt=\"" . $nome . "\">
+                                        <img id=\"$hash\" src=\"\" height=\"300px\" alt=\"" . $nome . "\"  style=\"background-image:url('Images/blank.png')\">
                                     </center>
                                 </div>".$this->source ($hash);
                     } else {
@@ -225,19 +225,19 @@
                     if ($this->isVideo($extensao)) {
                         return "<div class=\"video_file\">
                                     <center>
-                                        <video width=\"100%\" src=\"data:video/$extensao;base64,".$this->downloadFile($hash)."\" id=\"$hash\"  controls> Seu navegador não suporta a reprodução deste vídeo. </video>
+                                        <video id=\"$hash\" width=\"100%\" height=\"300px\" src=\"data:video/$extensao;base64,".$this->downloadFile($hash)."\" controls> Seu navegador não suporta a reprodução deste vídeo. </video>
                                     </center>
                                 </div>";
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
-                                    <center> 
+                                    <center>
                                         <audio id=\"$hash\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                     </center>
                                 </div>";
                     } elseif ($this->isImage($extensao)) {
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$hash\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"100%\" alt=\"" . $nome . "\">
+                                        <img id=\"$hash\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" style=\"background-image:url('Images/blank.png')\" height=\"300px\" alt=\"" . $nome . "\">
                                     </center>
                                 </div>";
                     } else {
@@ -264,16 +264,15 @@
             } 
             return "
             <script>
-
-            downloadBase64('$hash')
-            .then(function(dados) {
-                var contentBlob = b64toBlob(dados, '$type/$extensao');
-                document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
-            })
-            .catch(function(erro) {
-                console.error(erro);
-                // Trate o erro aqui, se necessário
-            });
+                downloadBase64('$hash')
+                .then(function(dados) {
+                    var contentBlob = b64toBlob(dados, '$type/$extensao');
+                    document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
+                })
+                .catch(function(erro) {
+                    console.error(erro);
+                    // Trate o erro aqui, se necessário
+                });
             </script>";
         }
 
