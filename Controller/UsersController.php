@@ -19,8 +19,8 @@
             die();
         }
 
-        function downloadFile ($nomeHash) { 
-           return $this->user->downloadFile ($nomeHash);
+        function downloadFile ($nomeHash) {
+            return base64_encode($this->user->downloadFile($nomeHash));
         }
 
         function uploadProfilePic (StringT $nick,$pic,$format) {
@@ -131,7 +131,7 @@
         // MESSAGES 
         function allMessages (StringT $contactNickName) {
             $query = $this->allMessagesQuery($contactNickName);
-            return $this->messages ($query,$contactNickName,false);
+            return $this->messages ($query,$contactNickName,true);
         }     
 
         function allMessagesQuery (StringT $contactNickName) {
@@ -157,7 +157,7 @@
                             $message = new Message($row["Messages"], $async);
                             $hour = $row["HourMsg"];
                             $id = $row["Idmessage"];
-                            $nome_anexo = $this->getMedia($row["nome_anexo"],$row["arquivo_anexo"]);
+                            $nome_anexo = $this->getMedia($row["nome_anexo"],$row["arquivo_anexo"],$async);
                             $messages[$count++] = array($from, $message.$nome_anexo, $hour, $id, $left);
                         }
                     }
@@ -192,52 +192,104 @@
             return $mensagens;
         }
 
-        function getMedia ($nome,$hash) {
+        function getMedia ($nome,$hash,$async) {
             $extensao = pathinfo($nome, PATHINFO_EXTENSION);
             
             if (!empty($nome)) {
-                if ($this->isVideo($extensao)) {
-                    return "<div class=\"audio_file\">
-                                <center>
-                                    <video width=\"100%\" controls> <source src=\"data:video/".$extensao.";base64," .($this->downloadFile($hash)). "\" type=\"video/" . $extensao . "\"> Seu navegador não suporta a reprodução deste vídeo. </video>
-                                </center>
-                            </div>";
-                } elseif ($this->isAudio($extensao)) {
-                    return "<div>
-                                <center> 
-                                    <audio controls> <source src=\"data:audio/".$extensao.";base64," . ($this->downloadFile($hash)). "\" type=\"audio/" . $extensao . "\"> Seu navegador não suporta a reprodução deste áudio. </audio>
-                                </center>
-                            </div>";
-                } elseif ($this->isImage($extensao)) {
-                    return "<div class=\"media_file\">
-                                <center>
-                                    <img src=\"data:image/".$extensao.";base64," . ($this->downloadFile($hash)). "\" width=\"100%\" alt=\"" . $nome . "\">
-                                </center>
-                            </div>";
+                if ($async) {
+                    if ($this->isVideo($extensao)) {
+                        return "<div class=\"video_file\">
+                                    <center>
+                                        <video width=\"100%\" id=\"$hash\"  controls> Seu navegador não suporta a reprodução deste vídeo. </video>
+                                    </center>
+                                </div>".$this->source ($hash);
+                    } elseif ($this->isAudio($extensao)) {
+                        return "<div class=\"audio_file\">
+                                    <center> 
+                                        <audio id=\"$hash\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                    </center>
+                                </div>".$this->source ($hash);
+                    } elseif ($this->isImage($extensao)) {
+                        return "<div class=\"image_file\">
+                                    <center>
+                                        <img id=\"$hash\" src=\"\" width=\"100%\" alt=\"" . $nome . "\">
+                                    </center>
+                                </div>".$this->source ($hash);
+                    } else {
+                        return "<div class=\"attachment_file\">
+                                    <img class=\"fileIcon\" src=\"Images/filesIcon.png\"/>
+                                    <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
+                                </div>";
+                    }
                 } else {
-                    return "<div class=\"attachment_file\">
-                                <img class=\"fileIcon\" src=\"Images/filesIcon.png\"/>
-                                <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
-                            </div>";
+                    if ($this->isVideo($extensao)) {
+                        return "<div class=\"video_file\">
+                                    <center>
+                                        <video width=\"100%\" src=\"data:video/$extensao;base64,".$this->downloadFile($hash)."\" id=\"$hash\"  controls> Seu navegador não suporta a reprodução deste vídeo. </video>
+                                    </center>
+                                </div>";
+                    } elseif ($this->isAudio($extensao)) {
+                        return "<div class=\"audio_file\">
+                                    <center> 
+                                        <audio id=\"$hash\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                    </center>
+                                </div>";
+                    } elseif ($this->isImage($extensao)) {
+                        return "<div class=\"image_file\">
+                                    <center>
+                                        <img id=\"$hash\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"100%\" alt=\"" . $nome . "\">
+                                    </center>
+                                </div>";
+                    } else {
+                        return "<div class=\"attachment_file\">
+                                    <img class=\"fileIcon\" src=\"Images/filesIcon.png\"/>
+                                    <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
+                                </div>";
+                    } 
                 }
             } else {
                 return '';
             }
         }
+        
+        function source ($hash) {
+            $extensao = pathinfo($hash, PATHINFO_EXTENSION);
+            $type="";
+            if ($this->isVideo($extensao)) {
+                $type="video";
+            } elseif ($this->isAudio($extensao)) {
+                $type="audio";
+            } elseif ($this->isImage($extensao)) {
+                $type="image";
+            } 
+            return "
+            <script>
 
-        private function isVideo($extensao) {
+            downloadBase64('$hash')
+            .then(function(dados) {
+                var contentBlob = b64toBlob(dados, '$type/$extensao');
+                document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
+            })
+            .catch(function(erro) {
+                console.error(erro);
+                // Trate o erro aqui, se necessário
+            });
+            </script>";
+        }
+
+        function isVideo($extensao) {
             $videoExtensions = array('mp4', 'webm'); // Adicione aqui as extensões de vídeo suportadas
 
             return in_array($extensao, $videoExtensions);
         }
 
-        private function isAudio($extensao) {
+        function isAudio($extensao) {
             $audioExtensions = array('mp3', 'wav', 'ogg'); // Adicione aqui as extensões de áudio suportadas
 
             return in_array($extensao, $audioExtensions);
         }
 
-        private function isImage($extensao) {
+        function isImage($extensao) {
             $imageExtensions = array('jpg', 'jpeg', 'png', 'gif'); // Adicione aqui as extensões de imagem suportadas
 
             return in_array($extensao, $imageExtensions);
@@ -258,12 +310,12 @@
                                 if(strpos($count, "0") !== false){
                                     return array("0","0");
                                 } else {
-                                    return array("2",$this->messages($query,$contactNickName,true));
+                                    return array("2",$this->messages($query,$contactNickName,false));
                                 }
                             }                   
                         }
                     } else {
-                        return array("1",$this->messages ($query,$contactNickName,true));
+                        return array("1",$this->messages ($query,$contactNickName,false));
                     }
                 }                   
             }

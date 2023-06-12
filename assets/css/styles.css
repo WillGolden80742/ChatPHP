@@ -166,7 +166,15 @@
     border-radius:5px;
   }
 
-  .media_file {
+  .image_file {
+    margin-top:5px;
+    background-color: rgba(127,127,127,0.5);
+    width: 99%;
+    border:solid 2px #285d33;
+    border-radius:5px;
+  }
+
+  .video_file {
     margin-top:5px;
     background-color: rgba(127,127,127,0.5);
     width: 99%;
@@ -179,7 +187,8 @@
     background-color: rgba(127,127,127,0.5);
     width: 99%;
     border:solid 2px #285d33;
-    border-radius:5px;
+    border-radius:50px;
+    box-shadow: inset 0px 0px 10px 5px rgb(0 0 0 / 35%);
   }
 
   .fileIcon {
@@ -441,6 +450,26 @@
       left:92%;
       font-size:32px;
     }
+
+    .attachment {  
+      width:40px;   
+      height:40px;   
+      left:83%;
+      top:95.5%;
+      background-position-x:7px;
+      background-position-y:7px;
+    }
+
+    .attachment_file a {
+      font-size: 48px;
+    }
+    
+    .attachment_file img {
+      width: 40px;
+      height: 40px;
+    }
+  
+    
     .search:hover{
       background-image: url("");
       background-position-y:20px;

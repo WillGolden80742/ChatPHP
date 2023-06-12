@@ -69,9 +69,9 @@
 
                 $linkId = microtime(true).random_int(0, 999);
                 if ($async) {
-                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
-                } else {
                     $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text)."<script> link (); function link (){ arrayLink = document.getElementById('$linkId'); link = arrayLink.innerHTML; $.ajax({ url: 'getTitle.php?', method: 'GET', data: {link: link}, dataType: 'json' }).done(function(result) { link = document.getElementById('$linkId').innerHTML; document.getElementById('$linkId').innerHTML = result+\"<span style='opacity:0.5;'>\"+link+\"</span>\" }); }</script>";
+                } else {
+                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
                 }  
             }
             

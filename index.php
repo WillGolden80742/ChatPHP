@@ -70,13 +70,21 @@
           var textLength = document.getElementById("text").value.length;
           var inputFile = document.getElementById('file');
           var sendButton = document.getElementById('send');
+          var attachmentDiv = document.getElementById('attachment');
 
           if (textLength > 500 || textLength < 1 && inputFile.files.length == 0) {
             sendButton.disabled = true;
           } else {
             sendButton.disabled = false;
           }
+
+          if (inputFile.files.length > 0) {
+            attachmentDiv.style.backgroundColor = "hsl(132, 40%, 26%)";
+          } else {
+            attachmentDiv.style.backgroundColor = ""; // Volta à cor padrão, se necessário
+          }
         }
+
 
         function downloadFile(nomeHash, nome) {
           var xhr = new XMLHttpRequest();
@@ -107,11 +115,46 @@
           xhr.send();
         }
 
+        function b64toBlob(b64Data, contentType) {
+              contentType = contentType || '';
+              var sliceSize = 512;
+              var byteCharacters = atob(b64Data);
+              var byteArrays = [];
+          
+              for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                  var slice = byteCharacters.slice(offset, offset + sliceSize);
+          
+                  var byteNumbers = new Array(slice.length);
+                  for (var i = 0; i < slice.length; i++) {
+                      byteNumbers[i] = slice.charCodeAt(i);
+                  }
+          
+                  var byteArray = new Uint8Array(byteNumbers);
+                  byteArrays.push(byteArray);
+              }
+          
+              var blob = new Blob(byteArrays, { type: contentType });
+              return blob;
+          }
+
+        function downloadBase64(nomeHash) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: `downloadFile.php?hashName=${nomeHash}`,
+                    method: 'POST',
+                    dataType: 'text'
+                }).done(function(dados) {
+                    resolve(dados);
+                }).fail(function(error) {
+                    reject(error);
+                });
+            });
+        }
+
         function createMessage () {
           var inputFile = document.getElementById('file');
 
-          // Verifica se foi selecionado pelo menos um arquivo
-
+          // Verifica se foi selecionado pelo menos um arquivos
           var messageText = document.getElementById('text').value;
 
           if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText  == " " ) {
