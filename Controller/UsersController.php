@@ -198,15 +198,11 @@
             if (!empty($nome)) {
                 if ($async) {
                     if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\">
-                                    <center>
-                                        <video width=\"100%\" id=\"$hash\" height=\"300px\" controls> Seu navegador não suporta a reprodução deste vídeo. </video>
-                                    </center>
-                                </div>".$this->source ($hash);
+                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 95%; \"> &nbsp;$nome </div>";
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center> 
-                                        <audio id=\"$hash\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                     </center>
                                 </div>".$this->source ($hash);
                     } elseif ($this->isImage($extensao)) {
@@ -223,15 +219,11 @@
                     }
                 } else {
                     if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\">
-                                    <center>
-                                        <video id=\"$hash\" width=\"100%\" height=\"300px\" src=\"data:video/$extensao;base64,".$this->downloadFile($hash)."\" controls> Seu navegador não suporta a reprodução deste vídeo. </video>
-                                    </center>
-                                </div>";
+                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 95%; \"> &nbsp;$nome </div>";
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center>
-                                        <audio id=\"$hash\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                     </center>
                                 </div>";
                     } elseif ($this->isImage($extensao)) {
@@ -264,10 +256,30 @@
             } 
             return "
             <script>
-                downloadBase64('$hash')
+                 downloadBase64('$hash')
                 .then(function(dados) {
                     var contentBlob = b64toBlob(dados, '$type/$extensao');
                     document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
+                })
+                .catch(function(erro) {
+                    console.error(erro);
+                    // Trate o erro aqui, se necessário
+                });
+            </script>";
+        }
+
+        function getThumb ($hash) {
+            $extensao = pathinfo($hash, PATHINFO_EXTENSION);
+            $type="";
+            return "
+            <script>
+
+                downloadBase64('$hash')
+                .then(function(dados) {
+                    var contentBlob = b64toBlob(dados, 'video/$extensao');
+                    divElement = document.getElementById('$hash');
+                    divElement.style.backgroundImage = 'url(' + obterThumbnailBase64(URL.createObjectURL(contentBlob)) + ')';
+
                 })
                 .catch(function(erro) {
                     console.error(erro);

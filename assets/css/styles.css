@@ -177,19 +177,21 @@
   .video_file {
     margin-top:5px;
     background-color: rgba(127,127,127,0.5);
-    width: 99%;
+    width: 95%;
     border:solid 2px #285d33;
     border-radius:5px;
+
   }
 
   .audio_file {
     margin-top:5px;
     background-color: rgba(127,127,127,0.5);
-    width: 99%;
+    width: 100%;
     border:solid 2px #285d33;
     border-radius:50px;
     box-shadow: inset 0px 0px 10px 5px rgb(0 0 0 / 35%);
   }
+
 
   .fileIcon {
     width:15px;
@@ -371,6 +373,8 @@
       background-image: url("../../Images/passwordIcon-dark.svg");
   }
 
+  
+
   .inputSubmit {
     font-size: 18px;
     padding:20px;
@@ -434,6 +438,7 @@
     font-weight: bold;
   }
 
+
   @media (orientation: portrait) {
     .contacts, .search:hover {
       width:97%;
@@ -468,8 +473,19 @@
       width: 40px;
       height: 40px;
     }
-  
     
+    .audio_file {
+      width:91%;
+    }
+
+    
+    .iframeContainer {
+      width: 88%;
+      height: 80%;
+      right: -40%;
+      top: 13%;
+    }
+
     .search:hover{
       background-image: url("");
       background-position-y:20px;
@@ -499,3 +515,12 @@
       display: block;
     }
   } 
+
+  @media (orientation: portrait) {
+    #iframeContainer {
+      width: 88%;
+      height: 80%;
+      right: -40%;
+      top: 13%;
+    }
+  }
