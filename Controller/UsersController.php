@@ -208,7 +208,7 @@
                     } elseif ($this->isImage($extensao)) {
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$hash\" src=\"\" height=\"300px\" alt=\"" . $nome . "\"  style=\"background-image:url('Images/blank.png')\">
+                                        <img id=\"$hash\" src=\"Images/blank.png\" height=\"300px\" alt=\"" . $nome . "\"  style=\"background-image:url('Images/blank.png')\">
                                     </center>
                                 </div>".$this->source ($hash);
                     } else {
