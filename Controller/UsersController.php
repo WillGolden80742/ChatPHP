@@ -208,7 +208,7 @@
                     } elseif ($this->isImage($extensao)) {
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$hash\" src=\"Images/blank.png\" height=\"300px\" alt=\"" . $nome . "\"  style=\"background-image:url('Images/blank.png')\">
+                                        <img id=\"$hash\" src=\"Images/blank.png\" height=\"300px\" alt=\"" . $nome . "\" >
                                     </center>
                                 </div>".$this->source ($hash);
                     } else {
@@ -229,7 +229,7 @@
                     } elseif ($this->isImage($extensao)) {
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$hash\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" style=\"background-image:url('Images/blank.png')\" height=\"300px\" alt=\"" . $nome . "\">
+                                        <img id=\"$hash\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" height=\"300px\" alt=\"" . $nome . "\">
                                     </center>
                                 </div>";
                     } else {
