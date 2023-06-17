@@ -67,59 +67,7 @@
           return currentDate;
         }
 
-        function criarDisplay (url) {
-            // Criar o div estilizado
-            var div = $('<div>', {
-              class: 'iframeContainer',
-              id: 'iframeContainer',
-              style: 'width: 600px; height: 400px; position: absolute; border-width: 40px 10px 10px; border-style: solid; border-color: rgba(29, 134, 52, 0.5); border-top-left-radius: 10px; border-bottom-right-radius: 10px; box-shadow: rgba(0, 0, 0, 0.35) 0px 10px 10px 0px; color: black; font-weight: bold; word-break: break-all; right: -5%; top: 10%; transform: translateX(-50%); backdrop-filter: blur(12px); z-index: 9999;'
-            });
-
-            if (window.matchMedia("(orientation: portrait)").matches) {
-              div.css({
-                width: '88%',
-                height: '50%',
-                right: '-40%',
-                top: '20%'
-              });
-            }
-
-            // Criar o iframe
-            var iframe = $('<iframe>', {
-              src: url,
-              style: 'width: 100%; height: 100%; border: none;'
-            });
-
-            // Adicionar o iframe ao div
-            div.append(iframe);
-
-            // Adicionar o div ao corpo do documento
-            $('body').append(div);
-
-            // Tornar o div arrastável
-            div.draggable();
-
-            // Adicionar opção de fechar janela
-            var closeButton = $('<button>', {
-              text: 'Close',
-              style: 'position: absolute; top: 10px; right: 10px; font-weight: bold; border: none; background-color: #285d33; font-size: 18px; padding: 10px; border-radius: 30px;'
-            });
-
-            if (window.matchMedia("(orientation: portrait)").matches) {
-              closeButton.css({
-                "font-size": "42px"
-              });
-            }
-
-
-
-            closeButton.on('click', function() {
-              div.remove();
-            });
-
-            div.append(closeButton);
-        }
-
+        
         var downloading = false;
 
         function showPlayer(hash,tipo,extensao) {
@@ -133,17 +81,42 @@
                 downloadBase64(hash)
                 .then(function(dados) {
                     var contentBlob = b64toBlob(dados, tipo+"/"+extensao);
-                    criarDisplay(URL.createObjectURL(contentBlob));
+                    urlContent = URL.createObjectURL(contentBlob);
                     videoDiv.style.backgroundImage = 'url(Images/play.svg)';
                     videoDiv.style.backgroundSize = '';
                     videoDiv.style.backgroundPositionY = '';
+                    embedVideo(urlContent,urlContent);
+                    downloading = false;
                 })
                 .catch(function(erro) {
                     console.error(erro);
                     // Trate o erro aqui, se necessário
                 });
-                downloading = false;
             }
+        }
+
+        function embedYoutube (id) {
+          fetchNewMessages=false;
+          scrollPos = document.getElementById('messages').scrollTop;
+          msgsContents=document.getElementById('messages').innerHTML;
+          style = "z-index: 1000; position: absolute; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%); width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(32px);";
+          document.getElementById('messages').innerHTML="<a href=\"https://youtu.be/"+id+"\" target=\"_blank\" style=\""+style+"left:2.5%;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\""+style+";right:2.5%;background-image: url('Images/close.svg');\" ></div><iframe width=90% height=90% style=\"position: absolute; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:90%; height:90%; margin-left: auto; margin-right: auto;\" src=\"https://www.youtube.com/embed/"+id+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+        }
+
+        function embedVideo(link,id) {
+          fetchNewMessages = false;
+          scrollPos = document.getElementById('messages').scrollTop;
+          msgsContents = document.getElementById('messages').innerHTML;
+          style = "z-index: 1000; position: absolute; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%); width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(32px);";
+          document.getElementById('messages').innerHTML = "<a href=\"" + link + "\" target=\"_blank\" style=\"" + style + "left:2.5%;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\"" + style + ";right:2.5%;background-image: url('Images/close.svg');\" ></div><iframe width=90% height=90% style=\"position: absolute; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:90%; height:90%; margin-left: auto; margin-right: auto;\" src=\"" + id + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+        }
+
+        function closeVideo() {
+          fetchNewMessages = true;
+          newContact();
+          document.getElementById('messages').innerHTML = msgsContents;
+          document.getElementById('messages').scrollTo(0, scrollPos);
+          newContact();
         }
 
         function messageValidate() {
@@ -193,32 +166,6 @@
 
           xhr.open('GET', url, true);
           xhr.send();
-        }
-
-        async function obterThumbnailBase64(urlVideo) {
-          const video = document.createElement('video');
-          video.crossOrigin = 'anonymous';
-
-          // Carrega o vídeo
-          await new Promise((resolve, reject) => {
-            video.addEventListener('loadeddata', resolve);
-            video.addEventListener('error', reject);
-            video.src = urlVideo;
-          });
-
-          // Cria um canvas para desenhar a thumbnail
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-
-          // Desenha a thumbnail no canvas
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-          // Converte a imagem do canvas para base64
-          const base64Data = canvas.toDataURL('image/jpeg');
-
-          return base64Data;
         }
 
 
@@ -343,21 +290,7 @@
           }
         }  
 
-        function embedYoutube (id) {
-          fetchNewMessages=false;
-          scrollPos = document.getElementById('messages').scrollTop;
-          msgsContents=document.getElementById('messages').innerHTML;
-          style = "z-index: 1000; position: absolute; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%); width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(32px);";
-          document.getElementById('messages').innerHTML="<a href=\"https://youtu.be/"+id+"\" target=\"_blank\" style=\""+style+"left:2.5%;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeYoutube()\" style=\""+style+";right:2.5%;background-image: url('Images/close.svg');\" ></div><iframe width=90% height=90% style=\"position: absolute; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:90%; height:90%; margin-left: auto; margin-right: auto;\" src=\"https://www.youtube.com/embed/"+id+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
-        }
 
-        function closeYoutube () {
-          fetchNewMessages=true;
-          newContact();
-          document.getElementById('messages').innerHTML=msgsContents;
-          document.getElementById('messages').scrollTo(0, scrollPos);
-          newContact();
-        }
    </script> 
   <style id="styleIndex">
 

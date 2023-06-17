@@ -457,10 +457,13 @@
     }
 
     .attachment {  
+      position: fixed;
       width:40px;   
       height:40px;   
-      left:83%;
-      top:95.5%;
+      z-index: 10000;
+      height: 40px;
+      left: 87%;
+      top:50px;  
       background-position-x:7px;
       background-position-y:7px;
     }
