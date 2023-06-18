@@ -12,7 +12,6 @@ function display () {
 }
 
 function down () {
-
   document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
   document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
   document.getElementById("down").innerHTML="";

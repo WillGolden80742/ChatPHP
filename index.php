@@ -6,15 +6,9 @@
 <DOCTYPE html>
 <html>
 <head>
-<script src="assets/js/javascript.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <script src="assets/js/jquery.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
       <script>
-        msgsContents = "";
-        fetchNewMessages = true;
-        scrollPos = 0;
         <?php 
           $nickNameContact = "";
           if (!empty($_GET['contactNickName'])) {

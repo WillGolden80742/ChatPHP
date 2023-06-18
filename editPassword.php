@@ -5,52 +5,15 @@
 ?>
 <html>
 <head>  
-<link rel="stylesheet" href="assets/css/styleNoIndex.css">
-</head>    
-<script>
-</script>    
-<style id="stylePic">
-
-    .salvar, .editPic{
-        display:none;
-    }
-
-    .profilePic {
-        background:none;
-        border:solid 3px #285d33;
-        border-radius:100%;
-        width:150px;
-        height:150px;
-        background-image: url("Images/profileMedium.png");
-        background-size: 100vw auto;
-        background-position-x:50%;
-        background-size: cover;   
-    }      
-    @media (orientation: portrait) {
-        .profilePic {
-          width:320px;
-          height:320px;
-        }
-        center h3 {
-            font-size:32px;
-        }
-        .header {
-            height:50px;
-        }
-        .header {
-            height:0;
-            border-bottom:0;
-            border-radius:0;
-            position:fixed;
-            box-shadow: none;
-        }
-
-        .back {
-            margin-top:36px;
-        }
-    }  
-
-</style>    
+    <style id="stylePic">
+        <?php 
+            $lines_array = file("assets/css/styleNoIndex.css");
+            foreach($lines_array as $line) {
+                echo $line;
+            }
+        ?>
+    </style>  
+</head>          
 <body class="container">
 <div class="editProfile">
 <center> 
