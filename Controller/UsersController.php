@@ -268,26 +268,6 @@
             </script>";
         }
 
-        function getThumb ($hash) {
-            $extensao = pathinfo($hash, PATHINFO_EXTENSION);
-            $type="";
-            return "
-            <script>
-
-                downloadBase64('$hash')
-                .then(function(dados) {
-                    var contentBlob = b64toBlob(dados, 'video/$extensao');
-                    divElement = document.getElementById('$hash');
-                    divElement.style.backgroundImage = 'url(' + obterThumbnailBase64(URL.createObjectURL(contentBlob)) + ')';
-
-                })
-                .catch(function(erro) {
-                    console.error(erro);
-                    // Trate o erro aqui, se necessário
-                });
-            </script>";
-        }
-
         function isVideo($extensao) {
             $videoExtensions = array('mp4', 'webm'); // Adicione aqui as extensões de vídeo suportadas
 
