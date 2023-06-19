@@ -47,31 +47,40 @@
 
         function nameCertification($name) {
             $error = "";
-            $nameTreated=false;
+            $nameTreated = false;
+            
             if (empty($name)) {
-                $error.="nome não pode ser vazia,";
+                $error .= "O nome não pode estar vazio,";
             } else if (!preg_match("/^[a-zA-Z0-9_ ]+$/", $name)) {
-                $error.=" permitido apenas _, aA a zZ e 0 a 9 para name,";
+                $error .= "Apenas são permitidos caracteres _, aA a zZ e 0 a 9 para o nome,";
+            } else if (strlen($name) > 20) {
+                $error .= "O nome deve ter no máximo 20 caracteres,";
             } else {
                 $nameTreated = true;
             }
-            return array($nameTreated,$error);
+            
+            return array($nameTreated, $error);
         }
-
-        function nickCertification ($nick) {
+        
+        function nickCertification($nick) {
             $error = "";
             $nickTreated = false;
+            
             if (empty($nick)) {
-                $error.=" nickname não pode ser vazia,";
-            }  else if (!preg_match("/^[a-zA-Z0-9_]+$/", $nick)) {
-                $error.=" permitido apenas _, aA a zZ e 0 a 9 para nick name,";
+                $error .= "O nickname não pode estar vazio,";
+            } else if (!preg_match("/^[a-zA-Z0-9_]+$/", $nick)) {
+                $error .= "Apenas são permitidos caracteres _, aA a zZ e 0 a 9 para o nickname,";
+            } else if (strlen($nick) > 20) {
+                $error .= "O nickname deve ter no máximo 20 caracteres,";
             } else if ($this->checkNick(new StringT($nick))) {
-                $error.=" nickname já existente,";
+                $error .= "O nickname já existe,";
             } else {
                 $nickTreated = true;
             }
-            return array($nickTreated,$error);
+            
+            return array($nickTreated, $error);
         }
+        
         
         function passCertification ($pass,$passConfirmation) {
             $error = "";
