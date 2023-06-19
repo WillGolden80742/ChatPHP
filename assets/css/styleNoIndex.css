@@ -14,7 +14,7 @@
   background-size: cover;   
 }
 
-@media (orientation: portrait) {
+@media (orientation: portrait) or (max-width:900px) {
     * {
         font-size:36px;
     } 
@@ -22,43 +22,6 @@
     .contacts, .search {
       display: none;
     } 
-
-    .messages {
-      margin-top: 160px;
-      width:94.5%;
-      height:85%;
-      left:0;
-      border:solid 4px #285d33;
-    }
-
-    .delete {
-      z-index: 1000;
-      font-size:18px;
-    }
-    .delete a {
-      font-size:12px;
-    }
-    .delete:hover a {
-      margin-left:-100px;
-    }
-
-    .text {
-      width:90%;
-      height: 70px;
-      left:5px;
-    }
-
-    .send {
-        width:70px;   
-        height:70px;
-        background-position-x:13px;
-        background-position-y:9px;
-        left:90%;
-    }
-
-    .down {
-      z-index: 1000;
-    }
 
     .back {
       margin-top:64px;
@@ -69,7 +32,7 @@
       display: none;
     }
 
-     .picMessage img {  
+    .picMessage img {  
       background-size: 100vw auto;
       background-position-x:50%; 
       background-size: cover;   
@@ -78,7 +41,7 @@
 
     .header {
       z-index: 1000;
-      height: 164px;
+      height: 200px;
       padding-left:20px;
       width:99%;
       top:0;
@@ -128,22 +91,30 @@
       width:320px;
       height:320px;
     }
+
     center h3 {
         font-size:32px;
     }
-    .header {
-        height:50px;
-    }
-  
-    .header {
-        height:0;
-        border-bottom:0;
-        border-radius:0;
-        position:fixed;
-        box-shadow: none;
-    }
+
     .back {
-        margin-top:36px;
+      float: left;
+      margin-left:50px;
+      margin-top:25px;
+    }
+    
+    .back img {
+      float: left;
     }
 
-} 
+    .picMessage img {
+      float: left;
+      margin-left: 20px;
+      top:0;
+    }
+
+    .back img, .logout img{
+      width:70px;
+    }
+    
+  
+}

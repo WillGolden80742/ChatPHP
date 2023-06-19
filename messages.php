@@ -15,15 +15,15 @@
 
 
   </style>  
-<head>   
+
 <link rel="stylesheet" href="assets/css/styleNoIndex.css">
   <title><?php echo $contactNickName; ?></title>
-</head>    
+
 <div class="messages" id="messages" onscroll="removeButtonDown();">
   
-<?php
-    echo $user->allMessages($contactNickName);
-?>
+    <?php
+      echo $user->allMessages($contactNickName);
+    ?>
 </div>
 
 <?php 

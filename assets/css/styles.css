@@ -4,7 +4,7 @@
   }
   * {
     font-family: Arial, Helvetica, sans-serif;
- 
+    --bs-font-sans-serif: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   }
 
   .from {
@@ -13,6 +13,8 @@
 
   body {
     background:#002e001f;
+    padding-left:50px;
+    padding-right:50px;
   }
 
   .newMsg {
@@ -40,28 +42,15 @@
     width:100%;
   } 
 
-  .messages {
-    padding: 0px 10px 10px 10px;
-    margin: 10px;
-    margin-top:5px;
-    left:29%;
-    width:67%;
-    height:70%;
-    border-radius: 10px 0px 10px 0px;
-    overflow-y: scroll;
-    background-image:url("../../Images/background.svg");
-    background-size: 100vw auto;
-    background-size: cover;
-  }
+
 
   .contacts {
     margin: 5px;
-    left:10px;
+    margin-left: 0;
     width:27%;
     height:88%;
     border-radius: 10px;
     overflow-y: scroll;
-    position: absolute;
   } 
   
 
@@ -81,15 +70,16 @@
   }
   
   .text {
-    padding: 0px 10px 10px 10px;
     background: none;
     border-top-left-radius:10px; 
     border-bottom-right-radius:10px;     
-    margin: 5px;
-    left:29%;
-    width:61%;
-    height:16%;
+    width:66%;
+    height:15%;
+    position: relative;
+    margin-left:0px;
+    margin-top:5px;
   }
+
 
   @-moz-document url-prefix() {
     .text {
@@ -102,6 +92,8 @@
     background-image: url("Images/profilePic.png");
     height:40px;
     width:40px;
+    position: relative;
+    display:flex;
     background-size:100%;
     background-position-y:50%;
     background-repeat:no-repeat;
@@ -114,22 +106,31 @@
     font-size: 18px; 
   }
 
-  .text, .messages {
-    display: inline-block;
-    position: relative;
+  .messages {
+    padding: 0px 10px 10px 10px;
+    margin: 10px;
+    top: 0;
+    margin-top:5px;
+    height:70%;  
+    width:67%;
+    border-radius: 10px 0px 10px 0px;
+    overflow-y: scroll;
+    background-image:url("../../Images/background.svg");
+    background-size: 100vw auto;
+    background-size: cover;
+    margin-bottom:0px;
   }
 
+
+
   .send {
-    position:absolute; 
     background: none;
     border: none;  
     text-transform: uppercase;    
-    margin-left:0px; 
     border-radius:100%;  
     padding:10px;   
     width:40px;   
     height:40px;   
-    left:92%;
     background-image: url("../../Images/send_vectorized.png");
     background-repeat: no-repeat;
     background-position-x:10px;
@@ -139,17 +140,16 @@
 
 
   .attachment {
-    position:absolute; 
     background: none;
     border: none;  
     text-transform: uppercase;    
-    margin-left:0px; 
     border-radius:100%;  
     padding:10px;   
     width:20px;   
     height:20px;   
-    left:92%;
-    top:85%;
+    position: relative;
+    float: left;
+    display:flex;
     background-image: url("../../Images/attachment.png");
     background-repeat: no-repeat;
     background-position-x:7px;
@@ -233,6 +233,14 @@
     margin-top: 5%;
     right:50%;
   }
+
+ 
+  .text, .attachment, .send {
+    float: left;
+    display:flex;
+  }
+
+
   
   .search {
     position: absolute;
@@ -240,7 +248,7 @@
     margin-top: 0px;
     background:none;
     height:35px;
-    left:24%;
+    left:25%;
     border: none;
     align-items: center;
     padding-left:40px;
@@ -255,12 +263,11 @@
   }
 
   .search:hover {
-    position: absolute;
     top:5px;
     margin-top: 0px;
     background:none;
-    left:7px;
-    width:27.5%;
+    left:50px;
+    width:25.5%;
     border: none;
     background-position-y:5px;
     background-position-x:5px;
@@ -270,6 +277,10 @@
     background:none;
     background-repeat: no-repeat;
     background-color:#285d33;
+    background-image: url("../../Images/search-dark.svg");
+    background-size:9%;
+    background-position-y:4px;
+    background-position-x:10px;
   }
 
 
@@ -293,7 +304,6 @@
   
   .delete:hover a {
     z-index:1000;
-    position: absolute;
     display:block;
     padding:10px;
     border: 3px solid #293528;
@@ -336,11 +346,9 @@
     background-image: url("Images/profilePic.png");
     height:128px;
     width:128px;
-    display: inline;
+    display:flex;
+    float:left;
     background-size:100%;
-    position:absolute;
-    top:17px;
-    margin-left:50px;
   }
 
   @-moz-document url-prefix() {
@@ -350,10 +358,8 @@
   }
 
   .userName {
-    position:absolute;
-    top:42px;
     margin-left:200px;
-    font-size:58px;
+    font-size:100px;
     color:black;
   }
 
@@ -404,14 +410,11 @@
   } 
 
 
-  .back, .header, .logout, .messages, .picMessage img , .text, .send, .contacts a h2, .user, .contacts, .search, .profilePic, .inputSubmit, .inputPassword, .inputText, .inputNick {
+  .back, .header, .logout, .messages, .picMessage img , .text, .send, .contacts a h2, .user, .contacts, .profilePic, .inputSubmit, .inputPassword, .inputText, .inputNick {
     transition:0.125s; 
     animation-delay: 0.25s;
   }
 
-  .search  {
-    width: 40px;
-  }
 
   ::-webkit-scrollbar {
     width:20px;
@@ -438,34 +441,64 @@
     font-weight: bold;
   }
 
+  .contacts {
+    float: left;
+    display:inline-block;
+    position: relative;
+  }
 
-  @media (orientation: portrait) {
-    .contacts, .search:hover {
-      width:97%;
+  .search  {
+    width: 0px;
+  }
+
+  @media (orientation: portrait) or (max-width: 900px) {
+    .contacts {
+      width:100%;
     }
     .contacts {
+      margin-top: 130px;
       height: 87%;
     }
+
     .search {
-      height:82px; 
+      height:130px; 
       background-image: url("../../Images/search-dark.svg");
-      background-size:100%;
+      background-size:150%;
       background-position-y:20px;
-      background-position-x:0px;
-      left:92%;
-      font-size:32px;
+      background-position-x:-9px;
+      width:5%;
+      left:90%;
+      font-size:64px;
     }
 
-    .attachment {  
-      position: fixed;
-      width:40px;   
-      height:40px;   
+    .search:hover{
+      background-position-y:20px;
+      border-radius:60px;
+      width:90%;
+      background-size:10%;
+      padding-left:100px;
+    }
+    
+    .search {
+      transition:0.125s; 
+      animation-delay: 0.25s;
+    }
+
+    .attachment { 
+      width:60px;   
+      height:60px;   
       z-index: 10000;
-      height: 40px;
-      left: 87%;
-      top:50px;  
-      background-position-x:7px;
-      background-position-y:7px;
+      margin-left:10px;
+      background-position-x:12px;
+      background-position-y:12px;
+    }
+
+    .send {
+      width:80px;   
+      height:80px;
+      margin-left:10px;
+      background-position-x:13px;
+      background-position-y:9px;
     }
 
     .attachment_file a {
@@ -481,49 +514,66 @@
       width:91%;
     }
 
-    
-    .iframeContainer {
-      width: 88%;
-      height: 80%;
-      right: -40%;
-      top: 13%;
-    }
 
-    .search:hover{
-      background-image: url("");
-      background-position-y:20px;
-      border-radius:40px;
-    }
     .contacts a h2 img {
       width:128px;
       height:128px;
     }
-    .contacts a h2, .user  {
+    .contacts a h2  {
       font-size:64px;
     }
 
-    .header {
-      height:80px;
-    }
-    
     .back img, .logout img{
-      width:40px;
-    }
-
-    .down {
-      top:0px;
+      width:70px;
     }
 
     .userName {
       display: block;
+      width:60%;
+      height:100px;
+      overflow-x:auto;
+      overflow-y: hidden;
+      word-wrap: unset;
     }
-  } 
 
-  @media (orientation: portrait) {
-    #iframeContainer {
-      width: 88%;
-      height: 80%;
-      right: -40%;
-      top: 13%;
+    .user {
+      font-size:100px;
     }
-  }
+
+    .messages {
+      margin-top: 220px;
+      width:94.5%;
+      height:75%;
+      left:0;
+      border:solid 4px #285d33;
+    }
+
+    .delete {
+      z-index: 1000;
+      font-size:18px;
+    }
+    .delete a {
+      font-size:12px;
+    }
+
+    .delete:hover a {
+      margin-left:-100px;
+    }
+
+    .text, .send, .attachment {
+      float: left;
+      display: inline;  
+    }
+
+
+    .text {
+      width:87%;
+      height:200px;
+      left:5px;
+    }
+
+    .down {
+      z-index: 1000;
+    }
+
+  } 

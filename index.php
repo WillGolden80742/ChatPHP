@@ -3,9 +3,8 @@
     $user = new UsersController();  
     $auth = new AutenticateModel();
 ?>
-<DOCTYPE html>
-<html>
-<head>
+
+
 <script src="assets/js/javascript.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
@@ -42,14 +41,13 @@
 
   </style>  
 
-</head>    
-<body class="container">
+
 
 <?php
 
     echo "<div  class=\"header\"><h2>";
     echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.svg\" /></a>";
-    echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.svg\" /></a>";    
+    echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.svg\" /></a>"; 
     if (!empty($nickNameContact)) {
       echo "<a class='picMessage' >";
       echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($nickNameContact).");' />";
@@ -79,7 +77,4 @@
     echo "</div>";
 
 ?>   
-
-</body>
-</html>
 

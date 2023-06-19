@@ -12,6 +12,11 @@
                 echo $line;
             }
         ?>
+        .header {
+            backdrop-filter:none;
+            border: none;
+            box-shadow: none;
+        }
     </style>  
 </head>          
 <body class="container">
