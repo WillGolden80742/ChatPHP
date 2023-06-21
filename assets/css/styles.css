@@ -240,49 +240,22 @@
     display:flex;
   }
 
-
-  
   .search {
-    position: absolute;
-    top:5px;
-    margin-top: 0px;
+    z-index: 10000;
     background:none;
-    height:35px;
-    left:25%;
+    height:50px;
     border: none;
     align-items: center;
-    padding-left:40px;
-    background-position-y:4px;
-    background-position-x:12px;
-    border:solid 2px rgba(255, 255, 255, 0);
-    border-radius:20px;
+    padding-left:50px;
+    width:100%;
     font-weight: bolder;
     background-image: url("../../Images/search-dark.svg");
-    background-size:55%;
+    background-size:10%;
+    background-position-y:50%;
+    background-position-x:15px;
     background-repeat: no-repeat;
+    border-bottom:solid 2px #285d33;
   }
-
-  .search:hover {
-    top:5px;
-    margin-top: 0px;
-    background:none;
-    left:50px;
-    width:25.5%;
-    border: none;
-    background-position-y:5px;
-    background-position-x:5px;
-    border-radius:20px;
-    border:solid 2px #285d33;
-    font-weight: bolder;
-    background:none;
-    background-repeat: no-repeat;
-    background-color:#285d33;
-    background-image: url("../../Images/search-dark.svg");
-    background-size:9%;
-    background-position-y:4px;
-    background-position-x:10px;
-  }
-
 
   .inputText,.inputNick, .inputPassword, .inputSubmit {
     background:none;
@@ -379,7 +352,6 @@
       background-image: url("../../Images/passwordIcon-dark.svg");
   }
 
-  
 
   .inputSubmit {
     font-size: 18px;
@@ -447,15 +419,15 @@
     position: relative;
   }
 
-  .search  {
-    width: 0px;
+  .contacts form {
+    margin-bottom: 0;
   }
 
   @media (orientation: portrait) or (max-width: 900px) {
+    
+ 
     .contacts {
       width:100%;
-    }
-    .contacts {
       margin-top: 130px;
       height: 87%;
     }
@@ -463,26 +435,11 @@
     .search {
       height:130px; 
       background-image: url("../../Images/search-dark.svg");
-      background-size:150%;
-      background-position-y:20px;
-      background-position-x:-9px;
-      width:5%;
       left:90%;
       font-size:64px;
+      padding-left:110px;
     }
-
-    .search:hover{
-      background-position-y:20px;
-      border-radius:60px;
-      width:90%;
-      background-size:10%;
-      padding-left:100px;
-    }
-    
-    .search {
-      transition:0.125s; 
-      animation-delay: 0.25s;
-    }
+  
 
     .attachment { 
       width:60px;   
@@ -577,3 +534,4 @@
     }
 
   } 
+  
