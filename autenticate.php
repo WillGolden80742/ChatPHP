@@ -13,6 +13,12 @@
   <style id="styleIndex">
     body {
       background:#002e001f;
+      background-image:url("Images/background.svg");
+      background-size: 100%;
+    }
+
+    input {
+      backdrop-filter: blur(32px);
     }
     @media only screen and (max-width: 1080px) {
       .inputText,.inputNick, .inputPassword, .inputSubmit {
@@ -48,8 +54,8 @@
 <?php
 
     echo "<div  class=\"header\"><h2>";
-    $userNickName = "";
-    echo "<a href='login.php'>Login</a> <a>|</a> <a href='singup.php'>Sing Up</a>";
+      $userNickName = "";
+      echo "<a href='login.php'>Login</a> <a>|</a> <a href='singup.php'>Sing Up</a>";
     echo "</div>";
 
   
