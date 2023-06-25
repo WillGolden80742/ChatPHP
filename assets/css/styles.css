@@ -102,7 +102,12 @@
 
   .send_msg_box {
     float: left;
-    width: 50px;
+    height:12.5%;
+    width:4.2%;
+    padding:6px;
+    margin-top:5px;
+    border-top-left-radius:10px; 
+    border-bottom-right-radius:10px;    
   }
 
   @-moz-document url-prefix() {
@@ -285,7 +290,7 @@
     height:50px;
     border: none;
     align-items: center;
-    padding-left:70px;
+    padding-left:50px;
     background-repeat: no-repeat;
     background-position-y:8px;
     background-position-x:12px;
