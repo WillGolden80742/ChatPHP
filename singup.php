@@ -6,7 +6,7 @@
 
 <center>    
 <div class="singUP">
-<img src="Images/chat.svg" />    
+<img class="chat_logo" src="Images/chat.svg" />    
 <form action="singup.php" method="post">
 <br>
 <input class="inputText" placeholder="Name"  type=text name=name><br>

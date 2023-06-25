@@ -53,7 +53,22 @@
     border-radius: 10px;
     overflow-y: scroll;
   } 
-  
+
+  .header {
+    height:40px;
+    width:27%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+
+  .header:hover {
+    overflow-x: auto; 
+  }
+
+  .header h2 {
+    margin-top:5px;
+  }
 
   .contacts a h2 {
     font-size: 14px;
@@ -120,12 +135,11 @@
     width:67%;
     border-radius: 10px 0px 10px 0px;
     overflow-y: scroll;
-    background-image:url("../../Images/background.svg");
+    background-image:url("../../Images/bg.png");
     background-size: 100vw auto;
-    background-size: cover;
+    background-size:70%;
     margin-bottom:0px;
   }
-
 
 
   .send {
@@ -215,10 +229,6 @@
     background-color:hsl(132, 40%, 26%);
   }
 
-  .header {
-    height:30px;
-  }
-
   .header h2 a:hover {
     transition:0.5s; 
     animation-delay: 0.5s;
@@ -263,18 +273,41 @@
     border-bottom:solid 2px #285d33;
   }
 
+
+
   .inputText,.inputNick, .inputPassword, .inputSubmit {
     background:none;
-    height:35px;
+    height:50px;
     border: none;
     align-items: center;
-    padding-left:40px;
+    padding-left:50px;
     background-repeat: no-repeat;
-    background-position-y:5px;
+    background-position-y:8px;
     background-position-x:12px;
     border-radius:20px;
     border:solid 2px #285d33;
     font-weight: bolder;
+    font-size: 32px;
+  }
+
+  .inputText,.inputNick, .inputSubmit {
+    background-position-y:8px;
+    background-size:6%;
+  }
+
+  .inputPassword {
+    background-size:4%;
+    background-position-x:18px;
+  }
+
+  .inputSubmit {
+    font-size: 32px;
+    padding:20px;
+    padding-top:6px;
+  }
+
+  .inputSubmit:hover {
+    background:#285d33;
   }
 
   .delete a {
@@ -358,16 +391,6 @@
       background-image: url("../../Images/passwordIcon-dark.svg");
   }
 
-
-  .inputSubmit {
-    font-size: 18px;
-    padding:20px;
-    padding-top:6px;
-  }
-
-  .inputSubmit:hover {
-    background:#285d33;
-  }
 
   .singUp {
     color:black;
@@ -482,6 +505,7 @@
       width:128px;
       height:128px;
     }
+
     .contacts a h2  {
       font-size:64px;
     }

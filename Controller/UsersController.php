@@ -28,7 +28,14 @@
             $this->sessions->clearSession($nick);
         }
         
-        function uploadProfile ($pass,StringT $newNick,$name) {      
+        function uploadProfile ($pass,StringT $newNick,$name) { 
+            $maxCharLimit = 20;
+    
+            if (strlen($newNick) > $maxCharLimit || strlen($name) > $maxCharLimit) {
+                header("Location: editProfile.php?error=O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.");
+                die();
+            }
+
             if ($this->auth->checkLogin(new StringT($this->nickSession),$pass)) {
                 if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->nickSession,$newNick) == 0) {
                     if($this->user->uploadProfile(new StringT($this->nickSession),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {

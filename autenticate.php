@@ -13,17 +13,28 @@
   <style id="styleIndex">
     body {
       background:#002e001f;
-      background-image:url("Images/background.svg");
-      background-size: 100%;
+      background-image:url("Images/bg.png");
+      background-size: 50%;
     }
 
     input {
       backdrop-filter: blur(32px);
     }
+
+    .header {
+      position: absolute;
+      top: 0;
+      margin-top: 0;
+      font-size: 28px;
+      transform: translateY(-50%);
+    }
+    .chat_logo{
+      width: 300px;
+    }
     @media only screen and (max-width: 1080px) {
       .inputText,.inputNick, .inputPassword, .inputSubmit {
-        font-size: 32px;
-        padding:20px;
+        font-size: 48px;
+        padding:10px;
         height:70px;
         background-position-y:22px;
         padding-left:40px;
@@ -32,17 +43,34 @@
 
       .inputSubmit {
           padding:20px;
-          padding-top:15px;
+          padding-top:5px;
       }
-      center img {
-        width:300px;
+
+      .inputPassword {
+        background-size: 4%;
+      }
+
+      .inputText,.inputNick {
+        background-size: 5%;
+      }
+
+      .inputText,.inputNick, .inputPassword  {
+        background-position-y:10px;
+        background-position-x:20px;
+        padding-left:70px;
+      }
+      .chat_logo {
+        width:500px;
       }
       .header a {
-        font-size: 32px;
+        font-size: 64px;
       }
 
       center h3 {
-            font-size:32px;
+        font-size:32px;
+      }
+      center {
+        transform: translateY(50%);
       }
       
     }
