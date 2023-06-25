@@ -133,7 +133,7 @@
                     $pic = "data:image/jpeg;base64," . base64_encode($value["picture"]);
                 }
             } else {
-                $pic = "Images/profilePic.png";
+                $pic = "Images/profilePic.svg";
             }
             return $pic;
         } 
@@ -175,7 +175,7 @@
                 }
             }
             if (count($messages) > 0) {
-               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.png'/></center>";
+               $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.svg'/></center>";
                $mensagens.= "<br>";
                 foreach ($messages as $msg) { 
                   if ($msg[4]) {
@@ -223,7 +223,7 @@
                                 </div>".$this->source ($hash);
                     } else {
                         return "<div class=\"attachment_file\">
-                                    <img class=\"fileIcon\" src=\"Images/filesIcon.png\"/>
+                                    <img class=\"fileIcon\" src=\"Images/filesIcon.svg\"/>
                                     <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
                                 </div>";
                     }
@@ -244,7 +244,7 @@
                                 </div>";
                     } else {
                         return "<div class=\"attachment_file\">
-                                    <img class=\"fileIcon\" src=\"Images/filesIcon.png\"/>
+                                    <img class=\"fileIcon\" src=\"Images/filesIcon.svg\"/>
                                     <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
                                 </div>";
                     } 

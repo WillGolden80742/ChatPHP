@@ -8,34 +8,35 @@
 <script src="assets/js/javascript.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
-      <script>
-        <?php 
-          $nickNameContact = "";
-          if (!empty($_GET['contactNickName'])) {
-            $nickNameContact = new StringT($_GET['contactNickName']);
-            $sessions = new Sessions();
-            $sessions->clearSession($nickNameContact);
-          }
-        ?>
-        var nickNameContact = "<?php echo $nickNameContact; ?>";
-        
-        $(document).ready(function(){
-          <?php
-            if (!empty($nickNameContact)) {
-              echo "down ();";
-            } 
-          ?>
-          newContact();     
-        });
 
-        <?php 
-            $lines_array = file("assets/js/javascript.js");
-            foreach($lines_array as $line) {
-                echo $line;
-            }
-        ?>
+  <script>
+    <?php 
+      $nickNameContact = "";
+      if (!empty($_GET['contactNickName'])) {
+        $nickNameContact = new StringT($_GET['contactNickName']);
+        $sessions = new Sessions();
+        $sessions->clearSession($nickNameContact);
+      }
+    ?>
+    var nickNameContact = "<?php echo $nickNameContact; ?>";
+    
+    $(document).ready(function(){
+      <?php
+        if (!empty($nickNameContact)) {
+          echo "down ();";
+        } 
+      ?>
+      newContact();     
+    });
 
-   </script> 
+    <?php 
+        $lines_array = file("assets/js/javascript.js");
+        foreach($lines_array as $line) {
+            echo $line;
+        }
+    ?>
+
+  </script> 
   <style id="styleIndex">
 
 

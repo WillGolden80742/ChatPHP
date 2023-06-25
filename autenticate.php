@@ -55,13 +55,13 @@
       }
 
       .inputText,.inputNick {
-        background-position-y:10px;
+        background-position-y:50%;
         background-position-x:20px;
         padding-left:70px;
       }
 
       .inputPassword  {
-        background-position-y:16px;
+        background-position-y:50%;
         background-position-x:20px;
         padding-left:70px;
       }

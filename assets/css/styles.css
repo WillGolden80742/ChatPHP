@@ -108,7 +108,7 @@
     padding:6px;
     margin-top:5px;
     border-top-left-radius:10px; 
-    border-bottom-right-radius:10px;    
+    border-bottom-right-radius:10px;
   }
 
   @-moz-document url-prefix() {
@@ -119,7 +119,7 @@
 
   .contacts a h2 img {
     border-radius:100px;
-    background-image: url("Images/profilePic.png");
+    background-image: url("Images/profilePic.svg");
     height:40px;
     width:40px;
     position: relative;
@@ -163,7 +163,7 @@
     background-image: url("../../Images/send_vectorized.png");
     background-repeat: no-repeat;
     background-position-x:10px;
-    background-position-y:6px;
+    background-position-y:50%;
     background-size:70%;
   }
 
@@ -179,10 +179,10 @@
     position: relative;
     float: left;
     display:flex;
-    background-image: url("../../Images/attachment.png");
+    background-image: url("../../Images/attachment.svg");
     background-repeat: no-repeat;
     background-position-x:7px;
-    background-position-y:6px;
+    background-position-y:50%;
     background-size:70%;
   }
 
@@ -293,7 +293,7 @@
     align-items: center;
     padding-left:50px;
     background-repeat: no-repeat;
-    background-position-y:8px;
+    background-position-y:50%;
     background-position-x:12px;
     border-radius:50px;
     border:solid 2px #285d33;
@@ -302,12 +302,10 @@
   }
 
   .inputText,.inputNick, .inputSubmit {
-    background-position-y:8px;
     background-size:6%;
   }
 
   .inputPassword {
-    background-position-y:9px;
     background-position-x:12px;
     background-size:5%;
   }
@@ -488,7 +486,7 @@
       z-index: 10000;
       margin-left:10px;
       background-position-x:12px;
-      background-position-y:12px;
+      background-position-y:50%;
     }
 
     .send {
@@ -496,7 +494,7 @@
       height:80px;
       margin-left:10px;
       background-position-x:13px;
-      background-position-y:9px;
+      background-position-y:50%;
     }
 
     .attachment_file a {

@@ -47,7 +47,7 @@
     <input class="inputPassword" placeholder="Password Confirmation"  type=password name=passConfirmation><br><br>    
     <input class="inputSubmit" type=submit value="ATUALIZAR"> 
 </form>
-<a href="editProfile.php" class="editPro"><img src="Images/nameMediumIcon-dark.png"></a>
+<a href="editProfile.php" class="editPro"><img src="Images/nameIcon-dark.svg"></a>
 <?php
     if (!empty($_GET['error'])) {
         echo "<center class='statusMsg'><h3 style=\"color:red;\">".$_GET['error']."</h3></center>";

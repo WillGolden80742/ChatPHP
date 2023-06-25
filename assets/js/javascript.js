@@ -243,7 +243,7 @@ function newContact() {
                   down();
                 } else {
                   document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
-                  document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.png'/> ";
+                  document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.svg'/> ";
                 }
               } else if (result[0] == "2")  {
                 document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
@@ -259,7 +259,7 @@ function newContact() {
 
 function loading (b) {
     if (b) {
-        document.getElementById("styleIndex").innerHTML+=".send {background:none; background-size:100%; background-repeat:no-repeat; background-image: url(\"Images/loading.gif\"); background-position-y: 42%; background-position-x: 50%; }";
+        document.getElementById("styleIndex").innerHTML+=".send {background:none; background-size:100%; background-repeat:no-repeat; background-image: url(\"Images/loading.gif\"); background-position-y:50%; background-position-x: 50%; }";
     } else {
         document.getElementById("styleIndex").innerHTML="";
     }
