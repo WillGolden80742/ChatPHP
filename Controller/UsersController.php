@@ -89,8 +89,7 @@
             while($row = mysqli_fetch_assoc($result)) { 
                 $contacts[$count++]=array($row["Contato"],$row["nickNameContato"]);
             }
-            $html="";
-    
+            $html="<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
             foreach ($contacts as $contact)  {
                 $html.= "<a href='messages.php?contactNickName=".$contact[1]."' >";
                 $html.= "<h2 ";

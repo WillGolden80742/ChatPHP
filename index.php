@@ -18,6 +18,7 @@
         $sessions->clearSession($nickNameContact);
       }
     ?>
+    
     var nickNameContact = "<?php echo $nickNameContact; ?>";
     
     $(document).ready(function(){
@@ -62,8 +63,7 @@
     echo "<a href=\"editProfile.php\"> ••• </a></span></h2>";
     $userNickName = new StringT($_SESSION['nickName']);
     echo "</div>";
-    echo "<div class='contacts'>";
-    echo "<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
+    echo "<div class='contacts' id='contacts'>";
     if (empty($_POST["search"])) {
       if (empty($nickNameContact)) {
         echo $user->contacts($userNickName,new StringT(null));
