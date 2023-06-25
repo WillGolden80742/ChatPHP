@@ -202,6 +202,11 @@
     width: 99%;
     border:solid 2px #285d33;
     border-radius:5px;
+    overflow-x: hidden;
+  }
+
+  .image_file:hover {
+    overflow-x: auto;
   }
 
   .video_file {
