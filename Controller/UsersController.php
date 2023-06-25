@@ -34,6 +34,7 @@
             if (strlen($newNick) > $maxCharLimit || strlen($name) > $maxCharLimit) {
                 header("Location: editProfile.php?error=O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.");
                 die();
+                return;
             }
 
             if ($this->auth->checkLogin(new StringT($this->nickSession),$pass)) {
