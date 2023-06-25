@@ -160,11 +160,11 @@
     padding:10px;   
     width:40px;   
     height:40px;   
-    background-image: url("../../Images/send_vectorized.png");
+    background-image: url("../../Images/send_vectorized.svg");
     background-repeat: no-repeat;
-    background-position-x:10px;
+    background-position-x:50%;
     background-position-y:50%;
-    background-size:70%;
+    background-size: 24px;
   }
 
 
@@ -181,9 +181,9 @@
     display:flex;
     background-image: url("../../Images/attachment.svg");
     background-repeat: no-repeat;
-    background-position-x:7px;
+    background-position-x:50%;
     background-position-y:50%;
-    background-size:70%;
+    background-size:24px;
   }
 
 
@@ -277,7 +277,7 @@
     width:100%;
     font-weight: bolder;
     background-image: url("../../Images/search-dark.svg");
-    background-size:10%;
+    background-size:32px;
     background-position-y:50%;
     background-position-x:15px;
     background-repeat: no-repeat;
@@ -467,47 +467,18 @@
  
     .contacts {
       width:100%;
-      margin-top: 130px;
+      margin-top: 0px;
       height: 87%;
+      top: 0;
     }
 
     .search {
       height:130px; 
       background-image: url("../../Images/search-dark.svg");
+      background-size: 64px;
       left:90%;
       font-size:64px;
       padding-left:110px;
-    }
-  
-
-    .attachment { 
-      width:60px;   
-      height:60px;   
-      z-index: 10000;
-      margin-left:10px;
-      background-position-x:12px;
-      background-position-y:50%;
-    }
-
-    .send {
-      width:80px;   
-      height:80px;
-      margin-left:10px;
-      background-position-x:13px;
-      background-position-y:50%;
-    }
-
-    .attachment_file a {
-      font-size: 48px;
-    }
-    
-    .attachment_file img {
-      width: 40px;
-      height: 40px;
-    }
-    
-    .audio_file {
-      width:91%;
     }
 
 
@@ -523,47 +494,42 @@
     .back img, .logout img{
       width:70px;
     }
-
-    .userName {
-      display: block;
-      width:60%;
-      height:100px;
-      overflow-x:auto;
-      overflow-y: hidden;
-      word-wrap: unset;
-    }
-
+    
     .user {
       font-size:100px;
     }
 
-    .messages {
-      margin-top: 220px;
-      width:94.5%;
-      height:75%;
-      left:0;
-      border:solid 4px #285d33;
-    }
 
-    .delete {
-      z-index: 1000;
-      font-size:18px;
-    }
-    .delete a {
-      font-size:12px;
-    }
-
-    .delete:hover a {
-      margin-left:-100px;
-    }
-
-    .text, .send, .attachment {
-      float: left;
-      display: inline;  
-    }
 
     .header {
-      height:24px;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      padding-top: 0;
+      margin-bottom:0;
+      height: 140px;
+      width:100%;
+      padding-top:20px;
+      padding-bottom:20px;
+    }
+
+
+    .header:hover {
+      overflow-x: auto;
+    }
+
+    .header h2 {
+      white-space: nowrap;
+      position: relative;
+      margin-top: 0;
+    }
+
+    .userName {
+      display: block;
+      width:55%;
+      overflow-x:auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding-left: 20px;
     }
 
     .text {
@@ -575,6 +541,7 @@
     .down {
       z-index: 1000;
     }
+    
 
   } 
   

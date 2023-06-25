@@ -16,7 +16,7 @@
 
   </style>  
 
-<link rel="stylesheet" href="assets/css/styleNoIndex.css">
+  <link rel="stylesheet" href="assets/css/styleNoIndex.css">
   <title><?php echo $contactNickName; ?></title>
 
 <div class="messages" id="messages" onscroll="removeButtonDown();">
