@@ -458,6 +458,16 @@
     position: relative;
   }
 
+  .contacts a h2 {
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+
+  .contacts a h2:hover {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
   .contacts form {
     margin-bottom: 0;
   }
@@ -535,7 +545,7 @@
     .text {
       width:87%;
       height:200px;
-      left:5px;
+      left:10px;
     }
 
     .down {
