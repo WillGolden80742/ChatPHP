@@ -13,8 +13,8 @@
   <style id="styleIndex">
     body {
       background:#002e001f;
-      background-image:url("Images/bg.png");
-      background-size: 50%;
+      background-image:url("Images/bg.svg");
+      background-size:50%;
     }
 
     input {
@@ -29,6 +29,7 @@
       height:auto;
       width:auto;
     }
+    
     .chat_logo{
       width: 300px;
     }
@@ -37,9 +38,7 @@
         font-size: 48px;
         padding:10px;
         height:70px;
-        background-position-y:22px;
         padding-left:40px;
-        border-radius:40px;
       }
 
       .inputSubmit {
@@ -55,8 +54,14 @@
         background-size: 5%;
       }
 
-      .inputText,.inputNick, .inputPassword  {
+      .inputText,.inputNick {
         background-position-y:10px;
+        background-position-x:20px;
+        padding-left:70px;
+      }
+
+      .inputPassword  {
+        background-position-y:16px;
         background-position-x:20px;
         padding-left:70px;
       }

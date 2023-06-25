@@ -55,6 +55,7 @@
   } 
 
   @media (orientation: landscape) {
+
     .header {
       height:60px;
       width:27%;
@@ -144,7 +145,7 @@
     width:67%;
     border-radius: 10px 0px 10px 0px;
     overflow-y: scroll;
-    background-image:url("../../Images/bg.png");
+    background-image:url("../../Images/bg.svg");
     background-size: 100vw auto;
     background-size:70%;
     margin-bottom:0px;
@@ -294,7 +295,7 @@
     background-repeat: no-repeat;
     background-position-y:8px;
     background-position-x:12px;
-    border-radius:20px;
+    border-radius:50px;
     border:solid 2px #285d33;
     font-weight: bolder;
     font-size: 32px;
@@ -306,8 +307,9 @@
   }
 
   .inputPassword {
-    background-size:4%;
-    background-position-x:18px;
+    background-position-y:9px;
+    background-position-x:12px;
+    background-size:5%;
   }
 
   .inputSubmit {
