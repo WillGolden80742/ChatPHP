@@ -285,7 +285,7 @@
     height:50px;
     border: none;
     align-items: center;
-    padding-left:50px;
+    padding-left:70px;
     background-repeat: no-repeat;
     background-position-y:8px;
     background-position-x:12px;
@@ -405,7 +405,7 @@
   }
 
   .editPass img, .editPro img {
-    height:18px;
+    height:32px;
   }
   .contacts, .messages, .text, .msg{
       border: 3px solid #285d33;

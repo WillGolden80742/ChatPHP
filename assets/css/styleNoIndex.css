@@ -61,8 +61,8 @@
         font-size: 32px;
         padding:20px;
         height:70px;
-        background-position-y:22px;
-        padding-left:40px;
+        background-position-y:18px;
+        padding-left:50px;
         border-radius:40px;
     }
 
@@ -75,8 +75,8 @@
     }
     
     .inputSubmit {
-        padding:20px;
-        padding-top:15px;
+      padding:20px;
+      padding-top:15px;
     }
 
      .editPic img, .editPass img, .editPro img {
@@ -93,7 +93,7 @@
     }
 
     center h3 {
-        font-size:32px;
+      font-size:32px;
     }
 
     .back {
