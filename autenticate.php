@@ -26,7 +26,8 @@
       top: 0;
       margin-top: 0;
       font-size: 28px;
-      transform: translateY(-50%);
+      height:auto;
+      width:auto;
     }
     .chat_logo{
       width: 300px;
