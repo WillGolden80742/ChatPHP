@@ -39,11 +39,9 @@
     
 ?>
 
-
-<form action="editPassword.php" method="post" enctype="multipart/form-data">
-    <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 
-    <input class="inputSubmit salvar" type=submit value="SALVAR">
-</form>
+<input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 
+<input class="inputSubmit salvar" onclick="uploadPic()" type=submit value="SALVAR">
+</br>
 <form action="uploadPassword.php" method="post" >
     <input class="inputPassword" placeholder="Current Password"  type=password name=currentPass><br><br>
     <input class="inputPassword" placeholder="New Password"  type=password name=pass><br><br>

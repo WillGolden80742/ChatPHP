@@ -36,10 +36,10 @@
         echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile(\"editProfilePic\");' /></div>";
     }
 ?>
-<form action="editProfile.php" method="post" enctype="multipart/form-data">
-    <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 
-    <input class="inputSubmit salvar" type=submit value="SALVAR">
-</form>
+
+<input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 
+<input class="inputSubmit salvar" onclick="uploadPic()" type=submit value="SALVAR">
+</br>
 <form action="uploadProfile.php" method="post" enctype="multipart/form-data">
     <input class="inputText" placeholder="Name"  type=text value="<?php echo $user->name(new StringT($_SESSION['nickName'])) ?>" name=name><br>
     <br><input class="inputNick" placeholder="Nick Name" type=text value="<?php echo $_SESSION['nickName'] ?>" name=nick><br><br>

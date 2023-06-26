@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 28/12/2022 às 02:00
+-- Tempo de geração: 26/06/2023 às 05:33
 -- Versão do servidor: 10.4.27-MariaDB
 -- Versão do PHP: 8.1.12
 
@@ -35,7 +35,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteMessage` (IN `idMsg` INT(20),
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `firstMessageWithAttachment` (IN `nickName` VARCHAR(20))  NO SQL SELECT messages.Idmessage,messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg FROM messages WHERE messages.MsgTo = nickName AND messages.received = 0 ORDER BY dataOrd DESC LIMIT 0,1$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT *, DATE_FORMAT(messages.date, '%H:%i') as HourMsg From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName ORDER BY DATE_FORMAT(messages.date, '%Y/%m/%d %H:%i:%s') ASC$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
+FROM messages m
+LEFT JOIN anexo an ON m.Idmessage = an.mensagem
+WHERE (m.MsgFrom = contactNickName AND m.MsgTo = nickName) OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName)
+ORDER BY DATE_FORMAT(m.date, '%Y/%m/%d %H:%i:%s') ASC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `messagesWithAttachment` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT messages.Idmessage, "" as messages ,messages.MsgFrom,"",messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, anexo.nome AS NomeArquivo, arquivos.nomeHash AS hashArquivo From messages INNER JOIN anexo on anexo.mensagem = messages.Idmessage INNER JOIN arquivos ON arquivos.nomeHash = anexo.arquivo WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName
 UNION
@@ -85,30 +89,6 @@ CREATE TABLE `clientes` (
   `senha` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `clientes`
---
-
-INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
-('William Dourado', '324', '49acae3f64f68683b7d3b29129452202be9df718b102cea556f5da254bb0bf3860d83a8fb3e2868fc1de85bd6b0de0d69d5ad5d421f0fe6f5748d81a2bba44e0'),
-('Alyssom', 'ally77', 'f6541153606baa043898e9286252be3da213b53bf88371f07172449974967ae1cfa02eb32939df66a9cdb465fe2b15cbf5c5cb8324b4b0d6ca2596d641e395e7'),
-('Based Pepe', 'based_Pepe', 'bf829a012991fe8380ee52dde9349ade67c3e748eb2851d66842e8275d205cb973794f6626816c6428b184ee118dddaeb68b9cabcd195028c106820ced31de1c'),
-('Гуммо', 'gvmmo', '649620a4b72e5c7a9536703ac9b56ba96f872cc698bdf1e21bda4492b1cbb1f71d1da987e9c2cd8c20aac34609cf5a0856776e0722781a73f259a9d4528d49ee'),
-('HongKong77', 'hong_kong77', 'cf3e55a4fb06be6f89aab4d93f0ff97eb8d804134e7667519343d492436458a9441b96aa4e7e4ad9c361d3cb5cecd66565fa112a39a0a7e7bbf5303a50c06511'),
-('Juliana Monique', 'juhMonique', 'b996c1d402f3d4a42f74219b2e2d0e65c264552dac45bbe94fdffb169d42b3ef85273f6646b01429362ac0b86dff9f9182e86711694575e821e079e7b01a40be'),
-('Lobo da Estepe', 'LoboDaEstepe', '0703f0fbf102bd37bb4397e094ab109c79580516973e5e6715b1dd4155033732247204b307cc98dc516d3a4f63a204a78ce10b3a01635fb8dfa4014ebca2e4ba'),
-('Logan', 'logan77', 'a2d7f3ddaa4f7737d5b09efd35aacb9fd46d65aa55abf97ba59afcb702d0e6e4b57a5c8c0fd5dcba795572039296e51d5421c7d8757e7440d830641c732a3d81'),
-('Eloa', 'lola', '9306e5a07857d057df506cb4be4dab89f714ff038f47494f9c0ae1fa436b09cdaa8660568920c1f57aa0496987d752457e9885d62859f1ac27167d0500c3c4f0'),
-('Marlon', 'marlon77', '7547cb5edd847874d6096a7834a6bc8cc361d5a1747255b0be2f9af381f2ecc23af7738aec80a6ac62f0e299c5cf862e6e7d2aa66347af5c803f725649159d6d'),
-('Mayumi Sato', 'mayumi_Sato', '253ec8f659ab7560acd2ae12490af2299c12f4b771d6b2c55fea3f6e277e588121fd13654b1966f5f4c52f7a6fdc3e8ea7d817b1838c00485f71240d8a54fb74'),
-('pco', 'pco_cooperative', '45546472d49c709ad4cf6a4258da21cf462dc764b48ec1895f6095eaa5d0b03e06a5b927ee5f7d6ece1f1e328bb8a1429227087db503ab0d758afc91ab3550c7'),
-('Pepe BluePill', 'pepe_bluepill', 'ca3ac3b326622426f5954fd543a043e5cc6b4c8b2ad6455a2a6ffa7c40594cca6f094b6d8d0a7bf78d898703ab5169e08d52190ea9454ba7e72efd2f9f6a1671'),
-('Rafael', 'rafa77', '82f86d39196c5d8c2dcda74c3a7e4cf94c12d0fb2c7f66947e9f538116d1c1d6e7520eb1cd066e2d2088f3c602be8dacbdc838ec7521fc4b10385118f833ad1c'),
-('William Dourado', 'willCruz', 'e04deea2cac576f39302a073c511ae7ce3d4fd9d3fa8151e289c67eedfd34c70bd9ca01a0cddf0890496e15dcffb19f5ba184cbe11d52f5bca532f254659bdb1'),
-(' Уилл Голден', 'willGolden', 'a8d853d9087fe946983f10db963a28488a1ee6474a0684ad29111d5c948b431b5fa0d1f5a33335ebf0615fc3c540ecaec687783f62ff58c48ed6cb2badb8f4e4'),
-('William Dourado', 'willGolden65', '58ac7d9f2d41bc370f31c5b444a1b903e8249a14dcc17d525e14f6a45ce9f703581d3e64fda708b9f8b2bb8b80c073230dbc29fa05a501f36a52592c5dfbc58d'),
-('WilliamDourado', 'willGolden7', 'd2d9834d23900330405cd0ce6c6cddaf4eeee85f7171465cc3b2597741a44866630854d1e49d2c0caddb18f246db83b26f828e9420f1bc82cf5970a78865a585');
-
 -- --------------------------------------------------------
 
 --
@@ -124,30 +104,6 @@ CREATE TABLE `messages` (
   `received` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `messages`
---
-
-INSERT INTO `messages` (`Idmessage`, `Messages`, `MsgFrom`, `MsgTo`, `Date`, `received`) VALUES
-(1686, ' Oi bb\r\n', 'lola', 'willGolden', '2022-01-26 17:42:58', 1),
-(1700, ' Oi\r\n', 'ally77', 'lola', '2022-01-27 10:26:07', 1),
-(1795, ' Oi', 'ally77', 'lola', '2022-01-27 20:10:13', 1),
-(1908, ' Oi', 'willGolden', 'willGolden', '2022-01-29 01:53:41', 1),
-(1922, ' OI\n', 'willGolden', 'lola', '2022-01-29 22:04:31', 2),
-(1923, 'Olá', 'willGolden', 'lola', '2022-01-29 22:04:37', 2),
-(1930, ' Ooi', 'lola', 'ally77', '2022-01-30 13:53:56', 1),
-(1932, 'Oxe ', 'lola', 'willGolden', '2022-01-30 13:57:35', 1),
-(1936, ' Oi\n', 'willGolden', 'ally77', '2022-01-30 20:19:36', 1),
-(1937, ' Oi', 'willGolden', 'lola', '2022-01-30 20:19:46', 2),
-(2017, ' OI ', 'lola', 'willGolden', '2022-02-01 01:14:28', 1),
-(2018, 'g f', 'lola', 'willGolden', '2022-02-01 01:14:49', 1),
-(2019, 'fdfg ', 'lola', 'willGolden', '2022-02-01 01:15:10', 1),
-(2020, ' Oi ', 'ally77', 'willGolden', '2022-02-01 01:16:13', 1),
-(2021, 'ds gf ', 'ally77', 'willGolden', '2022-02-01 01:16:17', 1),
-(2023, ' https://www.youtube.com/watch?v=gAfCJcoqQAY\n', 'willGolden', 'lola', '2022-12-27 21:37:20', 2),
-(2024, 'https://www.youtube.com/watch?v=SgI0mJqARIs\n', 'willGolden', 'lola', '2022-12-27 21:37:55', 2),
-(2029, ' https://symfony.com/doc/current/setup.html\n', 'willGolden', 'lola', '2022-12-27 21:54:57', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -158,25 +114,6 @@ CREATE TABLE `newMsg` (
   `msgFrom` varchar(20) NOT NULL,
   `msgTo` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `newMsg`
---
-
-INSERT INTO `newMsg` (`msgFrom`, `msgTo`) VALUES
-('gvmmo', 'hong_kong77'),
-('gvmmo', 'hong_kong77'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola'),
-('willGolden', 'lola');
 
 -- --------------------------------------------------------
 
@@ -201,13 +138,6 @@ CREATE TABLE `token` (
   `clienteID` varchar(256) NOT NULL,
   `tokenHash` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `token`
---
-
-INSERT INTO `token` (`clienteID`, `tokenHash`) VALUES
-('willGolden', 'e9a570a4908caa96b652f4104c6aa087a0d5e525d66a6f680eb04c931cc693b77d85385cb31d60d4c190c2fe78e8f0745e5f04cb5ef34d30f4ab3ff23ce2b718');
 
 --
 -- Índices para tabelas despejadas
@@ -266,13 +196,13 @@ ALTER TABLE `profilepicture`
 -- AUTO_INCREMENT de tabela `anexo`
 --
 ALTER TABLE `anexo`
-  MODIFY `anexoId` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=345;
+  MODIFY `anexoId` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2030;
+  MODIFY `Idmessage` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restrições para tabelas despejadas

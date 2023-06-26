@@ -9,12 +9,28 @@ function openfile(value) {
       document.getElementById(value).click();
     } else {
       document.getElementById('stylePic').innerHTML+=".salvar {display:none;}";
-      const profilePic = document.getElementById("profilePic");
-      profilePic.style.backgroundImage = profilePicSrc;
-      profilePicSrc = null;
-      profilePic.src = "Images/edit.png";
+      loadPicStatus (false);
     }
 }
+
+function loadPicStatus (value, keepPic=false) {
+  if (value) {
+    profilePic.src = "Images/remove.png";
+    document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
+    profilePicSrc = profilePic.style.backgroundImage;
+  } else {
+    profilePic.src = "Images/edit.png";
+    document.getElementById('stylePic').innerHTML+=".salvar {display:none;}";
+    if (keepPic) {
+      const profilePic = document.getElementById("profilePic");
+      profilePicSrc = profilePic.style.backgroundImage;
+    } else {
+      profilePic.style.backgroundImage = profilePicSrc;
+    }
+    profilePicSrc = null;
+  }
+}
+
 
 function handlePhotoUpload(event) {
   const fileInput = event.target;
@@ -26,14 +42,37 @@ function handlePhotoUpload(event) {
     reader.onload = function(e) {
       const imageSrc = e.target.result;
       const profilePic = document.getElementById("profilePic");
-      profilePicSrc = profilePic.style.backgroundImage;
       profilePic.style.backgroundImage = `url(${imageSrc})`;
-      profilePic.src = "Images/remove.png";
     };
     
     reader.readAsDataURL(file);
-    document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
+    loadPicStatus (true);
   }
+}
+
+function uploadPic() {
+  var arquivoInput = document.getElementById('editProfilePic');
+  var arquivo = arquivoInput.files[0];
+
+  var formData = new FormData();
+  formData.append('pic', arquivo);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'uploadPic.php');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      // Arquivo enviado com sucesso
+      if(xhr.responseText.length > 16) {
+        alert(xhr.responseText);
+      } else {
+        loadPicStatus(false,true);
+      }
+    } else {
+      // Ocorreu um erro ao enviar o arquivo
+      console.error(xhr.responseText);
+    }
+  };
+  xhr.send(formData);
 }
 
 

@@ -21,7 +21,7 @@
                     shell_exec("rm -rf ".$name);
                     return $bytes;
                 }  else {
-                    $this->error = "<p>Tamanho máximo de ".$this->formatMB($this->maxSize)." <br> Imagem tem ".$this->formatMB($size)." </p>";
+                    $this->error = "Tamanho máximo de ".$this->formatMB($this->maxSize).". Imagem tem ".$this->formatMB($size);
                     shell_exec("rm -rf ".$name);
                     return false;
                 }
