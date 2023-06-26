@@ -12,11 +12,14 @@
     <?php 
       echo "#".$contactNickName." {display:none;}";
     ?>
-
+      <?php 
+          $lines_array = file("assets/css/styleNoIndex.css");
+          foreach($lines_array as $line) {
+              echo $line;
+          }
+      ?>
 
   </style>  
-
-  <link rel="stylesheet" href="assets/css/styleNoIndex.css">
   <title><?php echo $contactNickName; ?></title>
 
 <div class="messages" id="messages" onscroll="removeButtonDown();">

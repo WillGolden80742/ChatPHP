@@ -2,14 +2,40 @@ var msgsContents = "";
 var fetchNewMessages = true;
 var scrollPos = 0;
 var h;
+var profilePicSrc;
 
 function openfile(value) {   
-    document.getElementById(value).click();
+    if (profilePicSrc == null) {
+      document.getElementById(value).click();
+    } else {
+      document.getElementById('stylePic').innerHTML+=".salvar {display:none;}";
+      const profilePic = document.getElementById("profilePic");
+      profilePic.style.backgroundImage = profilePicSrc;
+      profilePicSrc = null;
+      profilePic.src = "Images/edit.png";
+    }
 }
 
-function display () {
+function handlePhotoUpload(event) {
+  const fileInput = event.target;
+  const file = fileInput.files[0];
+  
+  if (file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      const imageSrc = e.target.result;
+      const profilePic = document.getElementById("profilePic");
+      profilePicSrc = profilePic.style.backgroundImage;
+      profilePic.style.backgroundImage = `url(${imageSrc})`;
+      profilePic.src = "Images/remove.png";
+    };
+    
+    reader.readAsDataURL(file);
     document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
+  }
 }
+
 
 function down () {
   document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";

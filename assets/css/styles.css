@@ -205,6 +205,7 @@
     overflow-x: hidden;
   }
 
+
   .image_file:hover {
     overflow-x: auto;
   }
@@ -289,8 +290,6 @@
     border-bottom:solid 2px #285d33;
   }
 
-
-
   .inputText,.inputNick, .inputPassword, .inputSubmit {
     background:none;
     height:50px;
@@ -303,7 +302,7 @@
     border-radius:50px;
     border:solid 2px #285d33;
     font-weight: bolder;
-    font-size: 32px;
+    font-size: 18px;
   }
 
   .inputText,.inputNick, .inputSubmit {
@@ -316,9 +315,9 @@
   }
 
   .inputSubmit {
-    font-size: 32px;
+    font-size: 18px;
     padding:20px;
-    padding-top:6px;
+    padding-top:13px;
   }
 
   .inputSubmit:hover {
@@ -473,13 +472,57 @@
     white-space: nowrap;
   }
 
+  .contacts a h3 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    align-items: center;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom:0;
+    font-size: 14px;
+  }
+
+  .contacts:hover a h3 {
+    background-color:#285d33;
+    color: #fff;
+  }
+
   .contacts form {
     margin-bottom: 0;
   }
 
+  .home {
+    width: 67%;
+    float:left;
+    border:solid 3px #285d33;
+    border-radius: 10px 0px 10px 0px;
+    margin-top: 5px;
+    height: 87.8%;
+    background-image:url("../../Images/chat.svg");
+    background-size: 30%;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 0;
+  }
+
+  .home div {
+    background-image:url("../../Images/bg.svg");
+    width:100%;
+    height:100%;
+    background-size:100%;
+  }
+
+  .inputCancel {
+    display: flex;
+    float: left;
+  }
+  
   @media (orientation: portrait) or (max-width: 900px) {
     
- 
+    .home {
+      display: none;
+    }
+
     .contacts {
       width:100%;
       margin-top: 0px;
@@ -506,6 +549,10 @@
       font-size:64px;
     }
 
+    .contacts:hover a h3 {
+      font-size:64px;
+    }
+
     .back img, .logout img{
       width:70px;
     }
@@ -513,7 +560,6 @@
     .user {
       font-size:100px;
     }
-
 
 
     .header {

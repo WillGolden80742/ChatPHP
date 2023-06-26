@@ -111,7 +111,9 @@
             while($row = mysqli_fetch_assoc($result)) { 
                 $contacts[$count++]=array($row["Contato"],$row["nickNameContato"]);
             }
-
+            echo "<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
+            echo "<a href=\"index.php\"><h3>Limpar busca";
+            echo "</h3></a>";
             if (count($contacts) > 0) {
                 // output data of each row
 
@@ -121,7 +123,7 @@
                   echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(".$this ->downloadProfilePic(new StringT($contact[1])).");' /></div>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg(new StringT($contact[1]))."</h2></a>"; 
                 }
 
-             }   
+             } 
              echo "</div>"; 
         }
 
@@ -269,6 +271,7 @@
                 .then(function(dados) {
                     var contentBlob = b64toBlob(dados, '$type/$extensao');
                     document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
+                    
                 })
                 .catch(function(erro) {
                     console.error(erro);

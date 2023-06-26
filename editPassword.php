@@ -32,13 +32,16 @@
         } else {
             echo $fileController->getError();
         }
-        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile(\"editProfilePic\");' /></div>";
+        echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile(\"editProfilePic\");' /></div>";
     } else {
-        echo "<div ><img src='Images/edit.png' class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile(\"editProfilePic\");' /></div>";
+        echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile(\"editProfilePic\");' /></div>";
     }
+    
 ?>
+
+
 <form action="editPassword.php" method="post" enctype="multipart/form-data">
-    <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="display();" style="display:none;" id="editProfile" type="file" name="pic"> 
+    <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 
     <input class="inputSubmit salvar" type=submit value="SALVAR">
 </form>
 <form action="uploadPassword.php" method="post" >

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 
   <script>
+
     <?php 
       $nickNameContact = "";
       if (!empty($_GET['contactNickName'])) {
@@ -77,3 +78,6 @@
 
 ?>   
 
+<div class="home">
+  <div></div>
+</div>

@@ -34,6 +34,11 @@
       width: 300px;
     }
     @media only screen and (max-width: 1080px) {
+
+      body {
+        background-size:100%;
+      }
+
       .inputText,.inputNick, .inputPassword, .inputSubmit {
         font-size: 48px;
         padding:10px;
