@@ -3,6 +3,7 @@ var fetchNewMessages = true;
 var scrollPos = 0;
 var h;
 var profilePicSrc;
+var downloading = false;
 
 function openfile(value) {   
     if (profilePicSrc == null) {

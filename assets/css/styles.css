@@ -43,13 +43,11 @@
     width:100%;
   } 
 
-
-
   .contacts {
     margin: 5px;
     margin-left: 0;
     width:27%;
-    height:88%;
+    height:86%;
     border-radius: 10px;
     overflow-y: scroll;
   } 
@@ -99,6 +97,7 @@
     position: relative;
     margin-left:0px;
     margin-top:5px;
+    font-size: 18px; 
   }
 
   .send_msg_box {
@@ -132,16 +131,12 @@
     background-size: cover;
   }
 
-  textarea { 
-    font-size: 18px; 
-  }
-
   .messages {
     padding: 0px 10px 10px 10px;
     margin: 10px;
     top: 0;
     margin-top:5px;
-    height:70%;  
+    height:68.5%;  
     width:67%;
     border-radius: 10px 0px 10px 0px;
     overflow-y: scroll;
@@ -303,6 +298,7 @@
     border:solid 2px #285d33;
     font-weight: bolder;
     font-size: 18px;
+    backdrop-filter: blur(5px);
   }
 
   .inputText,.inputNick, .inputSubmit {
@@ -492,12 +488,12 @@
   }
 
   .home {
-    width: 67%;
+    width: 68.6%;
     float:left;
     border:solid 3px #285d33;
     border-radius: 10px 0px 10px 0px;
     margin-top: 5px;
-    height: 87.8%;
+    height: 85.8%;
     background-image:url("../../Images/chat.svg");
     background-size: 30%;
     background-repeat: no-repeat;

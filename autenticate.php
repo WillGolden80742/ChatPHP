@@ -18,7 +18,7 @@
     }
 
     input {
-      backdrop-filter: blur(32px);
+      backdrop-filter: blur(5px);
     }
 
     .header {
