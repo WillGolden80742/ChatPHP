@@ -267,21 +267,15 @@
             } 
             return "
             <script>
-                do {
-                    if (!downloading) {
-                        downloading = true;
-                        downloadBase64('$hash')
-                        .then(function(dados) {
-                            var contentBlob = b64toBlob(dados, '$type/$extensao');
-                            document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
-                        })
-                        .catch(function(erro) {
-                            console.error(erro);
-                            // Trate o erro aqui, se necessário
-                        });
-                        downloading = false;
-                    }
-                } while (downloading);
+                downloadBase64('$hash')
+                .then(function(dados) {
+                    var contentBlob = b64toBlob(dados, '$type/$extensao');
+                    document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
+                })
+                .catch(function(erro) {
+                    console.error(erro);
+                    // Trate o erro aqui, se necessário
+                });
             </script>";
         }
 
