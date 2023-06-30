@@ -2,7 +2,6 @@ var msgsContents = "";
 var fetchNewMessages = true;
 var scrollPos = 0;
 var h;
-var profilePicSrc;
 
 function openfile(value) {   
     if (profilePicSrc == null) {
@@ -12,6 +11,7 @@ function openfile(value) {
       loadPicStatus (false);
     }
 }
+
 
 function loadPicStatus (value, keepPic=false) {
   if (value) {
@@ -144,6 +144,124 @@ function showPlayer(hash,tipo,extensao) {
     }
 }
 
+function downloadFile(nomeHash, nome) {
+  var xhr = new XMLHttpRequest();
+  var url = 'downloadFile.php?hashName=' + nomeHash;
+
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+          var base64Data = xhr.responseText;
+          var byteCharacters = atob(base64Data);
+          var byteNumbers = new Array(byteCharacters.length);
+
+          for (var i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+
+          var byteArray = new Uint8Array(byteNumbers);
+          var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+          // Cria um link para download e simula o clique nele
+          var downloadLink = document.createElement('a');
+          downloadLink.href = window.URL.createObjectURL(blob);
+          downloadLink.download = nome;
+          downloadLink.click();
+      }
+  };
+
+  xhr.open('GET', url, true);
+  xhr.send();
+}
+
+
+function b64toBlob(b64Data, contentType) {
+  contentType = contentType || '';
+  var sliceSize = 512;
+  var byteCharacters = atob(b64Data);
+  var byteArrays = [];
+
+  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    var byteNumbers = new Array(slice.length);
+    for (var i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    var byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  var blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+}
+
+async function downloadBase64(nomeHash) {
+  try {
+    const dados = await $.ajax({
+      url: `downloadFile.php?hashName=${nomeHash}`,
+      method: 'POST',
+      dataType: 'text'
+    });
+    return dados;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function downloadMidia(hash) {
+  try {
+    var parts = hash.split('.');
+    var format = parts[parts.length - 1].toLowerCase();
+    var dados = await downloadBase64(hash);
+    var contentBlob = b64toBlob(dados, type(format) + '/' + format);
+    document.getElementById(hash).src = URL.createObjectURL(contentBlob);
+  } catch (erro) {
+    console.error(erro);
+    // Trate o erro aqui, se necessário
+  }
+}
+
+function type(format) {
+  format = format.toLowerCase();
+  switch (format) {
+    case 'mp3':
+    case 'wav':
+    case 'ogg':
+      return 'audio';
+    case 'mp4':
+    case 'avi':
+    case 'mov':
+      return 'video';
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+      return 'image';
+    default:
+      return 'unknown';
+  }
+}
+
+async function downloadAllMidia() {
+  for (let i = arrMidia.length - 1; i >= 0; i--) {
+    let hash = arrMidia[i];
+    await downloadMidia(hash);
+  }
+}
+
+// Chame a função downloadAllMidia de uma função assíncrona
+async function main() {
+  try {
+    await downloadAllMidia();
+    // Outras operações após o download das mídias
+  } catch (erro) {
+    console.error(erro);
+    // Trate o erro aqui, se necessário
+  }
+}
+
+main();
+
 function embedYoutube (id) {
     fetchNewMessages=false;
     scrollPos = document.getElementById('messages').scrollTop;
@@ -187,71 +305,6 @@ function messageValidate() {
     }
 }
 
-
-function downloadFile(nomeHash, nome) {
-    var xhr = new XMLHttpRequest();
-    var url = 'downloadFile.php?hashName=' + nomeHash;
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var base64Data = xhr.responseText;
-            var byteCharacters = atob(base64Data);
-            var byteNumbers = new Array(byteCharacters.length);
-
-            for (var i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-
-            var byteArray = new Uint8Array(byteNumbers);
-            var blob = new Blob([byteArray], { type: 'application/octet-stream' });
-
-            // Cria um link para download e simula o clique nele
-            var downloadLink = document.createElement('a');
-            downloadLink.href = window.URL.createObjectURL(blob);
-            downloadLink.download = nome;
-            downloadLink.click();
-        }
-    };
-
-    xhr.open('GET', url, true);
-    xhr.send();
-}
-
-
-function b64toBlob(b64Data, contentType) {
-    contentType = contentType || '';
-    var sliceSize = 512;
-    var byteCharacters = atob(b64Data);
-    var byteArrays = [];
-
-    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        var byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-    }
-
-    var blob = new Blob(byteArrays, { type: contentType });
-    return blob;
-}
-
-async function downloadBase64(nomeHash) {
-    try {
-        const dados = await $.ajax({
-            url: `downloadFile.php?hashName=${nomeHash}`,
-            method: 'POST',
-            dataType: 'text'
-        });
-        return dados;
-    } catch (error) {
-        throw error;
-    }
-}
 
 function createMessage () {
   var inputFile = document.getElementById('file');

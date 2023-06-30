@@ -19,7 +19,10 @@
             die();
         }
 
-        function downloadFile ($nomeHash) {
+        function downloadFile ($nomeHash,$async=false) {
+            if ($async) {
+                usleep(1000000);
+            }
             return base64_encode($this->user->downloadFile($nomeHash));
         }
 
@@ -200,6 +203,7 @@
             } else {
                $mensagens= "<h3><center>Nenhuma mensagem de @".$contactNickName." até o momento<br>Faça seu primeiro envio!</center></h3>";
             }
+            $mensagens.= "<script>main();</script>";
             return $mensagens;
         }
 
@@ -256,26 +260,9 @@
         }
         
         function source ($hash) {
-            $extensao = pathinfo($hash, PATHINFO_EXTENSION);
-            $type="";
-            if ($this->isVideo($extensao)) {
-                $type="video";
-            } elseif ($this->isAudio($extensao)) {
-                $type="audio";
-            } elseif ($this->isImage($extensao)) {
-                $type="image";
-            } 
             return "
             <script>
-                downloadBase64('$hash')
-                .then(function(dados) {
-                    var contentBlob = b64toBlob(dados, '$type/$extensao');
-                    document.getElementById('$hash').src=URL.createObjectURL(contentBlob);
-                })
-                .catch(function(erro) {
-                    console.error(erro);
-                    // Trate o erro aqui, se necessário
-                });
+                arrMidia.push(\"$hash\");
             </script>";
         }
 

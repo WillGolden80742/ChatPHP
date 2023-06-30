@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 
   <script>
-
+    let arrMidia = [];
     <?php 
       $nickNameContact = "";
       if (!empty($_GET['contactNickName'])) {
