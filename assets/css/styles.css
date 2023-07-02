@@ -182,15 +182,6 @@
   }
 
 
-  .attachment_file {
-    margin-top:5px;
-    padding:4%;
-    background-color: rgba(127,127,127,0.5);
-    width: 91%;
-    border:solid 2px #285d33;
-    border-radius:5px;
-  }
-
   .image_file {
     margin-top:5px;
     background-color: rgba(127,127,127,0.5);
@@ -230,11 +221,28 @@
     background-size:100%;
   }
 
+  .attachment_file {
+    margin-top:5px;
+    padding:4%;
+    background-color: rgba(127,127,127,0.5);
+    width: 91%;
+    border:solid 2px #285d33;
+    border-radius:5px;
+  }
+
   .attachment_file a {
     font-size: 22px;
     margin-left:5px;
   }
-
+  
+  .uploading {
+    width: 40.5%;
+    float: right;
+    margin-right: 10px;
+    backdrop-filter: blur(5px);
+    color: white;
+    font-weight: bolder;
+  }
 
   .attachment:hover {
     background-color:hsl(132, 40%, 26%);

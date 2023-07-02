@@ -11,6 +11,8 @@
 
   <script>
     let arrMidia = [];
+    let indexMidia = [];
+    const usedURLs = new Map();
     <?php 
       $nickNameContact = "";
       if (!empty($_GET['contactNickName'])) {

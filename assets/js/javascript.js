@@ -3,6 +3,7 @@ var fetchNewMessages = true;
 var scrollPos = 0;
 var h;
 var profilePicSrc;
+var updatedMsg = false;
 
 function openfile(value) {   
     if (profilePicSrc == null) {
@@ -15,20 +16,22 @@ function openfile(value) {
 
 
 function loadPicStatus (value, keepPic=false) {
-  if (value) {
-    profilePic.src = "Images/remove.png";
-    document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
-    profilePicSrc = profilePic.style.backgroundImage;
-  } else {
-    profilePic.src = "Images/edit.png";
-    document.getElementById('stylePic').innerHTML+=".salvar {display:none;}";
-    if (keepPic) {
-      const profilePic = document.getElementById("profilePic");
+  if (typeof profilePic !== 'undefined') {
+    if (value) {
+      profilePic.src = "Images/remove.png";
+      document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
       profilePicSrc = profilePic.style.backgroundImage;
     } else {
-      profilePic.style.backgroundImage = profilePicSrc;
+      profilePic.src = "Images/edit.png";
+      document.getElementById('stylePic').innerHTML+=".salvar {display:none;}";
+      if (keepPic) {
+        const profilePic = document.getElementById("profilePic");
+        profilePicSrc = profilePic.style.backgroundImage;
+      } else {
+        profilePic.style.backgroundImage = profilePicSrc;
+      }
+      profilePicSrc = null;
     }
-    profilePicSrc = null;
   }
 }
 
@@ -52,27 +55,41 @@ function handlePhotoUpload(event) {
 }
 
 function uploadPic() {
-  uploadFile('uploadPic.php','editProfilePic');
+  var formData = new FormData();
+  var arquivoInput = document.getElementById('editProfilePic');
+  var arquivo = arquivoInput.files[0];
+  formData.append('pic', arquivo);
+  uploadFile('uploadPic.php',formData);
 }
 
-function uploadFile(url,id) {
-  var arquivoInput = document.getElementById(id);
-  var arquivo = arquivoInput.files[0];
-
-  var formData = new FormData();
-  formData.append('pic', arquivo);
-
+function uploadFile(url,formData) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url);
   xhr.onload = function() {
     if (xhr.status === 200) {
-      // Arquivo enviado com sucesso
       if(xhr.responseText.length > 16) {
         alert(xhr.responseText);
       } else {
         loadPicStatus(false,true);
       }
-    } else {
+    } else { 
+      // Ocorreu um erro ao enviar o arquivo
+      console.error(xhr.responseText);
+    }
+  };
+  xhr.send(formData);
+}
+
+function uploadAttachment(url,formData) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      loading(false);
+      updateMsg();
+      var attachmentDiv = document.getElementById('attachment');
+      attachmentDiv.style.backgroundColor = "";
+    } else { 
       // Ocorreu um erro ao enviar o arquivo
       console.error(xhr.responseText);
     }
@@ -214,13 +231,15 @@ async function downloadBase64(nomeHash) {
   }
 }
 
-async function downloadMidia(hash) {
+async function downloadMidia(id,hash) {
   try {
     var parts = hash.split('.');
     var format = parts[parts.length - 1].toLowerCase();
     var dados = await downloadBase64(hash);
     var contentBlob = b64toBlob(dados, type(format) + '/' + format);
-    document.getElementById(hash).src = URL.createObjectURL(contentBlob);
+    var url = URL.createObjectURL(contentBlob);
+    document.getElementById(id).src = url;
+    usedURLs.set(hash, url); 
   } catch (erro) {
     console.error(erro);
     // Trate o erro aqui, se necessário
@@ -250,8 +269,15 @@ function type(format) {
 async function downloadAllMidia() {
   if (typeof arrMidia !== 'undefined') {
     for (let i = arrMidia.length - 1; i >= 0; i--) {
-      let hash = arrMidia[i];
-      await downloadMidia(hash);
+      if (!updatedMsg) {
+        let hash = arrMidia[i];
+        let id = indexMidia[i];
+        if (usedURLs.has(hash)) {
+          document.getElementById(id).src = usedURLs.get(hash);
+        } else {
+          await downloadMidia(id, hash, usedURLs);
+        }
+      }
     }
   }
 }
@@ -270,6 +296,7 @@ async function main() {
 main();
 
 function embedYoutube (id) {
+    updatedMsg = true;
     fetchNewMessages=false;
     scrollPos = document.getElementById('messages').scrollTop;
     msgsContents=document.getElementById('messages').innerHTML;
@@ -278,19 +305,38 @@ function embedYoutube (id) {
 }
 
 function embedVideo(link,id) {
+    updatedMsg = true;
     fetchNewMessages = false;
     scrollPos = document.getElementById('messages').scrollTop;
-    msgsContents = document.getElementById('messages').innerHTML;
     style = "position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
     document.getElementById('messages').innerHTML = "<a href=\"" + link + "\" target=\"_blank\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><iframe style=\"position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\" src=\"" + id + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
 }
 
+function embedImage(id,hash) {
+  updatedMsg = true;
+  var imageSrc = document.getElementById(id).src;
+  fetchNewMessages = false;
+  scrollPos = document.getElementById('messages').scrollTop;
+  style = "z-index:10000;position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
+  document.getElementById('messages').innerHTML = "<a href=\"#\" onClick=\"downloadFile('"+hash+"','"+hash+"');\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeImage()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><div style=\" position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\"><img width=100% src=\""+imageSrc+"\"></div>";
+}
+
 function closeVideo() {
+    updatedMsg = false;
     fetchNewMessages = true;
     newContact();
-    document.getElementById('messages').innerHTML = msgsContents;
+    updateMsg();
     document.getElementById('messages').scrollTo(0, scrollPos);
     newContact();
+}
+
+function closeImage() {
+  updatedMsg = false;
+  fetchNewMessages = true;
+  newContact();
+  updateMsg();
+  document.getElementById('messages').scrollTo(0, scrollPos);
+  newContact();
 }
 
 function messageValidate() {
@@ -319,7 +365,7 @@ function createMessage () {
   // Verifica se foi selecionado pelo menos um arquivos
   var messageText = document.getElementById('text').value;
 
-  if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText  == " " ) {
+  if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText  == " " && messageText.length <= 500 && !(inputFile.files.length > 0) ) {
       loading (true);
       document.getElementById('text').value="";
       $.ajax({
@@ -336,15 +382,42 @@ function createMessage () {
               data: {msg: messageText},
               dataType: 'html'
             }).done(function(text) {
-              currentDate = new Date();
               document.getElementById('messages').innerHTML+="<div class='delete' id=\"del"+id+"\" style='color:grey;margin-left:45%;margin-right:2%;float:right;'> ●●●<a href='#' style='background-color:#1d8634' onclick=\"deleteMessage('"+id+"');\"><b>Apagar</b></a></div><br id='br"+id+"'><div class=\"msg msg-left\" id=\"msg"+id+"\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+text+"<br><span style=\"float:right;\">"+ date +"</span></p></div>"
               down ();
             });
             loading (false);
       });
-
+  } else {
+    loading(true);
+    var formData = new FormData();
+    var arquivo = inputFile.files[0];
+    formData.append('arquivo',arquivo);
+    formData.append('messageText',messageText);
+    formData.append('contactNickName',nickNameContact);
+    uploadAttachment('uploadfile.php',formData);
+    waitingMsg();
+    inputFile.value="";
   }
 }        
+
+function waitingMsg () {
+  date = getDate ();
+  document.getElementById('messages').innerHTML+="<div onclick=\"updateMsg()\" class=\"attachment_file uploading\"> <img class=\"fileIcon\" src=\"Images/loading.gif\"/> <a href=\"#\" >Enviado</a> </div>";
+  down();
+}
+
+function updateMsg () {
+  $.ajax({
+    url: 'updateMsg.php',
+    method: 'POST',
+    data: {contactNickName: nickNameContact},
+    dataType: 'html'
+  }).done(function(result) {
+    document.getElementById('messages').innerHTML=result;
+    down();
+    updatedMsg=true;
+  });
+}
 
 function newContact() {
     if (fetchNewMessages) {
@@ -380,7 +453,7 @@ function newContact() {
           newContact();
         });
     }    
-  }         
+}         
 
 function loading (b) {
     if (b) {

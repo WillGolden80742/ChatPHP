@@ -4,6 +4,7 @@
     class UsersController {
         private $auth;
         private $sessions;
+        private $indexMidia=0;
         function __construct() {
             $this->conFactory = new ConnectionFactory();
             $this->auth = new AutenticateController();
@@ -13,10 +14,8 @@
             $this->nickSession = $_SESSION['nickName'];
         } 
 
-        function uploadFile($file,$msg,$nickName, $contactNickName) {
-            $this->user->uploadFile($file,$msg,$nickName,$contactNickName);
-            header("Location: messages.php?contactNickName=".$contactNickName);
-            die();
+        function uploadFile($file,$msg, $contactNickName) {
+            $this->user->uploadFile($file,$msg,$this->nickSession,$contactNickName);
         }
 
         function downloadFile ($nomeHash,$async=false) {
@@ -146,13 +145,19 @@
         function allMessages (StringT $contactNickName) {
             $query = $this->allMessagesQuery($contactNickName);
             return $this->messages ($query,$contactNickName,true);
-        }     
+        } 
+        
+        function allMessagesSync (StringT $contactNickName) {
+            $query = $this->allMessagesQuery($contactNickName);
+            return $this->messages ($query,$contactNickName,false);
+        } 
 
         function allMessagesQuery (StringT $contactNickName) {
             return $this->user->messages(new StringT($this->nickSession),$contactNickName);
         }          
 
         function messages ($queryMessages,StringT $contactNickName,$async) {
+            $this->indexMidia=0;
             $this->receivedMsg($contactNickName );
             $messages = array();
             if (mysqli_num_rows($queryMessages) > 0) {
@@ -221,9 +226,10 @@
                                     </center>
                                 </div>".$this->source ($hash);
                     } elseif ($this->isImage($extensao)) {
+                        $this->indexMidia+=1;
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$hash\" src=\"Images/blank.png\" width=\"250px\" alt=\"" . $nome . "\" >
+                                        <img id=\"$this->indexMidia\" onclick=\"embedImage('$this->indexMidia','$hash')\" src=\"Images/blank.png\" width=\"250px\" alt=\"" . $nome . "\" >
                                     </center>
                                 </div>".$this->source ($hash);
                     } else {
@@ -242,9 +248,10 @@
                                     </center>
                                 </div>";
                     } elseif ($this->isImage($extensao)) {
+                        $this->indexMidia+=1;
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$hash\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"250px\" alt=\"" . $nome . "\">
+                                        <img id=\"$this->indexMidia\" onclick=\"embedImage('$this->indexMidia','$hash')\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"250px\" alt=\"" . $nome . "\">
                                     </center>
                                 </div>";
                     } else {
@@ -262,6 +269,7 @@
         function source ($hash) {
             return "
             <script>
+                indexMidia.push(\"$this->indexMidia\");
                 arrMidia.push(\"$hash\");
             </script>";
         }
@@ -279,7 +287,7 @@
         }
 
         function isImage($extensao) {
-            $imageExtensions = array('jpg', 'jpeg', 'png', 'gif'); // Adicione aqui as extensões de imagem suportadas
+            $imageExtensions = array('jpg', 'jpeg', 'png', 'webp', 'gif'); // Adicione aqui as extensões de imagem suportadas
 
             return in_array($extensao, $imageExtensions);
         }
