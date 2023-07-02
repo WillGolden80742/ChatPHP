@@ -217,16 +217,16 @@
             
             if (!empty($nome)) {
                 if ($async) {
+                    $this->indexMidia+=1;
                     if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
+                        return "<div class=\"video_file\" id=\"$this->indexMidia\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center> 
-                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                        <audio id=\"$this->indexMidia\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                     </center>
                                 </div>".$this->source ($hash);
                     } elseif ($this->isImage($extensao)) {
-                        $this->indexMidia+=1;
                         return "<div class=\"image_file\">
                                     <center>
                                         <img id=\"$this->indexMidia\" onclick=\"embedImage('$this->indexMidia','$hash')\" src=\"Images/blank.png\" width=\"250px\" alt=\"" . $nome . "\" >
@@ -239,16 +239,17 @@
                                 </div>";
                     }
                 } else {
+                    $this->indexMidia+=1;
                     if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
+                        return "<div class=\"video_file\" id=\"$this->indexMidia\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center>
-                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                        <audio id=\"$this->indexMidia\"  style=\"width: -webkit-fill-available;\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                     </center>
                                 </div>";
                     } elseif ($this->isImage($extensao)) {
-                        $this->indexMidia+=1;
+
                         return "<div class=\"image_file\">
                                     <center>
                                         <img id=\"$this->indexMidia\" onclick=\"embedImage('$this->indexMidia','$hash')\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"250px\" alt=\"" . $nome . "\">
@@ -288,7 +289,6 @@
 
         function isImage($extensao) {
             $imageExtensions = array('jpg', 'jpeg', 'png', 'webp', 'gif'); // Adicione aqui as extensões de imagem suportadas
-
             return in_array($extensao, $imageExtensions);
         }
 
