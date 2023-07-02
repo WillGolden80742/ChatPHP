@@ -243,9 +243,11 @@ function type(format) {
 }
 
 async function downloadAllMidia() {
-  for (let i = arrMidia.length - 1; i >= 0; i--) {
-    let hash = arrMidia[i];
-    await downloadMidia(hash);
+  if (typeof arrMidia !== 'undefined') {
+    for (let i = arrMidia.length - 1; i >= 0; i--) {
+      let hash = arrMidia[i];
+      await downloadMidia(hash);
+    }
   }
 }
 
