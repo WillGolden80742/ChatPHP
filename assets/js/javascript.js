@@ -2,6 +2,7 @@ var msgsContents = "";
 var fetchNewMessages = true;
 var scrollPos = 0;
 var h;
+var profilePicSrc;
 
 function openfile(value) {   
     if (profilePicSrc == null) {
@@ -51,14 +52,18 @@ function handlePhotoUpload(event) {
 }
 
 function uploadPic() {
-  var arquivoInput = document.getElementById('editProfilePic');
+  uploadFile('uploadPic.php','editProfilePic');
+}
+
+function uploadFile(url,id) {
+  var arquivoInput = document.getElementById(id);
   var arquivo = arquivoInput.files[0];
 
   var formData = new FormData();
   formData.append('pic', arquivo);
 
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'uploadPic.php');
+  xhr.open('POST', url);
   xhr.onload = function() {
     if (xhr.status === 200) {
       // Arquivo enviado com sucesso
