@@ -4,6 +4,7 @@ var scrollPos = 0;
 var h;
 var profilePicSrc;
 var updatedMsg = false;
+main();
 
 function openfile(value) {   
     if (profilePicSrc == null) {
@@ -246,6 +247,22 @@ async function downloadMidia(id,hash) {
   }
 }
 
+async function downloadAllMidia() {
+  if (typeof arrMidia !== 'undefined') {
+    for (let i = arrMidia.length - 1; i >= 0; i--) {
+      if (!updatedMsg) {
+        let hash = arrMidia[i];
+        let id = indexMidia[i];
+        if (usedURLs.has(hash)) {
+          document.getElementById(id).src = usedURLs.get(hash);
+        } else {
+          await downloadMidia(id, hash, usedURLs);
+        }
+      }
+    }
+  }
+}
+
 function type(format) {
   format = format.toLowerCase();
   switch (format) {
@@ -266,22 +283,6 @@ function type(format) {
   }
 }
 
-async function downloadAllMidia() {
-  if (typeof arrMidia !== 'undefined') {
-    for (let i = arrMidia.length - 1; i >= 0; i--) {
-      if (!updatedMsg) {
-        let hash = arrMidia[i];
-        let id = indexMidia[i];
-        if (usedURLs.has(hash)) {
-          document.getElementById(id).src = usedURLs.get(hash);
-        } else {
-          await downloadMidia(id, hash, usedURLs);
-        }
-      }
-    }
-  }
-}
-
 // Chame a função downloadAllMidia de uma função assíncrona
 async function main() {
   try {
@@ -293,7 +294,7 @@ async function main() {
   }
 }
 
-main();
+
 
 function embedYoutube (id) {
     updatedMsg = true;
@@ -308,35 +309,39 @@ function embedVideo(link,id) {
     updatedMsg = true;
     fetchNewMessages = false;
     scrollPos = document.getElementById('messages').scrollTop;
+    msgsContents=document.getElementById('messages').innerHTML;
     style = "position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
     document.getElementById('messages').innerHTML = "<a href=\"" + link + "\" target=\"_blank\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><iframe style=\"position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\" src=\"" + id + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
 }
 
 function embedImage(id,hash) {
-  updatedMsg = true;
-  var imageSrc = document.getElementById(id).src;
-  fetchNewMessages = false;
-  scrollPos = document.getElementById('messages').scrollTop;
-  style = "z-index:10000;position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
-  document.getElementById('messages').innerHTML = "<a href=\"#\" onClick=\"downloadFile('"+hash+"','"+hash+"');\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeImage()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><div style=\" position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\"><img width=100% src=\""+imageSrc+"\"></div>";
+    updatedMsg = true;
+    var imageSrc = document.getElementById(id).src;
+    fetchNewMessages = false;
+    scrollPos = document.getElementById('messages').scrollTop;
+    msgsContents=document.getElementById('messages').innerHTML;
+    style = "z-index:10000;position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
+    document.getElementById('messages').innerHTML = "<a href=\"#\" onClick=\"downloadFile('"+hash+"','"+hash+"');\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeImage()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><div style=\"overflow-x: auto; position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\"><center style=\"background-color: rgb(0,0,0);\"><img height=100% src=\""+imageSrc+"\"></center></div>";
 }
 
 function closeVideo() {
     updatedMsg = false;
     fetchNewMessages = true;
     newContact();
-    updateMsg();
+    document.getElementById('messages').innerHTML=msgsContents;
     document.getElementById('messages').scrollTo(0, scrollPos);
     newContact();
+    downloadAllMidia();
 }
 
 function closeImage() {
   updatedMsg = false;
   fetchNewMessages = true;
   newContact();
-  updateMsg();
+  document.getElementById('messages').innerHTML=msgsContents;
   document.getElementById('messages').scrollTo(0, scrollPos);
   newContact();
+  downloadAllMidia();
 }
 
 function messageValidate() {
