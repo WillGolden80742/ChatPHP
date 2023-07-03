@@ -110,7 +110,7 @@
     }
 
     center h3 {
-      font-size:32px;
+      font-size:64px;
     }
 
     .back {
@@ -148,7 +148,7 @@
       z-index: 1000;
       font-size:18px;
     }
-    
+
     .delete a {
       font-size:12px;
     }

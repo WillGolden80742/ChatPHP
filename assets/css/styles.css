@@ -486,7 +486,7 @@
     font-size: 14px;
   }
 
-  .contacts:hover a h3 {
+  .contacts a h3:hover {
     background-color:#285d33;
     color: #fff;
   }
@@ -628,7 +628,7 @@
       font-size:64px;
     }
 
-    .contacts:hover a h3 {
+    .contacts a h3 {
       font-size:64px;
     }
 
