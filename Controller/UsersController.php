@@ -219,7 +219,7 @@
                 if ($async) {
                     $this->indexMidia+=1;
                     if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\" id=\"$this->indexMidia\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
+                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center> 
@@ -241,7 +241,7 @@
                 } else {
                     $this->indexMidia+=1;
                     if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\" id=\"$this->indexMidia\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
+                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center>

@@ -294,8 +294,6 @@ async function main() {
   }
 }
 
-
-
 function embedYoutube (id) {
     updatedMsg = true;
     fetchNewMessages=false;
@@ -311,7 +309,7 @@ function embedVideo(link,id) {
     scrollPos = document.getElementById('messages').scrollTop;
     msgsContents=document.getElementById('messages').innerHTML;
     style = "position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
-    document.getElementById('messages').innerHTML = "<a href=\"" + link + "\" target=\"_blank\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><iframe style=\"position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\" src=\"" + id + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+    document.getElementById('messages').innerHTML ="<a href=\"" + link + "\" target=\"_blank\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><iframe style=\"position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\" src=\"" + id + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
 }
 
 function embedImage(id,hash) {
@@ -325,16 +323,14 @@ function embedImage(id,hash) {
 }
 
 function closeVideo() {
-    updatedMsg = false;
-    fetchNewMessages = true;
-    newContact();
-    document.getElementById('messages').innerHTML=msgsContents;
-    document.getElementById('messages').scrollTo(0, scrollPos);
-    newContact();
-    downloadAllMidia();
+  close();
 }
 
 function closeImage() {
+  close();
+}
+
+function close() {
   updatedMsg = false;
   fetchNewMessages = true;
   newContact();
@@ -343,6 +339,7 @@ function closeImage() {
   newContact();
   downloadAllMidia();
 }
+
 
 function messageValidate() {
     var textLength = document.getElementById("text").value.length;
