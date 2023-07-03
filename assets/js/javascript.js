@@ -294,32 +294,42 @@ async function main() {
   }
 }
 
-function embedYoutube (id) {
-    updatedMsg = true;
-    fetchNewMessages=false;
-    scrollPos = document.getElementById('messages').scrollTop;
-    msgsContents=document.getElementById('messages').innerHTML;
-    style = "position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
-    document.getElementById('messages').innerHTML="<a href=\"https://youtu.be/"+id+"\" target=\"_blank\" style=\""+style+";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\""+style+";float:right;background-image: url('Images/close.svg');\" ></div><iframe style=\"position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\" src=\"https://www.youtube.com/embed/"+id+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+function embedYoutube(id) {
+  updatedMsg = true;
+  fetchNewMessages = false;
+  scrollPos = document.getElementById('messages').scrollTop;
+  msgsContents = document.getElementById('messages').innerHTML;
+  document.getElementById('messages').innerHTML = `
+      <a href="https://youtu.be/${id}" target="_blank" class="embed-link"></a>
+      <div onClick="closeVideo()" class="embed-close"></div>
+      <iframe src="https://www.youtube.com/embed/${id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="embed-iframe"></iframe>`;
 }
 
-function embedVideo(link,id) {
-    updatedMsg = true;
-    fetchNewMessages = false;
-    scrollPos = document.getElementById('messages').scrollTop;
-    msgsContents=document.getElementById('messages').innerHTML;
-    style = "position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
-    document.getElementById('messages').innerHTML ="<a href=\"" + link + "\" target=\"_blank\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeVideo()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><iframe style=\"position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\" src=\"" + id + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+function embedVideo(link, id) {
+  updatedMsg = true;
+  fetchNewMessages = false;
+  scrollPos = document.getElementById('messages').scrollTop;
+  msgsContents = document.getElementById('messages').innerHTML;
+  document.getElementById('messages').innerHTML = `
+      <a href="${link}" target="_blank" class="embed-link"></a>
+      <div onClick="closeVideo()" class="embed-close"></div>
+      <iframe src="${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="embed-iframe"></iframe>`;
 }
 
-function embedImage(id,hash) {
-    updatedMsg = true;
-    var imageSrc = document.getElementById(id).src;
-    fetchNewMessages = false;
-    scrollPos = document.getElementById('messages').scrollTop;
-    msgsContents=document.getElementById('messages').innerHTML;
-    style = "z-index:10000;position: relative; border-radius: 100%; background-color: #285d3350; box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);width:70px; height:70px; top:0px;  margin-left: auto; margin-right: auto;background-size:50%; background-repeat:no-repeat;background-position-x: 50%; background-position-y: 50%; backdrop-filter: blur(5px);";
-    document.getElementById('messages').innerHTML = "<a href=\"#\" onClick=\"downloadFile('"+hash+"','"+hash+"');\" style=\"" + style + ";float:left;background-image: url('Images/link.svg');\" ></a> <div onClick=\"closeImage()\" style=\"" + style + ";float:right;background-image: url('Images/close.svg');\" ></div><div style=\"overflow-x: auto; position: relative; margin-top: auto; margin-bottom: auto; top:0; bottom:0; left: 0; right:0; width:100%; height:100%; margin-left: auto; margin-right: auto;\"><center style=\"background-color: rgb(0,0,0);\"><img height=100% src=\""+imageSrc+"\"></center></div>";
+function embedImage(hash, id) {
+  updatedMsg = true;
+  var imageSrc = document.getElementById(id).src;
+  fetchNewMessages = false;
+  scrollPos = document.getElementById('messages').scrollTop;
+  msgsContents = document.getElementById('messages').innerHTML;
+  document.getElementById('messages').innerHTML = `
+      <a href="#" onClick="downloadFile('${hash}', '${hash}');" class="embed-download"></a>
+      <div onClick="closeImage()" class="embed-close"></div>
+      <div class="embed-image-container">
+          <center>
+              <img height="100%" src="${imageSrc}" class="embed-image">
+          </center>
+      </div>`;
 }
 
 function closeVideo() {
