@@ -20,7 +20,7 @@
 
         function downloadFile ($nomeHash,$async=false) {
             if ($async) {
-                usleep(500000);
+                usleep(250000);
             }
             return base64_encode($this->user->downloadFile($nomeHash));
         }
