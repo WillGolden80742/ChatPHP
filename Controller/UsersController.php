@@ -249,7 +249,6 @@
                                     </center>
                                 </div>";
                     } elseif ($this->isImage($extensao)) {
-
                         return "<div class=\"image_file\">
                                     <center>
                                         <img id=\"$this->indexMidia\" onclick=\"embedImage('$hash','$this->indexMidia')\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"250px\" alt=\"" . $nome . "\">
