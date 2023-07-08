@@ -133,7 +133,7 @@
             $result = $this->user->downloadProfilePic($contactNickName);
             if (!empty($result) > 0) {
                 foreach($result as $value) {
-                    $pic = "data:image/jpeg;base64," . base64_encode($value["picture"]);
+                    $pic = "data:image/".$value["format"].";base64," . base64_encode($value["picture"]);
                 }
             } else {
                 $pic = "Images/profilePic.svg";

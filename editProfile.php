@@ -25,9 +25,10 @@
     $pic=null;
     if (!empty($_FILES["pic"])) {
         $fileController = new FileController($_FILES["pic"]);
-        $file = $fileController->getFile();
+        $file = $fileController->getImage();
+        $format = $fileController->getFormat();
         if ($file) {
-            $user->uploadProfilePic(new StringT($_SESSION['nickName']),$file,'jpg');
+            $user->uploadProfilePic(new StringT($_SESSION['nickName']),$file,$format);
         } else {
             echo $fileController->getError();
         }
@@ -35,6 +36,7 @@
     } else {
         echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(".$user ->downloadProfilePic(new StringT($_SESSION['nickName'])).");' onclick='openfile(\"editProfilePic\");' /></div>";
     }
+    
 ?>
 
 <input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 

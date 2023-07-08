@@ -56,11 +56,44 @@ function handlePhotoUpload(event) {
 }
 
 function uploadPic() {
-  var formData = new FormData();
   var arquivoInput = document.getElementById('editProfilePic');
   var arquivo = arquivoInput.files[0];
-  formData.append('pic', arquivo);
-  uploadFile('uploadPic.php',formData);
+  
+  resizeImage(arquivo, 400, function(resizedFile) {
+    var formData = new FormData();
+    formData.append('pic', resizedFile);
+    uploadFile('uploadPic.php', formData);
+  });
+}
+
+function resizeImage(file, maxHeight, callback) {
+  var reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function(event) {
+    var img = new Image();
+    img.src = event.target.result;
+    img.onload = function() {
+      var width = img.width;
+      var height = img.height;
+      
+      if (height > maxHeight) {
+        width *= maxHeight / height;
+        height = maxHeight;
+      }
+      
+      var canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      canvas.toBlob(function(blob) {
+        var resizedFile = new File([blob], file.name, { type: file.type });
+        callback(resizedFile);
+      }, file.type);
+    };
+  };
 }
 
 function uploadFile(url,formData) {
@@ -97,6 +130,8 @@ function uploadAttachment(url,formData) {
   };
   xhr.send(formData);
 }
+
+
 
 
 function down () {

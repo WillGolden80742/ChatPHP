@@ -27,8 +27,9 @@
     if (!empty($_FILES["pic"])) {
         $fileController = new FileController($_FILES["pic"]);
         $file = $fileController->getFile();
+        $format = $fileController->getFormat();
         if ($file) {
-            $user->uploadProfilePic(new StringT($_SESSION['nickName']),$file,'jpg');
+            $user->uploadProfilePic(new StringT($_SESSION['nickName']),$file,$format);
         } else {
             echo $fileController->getError();
         }
