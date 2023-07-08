@@ -70,7 +70,7 @@ function uploadPic() {
   var arquivo = arquivoInput.files[0];
   var formData = new FormData();
 
-  if (arquivo.type === 'image/webp') {
+  if (arquivo.type === 'image/gif' || arquivo.type === 'image/png' || arquivo.type === 'image/webp') {
     var reader = new FileReader();
     reader.onload = function(event) {
       var img = new Image();
@@ -81,10 +81,10 @@ function uploadPic() {
         var context = canvas.getContext('2d');
         context.drawImage(img, 0, 0);
         canvas.toBlob(function(blob) {
-          var file = new File([blob], 'profilepic.png', {type: 'image/png'});
+          var file = new File([blob], 'profilepic.jpg', {type: 'image/jpeg'});
           formData.append('pic', file);
           uploadFile('uploadPic.php', formData);
-        }, 'image/png');
+        }, 'image/jpeg', 0.8);
       };
       img.src = event.target.result;
     };
