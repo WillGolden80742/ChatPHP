@@ -465,6 +465,7 @@ function createMessage () {
       });
   } else {
     loading(true);
+    document.getElementById('text').value="";
     var formData = new FormData();
     var arquivo = inputFile.files[0];
     formData.append('arquivo',arquivo);
