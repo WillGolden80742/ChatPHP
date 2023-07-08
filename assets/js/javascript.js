@@ -69,12 +69,31 @@ function handlePhotoUpload(event) {
 function uploadPic() {
   var arquivoInput = document.getElementById('editProfilePic');
   var arquivo = arquivoInput.files[0];
-  
-  resizeImage(arquivo, 400, function(resizedFile) {
-    var formData = new FormData();
-    formData.append('pic', resizedFile);
+  var formData = new FormData();
+
+  if (arquivo.type === 'image/webp') {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+        canvas.toBlob(function(blob) {
+          var file = new File([blob], 'profilepic.png', {type: 'image/png'});
+          formData.append('pic', file);
+          uploadFile('uploadPic.php', formData);
+        }, 'image/png');
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(arquivo);
+  } else {
+    formData.append('pic', arquivo);
     uploadFile('uploadPic.php', formData);
-  });
+  }
 }
 
 function resizeImage(file, maxWidth, callback) {

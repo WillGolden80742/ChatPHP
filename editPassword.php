@@ -26,7 +26,7 @@
     $pic=null;
     if (!empty($_FILES["pic"])) {
         $fileController = new FileController($_FILES["pic"]);
-        $file = $fileController->getFile();
+        $file = $fileController->getImage();
         $format = $fileController->getFormat();
         if ($file) {
             $user->uploadProfilePic(new StringT($_SESSION['nickName']),$file,$format);
@@ -40,7 +40,7 @@
     
 ?>
 
-<input id="editProfilePic" accept=".jpeg,.jpg,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 
+<input id="editProfilePic" accept=".jpeg,.jpg,.webp,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic"> 
 <input class="inputSubmit salvar" onclick="uploadPic()" type=submit value="SALVAR">
 </br>
 <form action="uploadPassword.php" method="post" >
