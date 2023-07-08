@@ -71,28 +71,34 @@ function uploadPic() {
   var formData = new FormData();
 
   if (arquivo.type === 'image/gif' || arquivo.type === 'image/png' || arquivo.type === 'image/webp') {
-    var reader = new FileReader();
-    reader.onload = function(event) {
-      var img = new Image();
-      img.onload = function() {
-        var canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        var context = canvas.getContext('2d');
-        context.drawImage(img, 0, 0);
-        canvas.toBlob(function(blob) {
-          var file = new File([blob], 'profilepic.jpg', {type: 'image/jpeg'});
-          formData.append('pic', file);
-          uploadFile('uploadPic.php', formData);
-        }, 'image/jpeg', 0.8);
-      };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(arquivo);
+    imgToJPG(arquivo, 'profilepic.jpg', function(file) {
+      formData.append('pic', file);
+      uploadFile('uploadPic.php', formData);
+    });
   } else {
     formData.append('pic', arquivo);
     uploadFile('uploadPic.php', formData);
   }
+}
+
+function imgToJPG(inputFile, fileName, callback) {
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var context = canvas.getContext('2d');
+      context.drawImage(img, 0, 0);
+      canvas.toBlob(function(blob) {
+        var file = new File([blob], fileName, {type: 'image/jpeg'});
+        callback(file);
+      }, 'image/jpeg', 0.8);
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(inputFile);
 }
 
 function resizeImage(file, maxWidth, callback) {
@@ -474,14 +480,17 @@ function createMessage () {
     var file = formData.get('arquivo');
     var fileExtension = file.name.split('.').pop().toLowerCase();
     var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
+    
     if (imageFormats.includes(fileExtension)) {
-      resizeImage(file, 1280, function(resizedFile) {
-        formData.set('arquivo', resizedFile);
-        uploadAttachment('uploadfile.php',formData);
+      imgToJPG(file, 'resizedImage.jpg', function(resizedFile) {
+        resizeImage(resizedFile, 1280, function(finalFile) {
+          formData.set('arquivo', finalFile);
+          uploadAttachment('uploadfile.php', formData);
+        });
       });
     } else {
-      uploadAttachment('uploadfile.php',formData);
-    }
+      uploadAttachment('uploadfile.php', formData);
+    }    
     waitingMsg();
     inputFile.value="";
   }

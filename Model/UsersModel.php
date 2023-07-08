@@ -186,12 +186,34 @@
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");
         }
 
-        function deleteMessage (StringT $id,StringT $contactNickName,StringT $nick) {
-            // Recomendado uso de prepare statement 
-            $this->conFactory->query("call deleteMessage(".$id.",'".$nick."')");
+        function deleteMessage($id, $contactNickName, $nick) {
+            // Verificar se existe anexo vinculado a essa mensagem
+            $result = $this->conFactory->query("SELECT anexoId, arquivo FROM anexo WHERE mensagem = ".$id);
+            if ($result->num_rows > 0) {
+                // Verificar quantos anexos estão vinculados a esse arquivo
+                $row = $result->fetch_assoc();
+                $arquivo = $row['arquivo'];
+                
+                $result = $this->conFactory->query("SELECT COUNT(*) as totalAnexos FROM anexo WHERE arquivo = '".$arquivo."'");
+                $row = $result->fetch_assoc();
+                $totalAnexos = $row['totalAnexos'];
+                
+                if ($totalAnexos == 1) {
+                    // Apenas um anexo vinculado a esse arquivo, apagar o arquivo também
+                    $this->conFactory->query("DELETE FROM arquivos WHERE nomeHash = '".$arquivo."'");
+                }
+            }
+            
+            // Apagar a mensagem
+            $this->conFactory->query("DELETE FROM messages WHERE Idmessage = ".$id);
+            
+            // Inserir nova mensagem
             $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");
-            $this->conFactory->query("UPDATE messages SET received = '2' WHERE messages.MsgFrom = '".$nick."' and messages.MsgTo = '".$contactNickName."'");       
-        }
+            
+            // Atualizar o status da mensagem para '2'
+            $this->conFactory->query("UPDATE messages SET received = '2' WHERE MsgFrom = '".$nick."' AND MsgTo = '".$contactNickName."'");
+        } 
+        
         
         function getNumberOfAttachments($lasIdMessage) {
             $connection = $this->conFactoryPDO;
