@@ -155,6 +155,8 @@ function uploadAttachment(url, formData) {
     updateMsg();
     var attachmentDiv = document.getElementById('attachment');
     attachmentDiv.style.backgroundColor = "";
+    var sendButton = document.getElementById('send');
+    sendButton.disabled = true;
   }, function(errorText) {
     console.error(errorText);
   });
