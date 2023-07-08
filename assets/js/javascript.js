@@ -48,7 +48,6 @@ function loadingPicStatus (status) {
 
 
 function handlePhotoUpload(event) {
-  loadingPicStatus(true);
   const fileInput = event.target;
   const file = fileInput.files[0];
   
