@@ -37,7 +37,18 @@ function loadPicStatus (value, keepPic=false) {
 }
 
 
+
+function loadingPicStatus (status) {
+    if (status) {
+      profilePic.src = "Images/loadingProfilePic.webp";
+    } else {
+      profilePic.src = "Images/edit.png";
+    }  
+}
+
+
 function handlePhotoUpload(event) {
+  loadingPicStatus(true);
   const fileInput = event.target;
   const file = fileInput.files[0];
   
@@ -66,7 +77,7 @@ function uploadPic() {
   });
 }
 
-function resizeImage(file, maxHeight, callback) {
+function resizeImage(file, maxWidth, callback) {
   var reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = function(event) {
@@ -76,9 +87,9 @@ function resizeImage(file, maxHeight, callback) {
       var width = img.width;
       var height = img.height;
       
-      if (height > maxHeight) {
-        width *= maxHeight / height;
-        height = maxHeight;
+      if (width > maxWidth) {
+        height *= maxWidth / width;
+        width = maxWidth;
       }
       
       var canvas = document.createElement('canvas');
@@ -96,23 +107,6 @@ function resizeImage(file, maxHeight, callback) {
   };
 }
 
-function uploadFile(url,formData) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', url);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      if(xhr.responseText.length > 16) {
-        alert(xhr.responseText);
-      } else {
-        loadPicStatus(false,true);
-      }
-    } else { 
-      // Ocorreu um erro ao enviar o arquivo
-      console.error(xhr.responseText);
-    }
-  };
-  xhr.send(formData);
-}
 
 function uploadAttachment(url,formData) {
   var xhr = new XMLHttpRequest();
@@ -132,6 +126,23 @@ function uploadAttachment(url,formData) {
 }
 
 
+function uploadFile(url,formData) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      if(xhr.responseText.length > 16) {
+        alert(xhr.responseText);
+      } else {
+        loadPicStatus(false,true);
+      }
+    } else { 
+      // Ocorreu um erro ao enviar o arquivo
+      console.error(xhr.responseText);
+    }
+  };
+  xhr.send(formData);
+}
 
 
 function down () {
@@ -441,7 +452,17 @@ function createMessage () {
     formData.append('arquivo',arquivo);
     formData.append('messageText',messageText);
     formData.append('contactNickName',nickNameContact);
-    uploadAttachment('uploadfile.php',formData);
+    var file = formData.get('arquivo');
+    var fileExtension = file.name.split('.').pop().toLowerCase();
+    var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
+    if (imageFormats.includes(fileExtension)) {
+      resizeImage(file, 1280, function(resizedFile) {
+        formData.set('arquivo', resizedFile);
+        uploadAttachment('uploadfile.php',formData);
+      });
+    } else {
+      uploadAttachment('uploadfile.php',formData);
+    }
     waitingMsg();
     inputFile.value="";
   }
