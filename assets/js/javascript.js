@@ -132,42 +132,41 @@ function resizeImage(file, maxWidth, callback) {
 }
 
 
-function uploadAttachment(url,formData) {
+function upload(url, formData, successCallback, errorCallback) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url);
   xhr.onload = function() {
     if (xhr.status === 200) {
-      loading(false);
-      updateMsg();
-      var attachmentDiv = document.getElementById('attachment');
-      attachmentDiv.style.backgroundColor = "";
-    } else { 
-      // Ocorreu um erro ao enviar o arquivo
-      console.error(xhr.responseText);
-    }
-  };
-  xhr.send(formData);
-}
-
-
-function uploadFile(url,formData) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', url);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      if(xhr.responseText.length > 16) {
+      if (xhr.responseText.length > 16) {
         alert(xhr.responseText);
       } else {
-        loadPicStatus(false,true);
+        successCallback();
       }
-    } else { 
-      // Ocorreu um erro ao enviar o arquivo
-      console.error(xhr.responseText);
+    } else {
+      errorCallback(xhr.responseText);
     }
   };
   xhr.send(formData);
 }
 
+function uploadAttachment(url, formData) {
+  upload(url, formData, function() {
+    loading(false);
+    updateMsg();
+    var attachmentDiv = document.getElementById('attachment');
+    attachmentDiv.style.backgroundColor = "";
+  }, function(errorText) {
+    console.error(errorText);
+  });
+}
+
+function uploadFile(url, formData) {
+  upload(url, formData, function() {
+    loadPicStatus(false, true);
+  }, function(errorText) {
+    console.error(errorText);
+  });
+}
 
 function down () {
   document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
