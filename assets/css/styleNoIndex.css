@@ -32,9 +32,14 @@
 }
 
 @media (orientation: portrait) or (max-width:900px) {
+
     * {
         font-size:36px;
     } 
+    
+    .user a {
+      font-size:100px;
+    }
 
     .editProfile {
       width: 100%;

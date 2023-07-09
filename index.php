@@ -52,18 +52,18 @@
 
     echo "<div  class=\"header\"><h2>";
     echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.svg\" /></a>";
-    echo "<a class='back' href='index.php' ><img src=\"Images/left-arrow.svg\" /></a>"; 
+    echo "<a class='back' onclick='toggle();' ><img src=\"Images/left-arrow.svg\" /></a>"; 
     if (!empty($nickNameContact)) {
       echo "<a class='picMessage' >";
       echo "<img src='Images/blank.png' style='background-image:url(".$user ->downloadProfilePic($nickNameContact).");' />";
-      echo "<a class='userName'>";
+      echo "<a class='userName' id='userName'>";
       echo $user->name($nickNameContact);
       echo "</a>";
       echo "</a>";
     }
     echo "<span class='user' >&nbsp;";
     echo $user->name(new StringT($_SESSION['nickName']));
-    echo "<a href=\"editProfile.php\"> ••• </a></span></h2>";
+    echo "<a href=\"editProfile.php\" class='menuProfile' > ••• </a></span></h2>";
     $userNickName = new StringT($_SESSION['nickName']);
     echo "</div>";
     echo "<div class='contacts' id='contacts'>";

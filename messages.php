@@ -9,9 +9,7 @@
 ?>
   <style id="styleMsg">
 
-    <?php 
-      echo "#".$contactNickName." {display:none;}";
-    ?>
+  
       <?php 
           $lines_array = file("assets/css/styleNoIndex.css");
           foreach($lines_array as $line) {

@@ -639,7 +639,6 @@
       font-size:100px;
     }
 
-
     .header {
       overflow-y: hidden;
       overflow-x: hidden;
@@ -650,7 +649,6 @@
       padding-top:20px;
       padding-bottom:20px;
     }
-
 
     .header:hover {
       overflow-x: auto;

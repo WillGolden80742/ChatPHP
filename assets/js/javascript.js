@@ -620,11 +620,10 @@ function waitingMsg() {
   newDiv.appendChild(newImg);
   newDiv.appendChild(newLink);
   messagesElement.appendChild(newDiv);
-
   down();
 }
 
-function updateMessages (contact = nickNameContact) {
+function updateMessages (contact = nickNameContact, name=nickNameContact) {
   $.ajax({
     url: 'updateMsg.php',
     method: 'POST',
@@ -632,25 +631,73 @@ function updateMessages (contact = nickNameContact) {
     dataType: 'html'
   }).done(function(result) {
     document.getElementById('messages').innerHTML=result;
-    down();
     updatedMsg=true;
     var newUrl = 'messages.php?contactNickName=' + contact;
     history.pushState(null, '', newUrl);
-    updateContacts(contact);
+    updateContacts(contact,name);
   });
+  nickNameContact = contact;
 }
 
-function updateContacts (contact = nickNameContact) {
+function updateContacts (contact = nickNameContact,name=nickNameContact) {
     var h2Elements = document.querySelectorAll('.contacts h2');
     h2Elements.forEach(function(h2) {
       h2.style.background = 'none';
       h2.style.color = '#285d33';
       h2.style.boxShadow = 'none';
     }); 
+    var spanElements = document.querySelectorAll('span[id^=\"'+contact+'\"]');
+      spanElements.forEach(function (span) {
+      span.remove();
+    });
     var h2Element = document.querySelector('#contact'+contact+' h2');
     h2Element.style.color = 'white';
     h2Element.style.backgroundColor = '#285d33';
     h2Element.style.boxShadow = '0px 0px 10px 5px rgba(0, 0, 0, 0.35)';
+    document.getElementById('userName').innerHTML=name;
+    var imgElement = document.querySelector('#picContact'+contact+' img');
+    var imgContacts = document.querySelector('.picMessage img');
+    imgContacts.style.backgroundImage = imgElement.style.backgroundImage;
+    toggle(false);
+}
+
+function toggle(value = true) {
+  var screenOrientation = window.screen.orientation;
+  var screenWidth = window.innerWidth;
+  var screenHeight = window.innerHeight;
+
+  var hideDisplay = "none";
+  var blockDisplay = "block";
+  var inlineDisplay = "inline";
+  var flexDisplay = "flex";
+
+  var elementsToToggle = document.querySelectorAll('.text, .send, .attachment, .messages');
+  var elementsToHide = document.querySelectorAll('.picMessage, .back');
+  var elementsToHide2 = document.querySelectorAll('.username');
+  var elementsToShow = document.querySelectorAll('.contacts, .search, .logout, .user');
+
+  if (screenOrientation.type.includes("portrait") || screenHeight > screenWidth) {
+    elementsToToggle.forEach(function (element) {
+      element.style.display = value ? hideDisplay : blockDisplay;
+    });
+
+    elementsToHide.forEach(function (element) {
+      element.style.display = value ? hideDisplay : inlineDisplay;
+    });
+
+    elementsToHide2.forEach(function (element) {
+      element.style.display = value ? hideDisplay : flexDisplay;
+    });
+
+    elementsToShow.forEach(function (element) {
+      element.style.display = !value ? hideDisplay : inlineDisplay;
+    });
+  } else if (screenOrientation.type.includes("landscape") || screenWidth > screenHeight) {
+    elementsToToggle.forEach(function (element) {
+      element.style.display = blockDisplay;
+    });
+  }
+  down();
 }
 
 function newContact() {
@@ -671,6 +718,7 @@ function newContact() {
 }
 
 function newMessages() {
+  console.log(nickNameContact);
   $.ajax({
     url: 'newMsg.php?',
     method: 'POST',

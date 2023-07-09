@@ -84,7 +84,7 @@
             }
         }
 
-        function contacts(StringT $nick, StringT $nickNameContact) {
+        function contacts(StringT $nick, StringT $nickNameContact,$sync=false) {
             $result = $this->user->contacts($nick);
             $count = 0;
             $contacts = array();
@@ -93,8 +93,8 @@
             }
             $html = "<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
             foreach ($contacts as $contact) {
-                if (basename($_SERVER['PHP_SELF']) == "messages.php") {
-                    $html .= "<a id=\"contact$contact[1]\" onclick=\"updateMessages('$contact[1]')\">";
+                if (basename($_SERVER['PHP_SELF']) == "messages.php" || $sync) {
+                    $html .= "<a id=\"contact$contact[1]\" onclick=\"updateMessages('$contact[1]','$contact[0]')\">";
                 } else {
                     $html .= "<a href='messages.php?contactNickName=" . $contact[1] . "'>";
                 }
@@ -104,7 +104,11 @@
                         $html .= " style='color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
                     }
                 }
-                $html .= "><div class='picContact'><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp" . $this->newMg(new StringT($contact[1])) . "</h2></a>";
+                $count = "";
+                if (strcmp($nickNameContact,$contact[1])) {
+                    $count = $this->newMg(new StringT($contact[1]));
+                }  
+                $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp" .  $count. "</h2></a>";
             }
             return $html;
         }
@@ -161,7 +165,7 @@
 
         function messages ($queryMessages,StringT $contactNickName,$async) {
             $this->indexMidia=0;
-            $this->receivedMsg($contactNickName );
+            $this->receivedMsg($contactNickName);
             $messages = array();
             if (mysqli_num_rows($queryMessages) > 0) {
                 $idMessage = '0';
@@ -352,7 +356,7 @@
                     return "0";
                 } else {
                     $this->user->delMsg(new StringT($this->nickSession));
-                    return $this->contacts(new StringT($this->nickSession),new StringT($nickNameContact));
+                    return $this->contacts(new StringT($this->nickSession),new StringT($nickNameContact), true);
                 }
             }
         }        
