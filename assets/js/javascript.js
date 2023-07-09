@@ -634,7 +634,23 @@ function updateMessages (contact = nickNameContact) {
     document.getElementById('messages').innerHTML=result;
     down();
     updatedMsg=true;
+    var newUrl = 'messages.php?contactNickName=' + contact;
+    history.pushState(null, '', newUrl);
+    updateContacts(contact);
   });
+}
+
+function updateContacts (contact = nickNameContact) {
+    var h2Elements = document.querySelectorAll('.contacts h2');
+    h2Elements.forEach(function(h2) {
+      h2.style.background = 'none';
+      h2.style.color = '#285d33';
+      h2.style.boxShadow = 'none';
+    }); 
+    var h2Element = document.querySelector('#contact'+contact+' h2');
+    h2Element.style.color = 'white';
+    h2Element.style.backgroundColor = '#285d33';
+    h2Element.style.boxShadow = '0px 0px 10px 5px rgba(0, 0, 0, 0.35)';
 }
 
 function newContact() {

@@ -84,26 +84,29 @@
             }
         }
 
-        function contacts (StringT $nick,StringT $nickNameContact) {
-            $result =  $this->user->contacts($nick);
-            $count=0;
+        function contacts(StringT $nick, StringT $nickNameContact) {
+            $result = $this->user->contacts($nick);
+            $count = 0;
             $contacts = array();
-            while($row = mysqli_fetch_assoc($result)) { 
-                $contacts[$count++]=array($row["Contato"],$row["nickNameContato"]);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
             }
-            $html="<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
-            foreach ($contacts as $contact)  {
-                $html.= "<a href='messages.php?contactNickName=".$contact[1]."' >";
-                $html.= "<h2 ";
-                if (!empty($nickNameContact)){
-                if (!strcmp($nickNameContact,$contact[1])){
-                    $html.= "style='color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);'";
+            $html = "<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
+            foreach ($contacts as $contact) {
+                if (basename($_SERVER['PHP_SELF']) == "messages.php") {
+                    $html .= "<a id=\"contact$contact[1]\" onclick=\"updateMessages('$contact[1]')\">";
+                } else {
+                    $html .= "<a href='messages.php?contactNickName=" . $contact[1] . "'>";
                 }
-                } 
-                $html.= " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(".$this ->downloadProfilePic(new StringT($contact[1])).");' /></div>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg(new StringT($contact[1]))."</h2></a>";
+                $html .= "<h2";
+                if (!empty($nickNameContact)) {
+                    if (!strcmp($nickNameContact, $contact[1])) {
+                        $html .= " style='color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
+                    }
+                }
+                $html .= "><div class='picContact'><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp" . $this->newMg(new StringT($contact[1])) . "</h2></a>";
             }
-             
-            return $html;        
+            return $html;
         }
 
         function searchContact (StringT $nick) {

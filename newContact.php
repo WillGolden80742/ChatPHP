@@ -8,4 +8,4 @@
         $contacts = $user -> newContacts(new StringT($_POST['nickNameContact']));
     }
     echo json_encode($contacts);       
-?>
+?>  
