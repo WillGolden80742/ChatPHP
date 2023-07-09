@@ -624,11 +624,11 @@ function waitingMsg() {
   down();
 }
 
-function updateMessages () {
+function updateMessages (contact = nickNameContact) {
   $.ajax({
     url: 'updateMsg.php',
     method: 'POST',
-    data: {contactNickName: nickNameContact},
+    data: {contactNickName: contact},
     dataType: 'html'
   }).done(function(result) {
     document.getElementById('messages').innerHTML=result;
