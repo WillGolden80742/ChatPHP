@@ -122,7 +122,6 @@ function resizeImage(file, maxWidth, callback) {
       
       var ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
-      
       canvas.toBlob(function(blob) {
         var resizedFile = new File([blob], file.name, { type: file.type });
         callback(resizedFile);
@@ -152,7 +151,7 @@ function upload(url, formData, successCallback, errorCallback) {
 function uploadAttachment(url, formData) {
   upload(url, formData, function() {
     loading(false);
-    updateMsg();
+    updateMessages();
     var attachmentDiv = document.getElementById('attachment');
     attachmentDiv.style.backgroundColor = "";
     var sendButton = document.getElementById('send');
@@ -171,17 +170,14 @@ function uploadFile(url, formData) {
 }
 
 function down () {
-  document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
   document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
-  document.getElementById("down").innerHTML="";
+  downButton(false);
   h =  document.getElementById("messages").scrollTop;
-  
 } 
 
-function removeButtonDown () {
+function removeDownButton () {
   if (((document.getElementById("messages").scrollTop)/h)*100 >= 99) {
-    document.getElementById("down").innerHTML="";
-    document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: none; }";
+    downButton(false);
     h =  document.getElementById("messages").scrollTop;
   }
 }
@@ -370,10 +366,27 @@ function embedYoutube(id) {
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
-  document.getElementById('messages').innerHTML = `
-      <a href="https://youtu.be/${id}" target="_blank" class="embed-link"></a>
-      <div onClick="closeVideo()" class="embed-close"></div>
-      <iframe src="https://www.youtube.com/embed/${id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="embed-iframe"></iframe>`;
+  document.getElementById('messages').innerHTML = '';
+
+  var aElement = document.createElement('a');
+  aElement.href = 'https://youtu.be/' + id;
+  aElement.target = '_blank';
+  aElement.classList.add('embed-link');
+  document.getElementById('messages').appendChild(aElement);
+
+  var divElement = document.createElement('div');
+  divElement.onclick = closeVideo;
+  divElement.classList.add('embed-close');
+  document.getElementById('messages').appendChild(divElement);
+
+  var iframeElement = document.createElement('iframe');
+  iframeElement.src = 'https://www.youtube.com/embed/' + id;
+  iframeElement.title = 'YouTube video player';
+  iframeElement.frameBorder = 0;
+  iframeElement.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframeElement.allowFullscreen = true;
+  iframeElement.classList.add('embed-iframe');
+  document.getElementById('messages').appendChild(iframeElement);
 }
 
 function embedVideo(link, id) {
@@ -381,10 +394,26 @@ function embedVideo(link, id) {
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
-  document.getElementById('messages').innerHTML = `
-      <a href="${link}" target="_blank" class="embed-link"></a>
-      <div onClick="closeVideo()" class="embed-close"></div>
-      <iframe src="${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="embed-iframe"></iframe>`;
+  document.getElementById('messages').innerHTML = '';
+
+  var aElement = document.createElement('a');
+  aElement.href = link;
+  aElement.target = '_blank';
+  aElement.classList.add('embed-link');
+  document.getElementById('messages').appendChild(aElement);
+
+  var divElement = document.createElement('div');
+  divElement.onclick = closeVideo;
+  divElement.classList.add('embed-close');
+  document.getElementById('messages').appendChild(divElement);
+
+  var iframeElement = document.createElement('iframe');
+  iframeElement.src = id;
+  iframeElement.frameBorder = 0;
+  iframeElement.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframeElement.allowFullscreen = true;
+  iframeElement.classList.add('embed-iframe');
+  document.getElementById('messages').appendChild(iframeElement);
 }
 
 function embedImage(hash, id) {
@@ -393,14 +422,33 @@ function embedImage(hash, id) {
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
-  document.getElementById('messages').innerHTML = `
-      <a href="#" onClick="downloadFile('${hash}', '${hash}');" class="embed-download"></a>
-      <div onClick="closeImage()" class="embed-close"></div>
-      <div class="embed-image-container">
-          <center>
-              <img height="100%" src="${imageSrc}" class="embed-image">
-          </center>
-      </div>`;
+  document.getElementById('messages').innerHTML = '';
+
+  var aElement = document.createElement('a');
+  aElement.href = '#';
+  aElement.onclick = function() {
+    downloadFile(hash, hash);
+  };
+  aElement.classList.add('embed-download');
+  document.getElementById('messages').appendChild(aElement);
+
+  var divElement = document.createElement('div');
+  divElement.onclick = closeImage;
+  divElement.classList.add('embed-close');
+  document.getElementById('messages').appendChild(divElement);
+
+  var imageContainer = document.createElement('div');
+  imageContainer.classList.add('embed-image-container');
+  document.getElementById('messages').appendChild(imageContainer);
+
+  var centerElement = document.createElement('center');
+  imageContainer.appendChild(centerElement);
+
+  var imgElement = document.createElement('img');
+  imgElement.height = '100%';
+  imgElement.src = imageSrc;
+  imgElement.classList.add('embed-image');
+  centerElement.appendChild(imgElement);
 }
 
 function closeVideo() {
@@ -442,6 +490,7 @@ function messageValidate() {
 }
 
 
+
 function createMessage () {
   var inputFile = document.getElementById('file');
 
@@ -457,7 +506,7 @@ function createMessage () {
         data: {nickNameContact: nickNameContact, messageText: messageText},
         dataType: 'json'
       }).done(function(result) {
-            date = getDate ();
+            date = 
             id = result;
             $.ajax({
               url: 'getThumb.php?',
@@ -465,8 +514,8 @@ function createMessage () {
               data: {msg: messageText},
               dataType: 'html'
             }).done(function(text) {
-              document.getElementById('messages').innerHTML+="<div class='delete' id=\"del"+id+"\" style='color:grey;margin-left:45%;margin-right:2%;float:right;'> ●●●<a href='#' style='background-color:#1d8634' onclick=\"deleteMessage('"+id+"');\"><b>Apagar</b></a></div><br id='br"+id+"'><div class=\"msg msg-left\" id=\"msg"+id+"\" style=\"background-color:#1d8634;\"><span class=\"from\">You : </span><p>"+text+"<br><span style=\"float:right;\">"+ date +"</span></p></div>"
-              down ();
+               addMessage(id, text);
+               down ();
             });
             loading (false);
       });
@@ -495,15 +544,88 @@ function createMessage () {
     waitingMsg();
     inputFile.value="";
   }
-}        
+}    
 
-function waitingMsg () {
-  date = getDate ();
-  document.getElementById('messages').innerHTML+="<div onclick=\"updateMsg()\" class=\"attachment_file uploading\"> <img class=\"fileIcon\" src=\"Images/loading.gif\"/> <a href=\"#\" >Enviado</a> </div>";
+
+function addMessage(msgID, text) {
+  var deleteElement = document.createElement('div');
+  deleteElement.classList.add('delete');
+  deleteElement.id = 'del' + msgID;
+  deleteElement.style.color = 'grey';
+  deleteElement.style.marginLeft = '45%';
+  deleteElement.style.marginRight = '2%';
+  deleteElement.style.float = 'right';
+
+  var deleteLink = document.createElement('a');
+  deleteLink.href = '#';
+  deleteLink.style.backgroundColor = '#1d8634';
+
+  var deleteText = document.createElement('b');
+  deleteText.appendChild(document.createTextNode('Apagar'));
+
+  deleteLink.appendChild(deleteText);
+  deleteLink.onclick = function() {
+    deleteMessage(msgID);
+  };
+
+  deleteElement.appendChild(document.createTextNode('●●●'));
+  deleteElement.appendChild(deleteLink);
+
+  var brElement = document.createElement('br');
+  brElement.id = 'br' + msgID;
+
+  var msgElement = document.createElement('div');
+  msgElement.classList.add('msg', 'msg-left');
+  msgElement.id = 'msg' + msgID;
+  msgElement.style.backgroundColor = '#1d8634';
+
+  var fromSpan = document.createElement('span');
+  fromSpan.classList.add('from');
+  fromSpan.appendChild(document.createTextNode('You : '));
+
+  var textParagraph = document.createElement('p');
+  textParagraph.innerHTML = text; // Use innerHTML para inserir HTML
+
+  var dateSpan = document.createElement('span');
+  dateSpan.style.float = 'right';
+  dateSpan.appendChild(document.createTextNode(getDate()));
+
+  textParagraph.appendChild(document.createElement('br')); // Adiciona uma quebra de linha
+  textParagraph.appendChild(dateSpan);
+
+  msgElement.appendChild(fromSpan);
+  msgElement.appendChild(textParagraph);
+
+  var messagesElement = document.getElementById('messages');
+  messagesElement.appendChild(deleteElement);
+  messagesElement.appendChild(brElement);
+  messagesElement.appendChild(msgElement);
+}
+
+function waitingMsg() {
+  var messagesElement = document.getElementById('messages');
+  var newDiv = document.createElement('div');
+  newDiv.className = 'attachment_file uploading';
+  newDiv.onclick = function() {
+    updateMessages ();
+  };
+
+  var newImg = document.createElement('img');
+  newImg.className = 'fileIcon';
+  newImg.src = 'Images/loading.gif';
+
+  var newLink = document.createElement('a');
+  newLink.href = '#';
+  newLink.appendChild(document.createTextNode('Enviado'));
+
+  newDiv.appendChild(newImg);
+  newDiv.appendChild(newLink);
+  messagesElement.appendChild(newDiv);
+
   down();
 }
 
-function updateMsg () {
+function updateMessages () {
   $.ajax({
     url: 'updateMsg.php',
     method: 'POST',
@@ -517,45 +639,84 @@ function updateMsg () {
 }
 
 function newContact() {
-    if (fetchNewMessages) {
-        $.ajax({
-          url: 'newContact.php?',
-          method: 'POST',
-          data: {nickNameContact: nickNameContact},
-          dataType: 'json'
-        }).done(function(result) {
-          if (result !== "0") {
-            document.getElementById('contacts').innerHTML=result;
-            $.ajax({
-              url: 'newMsg.php?',
-              method: 'POST',
-              data: {nickNameContact: nickNameContact},
-              dataType: 'json'
-            }).done(function(result) {
-              if (result[0] == "1") {
-                document.getElementById('messages').innerHTML=result[1];
-                if (((document.getElementById("messages").scrollTop)/h)*100 >= 90) {
-                  down();
-                } else {
-                  document.getElementById("styleIndex").innerHTML+="#messages {box-shadow: inset 0px -20px 8px 0px rgb(0 0 0 / 35%) }";
-                  document.getElementById("down").innerHTML="<img  onclick='down();' style='position:fixed;margin-top:2%;box-shadow: 0px 2px 13px 15px rgb(0 0 0 / 35%); border-radius: 100%; background:white;' width='50px' src='Images/down.svg'/> ";
-                }
-              } else if (result[0] == "2")  {
-                document.getElementById("styleIndex").innerHTML+="#messages {box-shadow:none }";
-                document.getElementById('messages').innerHTML=result[1];
-                document.getElementById("down").innerHTML="";
-              }
-            });
-          }
-          newContact();
-        });
-    }    
-}         
+  if (fetchNewMessages) {
+    $.ajax({
+      url: 'newContact.php?',
+      method: 'POST',
+      data: { nickNameContact: nickNameContact },
+      dataType: 'json'
+    }).done(function(result) {
+      if (result !== "0") {
+        document.getElementById('contacts').innerHTML = result;
+        newMessages();
+      }
+      newContact();
+    });
+  }
+}
 
-function loading (b) {
-    if (b) {
-        document.getElementById("styleIndex").innerHTML+=".send {background:none; background-size:100%; background-repeat:no-repeat; background-image: url(\"Images/loading.gif\"); background-position-y:50%; background-position-x: 50%; }";
-    } else {
-        document.getElementById("styleIndex").innerHTML="";
+function newMessages() {
+  $.ajax({
+    url: 'newMsg.php?',
+    method: 'POST',
+    data: { nickNameContact: nickNameContact },
+    dataType: 'json'
+  }).done(function(result) {
+    if (result[0] == "1") {
+      document.getElementById('messages').innerHTML = result[1];
+      if (((document.getElementById("messages").scrollTop) / h) * 100 >= 90) {
+        down();
+      } else {
+        downButton(true);
+      }
+    } else if (result[0] == "2") {
+      document.getElementById('messages').innerHTML = result[1];
+      downButton(false);
     }
-}  
+  });
+}
+
+function downButton(value) {
+  var element = document.getElementById("down");
+  var messagesElement = document.getElementById("messages");
+
+  if (value) {
+    messagesElement.style.boxShadow = "inset 0px -20px 8px 0px rgba(0, 0, 0, 0.35)";
+
+    var img = document.createElement("img");
+    img.onclick = down;
+    img.style.position = "fixed";
+    img.style.marginTop = "2%";
+    img.style.boxShadow = "0px 2px 13px 15px rgba(0, 0, 0, 0.35)";
+    img.style.borderRadius = "100%";
+    img.style.background = "white";
+    img.width = "50";
+    img.src = "Images/down.svg";
+
+    element.innerHTML = "";
+    element.appendChild(img);
+  } else {
+    messagesElement.style.boxShadow = "none";
+    element.innerHTML = "";
+  }
+}
+    
+
+function loading(b) {
+  var sendElement = document.querySelector(".send");
+  if (b) {
+    sendElement.style.background = "none";
+    sendElement.style.backgroundSize = "100%";
+    sendElement.style.backgroundRepeat = "no-repeat";
+    sendElement.style.backgroundImage = "url('Images/loading.gif')";
+    sendElement.style.backgroundPositionY = "50%";
+    sendElement.style.backgroundPositionX = "50%";
+  } else {
+    sendElement.style.background = "";
+    sendElement.style.backgroundSize = "";
+    sendElement.style.backgroundRepeat = "";
+    sendElement.style.backgroundImage = "";
+    sendElement.style.backgroundPositionY = "";
+    sendElement.style.backgroundPositionX = "";
+  }
+}

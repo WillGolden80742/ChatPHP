@@ -22,7 +22,7 @@
   </style>  
   <title><?php echo $contactNickName; ?></title>
 
-<div class="messages" id="messages" onscroll="removeButtonDown();">
+<div class="messages" id="messages" onscroll="removeDownButton();">
   
     <?php
       echo $user->allMessages($contactNickName);
