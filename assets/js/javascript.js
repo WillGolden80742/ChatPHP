@@ -16,15 +16,15 @@ function openfile(value) {
 }
 
 
-function loadPicStatus (value, keepPic=false) {
+function loadPicStatus(value, keepPic = false) {
   if (typeof profilePic !== 'undefined') {
     if (value) {
       profilePic.src = "Images/remove.png";
-      document.getElementById('stylePic').innerHTML+=".salvar {display:block;}";
+      document.querySelector(".salvar").style.display = "block";
       profilePicSrc = profilePic.style.backgroundImage;
     } else {
       profilePic.src = "Images/edit.png";
-      document.getElementById('stylePic').innerHTML+=".salvar {display:none;}";
+      document.querySelector(".salvar").style.display = "none";
       if (keepPic) {
         const profilePic = document.getElementById("profilePic");
         profilePicSrc = profilePic.style.backgroundImage;
@@ -35,7 +35,6 @@ function loadPicStatus (value, keepPic=false) {
     }
   }
 }
-
 
 
 function loadingPicStatus (status) {
