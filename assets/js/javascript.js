@@ -6,7 +6,6 @@ var profilePicSrc;
 var updatedMsg = false;
 var orientationDevice = "landscape";
 main();
-
 // Chame a função downloadAllMidia de uma função assíncrona
 async function main() {
   try {
@@ -16,7 +15,6 @@ async function main() {
     console.error(erro);
     // Trate o erro aqui, se necessário
   }
-
     // Função para lidar com a mudança de resolução da tela
   function handleScreenResolutionChange() {
     // Obtenha a nova largura e altura da tela
@@ -624,6 +622,8 @@ function addMessage(msgID, text) {
   messagesElement.appendChild(deleteElement);
   messagesElement.appendChild(brElement);
   messagesElement.appendChild(msgElement);
+  var sendButton = document.getElementById('send');
+  sendButton.disabled = true;
 }
 
 function waitingMsg() {
@@ -751,15 +751,24 @@ function newContact() {
       if (result !== "0") {
         document.getElementById('contacts').innerHTML = result;
         newMessages();
+        responsiveCont();
       }
       newContact();
     });
   }
 }
 
+function responsiveCont () {
+  var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  if (screenWidth > screenHeight) {
+    document.getElementById(nickNameContact).style.display='none';
+  } else {
+    document.getElementById(nickNameContact).style.display='inline';
+  } 
+}
 
 function newMessages() {
-  console.log(nickNameContact);
   $.ajax({
     url: 'newMsg.php?',
     method: 'POST',

@@ -105,9 +105,7 @@
                     }
                 }
                 $count = "";
-                if (strcmp($nickNameContact,$contact[1])) {
-                    $count = $this->newMg(new StringT($contact[1]));
-                }  
+                $count = $this->newMg(new StringT($contact[1])); 
                 $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp" .  $count. "</h2></a>";
             }
             return $html;
