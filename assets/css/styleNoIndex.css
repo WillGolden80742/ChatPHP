@@ -36,7 +36,7 @@
     * {
         font-size:36px;
     } 
-    
+
     .user a {
       font-size:100px;
     }
@@ -45,7 +45,7 @@
       width: 100%;
     }
 
-    .contacts, .search {
+    .contacts {
       display: none;
     } 
 
