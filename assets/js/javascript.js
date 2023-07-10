@@ -4,7 +4,40 @@ var scrollPos = 0;
 var h;
 var profilePicSrc;
 var updatedMsg = false;
+var orientationDevice = "landscape";
 main();
+
+// Chame a função downloadAllMidia de uma função assíncrona
+async function main() {
+  try {
+    await downloadAllMidia();
+    // Outras operações após o download das mídias
+  } catch (erro) {
+    console.error(erro);
+    // Trate o erro aqui, se necessário
+  }
+
+    // Função para lidar com a mudança de resolução da tela
+  function handleScreenResolutionChange() {
+    // Obtenha a nova largura e altura da tela
+    var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  
+    if (screenWidth > screenHeight && orientationDevice == "portrait") {
+      toggle(true,true);
+      orientationDevice = "landscape";
+    } else if (screenHeight > screenWidth) {
+      orientationDevice = "portrait";
+    } 
+    // Se necessário, atualize o layout da página ou execute outras ações com base na nova resolução
+    // ...
+  }
+
+  // Adicione um listener para o evento 'resize' que é acionado quando a resolução da tela é alterada
+  window.addEventListener('resize', handleScreenResolutionChange);
+
+}
+
 
 function openfile(value) {   
     if (profilePicSrc == null) {
@@ -349,17 +382,6 @@ function type(format) {
   }
 }
 
-// Chame a função downloadAllMidia de uma função assíncrona
-async function main() {
-  try {
-    await downloadAllMidia();
-    // Outras operações após o download das mídias
-  } catch (erro) {
-    console.error(erro);
-    // Trate o erro aqui, se necessário
-  }
-}
-
 function embedYoutube(id) {
   updatedMsg = true;
   fetchNewMessages = false;
@@ -661,7 +683,7 @@ function updateContacts (contact = nickNameContact,name=nickNameContact) {
     toggle(false);
 }
 
-function toggle(value = true) {
+function toggle(value = true, landscape=false) {
   var screenOrientation = window.screen.orientation;
   var screenWidth = window.innerWidth;
   var screenHeight = window.innerHeight;
@@ -671,12 +693,19 @@ function toggle(value = true) {
   var inlineDisplay = "inline";
   var flexDisplay = "flex";
 
-  var elementsToToggle = document.querySelectorAll('.text, .send, .attachment, .messages');
+  var elementsToToggle = document.querySelectorAll('.text, .send, .attachment, .messages, .editProfile');
   var elementsToHide = document.querySelectorAll('.picMessage, .back');
   var elementsToHide2 = document.querySelectorAll('.username');
   var elementsToShow = document.querySelectorAll('.contacts, .search, .logout, .user');
+  var homeElement= document.querySelector('.home');
 
-  if (screenOrientation.type.includes("portrait") || screenHeight > screenWidth) {
+  homeElement.style.display = landscape? blockDisplay: hideDisplay;
+  if (landscape) {
+    value=true;
+  }
+
+  if (screenOrientation.type.includes("portrait") || screenHeight > screenWidth || landscape) {
+
     elementsToToggle.forEach(function (element) {
       element.style.display = value ? hideDisplay : blockDisplay;
     });
