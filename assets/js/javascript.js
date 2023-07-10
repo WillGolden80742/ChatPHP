@@ -649,6 +649,7 @@ function waitingMsg() {
 }
 
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
+  nickNameContact = contact;
   const currentUrl = window.location.href;
   if (currentUrl.includes('messages.php')) {
     $.ajax({
@@ -658,7 +659,6 @@ function updateMessages (contact = nickNameContact, name=nickNameContact) {
       dataType: 'html'
     }).done(function(result) {
       document.getElementById('messages').innerHTML=result;
-      nickNameContact = contact;
       if (document.getElementById('login') !== null) {
         window.location.href = 'login.php';
       } 
@@ -761,11 +761,14 @@ function newContact() {
 function responsiveCont () {
   var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  if (screenWidth > screenHeight) {
-    document.getElementById(nickNameContact).style.display='none';
-  } else {
-    document.getElementById(nickNameContact).style.display='inline';
-  } 
+  var contactID = document.getElementById(nickNameContact);
+  if (contactID) {
+    if (screenWidth > screenHeight) {
+      contactID.style.display='none';
+    } else {
+      contactID.style.display='inline';
+    } 
+  }
 }
 
 function newMessages() {
