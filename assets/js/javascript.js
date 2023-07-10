@@ -658,12 +658,15 @@ function updateMessages (contact = nickNameContact, name=nickNameContact) {
       dataType: 'html'
     }).done(function(result) {
       document.getElementById('messages').innerHTML=result;
+      nickNameContact = contact;
+      if (document.getElementById('login') !== null) {
+        window.location.href = 'login.php';
+      } 
       updatedMsg=true;
       var newUrl = 'messages.php?contactNickName=' + contact;
       history.pushState(null, '', newUrl);
       updateContacts(contact,name);
-    });
-    nickNameContact = contact;
+    }); 
   } else {
     window.location.href = 'messages.php?contactNickName='+contact;
   }

@@ -4,7 +4,7 @@
 <head>  
 </head>    
 <body class="container">
-<div class="login">
+<div class="login" id="login">
 <center>
 <img class="chat_logo" src="Images/chat.svg" />    
 <form action="login.php" method="post">
