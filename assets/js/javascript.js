@@ -201,11 +201,14 @@ function uploadFile(url, formData) {
   });
 }
 
-function down () {
-  document.getElementById("messages").scrollTo(0,document.getElementById('messages').scrollHeight);
-  downButton(false);
-  h =  document.getElementById("messages").scrollTop;
-} 
+function down() {
+  const messagesElement = document.getElementById("messages");
+  if (messagesElement) {
+    messagesElement.scrollTo(0, messagesElement.scrollHeight);
+    downButton(false);
+    h = messagesElement.scrollTop;
+  }
+}
 
 function removeDownButton () {
   if (((document.getElementById("messages").scrollTop)/h)*100 >= 99) {
@@ -646,19 +649,24 @@ function waitingMsg() {
 }
 
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
-  $.ajax({
-    url: 'updateMsg.php',
-    method: 'POST',
-    data: {contactNickName: contact},
-    dataType: 'html'
-  }).done(function(result) {
-    document.getElementById('messages').innerHTML=result;
-    updatedMsg=true;
-    var newUrl = 'messages.php?contactNickName=' + contact;
-    history.pushState(null, '', newUrl);
-    updateContacts(contact,name);
-  });
-  nickNameContact = contact;
+  const currentUrl = window.location.href;
+  if (currentUrl.includes('messages.php')) {
+    $.ajax({
+      url: 'updateMsg.php',
+      method: 'POST',
+      data: {contactNickName: contact},
+      dataType: 'html'
+    }).done(function(result) {
+      document.getElementById('messages').innerHTML=result;
+      updatedMsg=true;
+      var newUrl = 'messages.php?contactNickName=' + contact;
+      history.pushState(null, '', newUrl);
+      updateContacts(contact,name);
+    });
+    nickNameContact = contact;
+  } else {
+    window.location.href = 'messages.php?contactNickName='+contact;
+  }
 }
 
 function updateContacts (contact = nickNameContact,name=nickNameContact) {
@@ -684,20 +692,20 @@ function updateContacts (contact = nickNameContact,name=nickNameContact) {
 }
 
 function toggle(value = true, landscape=false) {
-  var screenOrientation = window.screen.orientation;
-  var screenWidth = window.innerWidth;
-  var screenHeight = window.innerHeight;
+  const screenOrientation = window.screen.orientation;
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
 
-  var hideDisplay = "none";
-  var blockDisplay = "block";
-  var inlineDisplay = "inline";
-  var flexDisplay = "flex";
+  const hideDisplay = "none";
+  const blockDisplay = "block";
+  const inlineDisplay = "inline";
+  const flexDisplay = "flex";
 
-  var elementsToToggle = document.querySelectorAll('.text, .send, .attachment, .messages, .editProfile');
-  var elementsToHide = document.querySelectorAll('.picMessage, .back');
-  var elementsToHide2 = document.querySelectorAll('.username');
-  var elementsToShow = document.querySelectorAll('.contacts, .search, .logout, .user');
-  var homeElement= document.querySelector('.home');
+  const elementsToToggle = document.querySelectorAll('.text, .send, .attachment, .messages, .editProfile');
+  const elementsToHide = document.querySelectorAll('.picMessage, .back');
+  const elementsToHide2 = document.querySelectorAll('.username');
+  const elementsToShow = document.querySelectorAll('.contacts, .search, .logout, .user');
+  const homeElement= document.querySelector('.home');
 
   homeElement.style.display = landscape? blockDisplay: hideDisplay;
   if (landscape) {
@@ -745,6 +753,7 @@ function newContact() {
     });
   }
 }
+
 
 function newMessages() {
   console.log(nickNameContact);
