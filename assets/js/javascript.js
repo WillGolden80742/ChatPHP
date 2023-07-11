@@ -8,6 +8,7 @@ var orientationDevice = "landscape";
 main();
 // Chame a função downloadAllMidia de uma função assíncrona
 async function main() {
+  loadTitles();
   try {
     await downloadAllMidia();
     // Outras operações após o download das mídias
@@ -332,7 +333,7 @@ async function downloadBase64(nomeHash) {
   }
 }
 
-async function downloadMidia(id,hash) {
+async function downloadMidia(id,hash,usedURLs) {
   try {
     var parts = hash.split('.');
     var format = parts[parts.length - 1].toLowerCase();
@@ -348,19 +349,54 @@ async function downloadMidia(id,hash) {
 }
 
 async function downloadAllMidia() {
-  if (typeof arrMidia !== 'undefined') {
-    for (let i = arrMidia.length - 1; i >= 0; i--) {
-      if (!updatedMsg) {
-        let hash = arrMidia[i];
-        let id = indexMidia[i];
+
+  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
+  var imageElements = Array.from(document.querySelectorAll('.image_file img')).reverse();
+  
+  const currentContact = typeof nickNameContact !== 'undefined' ? nickNameContact : null;
+
+  if (currentContact === null) {
+    return; // Retorna imediatamente se nickNameContact não está definido
+  }
+
+  for (let i = 0; i < imageElements.length; i++) {
+    if (currentContact == nickNameContact) {
+      try {
+        var hash = imageElements[i].getAttribute('id');
+        var id = hash; // ou qualquer outra lógica para obter o ID desejado
         if (usedURLs.has(hash)) {
           document.getElementById(id).src = usedURLs.get(hash);
         } else {
           await downloadMidia(id, hash, usedURLs);
         }
+      } catch (erro) {
+        console.error(erro);
+        // Trate o erro aqui, se necessário
       }
+    } else {
+      return;
     }
   }
+
+  for (let i = 0; i < audioElements.length; i++) {
+    if (currentContact == nickNameContact) {
+      try {
+        var hash = audioElements[i].getAttribute('id');
+        var id = hash; // ou qualquer outra lógica para obter o ID desejado
+        if (usedURLs.has(hash)) {
+          document.getElementById(id).src = usedURLs.get(hash);
+        } else {
+          await downloadMidia(id, hash, usedURLs);
+        }
+      } catch (erro) {
+        console.error(erro);
+        // Trate o erro aqui, se necessário
+      }
+    } else {
+      return;
+    }
+  }
+
 }
 
 function type(format) {
@@ -438,9 +474,9 @@ function embedVideo(link, id) {
   document.getElementById('messages').appendChild(iframeElement);
 }
 
-function embedImage(hash, id) {
+function embedImage(hash) {
   updatedMsg = true;
-  var imageSrc = document.getElementById(id).src;
+  var imageSrc = document.getElementById(hash).src;
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
@@ -662,9 +698,10 @@ function updateMessages (contact = nickNameContact, name=nickNameContact) {
       if (document.getElementById('login') !== null) {
         window.location.href = 'login.php';
       } 
-      updatedMsg=true;
+      downloadAllMidia();
       var newUrl = 'messages.php?contactNickName=' + contact;
       history.pushState(null, '', newUrl);
+      loadTitles();
       updateContacts(contact,name);
     }); 
   } else {
@@ -834,5 +871,33 @@ function loading(b) {
     sendElement.style.backgroundImage = "";
     sendElement.style.backgroundPositionY = "";
     sendElement.style.backgroundPositionX = "";
+  }
+}
+
+function loadTitles() {
+  const elementos = document.getElementsByClassName('linkMsg');
+  let i = elementos.length - 1;
+  const currentContact = typeof nickNameContact !== 'undefined' ? nickNameContact : null;
+
+  if (currentContact === null) {
+    return; // Retorna imediatamente se nickNameContact não está definido
+  }
+
+  while (i >= 0 && currentContact === nickNameContact) {
+    const elemento = elementos[i];
+    const arrayLink = document.getElementById(elemento.id);
+    const link = arrayLink.innerHTML;
+    
+    $.ajax({
+      url: 'getTitle.php',
+      method: 'GET',
+      data: { link: link },
+      dataType: 'json'
+    }).done(function(result) {
+      const linkElemento = document.getElementById(elemento.id);
+      linkElemento.innerHTML = result + "<span style='opacity:0.5;'>" + link + "</span>";
+    });
+    
+    i--;
   }
 }

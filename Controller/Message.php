@@ -1,6 +1,6 @@
 <?php
     class Message {
-
+        private static $countLinks = 0;
         private $msg;
         function __construct($msg, $async) {
             $this->msg = htmlspecialchars($msg, ENT_QUOTES);
@@ -66,12 +66,12 @@
                     $id = $this->splitLink($id);
                     $id = $urlY3.$id;
                 } 
-
-                $linkId = microtime(true).random_int(0, 999);
+                self::$countLinks++;
+                $linkId = self::$countLinks;
                 if ($async) {
-                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text)."<script> link (); function link (){ arrayLink = document.getElementById('$linkId'); link = arrayLink.innerHTML; $.ajax({ url: 'getTitle.php?', method: 'GET', data: {link: link}, dataType: 'json' }).done(function(result) { link = document.getElementById('$linkId').innerHTML; document.getElementById('$linkId').innerHTML = result+\"<span style='opacity:0.5;'>\"+link+\"</span>\" }); }</script>";
+                    $text = str_replace($id,"<a class='linkMsg' id='Link$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text);
                 } else {
-                    $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
+                    $text = str_replace($id,"<a class='linkMsg' id='Link$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
                 }  
             }
             

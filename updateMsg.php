@@ -4,5 +4,5 @@
     $auth = new AutenticateModel();
     
     if (!empty($_POST['contactNickName'])) {
-        echo $user->allMessagesSync(new StringT($_POST['contactNickName']));
+        echo $user->allMessages(new StringT($_POST['contactNickName']));
     } 

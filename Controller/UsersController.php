@@ -151,11 +151,6 @@
             $query = $this->allMessagesQuery($contactNickName);
             return $this->messages ($query,$contactNickName,true);
         } 
-        
-        function allMessagesSync (StringT $contactNickName) {
-            $query = $this->allMessagesQuery($contactNickName);
-            return $this->messages ($query,$contactNickName,false);
-        } 
 
         function allMessagesQuery (StringT $contactNickName) {
             return $this->user->messages(new StringT($this->nickSession),$contactNickName);
@@ -228,13 +223,13 @@
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center> 
-                                        <audio id=\"$this->indexMidia\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                     </center>
                                 </div>".$this->source ($hash);
                     } elseif ($this->isImage($extensao)) {
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$this->indexMidia\" onclick=\"embedImage('$hash','$this->indexMidia')\" src=\"Images/blank.png\" width=\"250px\" alt=\"" . $nome . "\" >
+                                        <img id=\"$hash\" onclick=\"embedImage('$hash')\" src=\"Images/blank.png\" width=\"250px\" alt=\"" . $nome . "\" >
                                     </center>
                                 </div>".$this->source ($hash);
                     } else {
@@ -250,13 +245,13 @@
                     } elseif ($this->isAudio($extensao)) {
                         return "<div class=\"audio_file\">
                                     <center>
-                                        <audio id=\"$this->indexMidia\"  style=\"width: -webkit-fill-available;\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                     </center>
                                 </div>";
                     } elseif ($this->isImage($extensao)) {
                         return "<div class=\"image_file\">
                                     <center>
-                                        <img id=\"$this->indexMidia\" onclick=\"embedImage('$hash','$this->indexMidia')\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"250px\" alt=\"" . $nome . "\">
+                                        <img id=\"$hash\" onclick=\"embedImage('$hash')\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"250px\" alt=\"" . $nome . "\">
                                     </center>
                                 </div>";
                     } else {
