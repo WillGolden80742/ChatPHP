@@ -364,9 +364,11 @@ async function downloadAllAudios (time) {
           await downloadMidia(id, hash, usedURLs);
         }
         if (audioTime.has(hash)) {
-          if (audioTime.get(hash) !== 0 && audioTime.get(hash) !== audioElements[i].duration) {
-            audioElements[i].currentTime = audioTime.get(hash);
-            audioElements[i].play();
+          if (audioTime.get(hash)[0] !== 0 && audioTime.get(hash)[0] !== audioElements[i].duration) {
+            audioElements[i].currentTime = audioTime.get(hash)[0];
+            if (!audioTime.get(hash)[1]) {
+              audioElements[i].play();
+            }
           }
         }
       } catch (erro) {
@@ -406,7 +408,7 @@ function getAudioTimes () {
   for (let i = 0; i < audioElements.length; i++) {
     try {
       var hash = audioElements[i].getAttribute('id');
-      audioTime.set(hash,audioElements[i].currentTime);
+      audioTime.set(hash,[audioElements[i].currentTime,audioElements[i].paused]);
     } catch (erro) {
       console.error(erro);
       // Trate o erro aqui, se necessário
@@ -703,7 +705,7 @@ function waitingMsg() {
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
   if (contact !== nickNameContact) {
     for (let key of audioTime.keys()) {
-      audioTime.set(key, 0);
+      audioTime.set(key,[0,true]);
     }  
   } else {
     getAudioTimes();
