@@ -1,9 +1,9 @@
 <?php
     include 'Model/AutenticateModel.php';
     class AutenticateController {
+        private $authModel;
         function __construct() {
             $this->authModel = new AutenticateModel();
-            $this->conFactory = new ConnectionFactory();
         }
         // USER 
         function login (StringT $nick,$pass) {    

@@ -5,6 +5,7 @@
     session_start();
     class AutenticateModel {
         private $conFactory;
+        private $conFactoryPDO;
         function __construct() {
             $this->conFactory = new ConnectionFactory();
             $this->conFactoryPDO = new ConnectionFactoryPDO();

@@ -4,9 +4,9 @@
     class UsersController {
         private $auth;
         private $sessions;
-        private $indexMidia=0;
+        private $user;
+        private $nickSession;
         function __construct() {
-            $this->conFactory = new ConnectionFactory();
             $this->auth = new AutenticateController();
             $this->user = new UsersModel();
             $this->sessions = new Sessions();
@@ -157,7 +157,6 @@
         }          
 
         function messages ($queryMessages,StringT $contactNickName,$async) {
-            $this->indexMidia=0;
             $this->receivedMsg($contactNickName);
             $messages = array();
             if (mysqli_num_rows($queryMessages) > 0) {
@@ -176,7 +175,7 @@
                             $message = new Message($row["Messages"], $async);
                             $hour = $row["HourMsg"];
                             $id = $row["Idmessage"];
-                            $nome_anexo = $this->getMedia($row["nome_anexo"],$row["arquivo_anexo"],$async);
+                            $nome_anexo = $this->getMedia($row["nome_anexo"],$row["arquivo_anexo"]);
                             $messages[$count++] = array($from, $message.$nome_anexo, $hour, $id, $left);
                         }
                     }
@@ -212,67 +211,39 @@
             return $mensagens;
         }
 
-        function getMedia ($nome,$hash,$async) {
+        function getMedia ($nome,$hash) {
             $extensao = pathinfo($nome, PATHINFO_EXTENSION);
             
             if (!empty($nome)) {
-                if ($async) {
-                    $this->indexMidia+=1;
-                    if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
-                    } elseif ($this->isAudio($extensao)) {
-                        return "<div class=\"audio_file\">
-                                    <center> 
-                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
-                                    </center>
-                                </div>".$this->source ($hash);
-                    } elseif ($this->isImage($extensao)) {
-                        return "<div class=\"image_file\">
-                                    <center>
-                                        <img id=\"$hash\" onclick=\"embedImage('$hash')\" src=\"Images/blank.png\" width=\"250px\" alt=\"" . $nome . "\" >
-                                    </center>
-                                </div>".$this->source ($hash);
-                    } else {
-                        return "<div class=\"attachment_file\">
-                                    <img class=\"fileIcon\" src=\"Images/filesIcon.svg\"/>
-                                    <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
-                                </div>";
-                    }
+                if ($this->isVideo($extensao)) {
+                    return "<div class=\"attachment_file\" id=\"$hash\"  onclick=\"showPlayer('$hash','video','$extensao');\">
+                                <img class=\"videoIcon\" src=\"Images/video.svg\"/>
+                                <a href=\"#\" >" . $nome . "</a>
+                            </div>";
+                } elseif ($this->isAudio($extensao)) {
+                    return "<div class=\"audio_file\">
+                                <center> 
+                                    <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                </center>
+                            </div>";
+                } elseif ($this->isImage($extensao)) {
+                    return "<div class=\"image_file\">
+                                <center>
+                                    <img id=\"$hash\" onclick=\"embedImage('$hash')\" src=\"Images/blank.png\" width=\"250px\" alt=\"" . $nome . "\" >
+                                </center>
+                            </div>";
                 } else {
-                    $this->indexMidia+=1;
-                    if ($this->isVideo($extensao)) {
-                        return "<div class=\"video_file\" id=\"$hash\" onclick=\"showPlayer('$hash','video','$extensao');\" style=\" height: 250px; background-image: url(Images/play.svg); background-position-x: 50%; padding: 10px; width: 92%; \"> &nbsp;$nome </div>";
-                    } elseif ($this->isAudio($extensao)) {
-                        return "<div class=\"audio_file\">
-                                    <center>
-                                        <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" src=\"data:audio/$extensao;base64,".$this->downloadFile($hash)."\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
-                                    </center>
-                                </div>";
-                    } elseif ($this->isImage($extensao)) {
-                        return "<div class=\"image_file\">
-                                    <center>
-                                        <img id=\"$hash\" onclick=\"embedImage('$hash')\" src=\"data:image/$extensao;base64,".$this->downloadFile($hash)."\" width=\"250px\" alt=\"" . $nome . "\">
-                                    </center>
-                                </div>";
-                    } else {
-                        return "<div class=\"attachment_file\">
-                                    <img class=\"fileIcon\" src=\"Images/filesIcon.svg\"/>
-                                    <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
-                                </div>";
-                    } 
+                    return "<div class=\"attachment_file\">
+                                <img class=\"fileIcon\" src=\"Images/filesIcon.svg\"/>
+                                <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
+                            </div>";
                 }
+            
             } else {
                 return '';
             }
         }
-        
-        function source ($hash) {
-            return "
-            <script>
-                indexMidia.push(\"$this->indexMidia\");
-                arrMidia.push(\"$hash\");
-            </script>";
-        }
+
 
         function isVideo($extensao) {
             $videoExtensions = array('mp4', 'webm'); // Adicione aqui as extensões de vídeo suportadas

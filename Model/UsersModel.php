@@ -4,6 +4,7 @@
     include 'Controller/Message.php';
     class UsersModel {
         private $conFactory;
+        private $conFactoryPDO;
         private $auth;
         function __construct() {
             $this->conFactory = new ConnectionFactory();

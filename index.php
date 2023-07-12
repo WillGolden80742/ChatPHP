@@ -10,8 +10,6 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 
   <script>
-    let arrMidia = [];
-    let indexMidia = [];
     const usedURLs = new Map();
     <?php 
       $nickNameContact = "";

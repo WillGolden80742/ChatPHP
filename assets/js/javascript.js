@@ -5,6 +5,7 @@ var h;
 var profilePicSrc;
 var updatedMsg = false;
 var orientationDevice = "landscape";
+var timestamp = new Date().getTime();
 main();
 // Chame a função downloadAllMidia de uma função assíncrona
 async function main() {
@@ -246,18 +247,14 @@ var downloading = false;
 function showPlayer(hash,tipo,extensao) {
     if (!downloading) {
         downloading = true;
-        var videoDiv = document.getElementById(hash);
-        videoDiv.style.backgroundImage = 'url(Images/download.gif)';
-        videoDiv.style.backgroundSize = '40%';
-        videoDiv.style.backgroundPositionY = '50%';
-        videoDiv.style.backgroundRepeat = 'no-repeat';
+        var videoDiv = document.getElementById(hash).querySelector('img');
+        videoDiv.src = 'Images/loading.gif';
         downloadBase64(hash)
         .then(function(dados) {
             var contentBlob = b64toBlob(dados, tipo+"/"+extensao);
             urlContent = URL.createObjectURL(contentBlob);
-            videoDiv.style.backgroundImage = 'url(Images/play.svg)';
-            videoDiv.style.backgroundSize = '';
-            videoDiv.style.backgroundPositionY = '';
+            var videoDiv = document.getElementById(hash).querySelector('img');
+            videoDiv.src = 'Images/video.svg';
             embedVideo(urlContent,urlContent);
             downloading = false;
         })
@@ -349,37 +346,15 @@ async function downloadMidia(id,hash,usedURLs) {
 }
 
 async function downloadAllMidia() {
+  const time = timestamp;
+  await downloadAllAudios(time);
+  await downloadAllImages(time);
+}
 
+async function downloadAllAudios (time) {
   var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
-  var imageElements = Array.from(document.querySelectorAll('.image_file img')).reverse();
-  
-  const currentContact = typeof nickNameContact !== 'undefined' ? nickNameContact : null;
-
-  if (currentContact === null) {
-    return; // Retorna imediatamente se nickNameContact não está definido
-  }
-
-  for (let i = 0; i < imageElements.length; i++) {
-    if (currentContact == nickNameContact) {
-      try {
-        var hash = imageElements[i].getAttribute('id');
-        var id = hash; // ou qualquer outra lógica para obter o ID desejado
-        if (usedURLs.has(hash)) {
-          document.getElementById(id).src = usedURLs.get(hash);
-        } else {
-          await downloadMidia(id, hash, usedURLs);
-        }
-      } catch (erro) {
-        console.error(erro);
-        // Trate o erro aqui, se necessário
-      }
-    } else {
-      return;
-    }
-  }
-
   for (let i = 0; i < audioElements.length; i++) {
-    if (currentContact == nickNameContact) {
+    if (time == timestamp) {
       try {
         var hash = audioElements[i].getAttribute('id');
         var id = hash; // ou qualquer outra lógica para obter o ID desejado
@@ -396,7 +371,28 @@ async function downloadAllMidia() {
       return;
     }
   }
+}
 
+async function downloadAllImages (time) {
+  var imageElements = Array.from(document.querySelectorAll('.image_file img')).reverse();
+  for (let i = 0; i < imageElements.length; i++) {
+    if (time == timestamp) {
+      try {
+        var hash = imageElements[i].getAttribute('id');
+        var id = hash; // ou qualquer outra lógica para obter o ID desejado
+        if (usedURLs.has(hash)) {
+          document.getElementById(id).src = usedURLs.get(hash);
+        } else {
+          await downloadMidia(id, hash, usedURLs);
+        }
+      } catch (erro) {
+        console.error(erro);
+        // Trate o erro aqui, se necessário
+      }
+    } else {
+      return;
+    }
+  }
 }
 
 function type(format) {
@@ -420,7 +416,7 @@ function type(format) {
 }
 
 function embedYoutube(id) {
-  updatedMsg = true;
+  timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
@@ -448,7 +444,7 @@ function embedYoutube(id) {
 }
 
 function embedVideo(link, id) {
-  updatedMsg = true;
+  timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
@@ -475,7 +471,7 @@ function embedVideo(link, id) {
 }
 
 function embedImage(hash) {
-  updatedMsg = true;
+  timestamp = new Date().getTime();
   var imageSrc = document.getElementById(hash).src;
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
@@ -518,9 +514,7 @@ function closeImage() {
 }
 
 function close() {
-  updatedMsg = false;
   fetchNewMessages = true;
-  newContact();
   document.getElementById('messages').innerHTML=msgsContents;
   document.getElementById('messages').scrollTo(0, scrollPos);
   newContact();
@@ -685,6 +679,7 @@ function waitingMsg() {
 }
 
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
+  timestamp = new Date().getTime();
   nickNameContact = contact;
   const currentUrl = window.location.href;
   if (currentUrl.includes('messages.php')) {
@@ -826,6 +821,8 @@ function newMessages() {
       document.getElementById('messages').innerHTML = result[1];
       downButton(false);
     }
+    timestamp = new Date().getTime();
+    downloadAllMidia();
   });
 }
 
@@ -877,13 +874,9 @@ function loading(b) {
 function loadTitles() {
   const elementos = document.getElementsByClassName('linkMsg');
   let i = elementos.length - 1;
-  const currentContact = typeof nickNameContact !== 'undefined' ? nickNameContact : null;
+  const time = timestamp;
 
-  if (currentContact === null) {
-    return; // Retorna imediatamente se nickNameContact não está definido
-  }
-
-  while (i >= 0 && currentContact === nickNameContact) {
+  while (i >= 0 && time === timestamp) {
     const elemento = elementos[i];
     const arrayLink = document.getElementById(elemento.id);
     const link = arrayLink.innerHTML;
