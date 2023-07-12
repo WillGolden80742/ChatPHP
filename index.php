@@ -11,6 +11,7 @@
 
   <script>
     const usedURLs = new Map();
+    const audioTime = new Map();
     <?php 
       $nickNameContact = "";
       if (!empty($_GET['contactNickName'])) {

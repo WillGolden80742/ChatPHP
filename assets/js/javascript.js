@@ -363,6 +363,12 @@ async function downloadAllAudios (time) {
         } else {
           await downloadMidia(id, hash, usedURLs);
         }
+        if (audioTime.has(hash)) {
+          if (audioTime.get(hash) !== 0 && audioTime.get(hash) !== audioElements[i].duration) {
+            audioElements[i].currentTime = audioTime.get(hash);
+            audioElements[i].play();
+          }
+        }
       } catch (erro) {
         console.error(erro);
         // Trate o erro aqui, se necessário
@@ -395,6 +401,19 @@ async function downloadAllImages (time) {
   }
 }
 
+function getAudioTimes () {
+  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
+  for (let i = 0; i < audioElements.length; i++) {
+    try {
+      var hash = audioElements[i].getAttribute('id');
+      audioTime.set(hash,audioElements[i].currentTime);
+    } catch (erro) {
+      console.error(erro);
+      // Trate o erro aqui, se necessário
+    }
+  }
+}
+
 function type(format) {
   format = format.toLowerCase();
   switch (format) {
@@ -416,6 +435,7 @@ function type(format) {
 }
 
 function embedYoutube(id) {
+  getAudioTimes();
   timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
@@ -444,6 +464,7 @@ function embedYoutube(id) {
 }
 
 function embedVideo(link, id) {
+  getAudioTimes();
   timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
@@ -471,6 +492,7 @@ function embedVideo(link, id) {
 }
 
 function embedImage(hash) {
+  getAudioTimes();
   timestamp = new Date().getTime();
   var imageSrc = document.getElementById(hash).src;
   fetchNewMessages = false;
@@ -679,6 +701,13 @@ function waitingMsg() {
 }
 
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
+  if (contact !== nickNameContact) {
+    for (let key of audioTime.keys()) {
+      audioTime.set(key, 0);
+    }  
+  } else {
+    getAudioTimes();
+  }
   timestamp = new Date().getTime();
   nickNameContact = contact;
   const currentUrl = window.location.href;
@@ -811,6 +840,7 @@ function newMessages() {
     dataType: 'json'
   }).done(function(result) {
     if (result[0] == "1") {
+      getAudioTimes();
       document.getElementById('messages').innerHTML = result[1];
       if (((document.getElementById("messages").scrollTop) / h) * 100 >= 90) {
         down();
@@ -818,6 +848,7 @@ function newMessages() {
         downButton(true);
       }
     } else if (result[0] == "2") {
+      getAudioTimes();
       document.getElementById('messages').innerHTML = result[1];
       downButton(false);
     }
