@@ -683,5 +683,78 @@
     }
     
 
-  } 
+} 
   
+/* Interface de Player */
+
+.player {
+  width: -webkit-fill-available;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 40px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.play-button {
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  border-radius: 100%;
+  background-image: url("../../Images/Player/play-button.svg");
+  background-position: 50% 50%;
+  background-size: 30%;
+  background-repeat: no-repeat;
+}
+
+.progress-bar {
+  flex-grow: 1;
+  height: 6px;
+  background-color: #ccc;
+  margin: 0 10px;
+  position: relative;
+  cursor: pointer; /* Adicionado para permitir a interação com a barra de progresso */
+}
+
+.progress {
+  height: 100%;
+  background-color: #000;
+  width:10%; /* Altere aqui para definir o progresso atual */
+}
+
+.time {
+  display: flex;
+  align-items: center;
+}
+
+.current-time,
+.duration {
+  font-size: 12px;
+  margin: 0 5px;
+}
+
+.volume-bar {
+  width:3%;
+  height: 6px;
+  background-color: #ccc;
+  margin: 0 10px;
+  position: relative;
+  cursor: pointer; /* Adicionado para permitir a interação com a barra de volume */
+}
+
+
+.volume-bar:hover {
+  transition:0.125s;
+  margin: 0 0px;
+  width:15%;
+}
+
+.volume {
+  height: 100%;
+  background-color: #000;
+  width: 10%; /* Altere aqui para definir o volume atual */
+}

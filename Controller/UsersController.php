@@ -222,8 +222,23 @@
                             </div>";
                 } elseif ($this->isAudio($extensao)) {
                     return "<div class=\"audio_file\">
+                                <div class=\"player\" style=\"display:none;\">
+                                    <div class=\"controls\">
+                                        <div class=\"play-button\"></div>
+                                        <div class=\"time\">
+                                            <span class=\"current-time\">0:00</span>
+                                            <span class=\"duration\">0:00</span>
+                                        </div>
+                                        <div class=\"progress-bar\">
+                                            <div class=\"progress\"></div>
+                                        </div>
+                                        <div class=\"volume-bar\">
+                                            <div class=\"volume\"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <center> 
-                                    <audio id=\"$hash\"  style=\"width: -webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                    <audio id=\"$hash\"  style=\"width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                 </center>
                             </div>";
                 } elseif ($this->isImage($extensao)) {
