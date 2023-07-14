@@ -201,7 +201,7 @@
     background-color: rgba(127,127,127,0.5);
     width: 100%;
     border:solid 2px #285d33;
-    border-radius:50px;
+    border-radius:10px;
     box-shadow: inset 0px 0px 10px 5px rgb(0 0 0 / 35%);
   }
 
@@ -689,9 +689,9 @@
 
 .player {
   width: -webkit-fill-available;
-  background-color: #f0f0f0;
+  background-color: #285d33;
   padding: 10px;
-  border-radius: 40px;
+  border-radius:10px;
 }
 
 .controls {
@@ -703,27 +703,32 @@
 .play-button {
   width: 40px;
   height: 40px;
-  background-color: #000;
-  border-radius: 100%;
+  border-radius: 5px;
   background-image: url("../../Images/Player/play-button.svg");
   background-position: 50% 50%;
-  background-size: 30%;
+  background-size: 50%;
+  background-color: #285d33;
+  border: 3px solid #285d33;
   background-repeat: no-repeat;
 }
 
+
 .progress-bar {
   flex-grow: 1;
-  height: 6px;
+  height: 20px;
   background-color: #ccc;
   margin: 0 10px;
   position: relative;
   cursor: pointer; /* Adicionado para permitir a interação com a barra de progresso */
+  border-radius:5px;
 }
 
 .progress {
   height: 100%;
-  background-color: #000;
-  width:10%; /* Altere aqui para definir o progresso atual */
+  background-color: #1d8634;
+  width:0; /* Altere aqui para definir o progresso atual */
+  transition:0.25s;
+  border-radius:5px;
 }
 
 .time {
@@ -737,24 +742,3 @@
   margin: 0 5px;
 }
 
-.volume-bar {
-  width:3%;
-  height: 6px;
-  background-color: #ccc;
-  margin: 0 10px;
-  position: relative;
-  cursor: pointer; /* Adicionado para permitir a interação com a barra de volume */
-}
-
-
-.volume-bar:hover {
-  transition:0.125s;
-  margin: 0 0px;
-  width:15%;
-}
-
-.volume {
-  height: 100%;
-  background-color: #000;
-  width: 10%; /* Altere aqui para definir o volume atual */
-}

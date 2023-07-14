@@ -330,15 +330,138 @@ async function downloadBase64(nomeHash) {
   }
 }
 
-async function downloadMidia(id,hash,usedURLs) {
+var currentIDPlayer = "";
+
+function togglePlay(hash, player = true) {
+  var playButton = document.getElementById(hash).querySelector(".controls .play-button");
+  var playerAudio = document.getElementById('playerAudio');
+  var progressBar = document.getElementById(hash).querySelector('.progress-bar');
+  var progress = document.getElementById(hash).querySelector('.progress-bar .progress');
+  var currentTimeElement = document.getElementById(hash).querySelector('.time .current-time');
+  var durationElement = document.getElementById(hash).querySelector('.time .duration');
+
+  if (player) {
+      document.querySelectorAll(".play-button").forEach(function(playButton) {
+        playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+      });
+
+      var clickPosition = parseFloat(progress.style.width.replace("%", "")) || 0;
+      var seekTime = (clickPosition / 100) * playerAudio.duration;
+
+      if (currentIDPlayer !== hash) {
+        document.querySelectorAll(".progress").forEach(function(progress) {
+          progress.style.width = "0%";
+        });
+        playButton.style.backgroundImage = "url('Images/loading.gif')";
+        // Simulate audio downloading delay
+        playButton.disabled = true;
+        setTimeout(function() {
+          downloadMidia('playerAudio', hash, usedURLs)
+            .then(() => {
+              playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
+              playerAudio.play();
+
+              currentIDPlayer = hash;
+              // Execute the remaining code here
+              // ...
+            })
+            .catch((error) => {
+              console.error('Error downloading media:', error);
+            })
+            .finally(() => {
+              playButton.disabled = false;
+            });
+        }, 1000); // Adjust the delay time as needed
+      } else if (!playerAudio.paused) {
+        playerAudio.pause();
+        playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+      } else {
+        playerAudio.play();
+
+        if (!isNaN(seekTime) && isFinite(seekTime)) {
+          playerAudio.currentTime = seekTime;
+        }
+
+        playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
+      }
+  } else {
+    // Update play button based on audio playback status
+    if (!playerAudio.paused) {
+      playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
+    } else {
+      playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+    }
+  }
+
+  // Update progress bar
+  playerAudio.addEventListener('timeupdate', function() {
+    if (currentIDPlayer === hash) {
+      var duration = playerAudio.duration;
+      var currentTime = playerAudio.currentTime;
+
+      if (duration === 0 || currentTime === 0) {
+        currentTimeElement.textContent = "0:00";
+        durationElement.textContent = "0:00";
+        progress.style.width = "0%";
+      } else {
+        var progressPercentage = (currentTime / duration) * 100;
+        progress.style.width = progressPercentage + "%";
+
+        // Update current time
+        var currentMinutes = Math.floor(currentTime / 60);
+        var currentSeconds = Math.floor(currentTime % 60);
+        currentTimeElement.textContent = currentMinutes + ":" + (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
+        // Update duration
+        var durationMinutes = Math.floor(duration / 60);
+        var durationSeconds = Math.floor(duration % 60);
+        durationElement.textContent = durationMinutes + ":" + (durationSeconds < 10 ? "0" : "") + durationSeconds;
+      }
+    }
+  });
+
+  // Monitor the audio playback completion event
+  playerAudio.addEventListener('ended', function() {
+    if (currentIDPlayer === hash) {
+      playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+      currentIDPlayer = ""; // Clear the current player ID
+      progress.style.width = "0%"; // Set the progress bar width to 100%
+    }
+  });
+
+  // Seek to a specific time on progress bar click
+  progressBar.addEventListener('click', function(e) {
+    if (currentIDPlayer === hash) {
+      var progressWidth = progressBar.offsetWidth;
+      var clickPosition = e.offsetX;
+      var seekTime = (clickPosition / progressWidth) * playerAudio.duration;
+
+      if (!isNaN(seekTime) && isFinite(seekTime)) {
+        playerAudio.currentTime = seekTime;
+      }
+    }
+  });
+}
+
+
+
+async function downloadMidia(id, hash, usedURLs) {
   try {
-    var parts = hash.split('.');
-    var format = parts[parts.length - 1].toLowerCase();
-    var dados = await downloadBase64(hash);
-    var contentBlob = b64toBlob(dados, type(format) + '/' + format);
-    var url = URL.createObjectURL(contentBlob);
-    document.getElementById(id).src = url;
-    usedURLs.set(hash, url); 
+    var elements = Array.from(document.querySelectorAll('[id="' + id + '"]'));
+    
+    elements.forEach(async function (element) {
+      if (usedURLs.has(hash)) {
+        element.src = usedURLs.get(hash);
+      } else {
+        var parts = hash.split('.');
+        var format = parts[parts.length - 1].toLowerCase();
+        var dados = await downloadBase64(hash);
+        var contentBlob = b64toBlob(dados, type(format) + '/' + format);
+        var url = URL.createObjectURL(contentBlob);
+        element.src = url;
+        usedURLs.set(hash, url);
+      }
+    });
   } catch (erro) {
     console.error(erro);
     // Trate o erro aqui, se necessário
@@ -347,52 +470,19 @@ async function downloadMidia(id,hash,usedURLs) {
 
 async function downloadAllMidia() {
   const time = timestamp;
-  await downloadAllAudios(time);
   await downloadAllImages(time);
 }
 
-async function downloadAllAudios (time) {
-  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
-  for (let i = 0; i < audioElements.length; i++) {
-    if (time == timestamp) {
-      try {
-        var hash = audioElements[i].getAttribute('id');
-        var id = hash; // ou qualquer outra lógica para obter o ID desejado
-        if (usedURLs.has(hash)) {
-          document.getElementById(id).src = usedURLs.get(hash);
-        } else {
-          await downloadMidia(id, hash, usedURLs);
-        }
-        if (audioTime.has(hash)) {
-          if (audioTime.get(hash)[0] !== 0 && audioTime.get(hash)[0] !== audioElements[i].duration) {
-            audioElements[i].currentTime = audioTime.get(hash)[0];
-            if (!audioTime.get(hash)[1]) {
-              audioElements[i].play();
-            }
-          }
-        }
-      } catch (erro) {
-        console.error(erro);
-        // Trate o erro aqui, se necessário
-      }
-    } else {
-      return;
-    }
-  }
-}
 
-async function downloadAllImages (time) {
+async function downloadAllImages(time) {
   var imageElements = Array.from(document.querySelectorAll('.image_file img')).reverse();
-  for (let i = 0; i < imageElements.length; i++) {
+
+  imageElements.forEach(async function (imageElement) {
     if (time == timestamp) {
       try {
-        var hash = imageElements[i].getAttribute('id');
+        var hash = imageElement.getAttribute('id');
         var id = hash; // ou qualquer outra lógica para obter o ID desejado
-        if (usedURLs.has(hash)) {
-          document.getElementById(id).src = usedURLs.get(hash);
-        } else {
-          await downloadMidia(id, hash, usedURLs);
-        }
+        await downloadMidia(id, hash, usedURLs);
       } catch (erro) {
         console.error(erro);
         // Trate o erro aqui, se necessário
@@ -400,21 +490,9 @@ async function downloadAllImages (time) {
     } else {
       return;
     }
-  }
+  });
 }
 
-function getAudioTimes () {
-  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
-  for (let i = 0; i < audioElements.length; i++) {
-    try {
-      var hash = audioElements[i].getAttribute('id');
-      audioTime.set(hash,[audioElements[i].currentTime,audioElements[i].paused]);
-    } catch (erro) {
-      console.error(erro);
-      // Trate o erro aqui, se necessário
-    }
-  }
-}
 
 function type(format) {
   format = format.toLowerCase();
@@ -437,7 +515,7 @@ function type(format) {
 }
 
 function embedYoutube(id) {
-  getAudioTimes();
+  
   timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
@@ -466,7 +544,7 @@ function embedYoutube(id) {
 }
 
 function embedVideo(link, id) {
-  getAudioTimes();
+  
   timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
@@ -494,7 +572,7 @@ function embedVideo(link, id) {
 }
 
 function embedImage(hash) {
-  getAudioTimes();
+  
   timestamp = new Date().getTime();
   var imageSrc = document.getElementById(hash).src;
   fetchNewMessages = false;
@@ -703,13 +781,6 @@ function waitingMsg() {
 }
 
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
-  if (contact !== nickNameContact) {
-    for (let key of audioTime.keys()) {
-      audioTime.set(key,[0,true]);
-    }  
-  } else {
-    getAudioTimes();
-  }
   timestamp = new Date().getTime();
   nickNameContact = contact;
   const currentUrl = window.location.href;
@@ -842,7 +913,7 @@ function newMessages() {
     dataType: 'json'
   }).done(function(result) {
     if (result[0] == "1") {
-      getAudioTimes();
+      
       document.getElementById('messages').innerHTML = result[1];
       if (((document.getElementById("messages").scrollTop) / h) * 100 >= 90) {
         down();
@@ -850,7 +921,7 @@ function newMessages() {
         downButton(true);
       }
     } else if (result[0] == "2") {
-      getAudioTimes();
+      
       document.getElementById('messages').innerHTML = result[1];
       downButton(false);
     }
@@ -927,3 +998,6 @@ function loadTitles() {
     i--;
   }
 }
+
+
+
