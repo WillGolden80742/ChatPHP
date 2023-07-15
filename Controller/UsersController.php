@@ -222,7 +222,8 @@
                             </div>";
                 } elseif ($this->isAudio($extensao)) {
                     return "<div class=\"audio_file\">
-                                <div class=\"player\" id='$hash' onclick=\"togglePlay('$hash');\" >
+                                <center><p class='name'>$nome</p></center>
+                                <div class=\"player\" id='player$hash' onclick=\"togglePlay('$hash');\" >
                                     <div class=\"controls\">
                                         <div class=\"play-button\"></div>
                                         <div class=\"time\">
@@ -235,7 +236,7 @@
                                     </div>
                                 </div>
                                 <center> 
-                                    <audio class=\"audioPlayer\" id='audio$hash' style=\"display:none;width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                    <audio class=\"audioPlayer\" id='$hash' style=\"display:none;width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                 </center>
                             </div>";
                 } elseif ($this->isImage($extensao)) {
@@ -264,7 +265,7 @@
         }
 
         function isAudio($extensao) {
-            $audioExtensions = array('mp3', 'wav', 'ogg'); // Adicione aqui as extensões de áudio suportadas
+            $audioExtensions = array('mp3', 'wav', 'm4a', 'ogg'); // Adicione aqui as extensões de áudio suportadas
 
             return in_array($extensao, $audioExtensions);
         }

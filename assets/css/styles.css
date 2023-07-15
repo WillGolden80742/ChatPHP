@@ -202,7 +202,6 @@
     border-radius: 10px;
   }
 
-
   .fileIcon {
     width:15px;
     height:15px;
@@ -581,11 +580,24 @@
 
 /* Interface de Player */
 
+.audio_file .name {
+  border-radius:40px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: rgba(127,127,127,0.5);
+  padding:10px;
+  margin-bottom:0;
+  border:solid 2px #285d33;
+  border-bottom:0;
+}
+
 .player {
   width: -webkit-fill-available;
   background-color: rgba(127,127,127,0.5);
   padding: 10px;
   border-radius:40px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   border: 3px solid #285d33;
 }
 
@@ -604,6 +616,7 @@
   background-size: 50%;
   background-color: rgba(255,255,255,0.5);
   background-repeat: no-repeat;
+  transition:0.25s;
 }
 
 
@@ -639,8 +652,12 @@
 
 @media (orientation: portrait) or (max-width: 900px) {
 
+
+
     .player {
-      border-radius:80px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      padding:20px;
     }
 
     .play-button {
@@ -660,7 +677,7 @@
     .current-time,
     .duration {
       font-size: 24px;
-      margin: 0 5px;
+      margin-left:20px;
     }
 
     .embed-link, .embed-download,  .embed-close {

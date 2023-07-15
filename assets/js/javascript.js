@@ -333,12 +333,12 @@ async function downloadBase64(nomeHash) {
 var currentIDPlayer = "";
 
 async function togglePlay(hash) {
-  var playButton = document.getElementById(hash).querySelector(".controls .play-button");
-  var playerAudio = document.getElementById('audio'+hash);
-  var progressBar = document.getElementById(hash).querySelector('.progress-bar');
-  var progress = document.getElementById(hash).querySelector('.progress-bar .progress');
-  var currentTimeElement = document.getElementById(hash).querySelector('.time .current-time');
-  var durationElement = document.getElementById(hash).querySelector('.time .duration');
+  var playButton = document.getElementById("player"+hash).querySelector(".controls .play-button");
+  var playerAudio = document.getElementById(hash);
+  var progressBar = document.getElementById("player"+hash).querySelector('.progress-bar');
+  var progress = document.getElementById("player"+hash).querySelector('.progress-bar .progress');
+  var currentTimeElement = document.getElementById("player"+hash).querySelector('.time .current-time');
+  var durationElement = document.getElementById("player"+hash).querySelector('.time .duration');
   const playIcon = "url('Images/Player/play-button.svg')";
   const pauseIcon = "url('Images/Player/pause-button.svg')";
 
@@ -431,7 +431,7 @@ async function downloadMidia(id, hash, usedURLs) {
         element.src = url;
         usedURLs.set(hash, url);
       }
-      var element = document.getElementById(hash);
+      var element = document.getElementById("player"+hash);
       if (element) {
         var playButton = element.querySelector(".controls .play-button");
         if (playButton) {
@@ -476,7 +476,7 @@ async function downloadAllAudios(time) {
   for (let i = 0; i < audioElements.length; i++) {
     if (time == timestamp) {
       try {
-        var hash = audioElements[i].getAttribute('id').replace("audio","");
+        var hash = audioElements[i].getAttribute('id');
         var id = audioElements[i].getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
         await downloadMidia(id, hash, usedURLs);
         if (audioTime.has(hash)) {
@@ -502,7 +502,7 @@ function getAudioTimes () {
   var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
   for (let i = 0; i < audioElements.length; i++) {
     try {
-      var hash = audioElements[i].getAttribute('id').replace("audio","");
+      var hash = audioElements[i].getAttribute('id');
       audioTime.set(hash,[audioElements[i].currentTime,audioElements[i].paused]);
     } catch (erro) {
       console.error(erro);
