@@ -612,7 +612,7 @@
   width: 40px;
   height: 40px;
   border-radius:100%;
-  background-image: url("../../Images/loading.gif");
+  background-image: url("../../Images/Player/loading.gif");
   background-position: 50% 50%;
   background-size: 50%;
   background-color: rgba(255,255,255,0.5);
