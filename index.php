@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 
   <script>
-    const usedURLs = new Map();
+    const cookie = new Map();
     const audioTime = new Map();
     <?php 
       $nickNameContact = "";

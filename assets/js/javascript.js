@@ -249,10 +249,10 @@ function showPlayer(hash,tipo,extensao) {
         downloading = true;
         var videoDiv = document.getElementById(hash).querySelector('img');
         videoDiv.src = 'Images/loading.gif';
-        if (usedURLs.has(hash)) {
+        if (cookie.has(hash)) {
           var videoDiv = document.getElementById(hash).querySelector('img');
           videoDiv.src = 'Images/video.svg';
-          var url = usedURLs.get(hash);
+          var url = cookie.get(hash);
           embedVideo(url,url);
           downloading = false;
         } else {
@@ -263,7 +263,7 @@ function showPlayer(hash,tipo,extensao) {
               var videoDiv = document.getElementById(hash).querySelector('img');
               videoDiv.src = 'Images/video.svg';
               embedVideo(urlContent,urlContent);
-              usedURLs.set(hash,urlContent);
+              cookie.set(hash,urlContent);
               downloading = false;
           }) .catch(function(erro) {
             console.error(erro);
@@ -274,9 +274,9 @@ function showPlayer(hash,tipo,extensao) {
 }
 
 function downloadFile(nomeHash, nome) {
-  if (usedURLs.has(nomeHash)) {
+  if (cookie.has(nomeHash)) {
     var downloadLink = document.createElement('a');
-    downloadLink.href = usedURLs.get(nomeHash);
+    downloadLink.href = cookie.get(nomeHash);
     downloadLink.download = nome;
     downloadLink.click();
   } else {
@@ -428,13 +428,13 @@ async function togglePlay(hash) {
 
 
 
-async function downloadMidia(id, hash, usedURLs) {
+async function downloadMidia(id, hash, cookie) {
   try {
     var elements = Array.from(document.querySelectorAll('[id="' + id + '"]'));
     
     elements.forEach(async function (element) {
-      if (usedURLs.has(hash)) {
-        element.src = usedURLs.get(hash);
+      if (cookie.has(hash)) {
+        element.src = cookie.get(hash);
       } else {
         var parts = hash.split('.');
         var format = parts[parts.length - 1].toLowerCase();
@@ -442,7 +442,7 @@ async function downloadMidia(id, hash, usedURLs) {
         var contentBlob = b64toBlob(dados, type(format) + '/' + format);
         var url = URL.createObjectURL(contentBlob);
         element.src = url;
-        usedURLs.set(hash, url);
+        cookie.set(hash, url);
       }
       var element = document.getElementById("player"+hash);
       if (element) {
@@ -477,7 +477,7 @@ async function downloadAllImages(time) {
       try {
         var hash = imageElement.getAttribute('id');
         var id = hash; // ou qualquer outra lógica para obter o ID desejado
-        await downloadMidia(id, hash, usedURLs);
+        await downloadMidia(id, hash, cookie);
       } catch (erro) {
         console.error(erro);
         // Trate o erro aqui, se necessário
@@ -495,7 +495,7 @@ async function downloadAllAudios(time) {
       try {
         var hash = audioElements[i].getAttribute('id');
         var id = audioElements[i].getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-        await downloadMidia(id, hash, usedURLs);
+        await downloadMidia(id, hash, cookie);
         if (audioTime.has(hash)) {
           if (audioTime.get(hash)[0] !== 0 && audioTime.get(hash)[0] !== audioElements[i].duration) {
             audioElements[i].currentTime = audioTime.get(hash)[0];
@@ -953,8 +953,8 @@ function newMessages() {
     data: { nickNameContact: nickNameContact },
     dataType: 'json'
   }).done(function(result) {
+    getAudioTimes();
     if (result[0] == "1") {
-      getAudioTimes();
       document.getElementById('messages').innerHTML = result[1];
       if (((document.getElementById("messages").scrollTop) / h) * 100 >= 90) {
         down();
@@ -962,7 +962,6 @@ function newMessages() {
         downButton(true);
       }
     } else if (result[0] == "2") {
-      getAudioTimes();
       document.getElementById('messages').innerHTML = result[1];
       downButton(false);
     }
@@ -1025,17 +1024,21 @@ function loadTitles() {
     const elemento = elementos[i];
     const arrayLink = document.getElementById(elemento.id);
     const link = arrayLink.innerHTML;
-    
-    $.ajax({
-      url: 'getTitle.php',
-      method: 'GET',
-      data: { link: link },
-      dataType: 'json'
-    }).done(function(result) {
-      const linkElemento = document.getElementById(elemento.id);
-      linkElemento.innerHTML = result + "<span style='opacity:0.5;'>" + link + "</span>";
-    });
-    
+    const linkElemento = document.getElementById(elemento.id);
+    if (cookie.has(link)) {
+      linkElemento.innerHTML = cookie.get(link);
+    } else {
+      $.ajax({
+        url: 'getTitle.php',
+        method: 'GET',
+        data: { link: link },
+        dataType: 'json'
+      }).done(function(result) {
+        result = result + "<span style='opacity:0.5;'>" + link + "</span>";
+        cookie.set(link,result);
+        linkElemento.innerHTML = result;
+      });
+    }
     i--;
   }
 }
