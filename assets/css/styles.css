@@ -197,12 +197,9 @@
   }
 
   .audio_file {
-    margin-top:5px;
-    background-color: rgba(127,127,127,0.5);
+    margin-top: 5px;
     width: 100%;
-    border:solid 2px #285d33;
-    border-radius:10px;
-    box-shadow: inset 0px 0px 10px 5px rgb(0 0 0 / 35%);
+    border-radius: 10px;
   }
 
 
@@ -582,7 +579,89 @@
     height: 100%;
   }
 
-  @media (orientation: portrait) or (max-width: 900px) {
+/* Interface de Player */
+
+.player {
+  width: -webkit-fill-available;
+  background-color: rgba(127,127,127,0.5);
+  padding: 10px;
+  border-radius:40px;
+  border: 3px solid #285d33;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.play-button {
+  width: 40px;
+  height: 40px;
+  border-radius:100%;
+  background-image: url("../../Images/loading.gif");
+  background-position: 50% 50%;
+  background-size: 50%;
+  background-color: rgba(255,255,255,0.5);
+  background-repeat: no-repeat;
+}
+
+
+.progress-bar {
+  flex-grow: 1;
+  height: 20px;
+  background-color: #ccc;
+  margin: 0 10px;
+  position: relative;
+  cursor: pointer; /* Adicionado para permitir a interação com a barra de progresso */
+  border-radius:10px;
+}
+
+.progress {
+  height: 100%;
+  background-color: #1d8634;
+  width:0; /* Altere aqui para definir o progresso atual */
+  transition:0.25s;
+  border-radius:10px;
+}
+
+.time {
+  display: flex;
+  align-items: center;
+}
+
+.current-time,
+.duration {
+  font-size: 12px;
+  margin: 0 5px;
+}
+
+
+@media (orientation: portrait) or (max-width: 900px) {
+
+    .player {
+      border-radius:80px;
+    }
+
+    .play-button {
+      width: 80px;
+      height: 80px;
+    }
+
+    .progress-bar {
+      height: 40px;
+      border-radius:20px;
+    }
+
+    .progress {
+      border-radius:20px;
+    }
+
+    .current-time,
+    .duration {
+      font-size: 24px;
+      margin: 0 5px;
+    }
 
     .embed-link, .embed-download,  .embed-close {
       width: 120px;
@@ -685,60 +764,3 @@
 
 } 
   
-/* Interface de Player */
-
-.player {
-  width: -webkit-fill-available;
-  background-color: #285d33;
-  padding: 10px;
-  border-radius:10px;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.play-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
-  background-image: url("../../Images/Player/play-button.svg");
-  background-position: 50% 50%;
-  background-size: 50%;
-  background-color: #285d33;
-  border: 3px solid #285d33;
-  background-repeat: no-repeat;
-}
-
-
-.progress-bar {
-  flex-grow: 1;
-  height: 20px;
-  background-color: #ccc;
-  margin: 0 10px;
-  position: relative;
-  cursor: pointer; /* Adicionado para permitir a interação com a barra de progresso */
-  border-radius:5px;
-}
-
-.progress {
-  height: 100%;
-  background-color: #1d8634;
-  width:0; /* Altere aqui para definir o progresso atual */
-  transition:0.25s;
-  border-radius:5px;
-}
-
-.time {
-  display: flex;
-  align-items: center;
-}
-
-.current-time,
-.duration {
-  font-size: 12px;
-  margin: 0 5px;
-}
-

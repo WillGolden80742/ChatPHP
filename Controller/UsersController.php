@@ -235,7 +235,7 @@
                                     </div>
                                 </div>
                                 <center> 
-                                    <audio style=\"display:none;width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                    <audio class=\"audioPlayer\" id='audio$hash' style=\"display:none;width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
                                 </center>
                             </div>";
                 } elseif ($this->isImage($extensao)) {

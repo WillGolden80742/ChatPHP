@@ -11,6 +11,7 @@
 
   <script>
     const usedURLs = new Map();
+    const audioTime = new Map();
     <?php 
       $nickNameContact = "";
       if (!empty($_GET['contactNickName'])) {
@@ -64,7 +65,6 @@
     echo "<a href=\"editProfile.php\" class='menuProfile' > ••• </a></span></h2>";
     $userNickName = new StringT($_SESSION['nickName']);
     echo "</div>";
-    echo "<audio id=\"playerAudio\" style=\"display:none;position:absolute;top:0;right:7%;top:1.5%;margin-top:0;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>";
     echo "<div class='contacts' id='contacts'>";
     if (empty($_POST["search"])) {
       if (empty($nickNameContact)) {

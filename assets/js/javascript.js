@@ -332,73 +332,43 @@ async function downloadBase64(nomeHash) {
 
 var currentIDPlayer = "";
 
-function togglePlay(hash, player = true) {
+async function togglePlay(hash) {
   var playButton = document.getElementById(hash).querySelector(".controls .play-button");
-  var playerAudio = document.getElementById('playerAudio');
+  var playerAudio = document.getElementById('audio'+hash);
   var progressBar = document.getElementById(hash).querySelector('.progress-bar');
   var progress = document.getElementById(hash).querySelector('.progress-bar .progress');
   var currentTimeElement = document.getElementById(hash).querySelector('.time .current-time');
   var durationElement = document.getElementById(hash).querySelector('.time .duration');
+  const playIcon = "url('Images/Player/play-button.svg')";
+  const pauseIcon = "url('Images/Player/pause-button.svg')";
 
-  if (player) {
-      document.querySelectorAll(".play-button").forEach(function(playButton) {
-        playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
-      });
-
-      var clickPosition = parseFloat(progress.style.width.replace("%", "")) || 0;
-      var seekTime = (clickPosition / 100) * playerAudio.duration;
-
-      if (currentIDPlayer !== hash) {
-        document.querySelectorAll(".progress").forEach(function(progress) {
-          progress.style.width = "0%";
-        });
-        playButton.style.backgroundImage = "url('Images/loading.gif')";
-        // Simulate audio downloading delay
-        playButton.disabled = true;
-        setTimeout(function() {
-          downloadMidia('playerAudio', hash, usedURLs)
-            .then(() => {
-              playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
-              playerAudio.play();
-
-              currentIDPlayer = hash;
-              // Execute the remaining code here
-              // ...
-            })
-            .catch((error) => {
-              console.error('Error downloading media:', error);
-            })
-            .finally(() => {
-              playButton.disabled = false;
-            });
-        }, 1000); // Adjust the delay time as needed
-      } else if (!playerAudio.paused) {
-        playerAudio.pause();
-        playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
-      } else {
-        playerAudio.play();
-
-        if (!isNaN(seekTime) && isFinite(seekTime)) {
-          playerAudio.currentTime = seekTime;
-        }
-
-        playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
-      }
-  } else {
-    // Update play button based on audio playback status
-    if (!playerAudio.paused) {
-      playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
-    } else {
+  if (currentIDPlayer !== hash) {
+    document.querySelectorAll(".play-button").forEach(function(playButton) {
       playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+    });
+    document.querySelectorAll('.audioPlayer').forEach(function(audio) {
+      audio.pause();
+    });
+    playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
+    playerAudio.play();
+
+    currentIDPlayer = hash;
+  } else {
+    if (playerAudio.paused) {
+      playerAudio.play();
+      playButton.style.backgroundImage = pauseIcon;
+    } else {
+      playerAudio.pause();
+      playButton.style.backgroundImage = playIcon;
     }
   }
+
 
   // Update progress bar
   playerAudio.addEventListener('timeupdate', function() {
     if (currentIDPlayer === hash) {
       var duration = playerAudio.duration;
       var currentTime = playerAudio.currentTime;
-
       if (duration === 0 || currentTime === 0) {
         currentTimeElement.textContent = "0:00";
         durationElement.textContent = "0:00";
@@ -417,13 +387,13 @@ function togglePlay(hash, player = true) {
         var durationSeconds = Math.floor(duration % 60);
         durationElement.textContent = durationMinutes + ":" + (durationSeconds < 10 ? "0" : "") + durationSeconds;
       }
-    }
+    } 
   });
 
   // Monitor the audio playback completion event
   playerAudio.addEventListener('ended', function() {
     if (currentIDPlayer === hash) {
-      playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+      playButton.style.backgroundImage = playIcon;
       currentIDPlayer = ""; // Clear the current player ID
       progress.style.width = "0%"; // Set the progress bar width to 100%
     }
@@ -461,6 +431,13 @@ async function downloadMidia(id, hash, usedURLs) {
         element.src = url;
         usedURLs.set(hash, url);
       }
+      var element = document.getElementById(hash);
+      if (element) {
+        var playButton = element.querySelector(".controls .play-button");
+        if (playButton) {
+          playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+        }
+      }
     });
   } catch (erro) {
     console.error(erro);
@@ -471,6 +448,7 @@ async function downloadMidia(id, hash, usedURLs) {
 async function downloadAllMidia() {
   const time = timestamp;
   await downloadAllImages(time);
+  await downloadAllAudios(time);
 }
 
 
@@ -493,6 +471,45 @@ async function downloadAllImages(time) {
   });
 }
 
+async function downloadAllAudios(time) {
+  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
+  for (let i = 0; i < audioElements.length; i++) {
+    if (time == timestamp) {
+      try {
+        var hash = audioElements[i].getAttribute('id').replace("audio","");
+        var id = audioElements[i].getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
+        await downloadMidia(id, hash, usedURLs);
+        if (audioTime.has(hash)) {
+          if (audioTime.get(hash)[0] !== 0 && audioTime.get(hash)[0] !== audioElements[i].duration) {
+            audioElements[i].currentTime = audioTime.get(hash)[0];
+            if (!audioTime.get(hash)[1]) {
+              togglePlay(hash);
+            }
+          }
+        }
+      } catch (erro) {
+        console.error(erro);
+        // Trate o erro aqui, se necessário
+      }
+    } else {
+      return;
+    }
+  }
+}
+
+
+function getAudioTimes () {
+  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
+  for (let i = 0; i < audioElements.length; i++) {
+    try {
+      var hash = audioElements[i].getAttribute('id').replace("audio","");
+      audioTime.set(hash,[audioElements[i].currentTime,audioElements[i].paused]);
+    } catch (erro) {
+      console.error(erro);
+      // Trate o erro aqui, se necessário
+    }
+  }
+}
 
 function type(format) {
   format = format.toLowerCase();
@@ -515,7 +532,7 @@ function type(format) {
 }
 
 function embedYoutube(id) {
-  
+  getAudioTimes();
   timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
@@ -544,7 +561,7 @@ function embedYoutube(id) {
 }
 
 function embedVideo(link, id) {
-  
+  getAudioTimes();
   timestamp = new Date().getTime();
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
@@ -572,7 +589,7 @@ function embedVideo(link, id) {
 }
 
 function embedImage(hash) {
-  
+  getAudioTimes();
   timestamp = new Date().getTime();
   var imageSrc = document.getElementById(hash).src;
   fetchNewMessages = false;
@@ -781,6 +798,13 @@ function waitingMsg() {
 }
 
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
+  if (contact !== nickNameContact) {
+    for (let key of audioTime.keys()) {
+      audioTime.set(key,[0,true]);
+    }  
+  } else {
+    getAudioTimes();
+  }
   timestamp = new Date().getTime();
   nickNameContact = contact;
   const currentUrl = window.location.href;
@@ -913,7 +937,7 @@ function newMessages() {
     dataType: 'json'
   }).done(function(result) {
     if (result[0] == "1") {
-      
+      getAudioTimes();
       document.getElementById('messages').innerHTML = result[1];
       if (((document.getElementById("messages").scrollTop) / h) * 100 >= 90) {
         down();
@@ -921,7 +945,7 @@ function newMessages() {
         downButton(true);
       }
     } else if (result[0] == "2") {
-      
+      getAudioTimes();
       document.getElementById('messages').innerHTML = result[1];
       downButton(false);
     }
