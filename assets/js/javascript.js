@@ -249,49 +249,62 @@ function showPlayer(hash,tipo,extensao) {
         downloading = true;
         var videoDiv = document.getElementById(hash).querySelector('img');
         videoDiv.src = 'Images/loading.gif';
-        downloadBase64(hash)
-        .then(function(dados) {
-            var contentBlob = b64toBlob(dados, tipo+"/"+extensao);
-            urlContent = URL.createObjectURL(contentBlob);
-            var videoDiv = document.getElementById(hash).querySelector('img');
-            videoDiv.src = 'Images/video.svg';
-            embedVideo(urlContent,urlContent);
-            downloading = false;
-        })
-        .catch(function(erro) {
+        if (usedURLs.has(hash)) {
+          var videoDiv = document.getElementById(hash).querySelector('img');
+          videoDiv.src = 'Images/video.svg';
+          var url = usedURLs.get(hash);
+          embedVideo(url,url);
+          downloading = false;
+        } else {
+          downloadBase64(hash)
+          .then(function(dados) {
+              var contentBlob = b64toBlob(dados, tipo+"/"+extensao);
+              urlContent = URL.createObjectURL(contentBlob);
+              var videoDiv = document.getElementById(hash).querySelector('img');
+              videoDiv.src = 'Images/video.svg';
+              embedVideo(urlContent,urlContent);
+              usedURLs.set(hash,urlContent);
+              downloading = false;
+          }) .catch(function(erro) {
             console.error(erro);
             // Trate o erro aqui, se necessário
-        });
+          });
+        }
     }
 }
 
 function downloadFile(nomeHash, nome) {
-  var xhr = new XMLHttpRequest();
-  var url = 'downloadFile.php?hashName=' + nomeHash;
+  if (usedURLs.has(nomeHash)) {
+    var downloadLink = document.createElement('a');
+    downloadLink.href = usedURLs.get(nomeHash);
+    downloadLink.download = nome;
+    downloadLink.click();
+  } else {
+    var xhr = new XMLHttpRequest();
+    var url = 'downloadFile.php?hashName=' + nomeHash;
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var base64Data = xhr.responseText;
+            var byteCharacters = atob(base64Data);
+            var byteNumbers = new Array(byteCharacters.length);
 
-  xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-          var base64Data = xhr.responseText;
-          var byteCharacters = atob(base64Data);
-          var byteNumbers = new Array(byteCharacters.length);
+            for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
 
-          for (var i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
+            var byteArray = new Uint8Array(byteNumbers);
+            var blob = new Blob([byteArray], { type: 'application/octet-stream' });
 
-          var byteArray = new Uint8Array(byteNumbers);
-          var blob = new Blob([byteArray], { type: 'application/octet-stream' });
-
-          // Cria um link para download e simula o clique nele
-          var downloadLink = document.createElement('a');
-          downloadLink.href = window.URL.createObjectURL(blob);
-          downloadLink.download = nome;
-          downloadLink.click();
-      }
-  };
-
-  xhr.open('GET', url, true);
-  xhr.send();
+            // Cria um link para download e simula o clique nele
+            var downloadLink = document.createElement('a');
+            downloadLink.href = window.URL.createObjectURL(blob);
+            downloadLink.download = nome;
+            downloadLink.click();
+        }
+    };
+    xhr.open('GET', url, true);
+    xhr.send();
+  }
 }
 
 
@@ -436,6 +449,10 @@ async function downloadMidia(id, hash, usedURLs) {
         var playButton = element.querySelector(".controls .play-button");
         if (playButton) {
           playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+        }
+        var playDown = element.querySelector(".controls .download-button");
+        if (playDown) {
+          playDown.style.backgroundImage = "url('Images/Player/download-button.svg')";
         }
       }
     });

@@ -608,16 +608,23 @@
   justify-content: space-between;
 }
 
-.play-button {
+.play-button, .download-button {
   width: 40px;
   height: 40px;
   border-radius:100%;
-  background-image: url("../../Images/Player/loading.gif");
   background-position: 50% 50%;
   background-size: 50%;
   background-color: rgba(255,255,255,0.5);
   background-repeat: no-repeat;
   transition:0.25s;
+}
+
+.play-button {
+  background-image: url("../../Images/Player/loading.gif");
+}
+
+.download-button {
+  background-image: url("../../Images/Player/loading.gif");
 }
 
 .progress-bar {

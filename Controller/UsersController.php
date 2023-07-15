@@ -220,9 +220,9 @@
                 } elseif ($this->isAudio($extensao)) {
                     return "<div class=\"audio_file\">
                                 <center><p class='name'>$nome</p></center>
-                                <div class=\"player\" id='player$hash' onclick=\"togglePlay('$hash');\" >
+                                <div class=\"player\" id='player$hash'>
                                     <div class=\"controls\">
-                                        <div class=\"play-button\"></div>
+                                        <div class=\"play-button\" onclick=\"togglePlay('$hash');\" ></div>
                                         <div class=\"time\">
                                             <span class=\"current-time\">0:00</span>
                                             <span class=\"duration\">0:00</span>
@@ -230,6 +230,7 @@
                                         <div class=\"progress-bar\">
                                             <div class=\"progress\"></div>
                                         </div>
+                                        <div class=\"download-button\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\"></div>
                                     </div>
                                 </div>
                                 <center> 
