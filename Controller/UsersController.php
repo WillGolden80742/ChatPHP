@@ -220,9 +220,11 @@
                 } elseif ($this->isAudio($extensao)) {
                     return "<div class=\"audio_file\">
                                 <center><p class='name'>$nome</p></center>
-                                <div class=\"player\" id='player$hash'>
+                                <div class=\"player\">
                                     <div class=\"controls\">
-                                        <div class=\"play-button\" onclick=\"togglePlay('$hash');\" ></div>
+                                        <div class=\"play-button\" onclick=\"togglePlay('$hash',event);\" >
+                                            <audio class=\"audioPlayer\" id='$hash' style=\"display:none;width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
+                                        </div>
                                         <div class=\"time\">
                                             <span class=\"current-time\">0:00</span>
                                             <span class=\"duration\">0:00</span>
@@ -233,9 +235,6 @@
                                         <div class=\"download-button\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\"></div>
                                     </div>
                                 </div>
-                                <center> 
-                                    <audio class=\"audioPlayer\" id='$hash' style=\"display:none;width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
-                                </center>
                             </div>";
                 } elseif ($this->isImage($extensao)) {
                     return "<div class=\"image_file\">

@@ -345,13 +345,13 @@ async function downloadBase64(nomeHash) {
 
 var currentIDPlayer = "";
 
-async function togglePlay(hash) {
-  var playButton = document.getElementById("player"+hash).querySelector(".controls .play-button");
-  var playerAudio = document.getElementById(hash);
-  var progressBar = document.getElementById("player"+hash).querySelector('.progress-bar');
-  var progress = document.getElementById("player"+hash).querySelector('.progress-bar .progress');
-  var currentTimeElement = document.getElementById("player"+hash).querySelector('.time .current-time');
-  var durationElement = document.getElementById("player"+hash).querySelector('.time .duration');
+async function togglePlay(hash,event) {
+  var playButton = event.target;
+  var playerAudio = playButton.querySelector('audio');
+  var progressBar = event.target.closest('.player').querySelector('.progress-bar');
+  var progress = event.target.closest('.player').querySelector('.progress-bar .progress');
+  var currentTimeElement = event.target.closest('.player').querySelector('.time .current-time');
+  var durationElement = event.target.closest('.player').querySelector('.time .duration');
   const playIcon = "url('Images/Player/play-button.svg')";
   const pauseIcon = "url('Images/Player/pause-button.svg')";
 
@@ -444,17 +444,18 @@ async function downloadMidia(id, hash, cookie) {
         element.src = url;
         cookie.set(hash, url);
       }
-      var element = document.getElementById("player"+hash);
-      if (element) {
-        var playButton = element.querySelector(".controls .play-button");
+      elements.forEach(function(audio) {
+        var parentElement = audio.closest(".player");
+        var playButton = parentElement.querySelector(".controls .play-button");
         if (playButton) {
           playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
         }
-        var playDown = element.querySelector(".controls .download-button");
-        if (playDown) {
-          playDown.style.backgroundImage = "url('Images/Player/download-button.svg')";
+      
+        var downloadButton = parentElement.querySelector(".controls .download-button");
+        if (downloadButton) {
+          downloadButton.style.backgroundImage = "url('Images/Player/download-button.svg')";
         }
-      }
+      });
     });
   } catch (erro) {
     console.error(erro);
