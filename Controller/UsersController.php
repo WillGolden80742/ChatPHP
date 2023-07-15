@@ -166,17 +166,15 @@
                     if (strcmp($row["Idmessage"], $idMessage) !== 0) {
                         if (!empty($row["Messages"])) {
                             if (strcmp($row["MsgFrom"], $contactNickName) == 0) {
-                                $from = "<span class='from'>From : @" . $row["MsgFrom"] . "</span>";
                                 $left = true;
                             } else {
                                 $left = false;
-                                $from = "<span class='from'>You : </span>";
                             }
                             $message = new Message($row["Messages"], $async);
                             $hour = $row["HourMsg"];
                             $id = $row["Idmessage"];
                             $nome_anexo = $this->getMedia($row["nome_anexo"],$row["arquivo_anexo"]);
-                            $messages[$count++] = array($from, $message.$nome_anexo, $hour, $id, $left);
+                            $messages[$count++] = array($message.$nome_anexo, $hour, $id, $left);
                         }
                     }
                     $idMessage = "" . $row["Idmessage"];
@@ -186,7 +184,7 @@
                $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.svg'/></center>";
                $mensagens.= "<br>";
                 foreach ($messages as $msg) { 
-                  if ($msg[4]) {
+                  if ($msg[3]) {
                     $color = "#285d33";
                     $margin = "right";
                     $float = "left";
@@ -194,14 +192,13 @@
                     $color = "#1d8634";
                     $margin = "left";
                     $float = "right";
-                    $mensagens.= "<div class='delete' id=\"del$msg[3]\" style='color:grey;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
-                    $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[3].");'><b>Apagar</b></a>";
+                    $mensagens.= "<div class='delete' id=\"del$msg[2]\" style='color:grey;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
+                    $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[2].");'><b>Apagar</b></a>";
                     $mensagens.= "</div>";
                   }        
-                  $mensagens.= "<br id=\"br$msg[3]\" >";
-                  $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[3]\" style='background-color:".$color.";'>";
-                  $mensagens.= $msg[0];                  
-                  $mensagens.= "<p>".$msg[1]."<br><span style='float:right;'>".$msg[2]."</span></p>";    
+                  $mensagens.= "<br id=\"br$msg[2]\" >";
+                  $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[2]\" style='background-color:".$color.";'>";                
+                  $mensagens.= "<p>".$msg[0]."<br><span style='float:right;'>".$msg[1]."</span></p>";    
                   $mensagens.= "</div>";    
                 }
             } else {
