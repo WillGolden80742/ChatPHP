@@ -587,7 +587,7 @@
   background-color: rgba(127,127,127,0.5);
   padding:10px;
   margin-bottom:0;
-  border:solid 2px #285d33;
+  border:solid 3px #285d33;
   border-bottom:0;
 }
 
@@ -599,6 +599,7 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border: 3px solid #285d33;
+  border-top: 1px solid #285d33;
 }
 
 .controls {
@@ -618,7 +619,6 @@
   background-repeat: no-repeat;
   transition:0.25s;
 }
-
 
 .progress-bar {
   flex-grow: 1;
@@ -651,8 +651,6 @@
 
 
 @media (orientation: portrait) or (max-width: 900px) {
-
-
 
     .player {
       border-top-left-radius: 0;
