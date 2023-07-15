@@ -199,4 +199,32 @@
     .audio_file {
       width:100%
     }
+
+    .player {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      padding:20px;
+    }
+
+    .play-button, .download-button {
+      width: 80px;
+      height: 80px;
+    }
+
+    .progress-bar {
+      height: 40px;
+      border-radius:20px;
+    }
+
+    .progress {
+      border-radius:20px;
+    }
+
+    .current-time,
+    .duration {
+      font-size: 24px;
+      margin-left:20px;
+    }
+
+
 }

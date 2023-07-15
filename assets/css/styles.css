@@ -659,32 +659,6 @@
 
 @media (orientation: portrait) or (max-width: 900px) {
 
-    .player {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      padding:20px;
-    }
-
-    .play-button {
-      width: 80px;
-      height: 80px;
-    }
-
-    .progress-bar {
-      height: 40px;
-      border-radius:20px;
-    }
-
-    .progress {
-      border-radius:20px;
-    }
-
-    .current-time,
-    .duration {
-      font-size: 24px;
-      margin-left:20px;
-    }
-
     .embed-link, .embed-download,  .embed-close {
       width: 120px;
       height: 120px;
