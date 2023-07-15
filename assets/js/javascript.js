@@ -430,30 +430,33 @@ async function togglePlay(hash,event) {
 
 async function downloadMidia(id, hash, cookie) {
   try {
-    var elements = Array.from(document.querySelectorAll('[id="' + id + '"]'));
+    const elements = Array.from(document.querySelectorAll('[id="' + id + '"]'));
     
     elements.forEach(async function (element) {
       if (cookie.has(hash)) {
         element.src = cookie.get(hash);
       } else {
-        var parts = hash.split('.');
-        var format = parts[parts.length - 1].toLowerCase();
-        var dados = await downloadBase64(hash);
-        var contentBlob = b64toBlob(dados, type(format) + '/' + format);
-        var url = URL.createObjectURL(contentBlob);
+        const parts = hash.split('.');
+        const format = parts[parts.length - 1].toLowerCase();
+        const dados = await downloadBase64(hash);
+        const contentBlob = b64toBlob(dados, type(format) + '/' + format);
+        const url = URL.createObjectURL(contentBlob);
         element.src = url;
         cookie.set(hash, url);
       }
       elements.forEach(function(audio) {
-        var parentElement = audio.closest(".player");
-        var playButton = parentElement.querySelector(".controls .play-button");
-        if (playButton) {
-          playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
-        }
-      
-        var downloadButton = parentElement.querySelector(".controls .download-button");
-        if (downloadButton) {
-          downloadButton.style.backgroundImage = "url('Images/Player/download-button.svg')";
+        const parentElement = audio.closest(".player");
+        
+        if (parentElement) {
+          const playButton = parentElement.querySelector(".controls .play-button");
+          if (playButton) {
+            playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+          }
+        
+          const downloadButton = parentElement.querySelector(".controls .download-button");
+          if (downloadButton) {
+            downloadButton.style.backgroundImage = "url('Images/Player/download-button.svg')";
+          }
         }
       });
     });
