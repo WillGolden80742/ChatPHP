@@ -2,9 +2,9 @@
     class Message {
         private static $countLinks = 0;
         private $msg;
-        function __construct($msg, $async) {
+        function __construct($msg) {
             $this->msg = htmlspecialchars($msg, ENT_QUOTES);
-            $this->msg = $this->links($this->msg, $async);
+            $this->msg = $this->links($this->msg);
         }
         
         function get_title($url){
@@ -35,17 +35,17 @@
             }
         }
 
-        function links ($msg,$async) {
+        function links ($msg) {
             if ($this->isYoutube ($msg)) {
                 $msg = $this->youtube ($msg);
                 $msgArray = explode("<style id=\"embed\">",$msg); 
-                return $this->link ($msgArray[0],$async)."<style id=\"embed\">".$msgArray[1];
+                return $this->link ($msgArray[0])."<style id=\"embed\">".$msgArray[1];
             } else {
-                return $this->link ($this->msg,$async);
+                return $this->link ($this->msg);
             }
         }
 
-        function link ($text,$async) {
+        function link ($text) {
 
             $urlY1 = "https://";
             $urlY2 = "http://";
@@ -68,11 +68,7 @@
                 } 
                 self::$countLinks++;
                 $linkId = self::$countLinks;
-                if ($async) {
-                    $text = str_replace($id,"<a class='linkMsg' id='Link$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text);
-                } else {
-                    $text = str_replace($id,"<a class='linkMsg' id='Link$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->get_title($this->href($id))."<span style='opacity:0.5;'>".$this->href($id)."</span></a>",$text);
-                }  
+                $text = str_replace($id,"<a class='linkMsg' id='Link$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text);
             }
             
             return $text;

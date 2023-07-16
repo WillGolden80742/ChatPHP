@@ -217,7 +217,7 @@
     margin-left:5px;
     display:inline-flex;
   }
-
+  
   .fileIcon, .loadIcon, .videoIcon {
     width: 20px;
     height: 20px;
@@ -236,6 +236,11 @@
   
   .videoIcon {
     background-image: url("../../Images/video.svg");
+  }
+
+  .attachment_file:hover .videoIcon {
+    transition:0.25s;
+    background-image: url("../../Images/Player/download-button.svg");
   }
 
   .fileIcon {

@@ -170,7 +170,7 @@
                             } else {
                                 $left = false;
                             }
-                            $message = new Message($row["Messages"], $async);
+                            $message = new Message($row["Messages"]);
                             $hour = $row["HourMsg"];
                             $id = $row["Idmessage"];
                             $nome_anexo = $this->getMedia($row["nome_anexo"],$row["arquivo_anexo"]);
