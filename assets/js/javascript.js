@@ -6,10 +6,10 @@ var profilePicSrc;
 var updatedMsg = false;
 var orientationDevice = "landscape";
 var timestamp = new Date().getTime();
+
 main();
 // Chame a função downloadAllMidia de uma função assíncrona
 async function main() {
-  loadTitles();
   try {
     await downloadAllMidia();
     // Outras operações após o download das mídias
@@ -470,6 +470,7 @@ async function downloadMidia(id, hash, cookie) {
 
 async function downloadAllMidia() {
   const time = timestamp;
+  await loadTitles();
   await downloadAllImages(time);
   await downloadAllAudios(time);
 }
@@ -611,10 +612,10 @@ function embedVideo(link, id) {
   document.getElementById('messages').appendChild(iframeElement);
 }
 
-function embedImage(hash) {
+function embedImage(hash,event) {
   getAudioTimes();
   timestamp = new Date().getTime();
-  var imageSrc = document.getElementById(hash).src;
+  var imageSrc = event.target.src;
   fetchNewMessages = false;
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
@@ -623,7 +624,10 @@ function embedImage(hash) {
   var aElement = document.createElement('a');
   aElement.href = '#';
   aElement.onclick = function() {
-    downloadFile(hash, hash);
+    var downloadLink = document.createElement('a');
+    downloadLink.href = imageSrc;
+    downloadLink.download = hash;
+    downloadLink.click();
   };
   aElement.classList.add('embed-download');
   document.getElementById('messages').appendChild(aElement);
@@ -752,7 +756,7 @@ function addMessage(msgID, text) {
 
   var deleteLink = document.createElement('a');
   deleteLink.href = '#';
-  deleteLink.style.backgroundColor = '#1d8634';
+  deleteLink.style.backgroundColor = '#2b5278';
 
   var deleteText = document.createElement('b');
   deleteText.appendChild(document.createTextNode('Apagar'));
@@ -771,11 +775,7 @@ function addMessage(msgID, text) {
   var msgElement = document.createElement('div');
   msgElement.classList.add('msg', 'msg-left');
   msgElement.id = 'msg' + msgID;
-  msgElement.style.backgroundColor = '#1d8634';
-
-  var fromSpan = document.createElement('span');
-  fromSpan.classList.add('from');
-  fromSpan.appendChild(document.createTextNode('You : '));
+  msgElement.style.backgroundColor = 'rgba(40, 81, 123,0.9)';
 
   var textParagraph = document.createElement('p');
   textParagraph.innerHTML = text; // Use innerHTML para inserir HTML
@@ -787,7 +787,6 @@ function addMessage(msgID, text) {
   textParagraph.appendChild(document.createElement('br')); // Adiciona uma quebra de linha
   textParagraph.appendChild(dateSpan);
 
-  msgElement.appendChild(fromSpan);
   msgElement.appendChild(textParagraph);
 
   var messagesElement = document.getElementById('messages');
@@ -845,7 +844,6 @@ function updateMessages (contact = nickNameContact, name=nickNameContact) {
       downloadAllMidia();
       var newUrl = 'messages.php?contactNickName=' + contact;
       history.pushState(null, '', newUrl);
-      loadTitles();
       updateContacts(contact,name);
     }); 
   } else {
@@ -1021,7 +1019,7 @@ function loading(b) {
   }
 }
 
-function loadTitles() {
+async function loadTitles() {
   const elementos = document.getElementsByClassName('linkMsg');
   let i = elementos.length - 1;
   const time = timestamp;

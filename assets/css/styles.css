@@ -516,6 +516,7 @@
     background-image:url("../../Images/bg.svg");
     background-position: center;
     padding: 0;
+    display: flex;
   }
 
   .home div {
