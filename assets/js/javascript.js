@@ -248,10 +248,10 @@ function showPlayer(hash,tipo,extensao) {
     if (!downloading) {
         downloading = true;
         var videoDiv = document.getElementById(hash).querySelector('img');
-        videoDiv.src = 'Images/loading.gif';
+        videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
         if (cookie.has(hash)) {
           var videoDiv = document.getElementById(hash).querySelector('img');
-          videoDiv.src = 'Images/video.svg';
+          videoDiv.style.backgroundImage = 'url(Images/video.svg)';
           var url = cookie.get(hash);
           embedVideo(url,url);
           downloading = false;
@@ -261,7 +261,7 @@ function showPlayer(hash,tipo,extensao) {
               var contentBlob = b64toBlob(dados, tipo+"/"+extensao);
               urlContent = URL.createObjectURL(contentBlob);
               var videoDiv = document.getElementById(hash).querySelector('img');
-              videoDiv.src = 'Images/video.svg';
+              videoDiv.style.backgroundImage = 'url(Images/video.svg)';
               embedVideo(urlContent,urlContent);
               cookie.set(hash,urlContent);
               downloading = false;
@@ -675,7 +675,7 @@ function messageValidate() {
     }
 
     if (inputFile.files.length > 0) {
-        attachmentDiv.style.backgroundColor = "hsl(132, 40%, 26%)";
+        attachmentDiv.style.backgroundColor = "#30a3e7";
     } else {
         attachmentDiv.style.backgroundColor = ""; // Volta à cor padrão, se necessário
     }
@@ -855,7 +855,7 @@ function updateContacts (contact = nickNameContact,name=nickNameContact) {
     var h2Elements = document.querySelectorAll('.contacts h2');
     h2Elements.forEach(function(h2) {
       h2.style.background = 'none';
-      h2.style.color = '#285d33';
+      h2.style.color = '#2b5278';
       h2.style.boxShadow = 'none';
     }); 
     var spanElements = document.querySelectorAll('span[id^=\"'+contact+'\"]');
@@ -864,7 +864,7 @@ function updateContacts (contact = nickNameContact,name=nickNameContact) {
     });
     var h2Element = document.querySelector('#contact'+contact+' h2');
     h2Element.style.color = 'white';
-    h2Element.style.backgroundColor = '#285d33';
+    h2Element.style.backgroundColor = '#2b5278';
     h2Element.style.boxShadow = '0px 0px 10px 5px rgba(0, 0, 0, 0.35)';
     document.getElementById('userName').innerHTML=name;
     var imgElement = document.querySelector('#picContact'+contact+' img');

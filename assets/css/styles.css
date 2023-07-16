@@ -1,6 +1,6 @@
   a {
     text-decoration:none;
-    color:#285d33;
+    color:#2b5278;
   }
 
   * {
@@ -13,7 +13,7 @@
   }
 
   body {
-    background:#002e001f;
+    background:#00142f1f;
     padding-left:50px;
     padding-right:50px;
   }
@@ -24,7 +24,7 @@
     height:20px;
     border-radius:100%;
     color:black;
-    background-color: #285d33 ;
+    background-color: #2b5278 ;
     align-items: center;
     display: flex;
   }
@@ -83,7 +83,7 @@
   }
 
   .contacts a h2:hover {
-    background-color: #285d33 ;
+    background-color: #2b5278 ;
     box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);
     color: white;
   }
@@ -186,7 +186,7 @@
     margin-top:5px;
     background-color: rgba(127,127,127,0.5);
     width: 99%;
-    border:solid 2px #285d33;
+    border:solid 2px #2b5278;
     border-radius:5px;
     overflow-x: hidden;
   }
@@ -202,32 +202,42 @@
     border-radius: 10px;
   }
 
-  .fileIcon {
-    width:15px;
-    height:15px;
-    background-size:100%;
-  }
-
-  .videoIcon {
-    width:15px;
-    height:15px;
-    background-size:100%;
-  }
 
   .attachment_file {
     margin-top:5px;
     padding:4%;
     background-color: rgba(127,127,127,0.5);
     width: 91%;
-    border:solid 2px #285d33;
+    border:solid 2px #2b5278;
     border-radius:5px;
   }
 
   .attachment_file a {
     font-size: 22px;
     margin-left:5px;
+    display:inline-flex;
+  }
+
+  .fileIcon,  .videoIcon {
+    width: 15px;
+    height: 15px;
+    background-color:#30a3e7;
+    padding:5px;
+    background-size:60%;
+    background-repeat:no-repeat;
+    background-position: center;
+    margin-right:10px;
+    border-radius:100%;
   }
   
+  .videoIcon {
+    background-image: url("../../Images/video.svg");
+  }
+
+  .fileIcon {
+    background-image: url("../../Images/filesIcon.svg");
+  }
+
   .uploading {
     width: 40.5%;
     float: right;
@@ -238,7 +248,7 @@
   }
 
   .attachment:hover {
-    background-color:hsl(132, 40%, 26%);
+    background-color:#30a3e7;
   }
 
   
@@ -255,7 +265,7 @@
   }
 
   .send:hover {
-    background-color:hsl(132, 40%, 26%);
+    background-color:#30a3e7;
   }
 
   .login, .singUP {
@@ -283,7 +293,7 @@
     background-position-y:50%;
     background-position-x:15px;
     background-repeat: no-repeat;
-    border-bottom:solid 2px #285d33;
+    border-bottom:solid 2px #2b5278;
   }
 
   .inputText,.inputNick, .inputPassword, .inputSubmit {
@@ -296,7 +306,7 @@
     background-position-y:50%;
     background-position-x:12px;
     border-radius:50px;
-    border:solid 2px #285d33;
+    border:solid 2px #2b5278;
     font-weight: bolder;
     font-size: 18px;
     backdrop-filter: blur(5px);
@@ -318,7 +328,7 @@
   }
 
   .inputSubmit:hover {
-    background:#285d33;
+    background:#2b5278;
   }
 
   .delete a {
@@ -351,9 +361,14 @@
   }
 
   .msg-left {
+    background-color:rgba(40, 81, 123,0.9);
     margin-left:50%;
   }
 
+  .msg-right {
+    background-color:rgba(23, 37, 52,0.9 );
+  }
+ 
   .imgEmoji {
     margin-top:1.5%;
     margin-right:10.5%;
@@ -413,7 +428,7 @@
     height:32px;
   }
   .contacts, .messages, .text, .msg{
-      border: 3px solid #285d33;
+      border: 3px solid #2b5278;
   }
 
   .send {
@@ -433,7 +448,7 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background:#285d33;
+    background:#2b5278;
   }   
 
   ::-webkit-scrollbar-thumb {
@@ -448,7 +463,7 @@
   }
 
   ::-webkit-input-placeholder{
-    color: #285d33;
+    color: #2b5278;
     font-weight: bold;
   }
 
@@ -479,7 +494,7 @@
   }
 
   .contacts a h3:hover {
-    background-color:#285d33;
+    background-color:#2b5278;
     color: #fff;
   }
 
@@ -490,7 +505,7 @@
   .home {
     width: 68.6%;
     float:left;
-    border:solid 3px #285d33;
+    border:solid 3px #2b5278;
     border-radius: 10px 0px 10px 0px;
     margin-top: 5px;
     height: 85.8%;
@@ -516,7 +531,7 @@
   /* embed midias */ 
 
   .embed-link, .embed-download,  .embed-close {
-    background-color: #285d33bd;
+    background-color: #2b5278bd;
     width: 70px;
     height: 70px;
     border-radius:100%;
@@ -587,7 +602,7 @@
   background-color: rgba(127,127,127,0.5);
   padding:10px;
   margin-bottom:0;
-  border:solid 3px #285d33;
+  border:solid 3px #2b5278;
   border-bottom:0;
   font-size:14px;
 }
@@ -599,8 +614,8 @@
   border-radius:5px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border: 3px solid #285d33;
-  border-top: 1px solid #285d33;
+  border: 3px solid #2b5278;
+  border-top: 1px solid #2b5278;
 }
 
 .controls {
@@ -640,7 +655,7 @@
 
 .progress {
   height: 100%;
-  background-color: #1d8634;
+  background-color: #30a3e7;
   width:0; /* Altere aqui para definir o progresso atual */
   transition:0.25s;
   border-radius:10px;

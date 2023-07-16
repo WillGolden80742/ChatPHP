@@ -12,7 +12,7 @@
 
   <style id="styleIndex">
     body {
-      background:#002e001f;
+      background:#00142f1f;
       background-image:url("Images/bg.svg");
       background-size:50%;
     }

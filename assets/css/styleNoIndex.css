@@ -4,7 +4,7 @@
 
 .profilePic {
   background:none;
-  border:solid 3px #285d33;
+  border:solid 3px #2b5278;
   border-radius:100%;
   width:150px;
   height:150px;
@@ -17,7 +17,7 @@
 .editProfile {
   width: 68.6%;
   float:left;
-  border:solid 3px #285d33;
+  border:solid 3px #2b5278;
   border-radius: 10px 0px 10px 0px;
   overflow-y: scroll;
   margin-top: 5px;

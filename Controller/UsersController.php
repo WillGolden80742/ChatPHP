@@ -101,7 +101,7 @@
                 $html .= "<h2";
                 if (!empty($nickNameContact)) {
                     if (!strcmp($nickNameContact, $contact[1])) {
-                        $html .= " style='color:white; background-color: #285d33;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
+                        $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
                     }
                 }
                 $count = "";
@@ -185,19 +185,17 @@
                $mensagens.= "<br>";
                 foreach ($messages as $msg) { 
                   if ($msg[3]) {
-                    $color = "#285d33";
                     $margin = "right";
                     $float = "left";
                   } else {
-                    $color = "#1d8634";
                     $margin = "left";
                     $float = "right";
                     $mensagens.= "<div class='delete' id=\"del$msg[2]\" style='color:grey;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
-                    $mensagens.= "<a href='#' style='background-color:".$color."' onclick='deleteMessage(".$msg[2].");'><b>Apagar</b></a>";
+                    $mensagens.= "<a href='#' class=\"msg-$float\" onclick='deleteMessage(".$msg[2].");'><b>Apagar</b><br></a>";
                     $mensagens.= "</div>";
                   }        
                   $mensagens.= "<br id=\"br$msg[2]\" >";
-                  $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[2]\" style='background-color:".$color.";'>";                
+                  $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[2]\" >";                
                   $mensagens.= "<p>".$msg[0]."<br><span style='float:right;'>".$msg[1]."</span></p>";    
                   $mensagens.= "</div>";    
                 }
@@ -214,8 +212,7 @@
             if (!empty($nome)) {
                 if ($this->isVideo($extensao)) {
                     return "<div class=\"attachment_file\" id=\"$hash\"  onclick=\"showPlayer('$hash','video','$extensao');\">
-                                <img class=\"videoIcon\" src=\"Images/video.svg\"/>
-                                <a href=\"#\" >" . $nome . "</a>
+                                <a href=\"#\" ><img class=\"videoIcon\" src=\"Images/blank.png\"  />" . $nome . "</a>
                             </div>";
                 } elseif ($this->isAudio($extensao)) {
                     return "<div class=\"audio_file\">
@@ -244,8 +241,7 @@
                             </div>";
                 } else {
                     return "<div class=\"attachment_file\">
-                                <img class=\"fileIcon\" src=\"Images/filesIcon.svg\"/>
-                                <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\">" . $nome . "</a>
+                                <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\"><img class=\"fileIcon\" src=\"Images/blank.png\"/>" . $nome . "</a>
                             </div>";
                 }
             
