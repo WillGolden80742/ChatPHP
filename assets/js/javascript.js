@@ -28,6 +28,7 @@ async function main() {
       orientationDevice = "landscape";
     } else if (screenHeight > screenWidth) {
       orientationDevice = "portrait";
+      toggle(false,false);
     } 
     // Se necessário, atualize o layout da página ou execute outras ações com base na nova resolução
     // ...
@@ -348,12 +349,22 @@ async function downloadBase64(nomeHash) {
 var currentIDPlayer = "";
 
 async function togglePlay(hash,event) {
-  var playButton = event.target;
-  var playerAudio = playButton.querySelector('audio');
-  var progressBar = event.target.closest('.player').querySelector('.progress-bar');
-  var progress = event.target.closest('.player').querySelector('.progress-bar .progress');
-  var currentTimeElement = event.target.closest('.player').querySelector('.time .current-time');
-  var durationElement = event.target.closest('.player').querySelector('.time .duration');
+  var playButton;
+  var playerAudio;
+  
+  if (event) {
+    playButton = event.target;
+    playerAudio = playButton.querySelector('audio');
+  } else {
+    playButton = document.getElementById(hash).parentNode;
+    playerAudio = document.getElementById(hash);
+  }
+  
+  var progressBar = playButton.closest('.player').querySelector('.progress-bar');
+  var progress = playButton.closest('.player').querySelector('.progress-bar .progress');
+  var currentTimeElement = playButton.closest('.player').querySelector('.time .current-time');
+  var durationElement = playButton.closest('.player').querySelector('.time .duration');
+  
   const playIcon = "url('Images/Player/play-button.svg')";
   const pauseIcon = "url('Images/Player/pause-button.svg')";
 
@@ -470,7 +481,7 @@ async function downloadMidia(id, hash, cookie) {
 
 async function downloadAllMidia() {
   const time = timestamp;
-  await loadTitles();
+  await downloadAllTitles();
   await downloadAllImages(time);
   await downloadAllAudios(time);
 }
@@ -518,6 +529,34 @@ async function downloadAllAudios(time) {
     } else {
       return;
     }
+  }
+}
+
+async function downloadAllTitles() {
+  const elementos = document.getElementsByClassName('linkMsg');
+  let i = elementos.length - 1;
+  const time = timestamp;
+
+  while (i >= 0 && time === timestamp) {
+    const elemento = elementos[i];
+    const arrayLink = document.getElementById(elemento.id);
+    const link = arrayLink.innerHTML;
+    const linkElemento = document.getElementById(elemento.id);
+    if (cookie.has(link)) {
+      linkElemento.innerHTML = cookie.get(link);
+    } else {
+      $.ajax({
+        url: 'getTitle.php',
+        method: 'GET',
+        data: { link: link },
+        dataType: 'json'
+      }).done(function(result) {
+        result = result + "<span style='opacity:0.5;'>" + link + "</span>";
+        cookie.set(link,result);
+        linkElemento.innerHTML = result;
+      });
+    }
+    i--;
   }
 }
 
@@ -1019,33 +1058,7 @@ function loading(b) {
   }
 }
 
-async function loadTitles() {
-  const elementos = document.getElementsByClassName('linkMsg');
-  let i = elementos.length - 1;
-  const time = timestamp;
 
-  while (i >= 0 && time === timestamp) {
-    const elemento = elementos[i];
-    const arrayLink = document.getElementById(elemento.id);
-    const link = arrayLink.innerHTML;
-    const linkElemento = document.getElementById(elemento.id);
-    if (cookie.has(link)) {
-      linkElemento.innerHTML = cookie.get(link);
-    } else {
-      $.ajax({
-        url: 'getTitle.php',
-        method: 'GET',
-        data: { link: link },
-        dataType: 'json'
-      }).done(function(result) {
-        result = result + "<span style='opacity:0.5;'>" + link + "</span>";
-        cookie.set(link,result);
-        linkElemento.innerHTML = result;
-      });
-    }
-    i--;
-  }
-}
 
 
 
