@@ -244,13 +244,15 @@ function getDate () {
 
 var downloading = false;
 
-function showPlayer(hash,tipo,extensao) {
+function showPlayer(hash,event) {
     if (!downloading) {
         downloading = true;
-        var videoDiv = document.getElementById(hash).querySelector('img');
+        var videoDiv = event.target.querySelector('img');
         videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
+        const parts = hash.split('.');
+        const format = parts[parts.length - 1].toLowerCase();
         if (cookie.has(hash)) {
-          var videoDiv = document.getElementById(hash).querySelector('img');
+          var videoDiv = event.target.querySelector('img');
           videoDiv.style.backgroundImage = 'url(Images/video.svg)';
           var url = cookie.get(hash);
           embedVideo(url,url);
@@ -258,9 +260,9 @@ function showPlayer(hash,tipo,extensao) {
         } else {
           downloadBase64(hash)
           .then(function(dados) {
-              var contentBlob = b64toBlob(dados, tipo+"/"+extensao);
+              var contentBlob = b64toBlob(dados, type(format)+"/"+format);
               urlContent = URL.createObjectURL(contentBlob);
-              var videoDiv = document.getElementById(hash).querySelector('img');
+              var videoDiv = event.target.querySelector('img');
               videoDiv.style.backgroundImage = 'url(Images/video.svg)';
               embedVideo(urlContent,urlContent);
               cookie.set(hash,urlContent);
@@ -805,14 +807,14 @@ function waitingMsg() {
   };
 
   var newImg = document.createElement('img');
-  newImg.className = 'fileIcon';
-  newImg.src = 'Images/loading.gif';
+  newImg.className = 'loadIcon';
+  newImg.src = "Images/blank.png";
 
   var newLink = document.createElement('a');
   newLink.href = '#';
+  
+  newLink.appendChild(newImg);
   newLink.appendChild(document.createTextNode('Enviado'));
-
-  newDiv.appendChild(newImg);
   newDiv.appendChild(newLink);
   messagesElement.appendChild(newDiv);
   down();
@@ -889,7 +891,7 @@ function toggle(value = true, landscape=false) {
   const elementsToShow = document.querySelectorAll('.contacts, .search, .logout, .user');
   const homeElement= document.querySelector('.home');
 
-  homeElement.style.display = landscape? blockDisplay: hideDisplay;
+  homeElement.style.display = landscape? flexDisplay: hideDisplay;
   if (landscape) {
     value=true;
   }

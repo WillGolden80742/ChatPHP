@@ -218,16 +218,20 @@
     display:inline-flex;
   }
 
-  .fileIcon,  .videoIcon {
-    width: 15px;
-    height: 15px;
+  .fileIcon, .loadIcon, .videoIcon {
+    width: 20px;
+    height: 20px;
     background-color:#30a3e7;
     padding:5px;
     background-size:60%;
     background-repeat:no-repeat;
     background-position: center;
     margin-right:10px;
-    border-radius:100%;
+    border-radius:10px;
+  }
+
+  .loadIcon {
+    background-image: url("../../Images/loading.gif");
   }
   
   .videoIcon {
@@ -503,24 +507,25 @@
   }
 
   .home {
+    z-index:10000;
     width: 68.6%;
-    float:left;
     border:solid 3px #2b5278;
     border-radius: 10px 0px 10px 0px;
     margin-top: 5px;
     height: 85.8%;
-    background-image:url("../../Images/chat.svg");
-    background-size: 30%;
-    background-repeat: no-repeat;
+    background-image:url("../../Images/bg.svg");
     background-position: center;
     padding: 0;
   }
 
   .home div {
-    background-image:url("../../Images/bg.svg");
+    background-image:url("../../Images/chat.svg");
+    background-size: 30%;
+    background-repeat: no-repeat;
     width:100%;
     height:100%;
-    background-size:70%;
+    background-size:30%;
+    background-position:center;
   }
 
   .inputCancel {
@@ -634,6 +639,7 @@
   background-repeat: no-repeat;
   transition:0.25s;
 }
+
 
 .play-button {
   background-image: url("../../Images/Player/loading.gif");

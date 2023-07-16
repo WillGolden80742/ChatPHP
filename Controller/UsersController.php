@@ -211,8 +211,8 @@
             
             if (!empty($nome)) {
                 if ($this->isVideo($extensao)) {
-                    return "<div class=\"attachment_file\" id=\"$hash\"  onclick=\"showPlayer('$hash','video','$extensao');\">
-                                <a href=\"#\" ><img class=\"videoIcon\" src=\"Images/blank.png\"  />" . $nome . "</a>
+                    return "<div class=\"attachment_file\" onclick=\"showPlayer('$hash',event);\">    
+                                <a href=\"#\" ><img class=\"videoIcon\" src=\"Images/blank.png\"  style=\"float:left\" />" . $nome . "</a>
                             </div>";
                 } elseif ($this->isAudio($extensao)) {
                     return "<div class=\"audio_file\">
