@@ -32,8 +32,10 @@
   .thumb-video {
     height:200px;
     width:100%;
-    border:solid 2px #fff;
-    background-size:100%;  
+    border:solid 2px #2b5278;
+    background-size:100%;
+    margin-bottom:5px;
+    border-radius: 10px;
   } 
 
   .thumb-video img {
@@ -41,6 +43,8 @@
     left:0;
     background-position-y:50%;
     width:100%;
+    border-radius: 10px;
+    box-shadow: inset 0px -20px 20px 0px rgb(0 0 0 / 35%);
   } 
 
   .contacts {
@@ -687,10 +691,6 @@
 .linkMsg {
   top:20px;
 }
-
-.thumb-video { 
-  margin-bottom:5px;
-}  
 
 @media (orientation: portrait) or (max-width: 900px) {
 

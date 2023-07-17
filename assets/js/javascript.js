@@ -481,7 +481,7 @@ async function downloadMidia(id, hash, cookie) {
 
 async function downloadAllMidia() {
   const time = timestamp;
-  await downloadAllTitles();
+  await downloadAllTitles(time);
   await downloadAllImages(time);
   await downloadAllAudios(time);
 }
@@ -532,15 +532,14 @@ async function downloadAllAudios(time) {
   }
 }
 
-async function downloadAllTitles() {
+async function downloadAllTitles(time) {
   const elementos = document.getElementsByClassName('linkMsg');
   let i = elementos.length - 1;
-  const time = timestamp;
 
   while (i >= 0 && time === timestamp) {
     const elemento = elementos[i];
     const arrayLink = document.getElementById(elemento.id);
-    const link = arrayLink.innerHTML;
+    const link = arrayLink.href;
     const linkElemento = document.getElementById(elemento.id);
     if (cookie.has(link)) {
       linkElemento.innerHTML = cookie.get(link);
