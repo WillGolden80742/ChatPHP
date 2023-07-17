@@ -533,7 +533,7 @@ async function downloadAllAudios(time) {
 }
 
 async function downloadAllTitles(time) {
-  const elementos = document.getElementsByClassName('linkMsg');
+  var elementos = document.getElementsByClassName('linkMsg');
 
   Array.from(elementos).reverse().forEach(async (elemento) => {
     if (time == timestamp) { 
