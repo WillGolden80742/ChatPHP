@@ -546,20 +546,6 @@ async function downloadAllTitles(time) {
   });
 }
 
-async function downloadAllTitles(time) {
-  const elementos = document.getElementsByClassName('linkMsg');
-
-  Array.from(elementos).reverse().forEach(async (elemento) => {
-    if (time == timestamp) {
-      const linkElemento = document.getElementById(elemento.id);
-      const link = linkElemento.href;
-      await downloadTitle(linkElemento, link);
-    } else {
-      return;
-    }
-  });
-}
-
 async function downloadTitle(linkElemento, link) {
   if (cookie.has(link)) {
     linkElemento.innerHTML = cookie.get(link);
