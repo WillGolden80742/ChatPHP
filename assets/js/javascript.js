@@ -536,26 +536,30 @@ async function downloadAllTitles(time) {
   const elementos = document.getElementsByClassName('linkMsg');
 
   Array.from(elementos).reverse().forEach(async (elemento) => {
-    if (time == timestamp) { 
-      const link = document.getElementById(elemento.id).href;
+    if (time == timestamp) {
       const linkElemento = document.getElementById(elemento.id);
-      if (cookie.has(link)) {
-        linkElemento.innerHTML = cookie.get(link);
-      } else {
-        const result = await $.ajax({
-          url: 'getTitle.php',
-          method: 'GET',
-          data: { link: link },
-          dataType: 'json'
-        });
-        const formattedResult = result + "<span style='opacity:0.5;'>" + link + "</span>";
-        cookie.set(link, formattedResult);
-        linkElemento.innerHTML = formattedResult;
-      }
+      await downloadTitle(linkElemento);
     } else {
       return;
     }
   });
+}
+
+async function downloadTitle(linkElemento) {
+  link = linkElemento.href;
+  if (cookie.has(link)) {
+    linkElemento.innerHTML = cookie.get(link);
+  } else {
+    const result = await $.ajax({
+      url: 'getTitle.php',
+      method: 'GET',
+      data: { link: link },
+      dataType: 'json'
+    });
+    const formattedResult = result + "<span style='opacity:0.5;'>" + link + "</span>";
+    cookie.set(link, formattedResult);
+    linkElemento.innerHTML = formattedResult;
+  }
 }
 
 function getAudioTimes () {
@@ -752,7 +756,6 @@ function createMessage () {
                down ();
             });
             loading (false);
-            downloadAllMidia();
       });
   } else {
     loading(true);
