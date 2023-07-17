@@ -536,7 +536,7 @@ async function downloadAllTitles(time) {
   const elementos = document.getElementsByClassName('linkMsg');
 
   Array.from(elementos).reverse().forEach(async (elemento) => {
-    if (time == currentTime) { 
+    if (time == timestamp) { 
       const link = document.getElementById(elemento.id).href;
       const linkElemento = document.getElementById(elemento.id);
       if (cookie.has(link)) {
