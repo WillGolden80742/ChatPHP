@@ -39,7 +39,7 @@
             if ($this->isYoutube ($msg)) {
                 $msg = $this->youtube ($msg);
                 $msgArray = explode("<style id=\"embed\">",$msg); 
-                return $this->link ($msgArray[0])."<style id=\"embed\">".$msgArray[1];
+                return "<style id=\"embed\">".$msgArray[1].$this->link ($msgArray[0]);
             } else {
                 return $this->link ($this->msg);
             }

@@ -684,6 +684,13 @@
   margin: 0 5px;
 }
 
+.linkMsg {
+  top:20px;
+}
+
+.thumb-video { 
+  margin-bottom:5px;
+}  
 
 @media (orientation: portrait) or (max-width: 900px) {
 
