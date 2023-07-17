@@ -1,6 +1,6 @@
 <?php
     class Message {
-        private static $countLinks = 0;
+        private static $countLinks;
         private $msg;
         function __construct($msg) {
             $this->msg = htmlspecialchars($msg, ENT_QUOTES);

@@ -752,6 +752,7 @@ function createMessage () {
                down ();
             });
             loading (false);
+            downloadAllMidia();
       });
   } else {
     loading(true);

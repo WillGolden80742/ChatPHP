@@ -167,6 +167,9 @@
       display: inline;  
     }
   
+    .text {
+      font-size:48px;
+    }
 
     .attachment { 
       width:60px;   
