@@ -534,31 +534,29 @@ async function downloadAllAudios(time) {
 
 async function downloadAllTitles(time) {
   const elementos = document.getElementsByClassName('linkMsg');
-  let i = elementos.length - 1;
 
-  while (i >= 0 && time === timestamp) {
-    const elemento = elementos[i];
-    const arrayLink = document.getElementById(elemento.id);
-    const link = arrayLink.href;
-    const linkElemento = document.getElementById(elemento.id);
-    if (cookie.has(link)) {
-      linkElemento.innerHTML = cookie.get(link);
+  Array.from(elementos).reverse().forEach(async (elemento) => {
+    if (time == currentTime) { 
+      const link = document.getElementById(elemento.id).href;
+      const linkElemento = document.getElementById(elemento.id);
+      if (cookie.has(link)) {
+        linkElemento.innerHTML = cookie.get(link);
+      } else {
+        const result = await $.ajax({
+          url: 'getTitle.php',
+          method: 'GET',
+          data: { link: link },
+          dataType: 'json'
+        });
+        const formattedResult = result + "<span style='opacity:0.5;'>" + link + "</span>";
+        cookie.set(link, formattedResult);
+        linkElemento.innerHTML = formattedResult;
+      }
     } else {
-      $.ajax({
-        url: 'getTitle.php',
-        method: 'GET',
-        data: { link: link },
-        dataType: 'json'
-      }).done(function(result) {
-        result = result + "<span style='opacity:0.5;'>" + link + "</span>";
-        cookie.set(link,result);
-        linkElemento.innerHTML = result;
-      });
+      return;
     }
-    i--;
-  }
+  });
 }
-
 
 function getAudioTimes () {
   var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
