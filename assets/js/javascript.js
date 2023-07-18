@@ -829,9 +829,6 @@ async function addMessage(msgID, text) {
   textParagraph.innerHTML = text;
   // Use innerHTML para inserir HTML
 
-  // Extrai o link da string de texto
-  var link = extractLinkFromText(text);
-
   // Chama a função downloadTitle para obter o título e incorporar o link
   var title = await downloadTitle(link);
   var titleSpan = document.createElement('span');
@@ -855,13 +852,6 @@ async function addMessage(msgID, text) {
   sendButton.disabled = true;
 }
 
-// Função para extrair o link da string de texto
-function extractLinkFromText(text) {
-  var linkStartIndex = text.indexOf('<a href=') + 9;
-  var linkEndIndex = text.indexOf('>', linkStartIndex) - 1;
-  var link = text.substring(linkStartIndex, linkEndIndex);
-  return link;
-}
 
 
 function waitingMsg() {
