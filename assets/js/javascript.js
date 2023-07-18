@@ -535,6 +535,23 @@ async function downloadAllAudios(time) {
   }
 }
 
+async function downloadLastTitle() {
+  const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
+  const ultimoElemento = elementos[0];
+
+  if (!ultimoElemento) {
+    return;
+  }
+
+  const linkElemento = document.getElementById(ultimoElemento.id);
+  const link = linkElemento.href;
+
+  if (cookie.has(link)) {
+    linkElemento.innerHTML = cookie.get(link);
+  } else {
+    await downloadTitle(linkElemento, link);
+  }
+}
 
 async function downloadAllTitles(time) {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
@@ -843,6 +860,7 @@ async function addMessage(msgID, text) {
 
   var sendButton = document.getElementById('send');
   sendButton.disabled = true;
+  await downloadLastTitle();
 }
 
 
