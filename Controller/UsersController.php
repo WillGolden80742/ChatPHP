@@ -236,7 +236,7 @@
                 } elseif ($this->isImage($extensao)) {
                     return "<div class=\"image_file\">
                                 <center>
-                                    <img id=\"$hash\" onclick=\"embedImage('$hash',event)\" src=\"Images/blank.png\" width=\"250px\" >
+                                    <img id=\"$hash\" onclick=\"embedImage('$hash',event)\" src=\"Images/download.gif\" width=\"250px\" >
                                 </center>
                             </div>";
                 } else {
