@@ -488,77 +488,87 @@ async function downloadAllMidia() {
 
 
 async function downloadAllImages(time) {
-  var imageElements = Array.from(document.querySelectorAll('.image_file img')).reverse();
+  const imageElements = Array.from(document.querySelectorAll('.image_file img')).reverse();
 
-  imageElements.forEach(async function (imageElement) {
-    if (time == timestamp) {
-      try {
-        var hash = imageElement.getAttribute('id');
-        var id = hash; // ou qualquer outra lógica para obter o ID desejado
-        await downloadMidia(id, hash, cookie);
-      } catch (erro) {
-        console.error(erro);
-        // Trate o erro aqui, se necessário
-      }
-    } else {
+  for (const imageElement of imageElements) {
+    if (time !== timestamp) {
       return;
     }
-  });
-}
 
-async function downloadAllAudios(time) {
-  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
-  for (let i = 0; i < audioElements.length; i++) {
-    if (time == timestamp) {
-      try {
-        var hash = audioElements[i].getAttribute('id');
-        var id = audioElements[i].getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-        await downloadMidia(id, hash, cookie);
-        if (audioTime.has(hash)) {
-          if (audioTime.get(hash)[0] !== 0 && audioTime.get(hash)[0] !== audioElements[i].duration) {
-            audioElements[i].currentTime = audioTime.get(hash)[0];
-            if (!audioTime.get(hash)[1]) {
-              togglePlay(hash);
-            }
-          }
-        }
-      } catch (erro) {
-        console.error(erro);
-        // Trate o erro aqui, se necessário
-      }
-    } else {
-      return;
+    try {
+      const hash = imageElement.getAttribute('id');
+      const id = hash; // ou qualquer outra lógica para obter o ID desejado
+      await downloadMidia(id, hash, cookie);
+    } catch (error) {
+      console.error(error);
+      // Trate o erro aqui, se necessário
     }
   }
 }
 
-async function downloadAllTitles(time) {
-  const elementos = document.getElementsByClassName('linkMsg');
+async function downloadAllAudios(time) {
+  const audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
 
-  Array.from(elementos).reverse().forEach(async (elemento) => {
-    if (time == timestamp) {
-      const linkElemento = document.getElementById(elemento.id);
-      const link = linkElemento.href;
-      await downloadTitle(linkElemento, link);
-    } else {
+  for (const audioElement of audioElements) {
+    if (time !== timestamp) {
       return;
     }
-  });
+
+    try {
+      const hash = audioElement.getAttribute('id');
+      const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
+      await downloadMidia(id, hash, cookie);
+
+      if (audioTime.has(hash)) {
+        const audioTimeData = audioTime.get(hash);
+        if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
+          audioElement.currentTime = audioTimeData[0];
+          if (!audioTimeData[1]) {
+            togglePlay(hash);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      // Trate o erro aqui, se necessário
+    }
+  }
+}
+
+
+async function downloadAllTitles(time) {
+  const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
+
+  for (const elemento of elementos) {
+    if (time !== timestamp) {
+      return;
+    }
+
+    const linkElemento = document.getElementById(elemento.id);
+    const link = linkElemento.href;
+
+    if (cookie.has(link)) {
+      linkElemento.innerHTML = cookie.get(link);
+    } else {
+      await downloadTitle(linkElemento, link);
+    }
+  }
 }
 
 async function downloadTitle(linkElemento, link) {
-  if (cookie.has(link)) {
-    linkElemento.innerHTML = cookie.get(link);
-  } else {
+  try {
     const result = await $.ajax({
       url: 'getTitle.php',
       method: 'GET',
-      data: { link: link },
+      data: { link },
       dataType: 'json'
     });
-    const formattedResult = result + "<span style='opacity:0.5;'>" + link + "</span>";
+
+    const formattedResult = `${result}<span style='opacity:0.5;'>${link}</span>`;
     cookie.set(link, formattedResult);
     linkElemento.innerHTML = formattedResult;
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -785,7 +795,7 @@ function createMessage () {
 }    
 
 
-function addMessage(msgID, text) {
+async function addMessage(msgID, text) {
   var deleteElement = document.createElement('div');
   deleteElement.classList.add('delete');
   deleteElement.id = 'del' + msgID;
@@ -800,12 +810,10 @@ function addMessage(msgID, text) {
 
   var deleteText = document.createElement('b');
   deleteText.appendChild(document.createTextNode('Apagar'));
-
   deleteLink.appendChild(deleteText);
   deleteLink.onclick = function() {
     deleteMessage(msgID);
   };
-
   deleteElement.appendChild(document.createTextNode('●●●'));
   deleteElement.appendChild(deleteLink);
 
@@ -818,12 +826,21 @@ function addMessage(msgID, text) {
   msgElement.style.backgroundColor = 'rgba(40, 81, 123,0.9)';
 
   var textParagraph = document.createElement('p');
-  textParagraph.innerHTML = text; // Use innerHTML para inserir HTML
+  textParagraph.innerHTML = text;
+  // Use innerHTML para inserir HTML
+
+  // Extrai o link da string de texto
+  var link = extractLinkFromText(text);
+
+  // Chama a função downloadTitle para obter o título e incorporar o link
+  var title = await downloadTitle(link);
+  var titleSpan = document.createElement('span');
+  titleSpan.innerHTML = title;
+  textParagraph.appendChild(titleSpan);
 
   var dateSpan = document.createElement('span');
   dateSpan.style.float = 'right';
   dateSpan.appendChild(document.createTextNode(getDate()));
-
   textParagraph.appendChild(document.createElement('br')); // Adiciona uma quebra de linha
   textParagraph.appendChild(dateSpan);
 
@@ -833,9 +850,19 @@ function addMessage(msgID, text) {
   messagesElement.appendChild(deleteElement);
   messagesElement.appendChild(brElement);
   messagesElement.appendChild(msgElement);
+
   var sendButton = document.getElementById('send');
   sendButton.disabled = true;
 }
+
+// Função para extrair o link da string de texto
+function extractLinkFromText(text) {
+  var linkStartIndex = text.indexOf('<a href=') + 9;
+  var linkEndIndex = text.indexOf('>', linkStartIndex) - 1;
+  var link = text.substring(linkStartIndex, linkEndIndex);
+  return link;
+}
+
 
 function waitingMsg() {
   var messagesElement = document.getElementById('messages');
