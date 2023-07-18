@@ -827,13 +827,6 @@ async function addMessage(msgID, text) {
 
   var textParagraph = document.createElement('p');
   textParagraph.innerHTML = text;
-  // Use innerHTML para inserir HTML
-
-  // Chama a função downloadTitle para obter o título e incorporar o link
-  var title = await downloadTitle(link);
-  var titleSpan = document.createElement('span');
-  titleSpan.innerHTML = title;
-  textParagraph.appendChild(titleSpan);
 
   var dateSpan = document.createElement('span');
   dateSpan.style.float = 'right';
