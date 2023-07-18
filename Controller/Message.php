@@ -66,8 +66,7 @@
                     $id = $this->splitLink($id);
                     $id = $urlY3.$id;
                 } 
-                self::$countLinks++;
-                $linkId = self::$countLinks;
+                $linkId = ++$this->countLinks;
                 $text = str_replace($id,"<a class='linkMsg' id='Link$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text);
             }
             
