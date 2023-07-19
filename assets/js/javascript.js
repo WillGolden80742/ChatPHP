@@ -219,20 +219,16 @@ function removeDownButton () {
 }
 
 function deleteMessage(id) {
-  if (confirm("Tem certeza de que deseja apagar esta mensagem?")) {
-    document.getElementById("msg" + id).remove();
-    document.getElementById("del" + id).remove();
-    document.getElementById("br" + id).remove();
-    loading(true);
-    $.ajax({
-      url: 'delete.php?id=' + id,
-      method: 'POST',
-      data: { nickNameContact: nickNameContact },
-      dataType: 'json'
-    }).done(function(result) {
-      loading(false);
-    });
-  }
+  document.getElementById("msg" + id).remove();
+  loading(true);
+  $.ajax({
+    url: 'delete.php?id=' + id,
+    method: 'POST',
+    data: { nickNameContact: nickNameContact },
+    dataType: 'json'
+  }).done(function(result) {
+    loading(false);
+  });
 }
 
 
@@ -814,56 +810,45 @@ function createMessage () {
 }    
 
 
-async function addMessage(msgID, text) {
-  var deleteElement = document.createElement('div');
-  deleteElement.classList.add('delete');
-  deleteElement.id = 'del' + msgID;
-  deleteElement.style.color = 'grey';
-  deleteElement.style.marginLeft = '45%';
-  deleteElement.style.marginRight = '2%';
-  deleteElement.style.float = 'right';
+async function addMessage(id, text) {
+  var msgElement = document.createElement('div');
+  msgElement.classList.add('msg', 'msg-left');
+  msgElement.id = 'msg' + id;
 
   var deleteLink = document.createElement('a');
   deleteLink.href = '#';
-  deleteLink.style.backgroundColor = '#2b5278';
+  deleteLink.classList.add('delete');
+  deleteLink.onclick = function() {
+    deleteMessage(id);
+  };
 
   var deleteText = document.createElement('b');
   deleteText.appendChild(document.createTextNode('Apagar'));
   deleteLink.appendChild(deleteText);
-  deleteLink.onclick = function() {
-    deleteMessage(msgID);
-  };
-  deleteElement.appendChild(document.createTextNode('●●●'));
-  deleteElement.appendChild(deleteLink);
-
-  var brElement = document.createElement('br');
-  brElement.id = 'br' + msgID;
-
-  var msgElement = document.createElement('div');
-  msgElement.classList.add('msg', 'msg-left');
-  msgElement.id = 'msg' + msgID;
-  msgElement.style.backgroundColor = 'rgba(40, 81, 123,0.9)';
+  deleteLink.appendChild(document.createElement('br'));
 
   var textParagraph = document.createElement('p');
-  textParagraph.innerHTML = text;
+  textParagraph.innerHTML=text;
+  textParagraph.appendChild(document.createElement('br'));
 
   var dateSpan = document.createElement('span');
   dateSpan.style.float = 'right';
   dateSpan.appendChild(document.createTextNode(getDate()));
-  textParagraph.appendChild(document.createElement('br')); // Adiciona uma quebra de linha
   textParagraph.appendChild(dateSpan);
 
+  msgElement.appendChild(deleteLink);
   msgElement.appendChild(textParagraph);
 
   var messagesElement = document.getElementById('messages');
-  messagesElement.appendChild(deleteElement);
-  messagesElement.appendChild(brElement);
   messagesElement.appendChild(msgElement);
 
   var sendButton = document.getElementById('send');
   sendButton.disabled = true;
+
   await downloadLastTitle();
 }
+
+
 
 
 

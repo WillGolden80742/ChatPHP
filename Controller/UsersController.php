@@ -186,16 +186,13 @@
                 foreach ($messages as $msg) { 
                   if ($msg[3]) {
                     $margin = "right";
-                    $float = "left";
                   } else {
                     $margin = "left";
-                    $float = "right";
-                    $mensagens.= "<div class='delete' id=\"del$msg[2]\" style='color:grey;margin-left:45%;margin-right:2%;float:".$float.";'> ●●●";  
-                    $mensagens.= "<a href='#' class=\"msg-$float\" onclick='deleteMessage(".$msg[2].");'><b>Apagar</b><br></a>";
-                    $mensagens.= "</div>";
                   }        
-                  $mensagens.= "<br id=\"br$msg[2]\" >";
-                  $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[2]\" >";                
+                  $mensagens.= "<div class='msg msg-".$margin."' id=\"msg$msg[2]\" >";
+                  if (!$msg[3]) {
+                    $mensagens.= "<a href='#' class=\"delete\" onclick='deleteMessage(".$msg[2].");'><b>Apagar</b><br></a>"; 
+                  }               
                   $mensagens.= "<p>".$msg[0]."<br><span style='float:right;'>".$msg[1]."</span></p>";    
                   $mensagens.= "</div>";    
                 }
