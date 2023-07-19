@@ -219,16 +219,18 @@ function removeDownButton () {
 }
 
 function deleteMessage(id) {
-  document.getElementById("msg" + id).remove();
-  loading(true);
-  $.ajax({
-    url: 'delete.php?id=' + id,
-    method: 'POST',
-    data: { nickNameContact: nickNameContact },
-    dataType: 'json'
-  }).done(function(result) {
-    loading(false);
-  });
+  if (confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+    document.getElementById("msg" + id).remove();
+    loading(true);
+    $.ajax({
+      url: 'delete.php?id=' + id,
+      method: 'POST',
+      data: { nickNameContact: nickNameContact },
+      dataType: 'json'
+    }).done(function(result) {
+      loading(false);
+    });
+  }
 }
 
 
