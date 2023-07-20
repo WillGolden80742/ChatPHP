@@ -800,11 +800,11 @@ function createMessage () {
       imgToJPG(file, 'resizedImage.jpg', function(resizedFile) {
         resizeImage(resizedFile, 1280, function(finalFile) {
           formData.set('arquivo', finalFile);
-          uploadAttachment('uploadfile.php', formData);
+          uploadAttachment('uploadFile.php', formData);
         });
       });
     } else {
-      uploadAttachment('uploadfile.php', formData);
+      uploadAttachment('uploadFile.php', formData);
     }    
     waitingMsg();
     inputFile.value="";
