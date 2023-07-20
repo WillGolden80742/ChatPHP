@@ -265,10 +265,10 @@
             return in_array($extensao, $imageExtensions);
         }
 
-        function newCurrentMsgs (StringT $contactNickName){
+        function hasNewMsgByCurrentContact (StringT $contactNickName){
             usleep(500000);
             $query = $this->allMessagesQuery($contactNickName);
-            $result = $this->user->newCurrentMsgs($contactNickName,new StringT($this->nickSession));
+            $result = $this->user->hasNewMsgByCurrentContact($contactNickName,new StringT($this->nickSession));
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
                     $count = $row["countMsg"];
@@ -313,9 +313,9 @@
             return $count;
         }
 
-        function newContacts (StringT $nickNameContact) {
+        function hasNewMsgByContact (StringT $nickNameContact) {
             usleep(500000);
-            $result = $this->user->newContacts(new StringT($this->nickSession));
+            $result = $this->user->hasNewMsgByContact(new StringT($this->nickSession));
             $count="0";
             while($row = mysqli_fetch_assoc($result)) {
                 $count = $row["countMsg"];

@@ -3,9 +3,9 @@
     header("Content-type: application/json; charset=utf-8");
     $user = new UsersController(); 
     if (empty($_POST['nickNameContact'])) {
-        $contacts = $user -> newContacts(new StringT(null));    
+        $contacts = $user -> hasNewMsgByContact(new StringT(null));    
     } else {
-        $contacts = $user -> newContacts(new StringT($_POST['nickNameContact']));
+        $contacts = $user -> hasNewMsgByContact(new StringT($_POST['nickNameContact']));
     }
     echo json_encode($contacts);       
 ?>  

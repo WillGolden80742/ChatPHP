@@ -151,7 +151,7 @@
         }
 
 
-        function newCurrentMsgs (StringT $contactNickName,StringT $nick){
+        function hasNewMsgByCurrentContact (StringT $contactNickName,StringT $nick){
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '".$contactNickName."' AND messages.MsgTo = '".$nick."' AND messages.received = '0'");
         }
@@ -166,7 +166,7 @@
             return $this->conFactory->query("call newMsg('".$nick."','".$contactNickName."','".$value."')");
         }
 
-        function newContacts (StringT $nick) {
+        function hasNewMsgByContact (StringT $nick) {
             // Recomendado uso de prepare statement 
             return $this->conFactory->query("call newMsgs('".$nick."')");
         }  

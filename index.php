@@ -29,7 +29,7 @@
           echo "down ();";
         } 
       ?>
-      newContact();     
+      hasNewMsgByContact();     
     });
 
     <?php 

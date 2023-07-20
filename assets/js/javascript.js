@@ -730,7 +730,7 @@ function close() {
   fetchNewMessages = true;
   document.getElementById('messages').innerHTML=msgsContents;
   document.getElementById('messages').scrollTo(0, scrollPos);
-  newContact();
+  hasNewMsgByContact();
   downloadAllMidia();
 }
 
@@ -766,7 +766,7 @@ function createMessage () {
       loading (true);
       document.getElementById('text').value="";
       $.ajax({
-        url: 'new.php',
+        url: 'createMessage.php',
         method: 'POST',
         data: {nickNameContact: nickNameContact, messageText: messageText},
         dataType: 'json'
@@ -976,20 +976,20 @@ function toggle(value = true, landscape=false) {
   down();
 }
 
-function newContact() {
+function hasNewMsgByContact() {
   if (fetchNewMessages) {
     $.ajax({
-      url: 'newContact.php?',
+      url: 'hasNewMsgByContact.php?',
       method: 'POST',
       data: { nickNameContact: nickNameContact },
       dataType: 'json'
     }).done(function(result) {
       if (result !== "0") {
         document.getElementById('contacts').innerHTML = result;
-        newMessages();
+        hasNewMsgByCurrentContact();
         responsiveCont();
       }
-      newContact();
+      hasNewMsgByContact();
     });
   }
 }
@@ -1007,9 +1007,9 @@ function responsiveCont () {
   }
 }
 
-function newMessages() {
+function hasNewMsgByCurrentContact() {
   $.ajax({
-    url: 'newMsg.php?',
+    url: 'hasNewMsgByCurrentContact.php?',
     method: 'POST',
     data: { nickNameContact: nickNameContact },
     dataType: 'json'
