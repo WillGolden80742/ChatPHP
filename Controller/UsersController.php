@@ -33,7 +33,7 @@
         function uploadProfile ($pass,StringT $newNick,$name) { 
             $maxCharLimit = 20;
     
-            if (strlen($newNick) > $maxCharLimit || strlen($name) > $maxCharLimit) {
+            if (mb_strlen($newNick) > $maxCharLimit || mb_strlen($name) > $maxCharLimit) {
                 header("Location: editProfile.php?error=O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.");
                 die();
                 return;
