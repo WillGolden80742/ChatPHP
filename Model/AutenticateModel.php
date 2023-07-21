@@ -19,7 +19,7 @@
         }
         
 
-        function singUp (StringT $name,StringT $nick,$pass) { 
+        function signUp ($name,StringT $nick,$pass) { 
             $connection = $this->conFactoryPDO;
             $query = $connection->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES (:name, :nick, :pass)");
             $query->bindParam(':name', $name, PDO::PARAM_STR);
@@ -32,7 +32,7 @@
             $connection = $this->conFactoryPDO;
             $query = $connection->query("SELECT * FROM clientes WHERE nickName = :nick");
             $query->bindParam(':nick', $nick, PDO::PARAM_STR);
-            return $connection->execute($query);
+            return $connection->execute($query)->rowCount();
         }
         
         function createToken() {

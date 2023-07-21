@@ -26,81 +26,63 @@
             }
         }
 
-        function singUp ($name,$nick,$pass,$passConfirmation) { 
-            echo $error = "";
+        function signUp($name, $nick, $pass, $passConfirmation) { 
+            $error = "";
             $nameCertification = $this->nameCertification($name);
             $nickCertification = $this->nickCertification($nick);
-            $passCertification = $this->passCertification ($pass,$passConfirmation);
-            if ($nameCertification[0] && $nickCertification[0] && $passCertification[0]) {
-                if ($this->authModel->singUp(new StringT($name),new StringT($nick),$this-> encrypt($nick.$pass))) {
-                    $this->login(new StringT($nick),$pass);
+            $passCertification = $this->passCertification($pass, $passConfirmation);
+        
+            if ($nameCertification === "" && $nickCertification === "" && $passCertification === "") {
+                if ($this->authModel->signUp($name, new StringT($nick), $this->encrypt($nick . $pass))) {
+                    $this->login(new StringT($nick), $pass);
                 } 
             } else {
                 $error = "<center><h3 style=\"color:red;\">";
-                $error.=$nameCertification[1];
-                $error.=$nickCertification[1];
-                $error.=$passCertification[1];
-                $error.="</h3></center>";
+                $error .= $nameCertification;
+                $error .= $nickCertification;
+                $error .= $passCertification;
+                $error .= "</h3></center>";
             }
             return $error;
-        }    
-
+        }
+        
         function nameCertification($name) {
-            $error = "";
-            $nameTreated = false;
-            
             if (empty($name)) {
-                $error .= "O nome não pode estar vazio,";
-            } else if (!preg_match("/^[a-zA-Z0-9_ ]+$/", $name)) {
-                $error .= "Apenas são permitidos caracteres _, aA a zZ e 0 a 9 para o nome,";
+                return "O nome não pode estar vazio.";
             } else if (strlen($name) > 20) {
-                $error .= "O nome deve ter no máximo 20 caracteres,";
-            } else {
-                $nameTreated = true;
+                return "O nome deve ter no máximo 20 caracteres.";
             }
-            
-            return array($nameTreated, $error);
+            return "";
         }
         
         function nickCertification($nick) {
-            $error = "";
-            $nickTreated = false;
-            
             if (empty($nick)) {
-                $error .= "O nickname não pode estar vazio,";
+                return "O nickname não pode estar vazio,";
             } else if (!preg_match("/^[a-zA-Z0-9_]+$/", $nick)) {
-                $error .= "Apenas são permitidos caracteres _, aA a zZ e 0 a 9 para o nickname,";
+                return "Apenas são permitidos caracteres _, aA a zZ e 0 a 9 para o nickname,";
             } else if (strlen($nick) > 20) {
-                $error .= "O nickname deve ter no máximo 20 caracteres,";
+                return "O nickname deve ter no máximo 20 caracteres,";
             } else if ($this->checkNick(new StringT($nick))) {
-                $error .= "O nickname já existe,";
-            } else {
-                $nickTreated = true;
+                return "O nickname já existe,";
             }
-            
-            return array($nickTreated, $error);
+            return "";
         }
         
-        
-        function passCertification ($pass,$passConfirmation) {
-            $error = "";
-            $passTreated = false;
+        function passCertification($pass, $passConfirmation) {
             if (empty($pass)) {
-                $error.=" senhas não pode ser vazia,";
-            } else if (strcmp($pass,$passConfirmation) !== 0) { 
-                $error.=" senhas não são iguais";
+                return "A senha não pode ser vazia,";
+            } else if (strcmp($pass, $passConfirmation) !== 0) { 
+                return "As senhas não são iguais";
             } else if (strlen($pass) < 8) {
-                $error.=" senha não pode ser menor que 8 caracteres";
-            } else {
-                $passTreated = true;
+                return "A senha não pode ser menor que 8 caracteres";
             }
-            return array ($passTreated,$error);
+            return "";
         }
-
+        
 
         function checkNick (StringT $nick) {
             $result = $this->authModel->checkNick($nick);  
-            if (mysqli_num_rows($result) > 0) {
+            if ($result > 0) {
                 return true;
             } else {
                 return false;

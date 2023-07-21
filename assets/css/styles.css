@@ -286,7 +286,7 @@
     background-color:#30a3e7;
   }
 
-  .login, .singUP {
+  .login, .signUp {
     margin-top: 5%;
     right:50%;
   }
@@ -441,7 +441,7 @@
   }
 
 
-  .singUp {
+  .signUp {
     color:black;
     padding:5px;
     padding-bottom:10px;

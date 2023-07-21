@@ -5,9 +5,9 @@
 <body class="container">
 
 <center>    
-<div class="singUP">
+<div class="signUp">
 <img class="chat_logo" src="Images/chat.svg" />    
-<form action="singup.php" method="post">
+<form action="signUp.php" method="post">
 <br>
 <input class="inputText" placeholder="Name"  type=text name=name><br>
 <br><input class="inputNick" placeholder="Nick Name" type=text name=nick><br>
@@ -20,7 +20,7 @@
 </div>
 <?php 
     if (!empty($_POST["name"]) || !empty($_POST["nick"]) || !empty($_POST["pass"]) || !empty($_POST["passConfirmation"]) ) {
-        echo $user->singUp($_POST["name"],$_POST["nick"],$_POST["pass"],$_POST["passConfirmation"]);
+        echo $user->signUp($_POST["name"],$_POST["nick"],$_POST["pass"],$_POST["passConfirmation"]);
     }   
 ?>
 </body>

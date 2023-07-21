@@ -94,7 +94,7 @@
 
     echo "<div  class=\"header\"><h2>";
       $userNickName = "";
-      echo "<a href='login.php'>Login</a> <a>|</a> <a href='singup.php'>Sing Up</a>";
+      echo "<a href='login.php'>Login</a> <a>|</a> <a href='signUp.php'>Sign Up</a>";
     echo "</div>";
 
   
