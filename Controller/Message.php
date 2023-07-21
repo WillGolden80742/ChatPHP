@@ -45,21 +45,34 @@
             }
         }
 
-        function link($text) {
-            $pattern = '/(https?:\/\/(?:www\.)?[\w.-]+\.[a-z]{2,}(?:\/\S*)?)/i';
-        
-            if (preg_match_all($pattern, $text, $matches)) {
-                foreach ($matches[1] as $url) {
-                    self::$countLinks++;
-                    $linkId = self::$countLinks . uniqid();
-                    $linkTag = "<a class='linkMsg' id='$linkId' href='$url' target='_blank'>$url</a>";
-                    $text = str_replace($url, $linkTag, $text);
-                }
+        function link ($text) {
+
+            $urlY1 = "https://";
+            $urlY2 = "http://";
+            $urlY3 = "www.";
+
+            if ( str_contains($text,$urlY1) || str_contains($text,$urlY2) || str_contains($text,$urlY3) ) {
+               
+                if (str_contains($text,$urlY1))  {
+                    $id = explode($urlY1,$text)[1];
+                    $id = $this->splitLink($id);
+                    $id = $urlY1.$id;
+                } else if (str_contains($text,$urlY2)) {
+                    $id = explode($urlY2,$text)[1]; 
+                    $id = $this->splitLink($id);
+                    $id = $urlY2.$id;
+                } else if (str_contains($text,$urlY3)) {
+                    $id = explode($urlY3,$text)[1]; 
+                    $id = $this->splitLink($id);
+                    $id = $urlY3.$id;
+                } 
+                self::$countLinks++;
+                $linkId = self::$countLinks . uniqid();                
+                $text = str_replace($id,"<a class='linkMsg' id='$linkId' href='".$this->href($id)."' target=\"_blank\">".$this->href($id)."</a>",$text);
             }
-        
+            
             return $text;
-        }
-        
+        } 
 
         function youtube ($text) {
 
