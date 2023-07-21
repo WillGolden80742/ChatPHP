@@ -4,26 +4,37 @@
     include 'Controller/StringT.php';
     session_start();
     class AutenticateModel {
-        private $conFactory;
         private $conFactoryPDO;
         function __construct() {
-            $this->conFactory = new ConnectionFactory();
             $this->conFactoryPDO = new ConnectionFactoryPDO();
         }
         // USER 
 
-        function checkLogin (StringT $nick,$pass) {
-            return $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."' and senha = '".$pass."'");   
+        function checkLogin(StringT $nick, $pass) {
+            $connection = $this->conFactoryPDO;
+            $query = $connection->query("SELECT * FROM clientes WHERE nickName = :nick AND senha = :pass");
+            $query->bindParam(':nick', $nick, PDO::PARAM_STR);
+            $query->bindParam(':pass', $pass, PDO::PARAM_STR);
+            return $connection->execute($query)->rowCount();
         }
+        
 
         function singUp (StringT $name,StringT $nick,$pass) { 
-            return $this->conFactory->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES ('".$name."', '".$nick."', '".$pass."')");
+            $connection = $this->conFactoryPDO;
+            $query = $connection->query("INSERT INTO clientes (nomeCliente, nickName, senha) VALUES (:name, :nick, :pass)");
+            $query->bindParam(':name', $name, PDO::PARAM_STR);
+            $query->bindParam(':nick', $nick, PDO::PARAM_STR);
+            $query->bindParam(':pass', $pass, PDO::PARAM_STR);
+            return $connection->execute($query);
         }    
 
-        function checkNick (StringT $nick) {
-            return $this->conFactory->query("SELECT * FROM clientes where nickName = '".$nick."'");
-        }   
-  
+        function checkNick(StringT $nick) {
+            $connection = $this->conFactoryPDO;
+            $query = $connection->query("SELECT * FROM clientes WHERE nickName = :nick");
+            $query->bindParam(':nick', $nick, PDO::PARAM_STR);
+            return $connection->execute($query);
+        }
+        
         function createToken() {
             $date = new DateTime();
             $connection = $this->conFactoryPDO;

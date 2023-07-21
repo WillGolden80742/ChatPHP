@@ -19,7 +19,7 @@
 
         function checkLogin (StringT $nick,$pass) {   
             $result = $this->authModel->checkLogin($nick,$this-> encrypt($nick.$pass));  
-            if (mysqli_num_rows($result) > 0) {
+            if (($result) > 0) {
                 return true;
             } else {
                 return false;
