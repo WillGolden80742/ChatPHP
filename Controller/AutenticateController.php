@@ -49,7 +49,7 @@
         function nameCertification($name) {
             if (empty($name)) {
                 return "O nome não pode estar vazio.";
-            } else if (strlen($name) > 20) {
+            } else if (mb_strlen($name) > 20) {
                 return "O nome deve ter no máximo 20 caracteres.";
             }
             return "";
