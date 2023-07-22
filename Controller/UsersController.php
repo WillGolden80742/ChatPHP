@@ -62,17 +62,17 @@
         function uploadPassword ($pass,$newPass,$newPassConfirmation) {
             if ($this->auth->checkLogin(new StringT($this->nickSession),$pass)) {
                 $passCertification = $this->auth->passCertification($newPass,$newPassConfirmation);
-                if ($passCertification[0]) {
+                if ($passCertification === "") {
                     if($this->user->uploadPassword(new StringT($this->nickSession),$this->auth-> encrypt($this->nickSession.$newPass))) {
-                        header("Location: editPassword.php?message=Senha alterada com sucesso!");
+                        header("Location: editProfile.php?message=Senha alterada com sucesso!");
                         die();
                     }
                 } else {
-                    header("Location: editPassword.php?error=".$passCertification[1]);
+                    header("Location: editProfile.php?error=".$passCertification[1]);
                     die();
                 }
             } else {
-                header("Location: editPassword.php?error=senha incorreta");
+                header("Location: editProfile.php?error=senha incorreta");
                 die();
             }        
         }        
