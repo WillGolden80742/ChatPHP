@@ -557,15 +557,16 @@ async function downloadLastTitle() {
 
 async function downloadAllTitles(time) {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
-
   for (const elemento of elementos) {
     if (time !== timestamp) {
       return;
     }
-
     const linkElemento = document.getElementById(elemento.id);
+    if (!linkElemento) {
+      // Se o elemento não foi encontrado, pule para o próximo
+      continue;
+    }
     const link = linkElemento.href;
-
     if (cookie.has(link)) {
       linkElemento.innerHTML = cookie.get(link);
     } else {
@@ -582,7 +583,6 @@ async function downloadTitle(linkElemento, link) {
       data: { link },
       dataType: 'json'
     });
-
     const formattedResult = `${result}<span style='opacity:0.5;'>${link}</span>`;
     cookie.set(link, formattedResult);
     linkElemento.innerHTML = formattedResult;
