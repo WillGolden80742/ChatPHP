@@ -1,9 +1,9 @@
 <?php
-    include 'Model/AutenticateModel.php';
-    class AutenticateController {
+    include 'Model/AuthenticateModel.php';
+    class AuthenticateController {
         private $authModel;
         function __construct() {
-            $this->authModel = new AutenticateModel();
+            $this->authModel = new AuthenticateModel();
         }
         // USER 
         function login (StringT $nick,$pass) {    
@@ -93,7 +93,7 @@
             if ($this->authModel->checkToken()) {
                 return true;
             } else {
-                header("Location: login.php");
+                header("Location: authenticate.php");
                 die();
                 return false;
             }
@@ -101,7 +101,7 @@
 
         function logout () {
             $this->authModel->deleteToken();
-            header("Location: login.php");
+            header("Location: authenticate.php");
             die();
         }
 

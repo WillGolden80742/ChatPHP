@@ -1,7 +1,7 @@
 <?php 
     include 'Controller/UsersController.php';    
     $user = new UsersController();  
-    $auth = new AutenticateModel();
+    $auth = new AuthenticateModel();
 ?>
 
 

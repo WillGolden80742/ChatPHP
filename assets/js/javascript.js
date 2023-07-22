@@ -898,7 +898,7 @@ function updateMessages (contact = nickNameContact, name=nickNameContact) {
     }).done(function(result) {
       document.getElementById('messages').innerHTML=result;
       if (document.getElementById('login') !== null) {
-        window.location.href = 'login.php';
+        window.location.href = 'authenticate.php';
       } 
       downloadAllMidia();
       var newUrl = 'messages.php?contactNickName=' + contact;

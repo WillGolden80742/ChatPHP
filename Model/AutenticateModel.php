@@ -3,7 +3,7 @@
     include 'ConnectionFactory/ConnectionFactoryPDO.php';
     include 'Controller/StringT.php';
     session_start();
-    class AutenticateModel {
+    class AuthenticateModel {
         private $conFactoryPDO;
         function __construct() {
             $this->conFactoryPDO = new ConnectionFactoryPDO();

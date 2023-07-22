@@ -1,5 +1,5 @@
 <?php 
-    include 'Controller/AutenticateController.php';
-    $auth = new AutenticateController(); 
+    include 'Controller/AuthenticateController.php';
+    $auth = new AuthenticateController(); 
     $auth->logout();
 ?>

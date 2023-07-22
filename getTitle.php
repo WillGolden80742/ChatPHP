@@ -1,7 +1,7 @@
 <?php 
     include 'Controller/UsersController.php';    
     $user = new UsersController();  
-    $auth = new AutenticateModel();
+    $auth = new AuthenticateModel();
     header("Content-type: application/json; charset=utf-8");
     use Goutte\Client;
     use Symfony\Component\HttpClient\HttpClient;

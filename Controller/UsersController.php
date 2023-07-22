@@ -7,7 +7,7 @@
         private $user;
         private $nickSession;
         function __construct() {
-            $this->auth = new AutenticateController();
+            $this->auth = new AuthenticateController();
             $this->user = new UsersModel();
             $this->sessions = new Sessions();
             $this->auth->isLogged();

@@ -1,5 +1,5 @@
 <?php
-    include 'Controller/AutenticateController.php';
+    include 'Controller/AuthenticateController.php';
     include 'Controller/Sessions.php';
     include 'Controller/Message.php';
     class UsersModel {
@@ -9,7 +9,7 @@
         function __construct() {
             $this->conFactory = new ConnectionFactory();
             $this->conFactoryPDO = new ConnectionFactoryPDO();            
-            $this->auth = new AutenticateController();
+            $this->auth = new AuthenticateController();
             $this->auth->isLogged();
         } 
         
