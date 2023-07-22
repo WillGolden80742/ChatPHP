@@ -24,11 +24,11 @@ async function main() {
     var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   
     if (screenWidth > screenHeight && orientationDevice == "portrait") {
-      toggle(true,true);
+      if (window.location.href.includes("index.php") && window.location.href.includes("messages.php"))
+        toggle(true,true);
       orientationDevice = "landscape";
     } else if (screenHeight > screenWidth) {
       orientationDevice = "portrait";
-      toggle(false,false);
     } 
     // Se necessário, atualize o layout da página ou execute outras ações com base na nova resolução
     // ...
