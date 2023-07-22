@@ -47,10 +47,10 @@
 
             <div id="profileTab" class="tabContent">
                 <form action="uploadProfile.php" method="post" enctype="multipart/form-data">
-                    <input class="inputText" placeholder="Nome" type="text" value="<?php echo $user->name(new StringT($_SESSION['nickName'])); ?>" name="name"><br>
-                    <br><input class="inputNick" placeholder="Nome de Usuário" type="text" value="<?php echo $_SESSION['nickName']; ?>" name="nick"><br><br>
-                    <input class="inputPassword" placeholder="Senha" type="password" name="pass"><br><br>
-                    <input class="inputSubmit" type="submit" value="ATUALIZAR">
+                    <input class="inputText" placeholder="Name"  type=text value="<?php echo $user->name(new StringT($_SESSION['nickName'])) ?>" name=name><br>
+                    <br><input class="inputNick" placeholder="Nick Name" type=text value="<?php echo $_SESSION['nickName'] ?>" name=nick><br><br>
+                    <input class="inputPassword" placeholder="Password"  type=password name=pass><br><br>
+                    <input class="inputSubmit" type=submit value="ATUALIZAR"> 
                 </form>
                 <a onclick="toggleTab('passwordTab');" class="editPass"><img src="Images/passwordIcon-dark.svg"></a>
             </div>
