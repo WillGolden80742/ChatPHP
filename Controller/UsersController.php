@@ -45,7 +45,7 @@
                         $this->nickSession=$newNick;
                         $_SESSION['nickName']=$newNick;
                         $this->auth->updateToken();
-                        echo "<center class='statusMsg'><h3 style=\"color:green;\">Alteração com sucesso!</h3></center>";
+                        echo "<center class='statusMsg'><h3 style=\"color:white;\">Alteração com sucesso!</h3></center>";
                     } else {
                         echo "<center class='statusMsg'><h3 style=\"color:red;\">Erro!</h3></center>";
                     }
@@ -63,7 +63,7 @@
                 if ($passCertification === "") {
                     if($this->user->uploadPassword(new StringT($this->nickSession),$this->auth-> encrypt($this->nickSession.$newPass))) {
                         $this->auth->updateToken();
-                        echo "<center class='statusMsg'><h3 style=\"color:green;\">Senha alterada com sucesso!</h3></center>";
+                        echo "<center class='statusMsg'><h3 style=\"color:white;\">Senha alterada com sucesso!</h3></center>";
                     }
                 } else {
                     echo "<center class='statusMsg'><h3 style=\"color:red;\">" . $passCertification . "</h3></center>";

@@ -62,7 +62,7 @@
     }
     echo "<span class='user' >&nbsp;";
     echo $user->name(new StringT($_SESSION['nickName']));
-    echo "<a href=\"editProfile.php\" class='menuProfile' > ••• </a></span></h2>";
+    echo "<a href=\"editProfile.php\" class='menuProfile' > <img src=\"Images/editProfileIcon.svg\" class=\"editProfileIcon\" > </a></span></h2>";
     $userNickName = new StringT($_SESSION['nickName']);
     echo "</div>";
     echo "<div class='contacts' id='contacts'>";

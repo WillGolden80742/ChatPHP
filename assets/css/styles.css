@@ -720,9 +720,16 @@
   text-shadow: 0px 0px 10px black;
 }
 
+.editProfileIcon {
+  height:24px;
+}
+
 @media (orientation: portrait) or (max-width: 900px) {
     .statusMsg h3 {
       font-size:48px;
+    }
+    .editProfileIcon {
+      height:64px;
     }
 
     .embed-link, .embed-download,  .embed-close {
