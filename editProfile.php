@@ -47,7 +47,6 @@ include 'Controller/FileController.php';
         xhttp.send();
     }
 
-
     function toggleTab(tabName) {
         var tabs = document.getElementsByClassName("tabContent");
         for (var i = 0; i < tabs.length; i++) {
@@ -59,7 +58,7 @@ include 'Controller/FileController.php';
     document.addEventListener("DOMContentLoaded", function() {
         loadProfileContent(); // Carrega o conteúdo do perfil ao carregar a página
     });
-
+    
 </script>
 </head>
 <body class="container">
