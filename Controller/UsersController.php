@@ -43,9 +43,8 @@
                 if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->nickSession,$newNick) == 0) {
                     if($this->user->uploadProfile(new StringT($this->nickSession),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
                         $this->nickSession=$newNick;
-                        $this->auth->deleteToken();
                         $_SESSION['nickName']=$newNick;
-                        $this->auth->createToken();
+                        $this->auth->updateToken();
                         echo "<center class='statusMsg'><h3 style=\"color:green;\">Alteração com sucesso!</h3></center>";
                     } else {
                         echo "<center class='statusMsg'><h3 style=\"color:red;\">Erro!</h3></center>";
@@ -63,6 +62,7 @@
                 $passCertification = $this->auth->passCertification($newPass,$newPassConfirmation);
                 if ($passCertification === "") {
                     if($this->user->uploadPassword(new StringT($this->nickSession),$this->auth-> encrypt($this->nickSession.$newPass))) {
+                        $this->auth->updateToken();
                         echo "<center class='statusMsg'><h3 style=\"color:green;\">Senha alterada com sucesso!</h3></center>";
                     }
                 } else {

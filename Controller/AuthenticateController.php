@@ -99,11 +99,8 @@
             }
         }
 
-        function deleteToken () {
+        function updateToken () {
             $this->authModel->deleteToken();
-        }
-
-        function createToken () {
             $this->authModel->createToken();
         }
         
