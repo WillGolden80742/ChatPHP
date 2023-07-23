@@ -13,7 +13,7 @@
                 header("Location: index.php");
                 die();   
             } else {
-                echo "<center class='statusMsg' ><h3 style=\"color:red;\" onmouseover=\"removerStatusMsg();\"> nickname ou senha incorreta </h3></center>";
+                echo "<center class='statusMsg' onmouseover=\"removerStatusMsg();\" ><h3 style=\"color:red;\" > nickname ou senha incorreta </h3></center>";
             }
         }
 
@@ -37,10 +37,16 @@
                     $this->login(new StringT($nick), $pass);
                 } 
             } else {
-                $error = "<center class='statusMsg'><h3 style=\"color:red;\">";
-                $error .="<br>".$nameCertification;
-                $error .="<br>".$nickCertification;
-                $error .="<br>".$passCertification;
+                $error = "<center class='statusMsg' onmouseover=\"removerStatusMsg();\" ><h3 style=\"color:red;\">";
+                if ($nameCertification !== "") {
+                    $error .=$nameCertification."<br>";
+                }
+                if ($nickCertification !== "") {
+                    $error .=$nickCertification."<br>";
+                }
+                if ($passCertification !== "") {
+                    $error .=$passCertification."<br>";
+                }
                 $error .= "</h3></center>";
             }
             echo $error;

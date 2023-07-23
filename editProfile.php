@@ -19,9 +19,10 @@ include 'Controller/FileController.php';
         box-shadow: none;
     }
 
+
+
 </style>
 <script>
-
 
 
     function loadProfileContent() {

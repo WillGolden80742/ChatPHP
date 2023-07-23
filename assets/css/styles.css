@@ -330,10 +330,6 @@
     backdrop-filter: blur(5px);
   }
 
-  .statusMsg h3 {
-    text-shadow: 0px 0px 10px black;
-  }
-
   .inputText,.inputNick, .inputSubmit {
     background-size:6%;
   }
@@ -707,7 +703,26 @@
   top:20px;
 }
 
+.statusMsg {
+  margin-top: 20px;
+  border:solid 3px #2b5278;
+  border-radius: 40px;
+  margin-left:30%;
+  margin-right:30%;
+  backdrop-filter: blur(5px);
+  color:red;
+  background:rgba(40, 81, 123,0.5);
+} 
+
+.statusMsg h3 {
+  font-size:24px;
+  text-shadow: 0px 0px 10px black;
+}
+
 @media (orientation: portrait) or (max-width: 900px) {
+    .statusMsg h3 {
+      font-size:48px;
+    }
 
     .embed-link, .embed-download,  .embed-close {
       width: 120px;

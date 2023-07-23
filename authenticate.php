@@ -27,7 +27,7 @@
         .chat_logo {
             width: 400px;
         }
-                /* Estilos específicos para o formulário de cadastro */
+         
         .signUp {
             display: none;
         }
@@ -71,6 +71,7 @@
                 padding-left: 70px;
             }
             .chat_logo {
+                position: static;
                 width: 666px;
             }
             .header a {
@@ -87,6 +88,12 @@
 </head>
 <body class="container">
 
+<?php
+        $userNickName = "";
+        include 'Controller/AuthenticateController.php';
+        $user = new AuthenticateController();
+?>
+
 <div class="header">
     <h2>
         <?php        
@@ -96,11 +103,6 @@
 </div>
 
 
-<?php
-        $userNickName = "";
-        include 'Controller/AuthenticateController.php';
-        $user = new AuthenticateController();
-?>
 
 <div class="signUp" id="signUp">
     <center>
@@ -135,7 +137,18 @@
     </center>
    
 </div>
-
+<?php
+        if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
+            $user->signUp($_POST["name"], $_POST["nick"], $_POST["pass"], $_POST["passConfirmation"]);
+            echo "<script>showSignUp();</script>";
+        }
+        if (!empty($_POST["nickLogin"]) && !empty($_POST["passLogin"])) {
+            $nick = $_POST["nickLogin"];
+            $pass = $_POST["passLogin"];
+            $user->login(new StringT($nick), $pass);
+            echo "<script>showLogin();</script>";
+        }
+?>
 <script>
     function showLogin() {
         document.getElementById('login').style.display = 'block';
@@ -146,18 +159,9 @@
         document.getElementById('login').style.display = 'none';
         document.getElementById('signUp').style.display = 'block';
     }
+    setTimeout(function() {
+        removerStatusMsg();
+    }, 3000);
 </script>
-<?php
-        if (!empty($_POST["nickLogin"]) && !empty($_POST["passLogin"])) {
-            $nick = $_POST["nickLogin"];
-            $pass = $_POST["passLogin"];
-            $user->login(new StringT($nick), $pass);
-            echo "<script>showLogin();</script>";
-        }
-        if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
-            $user->signUp($_POST["name"], $_POST["nick"], $_POST["pass"], $_POST["passConfirmation"]);
-            echo "<script>showSignUp();</script>";
-        }
-?>
 </body>
 </html>
