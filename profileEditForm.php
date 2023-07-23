@@ -1,7 +1,9 @@
 <?php
-    include 'Controller/UsersController.php'; 
-    $user = new UsersController();  
-    $auth = new AuthenticateModel();
+    if (!isset($user) && !isset($auth)) {
+        include 'Controller/UsersController.php';
+        $user = new UsersController();
+        $auth = new AuthenticateModel();
+    }
 
 ?>
 
