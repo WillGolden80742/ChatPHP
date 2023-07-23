@@ -43,12 +43,13 @@
                 if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->nickSession,$newNick) == 0) {
                     if($this->user->uploadProfile(new StringT($this->nickSession),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
                         $this->nickSession=$newNick;
+                        $_SESSION['nickName']=$newNick;
                         echo "<center class='statusMsg'><h3 style=\"color:green;\">Alteração com sucesso!</h3></center>";
                     } else {
                         echo "<center class='statusMsg'><h3 style=\"color:red;\">Erro!</h3></center>";
                     }
                 } else if ($this->auth->checkNick ($newNick)) {
-                    echo "<center class='statusMsg'><h3 style=\"color:red;\">@" . $newNick . "já existente</h3></center>";
+                    echo "<center class='statusMsg'><h3 style=\"color:red;\">@" . $newNick . " já existente</h3></center>";
                 }
             } else {
                 echo "<center class='statusMsg'><h3 style=\"color:red;\">senha incorreta</h3></center>";

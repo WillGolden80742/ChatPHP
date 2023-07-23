@@ -19,16 +19,8 @@ include 'Controller/FileController.php';
         box-shadow: none;
     }
 
-    #profileContent {
-        display:none;
-    }
-
 </style>
 <script>
-
-    function fadeIn(element) {
-        $(element).fadeIn(250); // 250 milissegundos (0.25 segundos)
-    }
 
 
 
@@ -38,9 +30,6 @@ include 'Controller/FileController.php';
             if (this.readyState == 4 && this.status == 200) {
                 var profileContent = this.responseText + editProfileMessage;
                 document.getElementById("profileContent").innerHTML = profileContent;
-
-                var profileContentElement = document.getElementById("profileContent");
-                fadeIn(profileContentElement);  // Aplica a transição de opacidade
             }
         };
         xhttp.open("GET", "contentEditProfile.php", true);
