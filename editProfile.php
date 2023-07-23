@@ -48,21 +48,6 @@ include 'Controller/FileController.php';
     }
 
 
-
-    function updateProfileContent() {
-        var form = document.getElementById("profileForm");
-        var formData = new FormData(form);
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                loadProfileContent(); // Atualiza o conteúdo após enviar o formulário
-            }
-        };
-        xhttp.open(form.method, form.action, true);
-        xhttp.send(formData);
-    }
-
     function toggleTab(tabName) {
         var tabs = document.getElementsByClassName("tabContent");
         for (var i = 0; i < tabs.length; i++) {
@@ -74,7 +59,7 @@ include 'Controller/FileController.php';
     document.addEventListener("DOMContentLoaded", function() {
         loadProfileContent(); // Carrega o conteúdo do perfil ao carregar a página
     });
-    
+
 </script>
 </head>
 <body class="container">
