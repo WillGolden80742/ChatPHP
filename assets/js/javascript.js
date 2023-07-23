@@ -163,6 +163,23 @@ function uploadPassword() {
   xhttp.send(formData);
 }
 
+function loadProfileContent() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          var profileContent = this.responseText + editProfileMessage;
+          document.getElementById("profileContent").innerHTML = profileContent;
+          if (editProfileMessage.length > 0) {
+              setTimeout(function() {
+                  removerStatusMsg();
+              }, 2000);
+          }
+      }
+  };
+  xhttp.open("GET", "profileEditForm.php", true);
+  xhttp.send();
+}
+
 function removerStatusMsg() {
   var statusMsgElement = document.querySelector('.statusMsg');
   if (statusMsgElement) {

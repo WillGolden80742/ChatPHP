@@ -24,23 +24,6 @@ include 'Controller/FileController.php';
 <script>
 
 
-    function loadProfileContent() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                var profileContent = this.responseText + editProfileMessage;
-                document.getElementById("profileContent").innerHTML = profileContent;
-                if (editProfileMessage.length > 0) {
-                    setTimeout(function() {
-                        removerStatusMsg();
-                    }, 2000);
-                }
-            }
-        };
-        xhttp.open("GET", "contentEditProfile.php", true);
-        xhttp.send();
-    }
-
     function toggleTab(tabName) {
         var tabs = document.getElementsByClassName("tabContent");
         for (var i = 0; i < tabs.length; i++) {
