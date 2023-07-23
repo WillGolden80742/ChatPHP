@@ -43,19 +43,15 @@
                 if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->nickSession,$newNick) == 0) {
                     if($this->user->uploadProfile(new StringT($this->nickSession),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
                         $this->nickSession=$newNick;
-                        header("Location: editProfile.php?message=Alteração com sucesso!");
-                        die();
+                        echo "<center class='statusMsg'><h3 style=\"color:green;\">Alteração com sucesso!</h3></center>";
                     } else {
-                        header("Location: editProfile.php");
-                        die(); 
+                        echo "<center class='statusMsg'><h3 style=\"color:red;\">Erro!</h3></center>";
                     }
                 } else if ($this->auth->checkNick ($newNick)) {
-                    header("Location: editProfile.php?error=@".$newNick." já existente");
-                    die();
+                    echo "<center class='statusMsg'><h3 style=\"color:red;\">@" . $newNick . "já existente</h3></center>";
                 }
             } else {
-                header("Location: editProfile.php?error=senha incorreta");
-                die();
+                echo "<center class='statusMsg'><h3 style=\"color:red;\">senha incorreta</h3></center>";
             }         
         }
 
@@ -64,16 +60,13 @@
                 $passCertification = $this->auth->passCertification($newPass,$newPassConfirmation);
                 if ($passCertification === "") {
                     if($this->user->uploadPassword(new StringT($this->nickSession),$this->auth-> encrypt($this->nickSession.$newPass))) {
-                        header("Location: editProfile.php?message=Senha alterada com sucesso!");
-                        die();
+                        echo "<center class='statusMsg'><h3 style=\"color:green;\">Senha alterada com sucesso!</h3></center>";
                     }
                 } else {
-                    header("Location: editProfile.php?error=".$passCertification[1]);
-                    die();
+                    echo "<center class='statusMsg'><h3 style=\"color:red;\">" . $passCertification . "</h3></center>";
                 }
             } else {
-                header("Location: editProfile.php?error=senha incorreta");
-                die();
+                echo "<center class='statusMsg'><h3 style=\"color:red;\">senha incorreta</h3></center>";
             }        
         }        
         

@@ -113,6 +113,54 @@ function uploadPic() {
     uploadFile('uploadPic.php', formData);
   }
 }
+var editProfileMessage = "";
+
+function uploadProfile() {
+  var name = document.querySelector("#profileTab input[name=name]").value;
+  var nick = document.querySelector("#profileTab input[name=nick]").value;
+  var pass = document.querySelector("#profileTab input[name=pass]").value;
+
+  var formData = new FormData();
+  formData.append('name', name);
+  formData.append('nick', nick);
+  formData.append('pass', pass);
+
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function(content) {
+    if (this.readyState == 4 && this.status == 200) {
+      loadProfileContent(); // Atualiza o conteúdo após enviar o formulário
+      editProfileMessage = this.responseText;
+    }
+  };
+
+  xhttp.open("POST", "uploadProfile.php", true);
+  xhttp.send(formData);
+}
+
+
+function uploadPassword() {
+  var currentPass = document.querySelector("#passwordTab input[name=currentPass]").value;
+  var newPass = document.querySelector("#passwordTab input[name=pass]").value;
+  var passConfirmation = document.querySelector("#passwordTab input[name=passConfirmation]").value;
+
+  var formData = new FormData();
+  formData.append('currentPass', currentPass);
+  formData.append('pass', newPass);
+  formData.append('passConfirmation', passConfirmation);
+
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function(content) {
+    if (this.readyState == 4 && this.status == 200) {
+      loadProfileContent(); // Atualiza o conteúdo após enviar o formulário
+      editProfileMessage = this.responseText;
+    }
+  };
+
+  xhttp.open("POST", "uploadPassword.php", true);
+  xhttp.send(formData);
+}
 
 function imgToJPG(inputFile, fileName, callback) {
   var reader = new FileReader();
