@@ -331,12 +331,12 @@
   }
 
   .inputText,.inputNick, .inputSubmit {
-    background-size:6%;
+    background-size:8%;
   }
 
   .inputPassword {
     background-position-x:12px;
-    background-size:5%;
+    background-size:7%;
   }
 
   .inputSubmit {
@@ -348,6 +348,20 @@
   .inputSubmit:hover {
     background:#2b5278;
   }
+
+
+  .inputNick {
+    background-image: url("../../Images/arrobaIcon-dark.svg");  
+  }
+
+  .inputText {
+      background-image: url("../../Images/nameIcon-dark.svg");
+  }
+
+  .inputPassword {
+      background-image: url("../../Images/passwordIcon-dark.svg");
+  }
+
 
   .msg .delete {
     z-index: 1000;
@@ -427,19 +441,6 @@
   .userName, .back,  .picMessage img {
     display:none;
   }    
-
-  .inputNick {
-    background-image: url("../../Images/arrobaIcon-dark.svg");  
-  }
-
-  .inputText {
-      background-image: url("../../Images/nameIcon-dark.svg");
-  }
-
-  .inputPassword {
-      background-image: url("../../Images/passwordIcon-dark.svg");
-  }
-
 
   .signUp {
     color:black;
