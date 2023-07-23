@@ -99,6 +99,14 @@
             }
         }
 
+        function deleteToken () {
+            $this->authModel->deleteToken();
+        }
+
+        function createToken () {
+            $this->authModel->createToken();
+        }
+        
         function logout () {
             $this->authModel->deleteToken();
             header("Location: authenticate.php");

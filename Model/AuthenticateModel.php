@@ -36,14 +36,13 @@
         }
         
         function createToken() {
-            $date = new DateTime();
             $connection = $this->conFactoryPDO;
             $query = $connection->query("DELETE FROM token WHERE clienteId =:nick");
             $query->bindParam(':nick',$_SESSION['nickName'], PDO::PARAM_STR);
             $connection->execute($query);
             $query = $connection->query("INSERT INTO token (clienteID, tokenHash) VALUES (:nick,:tokenHash)");
             $query->bindParam(':nick',$_SESSION['nickName'], PDO::PARAM_STR);
-            $hash = hash("sha512",$_SESSION['nickName'].$date->getTimestamp().rand(),false);
+            $hash = hash("sha512",$_SESSION['nickName'].uniqid(),false);
             $_SESSION['token'] = $hash;
             $query->bindParam(':tokenHash',$hash, PDO::PARAM_STR);
             $connection->execute($query);

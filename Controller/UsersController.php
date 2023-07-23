@@ -43,7 +43,9 @@
                 if (!$this->auth->checkNick (new StringT($newNick)) || strcmp($this->nickSession,$newNick) == 0) {
                     if($this->user->uploadProfile(new StringT($this->nickSession),$this->auth->encrypt($newNick.$pass),$newNick,$name)) {
                         $this->nickSession=$newNick;
+                        $this->auth->deleteToken();
                         $_SESSION['nickName']=$newNick;
+                        $this->auth->createToken();
                         echo "<center class='statusMsg'><h3 style=\"color:green;\">Alteração com sucesso!</h3></center>";
                     } else {
                         echo "<center class='statusMsg'><h3 style=\"color:red;\">Erro!</h3></center>";
