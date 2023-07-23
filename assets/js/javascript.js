@@ -113,6 +113,7 @@ function uploadPic() {
     uploadFile('uploadPic.php', formData);
   }
 }
+
 var editProfileMessage = "";
 
 function uploadProfile() {
