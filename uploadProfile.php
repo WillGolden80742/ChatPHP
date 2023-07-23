@@ -1,5 +1,9 @@
 <?php
     include 'Controller/UsersController.php';  
     $user = new UsersController();
-    $user->uploadProfile($_POST['pass'],new StringT($_POST['nick']),$_POST['name']);
+    if ($_POST['pass'] !== "") {
+        $user->uploadProfile($_POST['pass'],new StringT($_POST['nick']),$_POST['name']);
+    } else {
+        echo "<center class='statusMsg' onmouseover=\"removerStatusMsg();\" ><h3 style=\"color:red;\">È necessário senha para alteração</h3></center>";
+    }
 ?>

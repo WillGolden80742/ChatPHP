@@ -30,6 +30,11 @@ include 'Controller/FileController.php';
             if (this.readyState == 4 && this.status == 200) {
                 var profileContent = this.responseText + editProfileMessage;
                 document.getElementById("profileContent").innerHTML = profileContent;
+                if (editProfileMessage.length > 0) {
+                    setTimeout(function() {
+                        removerStatusMsg();
+                    }, 2000);
+                }
             }
         };
         xhttp.open("GET", "contentEditProfile.php", true);

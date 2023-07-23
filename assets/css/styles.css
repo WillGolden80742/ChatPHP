@@ -287,8 +287,8 @@
   }
 
   .login, .signUp {
+    position: relative;
     margin-top: 5%;
-    right:50%;
   }
 
  
@@ -324,10 +324,14 @@
     background-position-y:50%;
     background-position-x:12px;
     border-radius:50px;
-    border:solid 2px #2b5278;
+    border:solid 3px #2b5278;
     font-weight: bolder;
     font-size: 18px;
     backdrop-filter: blur(5px);
+  }
+
+  .statusMsg h3 {
+    text-shadow: 0px 0px 10px black;
   }
 
   .inputText,.inputNick, .inputSubmit {

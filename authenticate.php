@@ -4,7 +4,6 @@
     <title>ChatPHP</title>
     <script src="assets/js/javascript.js"></script>
     <script src="assets/js/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/jquery.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
     <style>
         /* Estilos CSS da página */
@@ -17,6 +16,7 @@
             backdrop-filter: blur(5px);
         }
         .header {
+            z-index:100000;
             position: absolute;
             top: 0;
             margin-top: 0;
@@ -26,6 +26,14 @@
         }
         .chat_logo {
             width: 400px;
+        }
+                /* Estilos específicos para o formulário de cadastro */
+        .signUp {
+            display: none;
+        }
+
+        .statusMsg {
+            position: relative;
         }
         @media only screen and (max-width: 1080px) {
             body {
@@ -74,54 +82,25 @@
             center {
                 transform: translateY(50%);
             }
-        }
-        /* Estilos específicos para o formulário de cadastro */
-        .signUp {
-            display: none;
-        }
+        }    
     </style>
 </head>
 <body class="container">
 
-<?php
-include 'Controller/AuthenticateController.php';
-$user = new AuthenticateController();
-
-// Verificar se o formulário de cadastro foi submetido
-if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
-    echo $user->signUp($_POST["name"], $_POST["nick"], $_POST["pass"], $_POST["passConfirmation"]);
-}
-
-// Verificar se o formulário de login foi submetido
-if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
-    $nick = $_POST["nick"];
-    $pass = $_POST["pass"];
-    $user->login(new StringT($nick), $pass);
-}
-?>
-
 <div class="header">
     <h2>
-        <?php
-        $userNickName = "";
-        echo "<a href='javascript:showLogin();'>Login</a> <a>|</a> <a href='javascript:showSignUp();'>Sign Up</a>";
+        <?php        
+            echo "<a href='javascript:showLogin();'>Login</a> <a>|</a> <a href='javascript:showSignUp();'>Sign Up</a>";
         ?>
     </h2>
 </div>
 
-<div class="login" id="login">
-    <center>
-        <img class="chat_logo" src="Images/chat1.svg" />
-        <form action="authenticate.php" method="post">
-            <br>
-            <input class="inputNick" placeholder="Nick Name" type="text" name="nick"><br>
-            <br>
-            <input class="inputPassword" placeholder="Password" type="password" name="pass"><br>
-            <br>
-            <input class="inputSubmit" type="submit" value="LOGIN">
-        </form>
-    </center>
-</div>
+
+<?php
+        $userNickName = "";
+        include 'Controller/AuthenticateController.php';
+        $user = new AuthenticateController();
+?>
 
 <div class="signUp" id="signUp">
     <center>
@@ -139,6 +118,22 @@ if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
             <input class="inputSubmit" type="submit" value="SIGN UP">
         </form>
     </center>
+
+</div>
+
+<div class="login" id="login">
+    <center>
+        <img class="chat_logo" src="Images/chat1.svg" />
+        <form action="authenticate.php" method="post">
+            <br>
+            <input class="inputNick" placeholder="Nick Name" type="text" name="nickLogin"><br>
+            <br>
+            <input class="inputPassword" placeholder="Password" type="password" name="passLogin"><br>
+            <br>
+            <input class="inputSubmit" type="submit" value="LOGIN">
+        </form>
+    </center>
+   
 </div>
 
 <script>
@@ -152,5 +147,17 @@ if (!empty($_POST["nick"]) && !empty($_POST["pass"])) {
         document.getElementById('signUp').style.display = 'block';
     }
 </script>
+<?php
+        if (!empty($_POST["nickLogin"]) && !empty($_POST["passLogin"])) {
+            $nick = $_POST["nickLogin"];
+            $pass = $_POST["passLogin"];
+            $user->login(new StringT($nick), $pass);
+            echo "<script>showLogin();</script>";
+        }
+        if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
+            $user->signUp($_POST["name"], $_POST["nick"], $_POST["pass"], $_POST["passConfirmation"]);
+            echo "<script>showSignUp();</script>";
+        }
+?>
 </body>
 </html>

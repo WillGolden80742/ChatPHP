@@ -163,6 +163,13 @@ function uploadPassword() {
   xhttp.send(formData);
 }
 
+function removerStatusMsg() {
+  var statusMsgElement = document.querySelector('.statusMsg');
+  if (statusMsgElement) {
+      statusMsgElement.remove();
+  }
+}
+
 function imgToJPG(inputFile, fileName, callback) {
   var reader = new FileReader();
   reader.onload = function(event) {

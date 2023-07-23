@@ -13,7 +13,7 @@
                 header("Location: index.php");
                 die();   
             } else {
-                echo "<center><h3 style=\"color:red;\"> nickname ou senha incorreta </h3></center>";
+                echo "<center class='statusMsg' ><h3 style=\"color:red;\" onmouseover=\"removerStatusMsg();\"> nickname ou senha incorreta </h3></center>";
             }
         }
 
@@ -37,13 +37,13 @@
                     $this->login(new StringT($nick), $pass);
                 } 
             } else {
-                $error = "<center><h3 style=\"color:red;\">";
-                $error .= $nameCertification;
-                $error .= $nickCertification;
-                $error .= $passCertification;
+                $error = "<center class='statusMsg'><h3 style=\"color:red;\">";
+                $error .="<br>".$nameCertification;
+                $error .="<br>".$nickCertification;
+                $error .="<br>".$passCertification;
                 $error .= "</h3></center>";
             }
-            return $error;
+            echo $error;
         }
         
         function nameCertification($name) {
@@ -57,24 +57,24 @@
         
         function nickCertification($nick) {
             if (empty($nick)) {
-                return "O nickname não pode estar vazio,";
+                return "O nickname não pode estar vazio.";
             } else if (!preg_match("/^[a-zA-Z0-9_]+$/", $nick)) {
-                return "Apenas são permitidos caracteres _, aA a zZ e 0 a 9 para o nickname,";
+                return "Apenas são permitidos caracteres _, aA a zZ e 0 a 9 para o nickname.";
             } else if (strlen($nick) > 20) {
-                return "O nickname deve ter no máximo 20 caracteres,";
+                return "O nickname deve ter no máximo 20 caracteres.";
             } else if ($this->checkNick(new StringT($nick))) {
-                return "O nickname já existe,";
+                return "O nickname já existe.";
             }
             return "";
         }
         
         function passCertification($pass, $passConfirmation) {
             if (empty($pass)) {
-                return "A senha não pode ser vazia,";
+                return "A senha não pode ser vazia.";
             } else if (strcmp($pass, $passConfirmation) !== 0) { 
-                return "As senhas não são iguais";
+                return "As senhas não são iguais.";
             } else if (strlen($pass) < 8) {
-                return "A senha não pode ser menor que 8 caracteres";
+                return "A senha não pode ser menor que 8 caracteres.";
             }
             return "";
         }
