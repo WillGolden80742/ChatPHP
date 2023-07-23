@@ -64,6 +64,22 @@ include 'Controller/FileController.php';
 <body class="container">
 <div class="editProfile">
     <center>
+        <?php 
+            $pic = null;
+            if (!empty($_FILES["pic"])) {
+                $fileController = new FileController($_FILES["pic"]);
+                $file = $fileController->getImage();
+                $format = $fileController->getFormat();
+                if ($file) {
+                    $user->uploadProfilePic(new StringT($_SESSION['nickName']), $file, $format);
+                } else {
+                    echo $fileController->getError();
+                }
+                echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(" . $user->downloadProfilePic(new StringT($_SESSION['nickName'])) . ");' onclick='openfile(\"editProfilePic\");' /></div>";
+            } else {
+                echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(" . $user->downloadProfilePic(new StringT($_SESSION['nickName'])) . ");' onclick='openfile(\"editProfilePic\");' /></div>";
+            }
+        ?>
         <div id="profileContent">
             <!-- Conteúdo de perfil carregado através do AJAX -->
         </div>
