@@ -1,31 +1,35 @@
 # ChatPHP
 
-ChatPHP é um projeto para criar um chat web utilizando PHP e MySQL. 
+ChatPHP é um chat web desenvolvido com PHP, MySQL, HTML, CSS e JavaScript.
 
 ## Funcionalidades
 
-- Cadastro e login de usuários
+- Cadastro e login de usuários com validação 
 - Adicionar/remover contatos
-- Enviar mensagens de texto para contatos
-- Enviar arquivos (imagens, áudio, vídeo, documentos) nas mensagens
-- Notificação de novas mensagens
-- Pesquisar contatos
-- Editar perfil (foto, nome, apelido)
-- Trocar senha
+- Enviar mensagens de texto em tempo real 
+- Enviar arquivos como imagens, áudio, vídeo e documentos
+- Notificações de novas mensagens com badges
+- Pesquisa de contatos pelo nome
+- Edição de perfil do usuário (foto, nome, username) 
+- Troca de senha com validação
+- Reprodução de áudio e vídeo no chat
+- Pré-visualização de imagens no chat
 
 ## Tecnologias
 
-- PHP 8+
-- MySQL  
-- HTML/CSS/JS
+- PHP 7+
+- MySQL
+- HTML, CSS, JS
+- jQuery
+- AJAX
 
-## Configuração
+## Instalação
 
-- Importar o `chat.sql` 
-- Configurar variáveis de ambiente (.env ou servidor web)
+- Importar o banco de dados SQL
+- Configurar variáveis de ambiente (.env)
 - Instalar dependências com `composer install`
-- Configurar URL base nas views
+- Definir URL base no arquivo de configuração
 
-## License
+## Licença
 
-MIT
+ChatPHP está licenciado sob a licença MIT.
