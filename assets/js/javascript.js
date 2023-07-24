@@ -8,18 +8,13 @@ var orientationDevice = "landscape";
 var timestamp = new Date().getTime();
 
 main();
-// Chame a função downloadAllMidia de uma função assíncrona
 async function main() {
   try {
     await downloadAllMidia();
-    // Outras operações após o download das mídias
   } catch (erro) {
     console.error(erro);
-    // Trate o erro aqui, se necessário
   }
-    // Função para lidar com a mudança de resolução da tela
   function handleScreenResolutionChange() {
-    // Obtenha a nova largura e altura da tela
     var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   
@@ -30,13 +25,8 @@ async function main() {
     } else if (screenHeight > screenWidth) {
       orientationDevice = "portrait";
     } 
-    // Se necessário, atualize o layout da página ou execute outras ações com base na nova resolução
-    // ...
   }
-
-  // Adicione um listener para o evento 'resize' que é acionado quando a resolução da tela é alterada
   window.addEventListener('resize', handleScreenResolutionChange);
-
 }
 
 
