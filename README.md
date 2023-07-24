@@ -1,5 +1,3 @@
-Aqui está um README.md atualizado com a lista de arquivos fornecida:
-
 # ChatPHP
 
 ChatPHP é um projeto para criar um chat web utilizando PHP e MySQL. 
