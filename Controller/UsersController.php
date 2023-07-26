@@ -18,10 +18,7 @@
             $this->user->uploadFile($file,$msg,$this->nickSession,$contactNickName);
         }
 
-        function downloadFile ($nomeHash,$async=false) {
-            if ($async) {
-                usleep(250000);
-            }
+        function downloadFile ($nomeHash) {
             return base64_encode($this->user->downloadFile($nomeHash));
         }
 
