@@ -242,7 +242,7 @@
 
 
         function isVideo($extensao) {
-            $videoExtensions = array('mp4', 'webm'); // Adicione aqui as extensões de vídeo suportadas
+            $videoExtensions = array('mp4'); // Adicione aqui as extensões de vídeo suportadas
 
             return in_array($extensao, $videoExtensions);
         }

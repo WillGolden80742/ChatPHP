@@ -32,7 +32,6 @@
   .thumb-video {
     height:200px;
     width:100%;
-    border:solid 2px #2b5278;
     background-size:100%;
     margin-bottom:5px;
     border-radius: 10px;
@@ -53,7 +52,7 @@
     width:27%;
     height:86%;
     border-radius: 10px;
-    overflow-y: scroll;
+    overflow-y: auto;
   } 
 
   @media (orientation: landscape) {
@@ -94,14 +93,19 @@
   
   .text {
     background: none;
-    border-top-left-radius:10px; 
-    border-bottom-right-radius:10px;     
+    border-radius:10px;    
     width:64%;
     height:15%;
     position: relative;
     margin-left:0px;
     margin-top:5px;
     font-size: 18px; 
+    background-image: url("../../Images/emojiIcon.svg");
+    background-size:32px;
+    background-position-x: calc(100% - 10px);
+    background-position-y: calc(0% + 10px);
+    padding-right:52px;
+    background-repeat: no-repeat;
   }
 
   .send_msg_box {
@@ -142,7 +146,7 @@
     margin-top:5px;
     height:68.5%;  
     width:67%;
-    border-radius: 10px 0px 10px 0px;
+    border-radius: 10px;
     overflow-y: scroll;
     background-image:url("../../Images/bg.svg");
     background-size: 100vw auto;
@@ -190,7 +194,6 @@
     margin-top:5px;
     background-color: rgba(127,127,127,0.5);
     width: 99%;
-    border:solid 2px #2b5278;
     border-radius:5px;
     overflow-x: hidden;
     background-image: url("../../Images/download.gif");
@@ -203,21 +206,42 @@
     overflow-x: auto;
   }
 
-
-
   .audio_file {
     margin-top: 5px;
     width: 100%;
     border-radius: 10px;
   }
 
+  .emoji {
+    font-size:48px;
+  }
+   
+  .emoji-div {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    text-align: center;
+    background-color: rgba(40, 81, 123);
+    border-radius:10px;
+  }
+
+  .emoji-div div {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+  }
+
+  .emoji-div div:hover {
+    display: inline-block;
+    background-color: rgba(135, 197, 255, 0.5);
+  }
 
   .attachment_file {
     margin-top:5px;
     padding:4%;
-    background-color: #30a3e7;
+    background-color: rgba(135, 197, 255, 0.5);
     width: 91%;
-    border:solid 2px #2b5278;
     border-radius:5px;
   }
 
@@ -311,7 +335,7 @@
     background-position-y:50%;
     background-position-x:15px;
     background-repeat: no-repeat;
-    border-bottom:solid 2px #2b5278;
+    border:none;
   }
 
   .inputText,.inputNick, .inputPassword, .inputSubmit {
@@ -368,10 +392,9 @@
     float:right;
     right: 0;
     padding: 7px;
-    border: 3px solid #2b5278;
-    color: black;
-    margin-top:-50px;
-    background:rgba(40, 81, 123,0.9);
+    color: white;
+    margin-top:-40px;
+    background:rgba(40, 81, 123);
     margin-right:-12px;
     border-radius:10px;
     opacity:0;
@@ -383,13 +406,12 @@
   }  
 
   .msg {
-    border-top-left-radius:10px; 
+    border-radius:20px; 
     padding:10px;
-    max-width:50%;
-    border-bottom-right-radius:10px;  
+    max-width:50%; 
     margin:30px;
     box-shadow: 0px 10px 10px 0px rgb(0 0 0 / 35%);
-    color:black;
+    color:white;
     font-weight: bold;
     word-break: break-all;
   }
@@ -399,12 +421,12 @@
   }
 
   .msg-left {
-    background-color:rgba(40, 81, 123,0.9);
+    background-color:rgba(40, 81, 123);
     margin-left:50%;
   }
 
   .msg-right {
-    background-color:rgba(23, 37, 52,0.9 );
+    background-color:rgba(23, 37, 52);
   }
  
   .imgEmoji {
@@ -452,10 +474,15 @@
   .editPass img, .editPro img {
     height:32px;
   }
-  .contacts, .messages, .text, .msg{
-      border: 3px solid #2b5278;
+  
+  .messages, .text, .contacts{
+    background-color:#0240911f;
+    border:none;
   }
 
+  .messages {
+    background-color:none;
+  }
   .send {
     border: 3px solid rgba(0,0,0,0);
   } 
@@ -468,26 +495,24 @@
 
 
   ::-webkit-scrollbar {
-    width:20px;
-    border-radius:10px;
+    width: 20px;
+    border:none;
   }
-
+  
   ::-webkit-scrollbar-thumb:hover {
-    background:#2b5278;
-  }   
-
+    background: #2b5278;
+  }
+  
   ::-webkit-scrollbar-thumb {
-    background:white;
-    border-radius:10px;
-    border:solid 1px rgba(0,0,0,0.25);
+    background: white;
+    border-radius: 5px;
   }
-
+  
   ::-webkit-scrollbar-track {
-    border-radius:10px;
-    box-shadow:inset 0px 0px 5px rgba(0,0,0,0.25);
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.25);
   }
-
-  ::-webkit-input-placeholder{
+  
+  ::-webkit-input-placeholder {
     color: #2b5278;
     font-weight: bold;
   }
@@ -530,8 +555,7 @@
   .home {
     z-index:10000;
     width: 68.6%;
-    border:solid 3px #2b5278;
-    border-radius: 10px 0px 10px 0px;
+    border-radius: 10px;
     margin-top: 5px;
     height: 85.8%;
     background-image:url("../../Images/bg.svg");
@@ -558,10 +582,10 @@
   /* embed midias */ 
 
   .embed-link, .embed-download,  .embed-close {
-    background-color: #2b5278bd;
+    background-color: #2b5278;
     width: 70px;
     height: 70px;
-    border-radius:100%;
+    border-radius:10px;
     background-size: 50%;
     background-repeat: no-repeat;
     background-position-x: 50%;
@@ -629,7 +653,6 @@
   background-color: rgba(127,127,127,0.5);
   padding:10px;
   margin-bottom:0;
-  border:solid 3px #2b5278;
   border-bottom:0;
   font-size:14px;
 }
@@ -641,8 +664,7 @@
   border-radius:5px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border: 3px solid #2b5278;
-  border-top: 1px solid #2b5278;
+  margin-top:1px;
 }
 
 .controls {
@@ -726,6 +748,11 @@
 }
 
 @media (orientation: portrait) or (max-width: 900px) {
+
+    .msg .delete {
+      margin-top:-60px;
+    }
+
     .statusMsg h3 {
       font-size:48px;
     }
@@ -830,7 +857,16 @@
       width:40px;
       height:40px;
     }
-    
+
+    .emoji {
+      font-size:96px;
+    }  
+
+    .emoji-div div {
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+    }
 
 } 
   

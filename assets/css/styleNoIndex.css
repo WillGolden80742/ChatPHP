@@ -17,14 +17,14 @@
 .editProfile {
   width: 68.6%;
   float:left;
-  border:solid 3px #2b5278;
-  border-radius: 10px 0px 10px 0px;
+  border-radius: 10px;
   overflow-y: scroll;
   margin-top: 5px;
   padding-top:20px;
   background-image: url("Images/bg.svg");
   background-size:70%;
   height: 82.7%;
+  background-color:#0240911f;
 }
 
 .home {
@@ -171,6 +171,10 @@
   
     .text {
       font-size:48px;
+      background-size:64px;
+      background-position-x: calc(100% - 20px);
+      background-position-y: calc(0% + 20px);
+      padding-right:104px;
     }
 
     .attachment { 
