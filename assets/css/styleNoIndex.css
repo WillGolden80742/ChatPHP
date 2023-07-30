@@ -203,6 +203,10 @@
       width: 40px;
       height: 40px;
     }
+
+    .attachment_file, .image_file, .thumb-video img {
+      border-radius:20px;
+    }
     
     .audio_file {
       width:100%
