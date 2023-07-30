@@ -751,8 +751,6 @@
 
 .editProfileIcon {
   height:24px;
-  float: right;
-  transform: translateY(50%);
 }
 
 @media (orientation: portrait) or (max-width: 900px) {
