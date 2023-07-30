@@ -730,7 +730,6 @@ function emojiClicked(event) {
   const xDiff = Width-xClick;
   const yClick=event.offsetY;
   const size = parseInt(window.getComputedStyle(textElement).backgroundSize.replace("px",""));
-  console.log("size:"+(size+10)+",\nx:"+xDiff+",\ny:"+yClick);
   if(screenWidth>screenHeight) {
     if (yClick <= (size+10) && xDiff <= (size+10)) {
         embedEmojis();
