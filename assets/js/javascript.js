@@ -311,13 +311,16 @@ var downloading = false;
 function showPlayer(hash,event) {
     if (!downloading) {
         downloading = true;
-        var videoDiv = event.target.querySelector('img');
-        videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
+        var videoDiv = event.target.querySelector("img");
+        if (videoDiv) {
+          videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
+        } 
         const parts = hash.split('.');
         const format = parts[parts.length - 1].toLowerCase();
         if (cookie.has(hash)) {
-          var videoDiv = event.target.querySelector('img');
-          videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+          if (videoDiv) { 
+            videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+          } 
           var url = cookie.get(hash);
           embedVideo(url,url);
           downloading = false;
@@ -326,8 +329,9 @@ function showPlayer(hash,event) {
           .then(function(dados) {
               var contentBlob = b64toBlob(dados, type(format)+"/"+format);
               urlContent = URL.createObjectURL(contentBlob);
-              var videoDiv = event.target.querySelector('img');
-              videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+              if (videoDiv) { 
+                videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+              } 
               embedVideo(urlContent,urlContent);
               cookie.set(hash,urlContent);
               downloading = false;
