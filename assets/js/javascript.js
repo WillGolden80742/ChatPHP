@@ -716,6 +716,28 @@ function embedYoutube(id) {
   document.getElementById('messages').appendChild(iframeElement);
 }
 
+function emojiClicked(event) {
+  var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  const currentTextElement = document.querySelector(".text");
+  const element = event.target;
+  const xClick = event.offsetX;
+  const Width = currentTextElement.offsetWidth;
+  const xDiff = Width-xClick;
+  const yClick=event.offsetY;
+  const size = parseInt(window.getComputedStyle(textElement).backgroundSize.replace("px",""));
+  console.log("size:"+(size+10)+",\nx:"+xDiff+",\ny:"+yClick);
+  if(screenWidth>screenHeight) {
+    if (yClick <= (size+10) && xDiff <= (size+10)) {
+        embedEmojis();
+    }
+  } else {
+    if (yClick <= (size+20) && xDiff <= (size+20)) {
+        embedEmojis();
+    }
+  }
+}
+
 function embedEmojis() {
   const isOpen = document.querySelector(".emoji-div");
   if (!isOpen) {

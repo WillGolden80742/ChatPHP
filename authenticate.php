@@ -47,6 +47,7 @@
                 padding: 10px;
                 height: 70px;
                 padding-left: 40px;
+                border-radius: 40px;
             }
             .inputSubmit {
                 padding: 20px;
