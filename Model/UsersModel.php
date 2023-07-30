@@ -15,56 +15,58 @@
         
 
         function uploadFile($file, $msg, $nickName, $contactNickName) {
-            if (!empty($msg)) {
-                $this->createMessage($msg, new StringT($contactNickName), new StringT($nickName));
-            } else {
-                $this->createMessage(" ", new StringT($contactNickName), new StringT($nickName));
-            }
-        
-            $row = mysqli_fetch_assoc($this->lasIdMessage($nickName, $contactNickName));
-        
-            if ($this->getNumberOfAttachments($row['LastID']) == 0) {
-                $nomeHash = md5_file($file['tmp_name']) . '.' . $file['size'] . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-        
-                // Verificar se o arquivo já existe na tabela 'arquivos'
-                $connection = $this->conFactoryPDO;
-                $query = $connection->query("SELECT nomeHash FROM arquivos WHERE nomeHash = :nomeHash");
-                $query->bindParam(':nomeHash', $nomeHash);
-                $connection->execute($query);
-        
-                if (!($query->rowCount() > 0)) {
-                    // Inserir o arquivo na tabela 'arquivos'
-                    $query = $connection->query("INSERT INTO arquivos (nomeHash, arquivo) VALUES (:nomeHash, :arquivo)");
-                    $query->bindParam(':nomeHash', $nomeHash);
-                    $arquivo = file_get_contents($file['tmp_name']);
-                    $query->bindParam(':arquivo', $arquivo);
-                    $connection->execute($query);
+            if (strcmp($contactNickName, $nickName) !== 0) {
+                if (!empty($msg)) {
+                    $this->createMessage($msg, new StringT($contactNickName), new StringT($nickName));
+                } else {
+                    $this->createMessage(" ", new StringT($contactNickName), new StringT($nickName));
                 }
-        
-                // Verificar se existe um anexo referenciando a um arquivo Idmessage que pertença ao MsgTo ($contactNickName)
-                $query = $connection->query("SELECT anexoId FROM anexo WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE MsgTo = :msgTo)");
-                $query->bindParam(':arquivo', $nomeHash);
-                $query->bindParam(':msgTo', $contactNickName);
-                $connection->execute($query);
-        
-                if ($query->rowCount() > 0) {
-                    // Atualizar o anexo existente com o ID da última mensagem enviada
-                    $query = $connection->query("UPDATE anexo SET mensagem = :mensagem WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE MsgTo = :msgTo)");
-                    $query->bindParam(':mensagem', $row['LastID']);
+            
+                $row = mysqli_fetch_assoc($this->lasIdMessage($nickName, $contactNickName));
+            
+                if ($this->getNumberOfAttachments($row['LastID']) == 0) {
+                    $nomeHash = md5_file($file['tmp_name']) . '.' . $file['size'] . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+            
+                    // Verificar se o arquivo já existe na tabela 'arquivos'
+                    $connection = $this->conFactoryPDO;
+                    $query = $connection->query("SELECT nomeHash FROM arquivos WHERE nomeHash = :nomeHash");
+                    $query->bindParam(':nomeHash', $nomeHash);
+                    $connection->execute($query);
+            
+                    if (!($query->rowCount() > 0)) {
+                        // Inserir o arquivo na tabela 'arquivos'
+                        $query = $connection->query("INSERT INTO arquivos (nomeHash, arquivo) VALUES (:nomeHash, :arquivo)");
+                        $query->bindParam(':nomeHash', $nomeHash);
+                        $arquivo = file_get_contents($file['tmp_name']);
+                        $query->bindParam(':arquivo', $arquivo);
+                        $connection->execute($query);
+                    }
+            
+                    // Verificar se existe um anexo referenciando a um arquivo Idmessage que pertença ao MsgTo ($contactNickName)
+                    $query = $connection->query("SELECT anexoId FROM anexo WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE MsgTo = :msgTo)");
                     $query->bindParam(':arquivo', $nomeHash);
                     $query->bindParam(':msgTo', $contactNickName);
                     $connection->execute($query);
-                } else {
-                    // Inserir um novo anexo referenciando o arquivo à última mensagem enviada
-                    $query = $connection->query("INSERT INTO anexo (nome, arquivo, mensagem) VALUES (:nome, :arquivo, :mensagem)");
-                    $query->bindParam(':nome', $file['name']);
-                    $query->bindParam(':arquivo', $nomeHash);
-                    $query->bindParam(':mensagem', $row['LastID']);
+            
+                    if ($query->rowCount() > 0) {
+                        // Atualizar o anexo existente com o ID da última mensagem enviada
+                        $query = $connection->query("UPDATE anexo SET mensagem = :mensagem WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE MsgTo = :msgTo)");
+                        $query->bindParam(':mensagem', $row['LastID']);
+                        $query->bindParam(':arquivo', $nomeHash);
+                        $query->bindParam(':msgTo', $contactNickName);
+                        $connection->execute($query);
+                    } else {
+                        // Inserir um novo anexo referenciando o arquivo à última mensagem enviada
+                        $query = $connection->query("INSERT INTO anexo (nome, arquivo, mensagem) VALUES (:nome, :arquivo, :mensagem)");
+                        $query->bindParam(':nome', $file['name']);
+                        $query->bindParam(':arquivo', $nomeHash);
+                        $query->bindParam(':mensagem', $row['LastID']);
+                        $connection->execute($query);
+                    }
+                    // Apagar mensagens que não possuem anexos referenciados
+                    $query = $connection->query("DELETE FROM messages WHERE Idmessage NOT IN (SELECT mensagem FROM anexo) AND Messages = ' '");
                     $connection->execute($query);
                 }
-                // Apagar mensagens que não possuem anexos referenciados
-                $query = $connection->query("DELETE FROM messages WHERE Idmessage NOT IN (SELECT mensagem FROM anexo) AND Messages = ' '");
-                $connection->execute($query);
             }
         }
         
@@ -186,7 +188,7 @@
         }
 
         function createMessage ($msg,StringT $contactNickName,StringT $nick) { 
-            if ($contactNickName !== $nick) {
+            if (strcmp($contactNickName, $nick) !== 0) {
                 $connection = $this->conFactoryPDO;
                 $query = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, :nick,:contactNickName)");
                 $query->bindParam(':msg',$msg);
