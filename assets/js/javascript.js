@@ -992,6 +992,7 @@ function waitingMsg() {
 }
 
 function updateMessages (contact = nickNameContact, name=nickNameContact) {
+  closeEmoji();
   if (contact !== nickNameContact) {
     document.title = contact;
     for (let key of audioTime.keys()) {
