@@ -769,7 +769,7 @@ function embedEmojis() {
       emojiDiv.appendChild(div);
 
       div.onclick = () => {
-        if (send == "url(\"Images/send_vectorized.svg\")") {
+        if (send !== "url(\"Images/micSelectedIcon.svg\")") {
           document.querySelector(".text").value += emoji;
           messageValidate();
         }
