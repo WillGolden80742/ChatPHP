@@ -109,6 +109,7 @@
                 });
         } else {
             console.error("A API de áudio do HTML5 não é suportada neste navegador.");
+            sendButtom.style.backgroundImage = "url(\"Images/micIcon.svg\")";
         }
     }
 
