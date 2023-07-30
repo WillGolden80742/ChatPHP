@@ -106,6 +106,7 @@
     background-position-y: calc(0% + 10px);
     padding-right:52px;
     background-repeat: no-repeat;
+    resize: none;
   }
 
   .send_msg_box {
