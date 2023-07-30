@@ -250,8 +250,6 @@ function uploadAttachment(url, formData) {
     updateMessages();
     var attachmentDiv = document.getElementById('attachment');
     attachmentDiv.style.backgroundColor = "";
-    var sendButton = document.getElementById('send');
-    sendButton.disabled = true;
   }, function(errorText) {
     console.error(errorText);
   });
@@ -730,6 +728,7 @@ function emojiClicked(event) {
   const xDiff = Width-xClick;
   const yClick=event.offsetY;
   const size = parseInt(window.getComputedStyle(textElement).backgroundSize.replace("px",""));
+
   if(screenWidth>screenHeight) {
     if (yClick <= (size+10) && xDiff <= (size+10)) {
         embedEmojis();
@@ -770,8 +769,10 @@ function embedEmojis() {
       emojiDiv.appendChild(div);
 
       div.onclick = () => {
-        document.querySelector(".text").value += emoji;
-        messageValidate();
+        if (send == "url(\"Images/send_vectorized.svg\")") {
+          document.querySelector(".text").value += emoji;
+          messageValidate();
+        }
       }
     });
 
@@ -880,11 +881,11 @@ function messageValidate() {
     var inputFile = document.getElementById('file');
     var sendButton = document.getElementById('send');
     var attachmentDiv = document.getElementById('attachment');
-
-    if (textLength > 500 || textLength < 1 && inputFile.files.length == 0) {
-        sendButton.disabled = true;
-    } else {
-        sendButton.disabled = false;
+    
+    if (textLength > 0 && textLength <= 500 && sendButton.style.backgroundImage !== "url(\"Images/send_vectorized.svg\")") {
+      sendButton.style.backgroundImage = "url(\"Images/send_vectorized.svg\")";
+    } else if (textLength == 0  || textLength > 500 && sendButton.style.backgroundImage !== "url(\"Images/micIcon.svg\")") {
+      sendButton.style.backgroundImage = "url(\"Images/micIcon.svg\")";
     }
 
     if (inputFile.files.length > 0) {
@@ -894,60 +895,67 @@ function messageValidate() {
     }
 }
 
-
+function stringToMD5(inputString) {
+  const md5Hash = md5(inputString);
+  return md5Hash;
+}
 
 function createMessage () {
-  var inputFile = document.getElementById('file');
-  closeEmoji();
-  // Verifica se foi selecionado pelo menos um arquivos
   var messageText = document.getElementById('text').value;
+  const send = document.querySelector(".send").style.backgroundImage;
+  if (send == "url(\"Images/send_vectorized.svg\")") {
+    var inputFile = document.getElementById('file');
+    closeEmoji();
 
-  if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText  == " " && messageText.length <= 500 && !(inputFile.files.length > 0) ) {
-      loading (true);
-      document.getElementById('text').value="";
-      $.ajax({
-        url: 'createMessage.php',
-        method: 'POST',
-        data: {nickNameContact: nickNameContact, messageText: messageText},
-        dataType: 'json'
-      }).done(function(result) {
-            date = 
-            id = result;
-            $.ajax({
-              url: 'getThumb.php?',
-              method: 'GET',
-              data: {msg: messageText},
-              dataType: 'html'
-            }).done(function(text) {
-               addMessage(id, text);
-               down ();
-            });
-            loading (false);
-      });
-  } else {
-    loading(true);
-    document.getElementById('text').value="";
-    var formData = new FormData();
-    var arquivo = inputFile.files[0];
-    formData.append('arquivo',arquivo);
-    formData.append('messageText',messageText);
-    formData.append('contactNickName',nickNameContact);
-    var file = formData.get('arquivo');
-    var fileExtension = file.name.split('.').pop().toLowerCase();
-    var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
-    
-    if (imageFormats.includes(fileExtension)) {
-      imgToJPG(file, 'resizedImage.jpg', function(resizedFile) {
-        resizeImage(resizedFile, 1280, function(finalFile) {
-          formData.set('arquivo', finalFile);
-          uploadAttachment('uploadFile.php', formData);
+    if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText  == " " && messageText.length <= 500 && !(inputFile.files.length > 0) ) {
+        loading (true);
+        document.getElementById('text').value="";
+        $.ajax({
+          url: 'createMessage.php',
+          method: 'POST',
+          data: {nickNameContact: nickNameContact, messageText: messageText},
+          dataType: 'json'
+        }).done(function(result) {
+              date = 
+              id = result;
+              $.ajax({
+                url: 'getThumb.php?',
+                method: 'GET',
+                data: {msg: messageText},
+                dataType: 'html'
+              }).done(function(text) {
+                addMessage(id, text);
+                down ();
+              });
+              loading (false);
         });
-      });
     } else {
-      uploadAttachment('uploadFile.php', formData);
-    }    
-    waitingMsg();
-    inputFile.value="";
+      loading(true);
+      document.getElementById('text').value="";
+      var formData = new FormData();
+      var arquivo = inputFile.files[0];
+      formData.append('arquivo',arquivo);
+      formData.append('messageText',messageText);
+      formData.append('contactNickName',nickNameContact);
+      var file = formData.get('arquivo');
+      var fileExtension = file.name.split('.').pop().toLowerCase();
+      var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
+      
+      if (imageFormats.includes(fileExtension)) {
+        imgToJPG(file, 'resizedImage.jpg', function(resizedFile) {
+          resizeImage(resizedFile, 1280, function(finalFile) {
+            formData.set('arquivo', finalFile);
+            uploadAttachment('uploadFile.php', formData);
+          });
+        });
+      } else {
+        uploadAttachment('uploadFile.php', formData);
+      }    
+      waitingMsg();
+      inputFile.value="";
+    }
+  } else {
+    startRecording();
   }
 }    
 
@@ -983,14 +991,8 @@ async function addMessage(id, text) {
 
   var messagesElement = document.getElementById('messages');
   messagesElement.appendChild(msgElement);
-
-  var sendButton = document.getElementById('send');
-  sendButton.disabled = true;
-
   await downloadLastTitle();
 }
-
-
 
 
 
