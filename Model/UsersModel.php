@@ -186,14 +186,15 @@
         }
 
         function createMessage ($msg,StringT $contactNickName,StringT $nick) { 
-            // Recomendado uso de prepare statement 
-            $connection = $this->conFactoryPDO;
-            $query = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, :nick,:contactNickName)");
-            $query->bindParam(':msg',$msg);
-            $query->bindParam(':nick',$nick);
-            $query->bindParam(':contactNickName',$contactNickName);
-            $connection->execute($query);  
-            $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");
+            if ($contactNickName !== $nick) {
+                $connection = $this->conFactoryPDO;
+                $query = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, :nick,:contactNickName)");
+                $query->bindParam(':msg',$msg);
+                $query->bindParam(':nick',$nick);
+                $query->bindParam(':contactNickName',$contactNickName);
+                $connection->execute($query);  
+                $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('".$nick."','".$contactNickName."')");
+            }
         }
 
         function deleteMessage($id, $contactNickName, $nick) {
