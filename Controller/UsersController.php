@@ -118,9 +118,11 @@
                 // output data of each row
 
                 foreach ($contacts as $contact)  {
-                  echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" >";
-                  echo "<h2 ";
-                  echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(".$this ->downloadProfilePic(new StringT($contact[1])).");' /></div>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg(new StringT($contact[1]))."</h2></a>"; 
+                    if (strcmp($nick,$this->nickSession) !== 0) {
+                        echo "<a href=\"messages.php?contactNickName=".$contact[1]."\" >";
+                        echo "<h2 ";
+                        echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(".$this ->downloadProfilePic(new StringT($contact[1])).");' /></div>&nbsp&nbsp".$contact[0]." &nbsp".$this->newMg(new StringT($contact[1]))."</h2></a>"; 
+                    }
                 }
 
              } 
