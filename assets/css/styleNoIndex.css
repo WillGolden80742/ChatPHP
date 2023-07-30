@@ -15,8 +15,7 @@
 }
 
 .editProfile {
-  width: 68.6%;
-  float:left;
+  width:-webkit-fill-available;
   border-radius: 10px;
   overflow-y: scroll;
   margin-top: 5px;

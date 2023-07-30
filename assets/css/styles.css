@@ -14,8 +14,8 @@
 
   body {
     background:#00142f1f;
-    padding-left:50px;
-    padding-right:50px;
+    padding-right:100px;
+    padding-left: 100px;
   }
 
   .newMsg {
@@ -145,13 +145,14 @@
     top: 0;
     margin-top:5px;
     height:68.5%;  
-    width:67%;
+    width:-webkit-fill-available;
     border-radius: 10px;
     overflow-y: scroll;
     background-image:url("../../Images/bg.svg");
     background-size: 100vw auto;
     background-size:70%;
     margin-bottom:0px;
+    margin-right: 0;
   }
 
 
@@ -554,7 +555,7 @@
 
   .home {
     z-index:10000;
-    width: 68.6%;
+    width:-webkit-fill-available;
     border-radius: 10px;
     margin-top: 5px;
     height: 85.8%;
@@ -562,10 +563,11 @@
     background-position: center;
     padding: 0;
     display: flex;
+    background-color:#0240911f;
   }
 
   .home div {
-    background-image:url("../../Images/chat1.svg");
+    background-image:url("../../Images/chat.svg");
     background-size: 30%;
     background-repeat: no-repeat;
     width:100%;

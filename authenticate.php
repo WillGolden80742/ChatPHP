@@ -106,7 +106,7 @@
 
 <div class="signUp" id="signUp">
     <center>
-        <img class="chat_logo" src="Images/chat1.svg" />
+        <img class="chat_logo" src="Images/chat.svg" />
         <form action="authenticate.php" method="post">
             <br>
             <input class="inputText" placeholder="Name" type="text" name="name"><br>
@@ -125,7 +125,7 @@
 
 <div class="login" id="login">
     <center>
-        <img class="chat_logo" src="Images/chat1.svg" />
+        <img class="chat_logo" src="Images/chat.svg" />
         <form action="authenticate.php" method="post">
             <br>
             <input class="inputNick" placeholder="Nick Name" type="text" name="nickLogin"><br>
