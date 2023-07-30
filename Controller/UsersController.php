@@ -31,8 +31,7 @@
             $maxCharLimit = 20;
     
             if (mb_strlen($newNick) > $maxCharLimit || mb_strlen($name) > $maxCharLimit) {
-                header("Location: editProfile.php?error=O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.");
-                die();
+                echo "<center class='statusMsg'><h3 style=\"color:red;\">O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.</h3></center>";
                 return;
             }
 
