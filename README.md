@@ -48,6 +48,10 @@ ChatPHP é um chat web desenvolvido com PHP, MySQL, HTML, CSS e JavaScript.
 
 - Definir URL base no arquivo de configuração
 
+## Demostrações
+
+https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3
+
 ## Licença
 
 ChatPHP está licenciado sob a licença MIT.
