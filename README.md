@@ -56,6 +56,9 @@ https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-99
 
 ![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/5014f77d-2166-4882-9510-97c2ab5502c5)
 
+![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/0052d7fc-3bf9-4a3d-8b98-48288c4e118a)
+
+
 ## Licença
 
 ChatPHP está licenciado sob a licença MIT.
