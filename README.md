@@ -6,13 +6,11 @@ ChatPHP é um chat web desenvolvido com PHP, MySQL, HTML, CSS e JavaScript.
 
 - Cadastro e login de usuários com validação
 
-- Adicionar/remover contatos
-
 - Enviar mensagens de texto em tempo real
 
 - Enviar arquivos como imagens, áudio, vídeo e documentos
 
-- Notificações de novas mensagens com badges 
+- Notificações de novas mensagens
 
 - Pesquisa de contatos pelo nome
 
