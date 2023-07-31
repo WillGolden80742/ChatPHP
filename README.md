@@ -58,6 +58,8 @@ https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-99
 
 ![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/0052d7fc-3bf9-4a3d-8b98-48288c4e118a)
 
+![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/dd3e2668-a99a-4907-9d69-c2e89c5be225)
+
 
 ## Licença
 
