@@ -877,12 +877,12 @@ function close() {
 
 
 function messageValidate() {
-    var textLength = document.getElementById("text").value.length;
-    var inputFile = document.getElementById('file');
-    var sendButton = document.getElementById('send');
-    var attachmentDiv = document.getElementById('attachment');
+    const textLength = document.getElementById("text").value.length;
+    const inputFile = document.getElementById('file');
+    const sendButton = document.getElementById('send');
+    const attachmentDiv = document.getElementById('attachment');
     
-    if (textLength > 0 && textLength <= 500 && sendButton.style.backgroundImage !== "url(\"Images/send_vectorized.svg\")") {
+    if (textLength > 0 && textLength <= 500 && sendButton.style.backgroundImage !== "url(\"Images/send_vectorized.svg\")" || inputFile.files.length > 0) {
       sendButton.style.backgroundImage = "url(\"Images/send_vectorized.svg\")";
     } else if (textLength == 0  || textLength > 500 && sendButton.style.backgroundImage !== "url(\"Images/micIcon.svg\")") {
       sendButton.style.backgroundImage = "url(\"Images/micIcon.svg\")";
