@@ -1,29 +1,29 @@
-.salvar, .editPic{
-  display:none;
+.salvar, .editPic {
+  display: none;
 }
 
 .profilePic {
-  background:none;
-  border-radius:100%;
-  width:150px;
-  height:150px;
+  background: none;
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
   background-image: url("Images/profileMedium.png");
   background-size: 100vw auto;
-  background-position-x:50%;
-  background-size: cover;   
+  background-position-x: 50%;
+  background-size: cover;
   background-color: rgba(23, 37, 52);
 }
 
 .editProfile {
-  width:-webkit-fill-available;
+  width: -webkit-fill-available;
   border-radius: 10px;
   overflow-y: scroll;
   margin-top: 5px;
-  padding-top:20px;
+  padding-top: 20px;
   background-image: url("Images/bg.svg");
-  background-size:70%;
+  background-size: 70%;
   height: 82.7%;
-  background-color:#0240911f;
+  background-color: #0240911f;
 }
 
 .home {
@@ -32,224 +32,225 @@
 
 @media (orientation: portrait) or (max-width:900px) {
 
-    * {
-        font-size:36px;
-    } 
+  * {
+    font-size: 36px;
+  }
 
-    .user a {
-      font-size:100px;
-    }
+  .user a {
+    font-size: 100px;
+  }
 
-    .editProfile {
-      width: 100%;
-    }
+  .editProfile {
+    width: 100%;
+  }
 
-    .contacts {
-      display: none;
-    } 
+  .contacts {
+    display: none;
+  }
 
-    .back {
-      margin-top:64px;
-      display: block;
-    }
+  .back {
+    margin-top: 64px;
+    display: block;
+  }
 
-    .logout , .user {
-      display: none;
-    }
+  .logout, .user {
+    display: none;
+  }
 
-    .picMessage img {  
-      background-size: 100vw auto;
-      background-position-x:50%; 
-      background-size: cover;   
-      display:block;
-    }
-    
-    .msg {
-      max-width:70%;
-    }
+  .picMessage img {
+    background-size: 100vw auto;
+    background-position-x: 50%;
+    background-size: cover;
+    display: block;
+  }
 
-    .image_file {
-      height:600px;
-      overflow-x: auto;
-    }
-    
-    .image_file img {
-      width:auto;
-      height:100%;
-    }
+  .msg {
+    max-width: 70%;
+  }
 
-    .inputText,.inputNick, .inputPassword, .inputSubmit {
-      font-size:48px;
-      padding:20px;
-      height:120px;
-      padding-left:80px;
-      border-radius:80px;
-    }
-    .inputSubmit {
-        padding-left:20px;  
-    }
+  .image_file {
+    height: 600px;
+    overflow-x: auto;
+  }
 
-    .msg-left {
-      margin-left:30%;
-    }
-  
-    .msg a {
-      color:white;
-    }
-    
-    .inputSubmit{
-      padding:20px;
-      padding-top:15px;
-    }
+  .image_file img {
+    width: auto;
+    height: 100%;
+  }
 
-    .editPic img, .editPass img, .editPro img {
-      height:50px;
-    }
+  .inputText, .inputNick, .inputPassword, .inputSubmit {
+    font-size: 48px;
+    padding: 20px;
+    height: 120px;
+    padding-left: 80px;
+    border-radius: 80px;
+  }
 
-     .thumb-video {
-      height:250px;  
-    } 
+  .inputSubmit {
+    padding-left: 20px;
+  }
 
-    .profilePic {
-      width:320px;
-      height:320px;
-    }
+  .msg-left {
+    margin-left: 30%;
+  }
 
-    center h3 {
-      font-size:64px;
-    }
+  .msg a {
+    color: white;
+  }
 
-    .back {
-      float: left;
-      margin-top:25px;
-    }
-    
-    .back img {
-      float: left;
-    }
+  .inputSubmit {
+    padding: 20px;
+    padding-top: 15px;
+  }
 
-    .picMessage img {
-      float: left;
-      margin-left: 20px;
-      top:0;
-    }
+  .editPic img, .editPass img, .editPro img {
+    height: 50px;
+  }
 
-    .back img, .logout img{
-      width:70px;
-    }
-    
+  .thumb-video {
+    height: 250px;
+  }
 
-    .messages {
-      width:94.5%;
-      height:75%;
-      left:0;
-      background-size:100%;
-    }
+  .profilePic {
+    width: 320px;
+    height: 320px;
+  }
 
-    .uploading {
-      width: 60%;
-    }
+  center h3 {
+    font-size: 64px;
+  }
 
-    .delete {
-      z-index: 1000;
-      font-size:18px;
-    }
+  .back {
+    float: left;
+    margin-top: 25px;
+  }
 
-    .delete a {
-      font-size:12px;
-    }
+  .back img {
+    float: left;
+  }
 
-    .delete:hover a {
-      margin-left:-100px;
-    }
+  .picMessage img {
+    float: left;
+    margin-left: 20px;
+    top: 0;
+  }
 
-    .text, .send, .attachment {
-      float: left;
-      display: inline;  
-    }
-  
-    .text {
-      font-size:48px;
-      background-size:64px;
-      background-position-x: calc(100% - 20px);
-      background-position-y: calc(0% + 20px);
-      padding-right:104px;
-    }
+  .back img, .logout img {
+    width: 70px;
+  }
 
-    .attachment { 
-      width:60px;   
-      height:60px;   
-      z-index: 10000;
-      margin-left:10px;
-      background-position-x:50%;
-      background-position-y:50%;
-      background-size:48px;
-    }
 
-    .send {
-      width:80px;   
-      height:80px;
-      margin-left:10px;
-      background-position-x:50%;
-      background-position-y:50%;
-      background-size:48px;
-    }
+  .messages {
+    width: 94.5%;
+    height: 75%;
+    left: 0;
+    background-size: 100%;
+  }
 
-    .attachment_file a {
-      font-size: 48px;
-    }
-    
-    .attachment_file img {
-      width: 40px;
-      height: 40px;
-    }
+  .uploading {
+    width: 60%;
+  }
 
-    .attachment_file, .image_file, .thumb-video img {
-      border-radius:20px;
-    }
-    
-    .audio_file {
-      width:100%
-    }
+  .delete {
+    z-index: 1000;
+    font-size: 18px;
+  }
 
-    .player, .audio_file .name {
-      border-radius:10px;
-    }
+  .delete a {
+    font-size: 12px;
+  }
 
-    .player {
-      padding:20px;
-      border-top-left-radius:0px;
-      border-top-right-radius:0px;
-    }
+  .delete:hover a {
+    margin-left: -100px;
+  }
 
-    .audio_file .name {
-      font-size:28px;
-      border-bottom-left-radius:0px;
-      border-bottom-right-radius:0px;
-    }
+  .text, .send, .attachment {
+    float: left;
+    display: inline;
+  }
 
-    .play-button, .download-button {
-      width: 80px;
-      height: 80px;
-    }
+  .text {
+    font-size: 48px;
+    background-size: 64px;
+    background-position-x: calc(100% - 20px);
+    background-position-y: calc(0% + 20px);
+    padding-right: 104px;
+  }
 
-    .progress-bar {
-      height: 40px;
-      border-radius:20px;
-    }
+  .attachment {
+    width: 60px;
+    height: 60px;
+    z-index: 10000;
+    margin-left: 10px;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: 48px;
+  }
 
-    .progress {
-      border-radius:20px;
-    }
+  .send {
+    width: 80px;
+    height: 80px;
+    margin-left: 10px;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: 48px;
+  }
 
-    .current-time,
-    .duration {
-      font-size: 24px;
-      margin-left:20px;
-    }
+  .attachment_file a {
+    font-size: 48px;
+  }
 
-    .editProfile, .home, .contacts, .text, .messages {
-      border-radius:20px;
-    }
+  .attachment_file img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .attachment_file, .image_file, .thumb-video img {
+    border-radius: 20px;
+  }
+
+  .audio_file {
+    width: 100%
+  }
+
+  .player, .audio_file .name {
+    border-radius: 10px;
+  }
+
+  .player {
+    padding: 20px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+
+  .audio_file .name {
+    font-size: 28px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  .play-button, .download-button {
+    width: 80px;
+    height: 80px;
+  }
+
+  .progress-bar {
+    height: 40px;
+    border-radius: 20px;
+  }
+
+  .progress {
+    border-radius: 20px;
+  }
+
+  .current-time,
+  .duration {
+    font-size: 24px;
+    margin-left: 20px;
+  }
+
+  .editProfile, .home, .contacts, .text, .messages {
+    border-radius: 20px;
+  }
 
 }
