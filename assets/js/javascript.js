@@ -907,7 +907,6 @@ function createMessage() {
   if (send == "url(\"Images/send_vectorized.svg\")") {
     var inputFile = document.getElementById('file');
     closeEmoji();
-
     if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText == " " && messageText.length <= 500 && !(inputFile.files.length > 0)) {
       loading(true);
       document.getElementById('text').value = "";
