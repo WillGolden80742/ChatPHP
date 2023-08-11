@@ -23,7 +23,6 @@ class Chat implements MessageComponentInterface {
 
     public function onMessage(ConnectionInterface $from, $msg) {
         $data = json_decode($msg, true);
-        
         $nickNameFrom = $data['nickNameFrom'];
         $this->nickNameMap[$nickNameFrom] = $from->resourceId;
         
