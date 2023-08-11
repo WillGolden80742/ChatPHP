@@ -30,7 +30,6 @@ $auth = new AuthenticateModel();
       echo "down ();";
     }
     ?>
-    hasNewMsgByContact();
   });
 
   <?php
@@ -39,6 +38,35 @@ $auth = new AuthenticateModel();
     echo $line;
   }
   ?>
+  const ws = new WebSocket('ws://192.168.15.151:8080');
+  ws.onopen = () => {
+    console.log('Conexão estabelecida.');
+    sendSocket("online");
+  };
+
+  ws.onmessage = (event) => {
+    const message = event.data;
+    hasNewMsgByContact();
+    console.log(message);
+  };
+
+  ws.onclose = () => {
+    console.log('Conexão fechada.');
+  };
+
+  function sendSocket(value) {
+
+    const nickNameFrom = '<?php echo new StringT($_SESSION['nickName']); ?>';
+    const nickNameTo = '<?php echo $nickNameContact; ?>';
+
+    if (value.trim() !== '' && nickNameFrom.trim() !== '') {
+      ws.send(JSON.stringify({
+        nickNameFrom: nickNameFrom,
+        nickNameTo: nickNameTo,
+        message: value
+      }));
+    }
+  }
 </script>
 <style id="styleIndex">
 

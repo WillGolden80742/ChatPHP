@@ -248,6 +248,7 @@ function uploadAttachment(url, formData) {
   upload(url, formData, function () {
     loading(false);
     updateMessages();
+    sendSocket("upload com sucesso!");
     var attachmentDiv = document.getElementById('attachment');
     attachmentDiv.style.backgroundColor = "";
   }, function (errorText) {
@@ -290,6 +291,7 @@ function deleteMessage(id) {
       dataType: 'json'
     }).done(function (result) {
       loading(false);
+      sendSocket("delete");
     });
   }
 }
@@ -871,7 +873,6 @@ function close() {
   fetchNewMessages = true;
   document.getElementById('messages').innerHTML = msgsContents;
   document.getElementById('messages').scrollTo(0, scrollPos);
-  hasNewMsgByContact();
   downloadAllMidia();
 }
 
@@ -925,6 +926,7 @@ function createMessage() {
           dataType: 'html'
         }).done(function (text) {
           addMessage(id, text);
+          sendSocket("enviada mensagem!");
           down();
         });
         loading(false);
@@ -1218,7 +1220,6 @@ function hasNewMsgByContact() {
         hasNewMsgByCurrentContact();
         responsiveCont();
       }
-      hasNewMsgByContact();
     });
   }
 }
