@@ -4,7 +4,6 @@ $user = new UsersController();
 $auth = new AuthenticateModel();
 ?>
 
-<title>CHATPHP</title>
 <script src="assets/js/javascript.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.18.0/js/md5.min.js"></script>
@@ -13,7 +12,10 @@ $auth = new AuthenticateModel();
 <script>
   const cookie = new Map();
   const audioTime = new Map();
-  
+  const currentUrl = window.location.href;
+  if (currentUrl.split("ChatPHP/")[1].includes('index.php') || currentUrl.split("ChatPHP/")[1] == '') {
+    document.title = "CHATPHP";
+  }
   <?php
   $nickNameContact = "";
   if (!empty($_GET['contactNickName'])) {

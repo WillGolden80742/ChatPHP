@@ -15,7 +15,6 @@ if (!empty($_GET['contactNickName'])) {
   }
   ?>
 </style>
-
 <title><?php echo $contactNickName; ?></title>
 
 <div class="messages" id="messages" onscroll="removeDownButton();">
