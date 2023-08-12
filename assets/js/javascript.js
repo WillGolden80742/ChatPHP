@@ -1214,7 +1214,9 @@ function hasNewMsgByContact(msg) {
         document.getElementById('contacts').innerHTML = result;
         responsiveCont();
       }
-      hasNewMsgByCurrentContact(msg);
+      if (JSON.parse(msg).from == nickNameContact) { 
+        hasNewMsgByCurrentContact(msg);
+      }
     })
     .catch(error => {
       console.error('Erro na requisição:', error);
