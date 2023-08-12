@@ -16,7 +16,7 @@ $auth = new AuthenticateModel();
   const home = currentUrl.split("ChatPHP/")[1];
   if (home.includes('index.php') || home == '') {
     document.title = "CHATPHP";
-  } else if (home.includes('editProfile.php') ) {
+  } else if (home.includes('editProfile.php')) {
     document.title = "Edite Perfil";
   }
   <?php
@@ -63,7 +63,6 @@ $auth = new AuthenticateModel();
   function sendSocket(value) {
     const nickNameFrom = '<?php echo new StringT($_SESSION['nickName']); ?>';
     const nickNameTo = '<?php echo $nickNameContact; ?>';
-
     if (value.trim() !== '' && nickNameFrom.trim() !== '') {
       ws.send(JSON.stringify({
         nickNameFrom: nickNameFrom,
