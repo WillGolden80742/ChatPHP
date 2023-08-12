@@ -61,7 +61,6 @@ $auth = new AuthenticateModel();
   };
 
   function sendSocket(value) {
-
     const nickNameFrom = '<?php echo new StringT($_SESSION['nickName']); ?>';
     const nickNameTo = '<?php echo $nickNameContact; ?>';
 
