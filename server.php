@@ -1,5 +1,4 @@
 <?php
-
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Server\IoServer;
@@ -29,20 +28,18 @@ class Chat implements MessageComponentInterface
     {
         $data = json_decode($msg, true);
         $nickNameFrom = $data['nickNameFrom'];
-        $this->nickNameMap[$nickNameFrom] = $from->resourceId;
+        $this->nickNameMap[$nickNameFrom] = $from;
 
         if (isset($data['nickNameFrom']) && isset($data['nickNameTo']) && isset($data['message'])) {
             $nickNameTo = $data['nickNameTo'];
             $message = $data['message'];
 
-            foreach ($this->clients as $client) {
-                if ($client->resourceId === $this->nickNameMap[$nickNameTo]) {
-                    $client->send(json_encode([
-                        'from' => $nickNameFrom,
-                        'message' => $message
-                    ]));
-                    break;
-                }
+            if (isset($this->nickNameMap[$nickNameTo])) {
+                $client = $this->nickNameMap[$nickNameTo];
+                $client->send(json_encode([
+                    'from' => $nickNameFrom,
+                    'message' => $message
+                ]));
             }
         }
     }
