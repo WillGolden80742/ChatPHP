@@ -37,6 +37,8 @@ ChatPHP é um chat web desenvolvido com PHP, MySQL, HTML, CSS e JavaScript.
 - jQuery
 
 - AJAX
+  
+- WebSockets
 
 ## Instalação
 
