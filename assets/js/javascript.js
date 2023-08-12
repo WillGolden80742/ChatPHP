@@ -148,7 +148,6 @@ function uploadPassword() {
       editProfileMessage = this.responseText;
     }
   };
-
   xhttp.open("POST", "uploadPassword.php", true);
   xhttp.send(formData);
 }
@@ -248,7 +247,7 @@ function uploadAttachment(url, formData) {
   upload(url, formData, function () {
     loading(false);
     updateMessages();
-    sendSocket("upload com sucesso!");
+    sendSocket("create_message");
     var attachmentDiv = document.getElementById('attachment');
     attachmentDiv.style.backgroundColor = "";
   }, function (errorText) {
@@ -282,6 +281,7 @@ function removeDownButton() {
 
 function deleteMessage(id) {
   if (confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+    sendSocket("delete_message:msg" + id);
     document.getElementById("msg" + id).remove();
     loading(true);
     $.ajax({
@@ -289,9 +289,8 @@ function deleteMessage(id) {
       method: 'POST',
       data: { nickNameContact: nickNameContact },
       dataType: 'json'
-    }).done(function (result) {
+    }).done(function () {
       loading(false);
-      sendSocket("delete");
     });
   }
 }
@@ -925,7 +924,7 @@ function createMessage() {
           dataType: 'html'
         }).done(function (text) {
           addMessage(id, text);
-          sendSocket("enviada mensagem!");
+          sendSocket("create_message");
           down();
         });
         loading(false);
@@ -1030,6 +1029,7 @@ async function startRecording() {
       });
   } else {
     console.error("A API de áudio do HTML5 não é suportada neste navegador.");
+    alert("A API de áudio do HTML5 não funciona neste navegador ou a conexão não é segura.");
     sendButtom.style.backgroundImage = "url(\"Images/micDisabled.svg\")";
     text.disabled = false;
   }
@@ -1206,19 +1206,27 @@ function toggle(value = true, landscape = false) {
   down();
 }
 
-function hasNewMsgByContact() {
+function hasNewMsgByContact(msg) {
   if (fetchNewMessages) {
-    $.ajax({
-      url: 'hasNewMsgByContact.php?',
+    const formData = new FormData();
+    formData.append('nickNameContact', nickNameContact);
+
+    fetch('hasNewMsgByContact.php', {
       method: 'POST',
-      data: { nickNameContact: nickNameContact },
-      dataType: 'json'
-    }).done(function (result) {
+      body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
       if (result !== "0") {
         document.getElementById('contacts').innerHTML = result;
-        hasNewMsgByCurrentContact();
         responsiveCont();
       }
+      if (document.getElementById('messages')) {
+        hasNewMsgByCurrentContact(msg);
+      }
+    })
+    .catch(error => {
+      console.error('Erro na requisição:', error);
     });
   }
 }
@@ -1236,29 +1244,50 @@ function responsiveCont() {
   }
 }
 
-function hasNewMsgByCurrentContact() {
-  $.ajax({
-    url: 'hasNewMsgByCurrentContact.php?',
-    method: 'POST',
-    data: { nickNameContact: nickNameContact },
-    dataType: 'json'
-  }).done(function (result) {
-    getAudioTimes();
-    if (result[0] == "1") {
-      document.getElementById('messages').innerHTML = result[1];
-      if (((document.getElementById("messages").scrollTop) / h) * 100 >= 90) {
-        down();
-      } else {
-        downButton(true);
+function hasNewMsgByCurrentContact(msg) {
+  const jsonObject = JSON.parse(msg);
+  const message = jsonObject.message;
+  const from = jsonObject.from;
+
+  if (message === "create_message" || message.includes("delete_message")) {
+    if (message === "create_message") {
+      const formData = new FormData();
+      formData.append('nickNameContact', from);
+
+      fetch('lastMsgByCurrentContact.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(result => {
+        getAudioTimes();
+        document.getElementById('messages').innerHTML += result;
+        const messagesElement = document.getElementById("messages");
+        const h = messagesElement.scrollHeight;
+        
+        if ((messagesElement.scrollTop / h) * 100 >= 90) {
+          down();
+        } else {
+          downButton(true);
+        }
+        const timestamp = new Date().getTime();
+        downloadAllMidia();
+      })
+      .catch(error => {
+        console.error('Erro na requisição:', error);
+      });
+    } 
+    if (message.includes("delete_message")) {
+      const messageId = message.split("delete_message:")[1];
+      const element = document.getElementById(messageId);
+      if (element) {
+        element.remove();
       }
-    } else if (result[0] == "2") {
-      document.getElementById('messages').innerHTML = result[1];
       downButton(false);
     }
-    timestamp = new Date().getTime();
-    downloadAllMidia();
-  });
+  }
 }
+
 
 function downButton(value) {
   var element = document.getElementById("down");

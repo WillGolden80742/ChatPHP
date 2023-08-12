@@ -38,7 +38,7 @@ $auth = new AuthenticateModel();
     echo $line;
   }
   ?>
-  const ws = new WebSocket('ws://192.168.15.151:8080');
+  const ws = new WebSocket('ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080');
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
     sendSocket("online");
@@ -46,7 +46,7 @@ $auth = new AuthenticateModel();
 
   ws.onmessage = (event) => {
     const message = event.data;
-    hasNewMsgByContact();
+    hasNewMsgByContact(message);
     console.log(message);
   };
 

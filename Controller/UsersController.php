@@ -162,6 +162,17 @@ class UsersController
         return $this->user->messages(new StringT($this->nickSession), $contactNickName);
     }
 
+    function lastMessage(StringT $contactNickName)
+    {
+        $query = $this->lastMessageQuery($contactNickName);
+        return $this->messages($query, $contactNickName, true);
+    }
+
+    function lastMessageQuery(StringT $contactNickName)
+    {
+        return $this->user->lastMessage(new StringT($this->nickSession), $contactNickName);
+    }
+
     function messages($queryMessages, StringT $contactNickName, $async)
     {
         $this->receivedMsg($contactNickName);
@@ -188,8 +199,11 @@ class UsersController
             }
         }
         if (count($messages) > 0) {
-            $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.svg'/></center>";
-            $mensagens .= "<br>";
+            $mensagens = "";
+            if (count($messages) > 1) {
+                $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.svg'/></center>";
+                $mensagens .= "<br>";
+            }
             foreach ($messages as $msg) {
                 if ($msg[3]) {
                     $margin = "right";
@@ -273,33 +287,6 @@ class UsersController
     {
         $imageExtensions = array('jpg', 'jpeg', 'png', 'webp', 'gif'); // Adicione aqui as extensões de imagem suportadas
         return in_array($extensao, $imageExtensions);
-    }
-
-    function hasNewMsgByCurrentContact(StringT $contactNickName)
-    {
-        usleep(500000);
-        $query = $this->allMessagesQuery($contactNickName);
-        $result = $this->user->hasNewMsgByCurrentContact($contactNickName, new StringT($this->nickSession));
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $count = $row["countMsg"];
-                if (strpos($count, "0") !== false) {
-                    $result = $this->user->isDeleteMessage($contactNickName, new StringT($this->nickSession));
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $count = $row["countMsg"];
-                            if (strpos($count, "0") !== false) {
-                                return array("0", "0");
-                            } else {
-                                return array("2", $this->messages($query, $contactNickName, false));
-                            }
-                        }
-                    }
-                } else {
-                    return array("1", $this->messages($query, $contactNickName, false));
-                }
-            }
-        }
     }
 
     function newMg(StringT $contactNickName)

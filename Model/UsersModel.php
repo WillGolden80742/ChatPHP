@@ -164,6 +164,11 @@ class UsersModel
         return $this->conFactory->query("call messages('" . $nickName . "','" . $contactNickName . "')");
     }
 
+    function lastMessage(StringT $nickName, StringT $contactNickName)
+    {
+        // Recomendado uso de prepare statement 
+        return $this->conFactory->query("call  lastMessage('" . $nickName . "','" . $contactNickName . "')");
+    }
 
     function hasNewMsgByCurrentContact(StringT $contactNickName, StringT $nick)
     {
