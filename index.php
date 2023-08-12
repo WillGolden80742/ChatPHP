@@ -13,8 +13,11 @@ $auth = new AuthenticateModel();
   const cookie = new Map();
   const audioTime = new Map();
   const currentUrl = window.location.href;
-  if (currentUrl.split("ChatPHP/")[1].includes('index.php') || currentUrl.split("ChatPHP/")[1] == '') {
+  const home = currentUrl.split("ChatPHP/")[1];
+  if (home.includes('index.php') || home == '') {
     document.title = "CHATPHP";
+  } else if (home.includes('editProfile.php') ) {
+    document.title = "Edite Perfil";
   }
   <?php
   $nickNameContact = "";
