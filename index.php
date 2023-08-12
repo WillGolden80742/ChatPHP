@@ -58,6 +58,10 @@ $auth = new AuthenticateModel();
 
   ws.onclose = () => {
     console.log('Conexão fechada.');
+    const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
+    if (reload) {
+      location.reload();
+    }
   };
 
   function sendSocket(value) {
