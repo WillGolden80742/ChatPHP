@@ -29,11 +29,9 @@ class Chat implements MessageComponentInterface
         $data = json_decode($msg, true);
         $nickNameFrom = $data['nickNameFrom'];
         $this->nickNameMap[$nickNameFrom] = $from;
-
         if (isset($data['nickNameFrom']) && isset($data['nickNameTo']) && isset($data['message'])) {
             $nickNameTo = $data['nickNameTo'];
             $message = $data['message'];
-
             if (isset($this->nickNameMap[$nickNameTo])) {
                 $client = $this->nickNameMap[$nickNameTo];
                 $client->send(json_encode([
