@@ -33,8 +33,6 @@ $auth = new AuthenticateModel();
     }
   });
 
-  const receivedMsg = new Set();
-  const deletedMsg = new Set();
   const ws = new WebSocket(`ws://${location.host}:8080`);
 
   ws.onopen = () => {
