@@ -1222,7 +1222,7 @@ function hasNewMsgByContact(msg) {
         }
       } else {
         console.error("Elemento de contato não encontrado para: " + from);
-      }
+      } 
       const contactsContainer = document.querySelector(".contacts");
       contactsContainer.querySelector('form').remove();
       contactsContainer.insertBefore(contact, contactsContainer.firstChild);
@@ -1258,7 +1258,7 @@ function hasNewMsgByCurrentContact(from, message) {
       const formData = new FormData();
       formData.append('nickNameContact', from);
       formData.append('idMsg', idMsg);
-      fetch('lastMsgByCurrentContact.php', {
+      fetch('messageByID.php', {
         method: 'POST',
         body: formData
       })
