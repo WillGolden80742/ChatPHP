@@ -1244,7 +1244,7 @@ function hasNewMsgByCurrentContact(from, message) {
               messagesDiv.innerHTML += result;
               const messagesElement = document.getElementById("messages");
               const h = messagesElement.scrollHeight;
-              if ((messagesElement.scrollTop / h) * 100 >= 90) {
+              if ((messagesElement.scrollTop / h) * 100 >= 80) {
                 down();
               } else {
                 downButton(true);
