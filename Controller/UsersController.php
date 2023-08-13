@@ -165,9 +165,21 @@ class UsersController
         return $this->messages($query, $contactNickName);
     }
 
+
     function lastMessageQuery(StringT $contactNickName)
     {
         return $this->user->lastMessage(new StringT($this->nickSession), $contactNickName);
+    }
+
+    function messageByID(StringT $contactNickName, StringT $id)
+    {
+        $query = $this->messageByIDQuery($contactNickName, $id);
+        return $this->messages($query, $contactNickName);
+    }
+
+    function messageByIDQuery(StringT $contactNickName, StringT $id)
+    {
+        return $this->user->messageByID(new StringT($this->nickSession), $contactNickName, $id);
     }
 
     function messages($queryMessages, StringT $contactNickName)

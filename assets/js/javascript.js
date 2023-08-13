@@ -1258,16 +1258,16 @@ function hasNewMsgByCurrentContact(from, message) {
   if (message.includes("create_message") || message.includes("delete_message")) {
     if (message.includes("create_message")) {
       const formData = new FormData();
+      const idMsg = message.split("create_message:")[1].replace("msg","");
       formData.append('nickNameContact', from);
-
+      formData.append('idMsg', idMsg);
       fetch('lastMsgByCurrentContact.php', {
         method: 'POST',
         body: formData
       })
         .then(response => response.json())
         .then(result => {
-          const idMsg = message.split("create_message:")[1];
-          if (!document.getElementById(idMsg)) {
+          if (!document.getElementById("msg"+idMsg)) {
             var messagesDiv = document.querySelector('#messages');
             msgsContents += result;
             if (messagesDiv) {
