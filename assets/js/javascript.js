@@ -1207,23 +1207,34 @@ function hasNewMsgByContact(msg) {
   const contact = document.querySelector("#contact" + from);
   if (from === nickNameContact) {
     hasNewMsgByCurrentContact(from, message);
+    if (!message.includes("delete_message") && message.includes("create_message")) {
+      countMessage(contact, true);
+    }
   } else {
     if (!message.includes("delete_message") && message.includes("create_message")) {
       if (contact) {
-        const count = contact.querySelector(".newMsg");
-        if (count) {
-          count.innerHTML =  + (parseInt(count.innerHTML) + 1);
-        } else {
-          const newCount = document.createElement("span");
-          newCount.id = nickNameContact;
-          newCount.className = "newMsg";
-          newCount.innerHTML = "1";
-          contact.querySelector("h2").appendChild(newCount);
-        }
+        countMessage(contact, false);
       } else {
         console.error("Elemento de contato não encontrado para: " + from);
-      } 
+      }
       moveToUp(contact);
+    }
+  }
+}
+
+function countMessage(contact, isCurrentContact) {
+  var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  if (screenHeight > screenWidth || !isCurrentContact) {
+    const count = contact.querySelector(".newMsg");
+    if (count) {
+      count.innerHTML = + (parseInt(count.innerHTML) + 1);
+    } else {
+      const newCount = document.createElement("span");
+      newCount.id = nickNameContact;
+      newCount.className = "newMsg";
+      newCount.innerHTML = "1";
+      contact.querySelector("h2").appendChild(newCount);
     }
   }
 }
