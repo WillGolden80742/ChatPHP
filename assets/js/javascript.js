@@ -1204,7 +1204,6 @@ function hasNewMsgByContact(msg) {
   const from = JSON.parse(msg).from;
   const message = JSON.parse(msg).message;
   const contact = document.querySelector("#contact"+from+" h2");
-  console.log(contact);
   if (from == nickNameContact) { 
     hasNewMsgByCurrentContact(from,message);
   } else {
