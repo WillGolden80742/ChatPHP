@@ -33,7 +33,7 @@ $auth = new AuthenticateModel();
     }
   });
 
-  const ws = new WebSocket(`ws://${location.host}:8080`);
+  const ws = new WebSocket(`ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080`);
 
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
