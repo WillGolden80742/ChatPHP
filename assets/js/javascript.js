@@ -1207,7 +1207,7 @@ function hasNewMsgByContact(msg) {
   if (from == nickNameContact) { 
     hasNewMsgByCurrentContact(from,message);
   } else {
-    if (!message.includes("delete_message")) {
+    if (!message.includes("delete_message") || message.includes("create_message")) {
       const count = contact.querySelector(".newMsg");
       if (count) {
         count.innerHTML="&nbsp;"+(parseInt(count.innerHTML.replace("&nbsp;",""))+1);
