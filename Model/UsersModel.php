@@ -171,6 +171,12 @@ class UsersModel
         return $this->conFactory->query("call  lastMessage('" . $nickName . "','" . $contactNickName . "')");
     }
 
+    function messageByID(StringT $nickName, StringT $contactNickName, StringT $id)
+    {
+        // Recomendado uso de prepare statement 
+        return $this->conFactory->query("call  messageByID('" . $nickName . "','" . $contactNickName . "', '".$id."')");
+    }
+
     function lasIdMessage($nick, $contactNickName)
     {
         return $this->conFactory->query("SELECT MAX(messages.Idmessage) as LastID From messages WHERE MsgFrom = '$nick' AND MsgTo = '$contactNickName'");
