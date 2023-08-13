@@ -1201,20 +1201,23 @@ function toggle(value = true, landscape = false) {
 }
 
 function hasNewMsgByContact(msg) {
-  const from = JSON.parse(msg).from;
-  const message = JSON.parse(msg).message;
+  const parsedMsg = JSON.parse(msg);
+  const from = parsedMsg.from;
+  const message = parsedMsg.message;
   const contact = document.querySelector("#contact" + from + " h2");
   if (from == nickNameContact) {
     hasNewMsgByCurrentContact(from, message);
   } else {
     if (!message.includes("delete_message") || message.includes("create_message")) {
-      const count = contact.querySelector(".newMsg");
-      if (count) {
-        count.innerHTML = "&nbsp;" + (parseInt(count.innerHTML.replace("&nbsp;", "")) + 1);
-      } else {
-        if (contact) {
+      if (contact) {
+        const count = contact.querySelector(".newMsg");
+        if (count) {
+          count.innerHTML = "&nbsp;" + (parseInt(count.innerHTML.replace("&nbsp;", "")) + 1);
+        } else {
           contact.innerHTML += "<span id=\"" + nickNameContact + "\" class=\"newMsg\">&nbsp;1</span>";
         }
+      } else {
+        console.error("Contact element not found for: " + from);
       }
     }
   }
