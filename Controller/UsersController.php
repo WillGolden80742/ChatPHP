@@ -123,7 +123,6 @@ class UsersController
         echo "</h3></a>";
         if (count($contacts) > 0) {
             // output data of each row
-
             foreach ($contacts as $contact) {
                 if (strcmp($nick, $this->nickSession) !== 0) {
                     echo "<a id=\"contact$contact[1]\" href=\"messages.php?contactNickName=" . $contact[1] . "\" >";

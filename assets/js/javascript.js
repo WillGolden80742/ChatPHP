@@ -1132,7 +1132,7 @@ function updateMessages(contact = nickNameContact, name = nickNameContact) {
 }
 
 function updateContacts(contact = nickNameContact, name = nickNameContact) {
-  const currentContact = document.querySelector("#contact"+contact+" h2");
+  const currentContact = document.querySelector("#contact" + contact + " h2");
   const count = currentContact.querySelector(".newMsg");
   if (count) {
     count.remove();
@@ -1203,22 +1203,24 @@ function toggle(value = true, landscape = false) {
 function hasNewMsgByContact(msg) {
   const from = JSON.parse(msg).from;
   const message = JSON.parse(msg).message;
-  const contact = document.querySelector("#contact"+from+" h2");
-  if (from == nickNameContact) { 
-    hasNewMsgByCurrentContact(from,message);
+  const contact = document.querySelector("#contact" + from + " h2");
+  if (from == nickNameContact) {
+    hasNewMsgByCurrentContact(from, message);
   } else {
     if (!message.includes("delete_message") || message.includes("create_message")) {
       const count = contact.querySelector(".newMsg");
       if (count) {
-        count.innerHTML="&nbsp;"+(parseInt(count.innerHTML.replace("&nbsp;",""))+1);
+        count.innerHTML = "&nbsp;" + (parseInt(count.innerHTML.replace("&nbsp;", "")) + 1);
       } else {
-        contact.innerHTML+="<span id=\""+nickNameContact+"\" class=\"newMsg\">&nbsp;1</span>";
+        if (contact) {
+          contact.innerHTML += "<span id=\"" + nickNameContact + "\" class=\"newMsg\">&nbsp;1</span>";
+        }
       }
     }
   }
 }
 
-function hasNewMsgByCurrentContact(from,message) {
+function hasNewMsgByCurrentContact(from, message) {
 
   if (message === "create_message" || message.includes("delete_message")) {
     if (message === "create_message") {
