@@ -97,7 +97,7 @@ class UsersController
             if (basename($_SERVER['PHP_SELF']) == "messages.php" || $sync) {
                 $html .= "<a id=\"contact$contact[1]\" onclick=\"updateMessages('$contact[1]','$contact[0]')\">";
             } else {
-                $html .= "<a href='messages.php?contactNickName=" . $contact[1] . "'>";
+                $html .= "<a id=\"contact$contact[1]\" href='messages.php?contactNickName=" . $contact[1] . "'>";
             }
             $html .= "<h2";
             if (!empty($nickNameContact)) {
