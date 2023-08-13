@@ -18,7 +18,7 @@ class UsersController
 
     function uploadFile($file, $msg, $contactNickName)
     {
-        $this->user->uploadFile($file, $msg, $this->nickSession, $contactNickName);
+        return $this->user->uploadFile($file, $msg, $this->nickSession, $contactNickName);
     }
 
     function downloadFile($nomeHash)

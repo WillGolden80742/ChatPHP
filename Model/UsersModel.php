@@ -71,6 +71,7 @@ class UsersModel
                 $connection->execute($query);
             }
         }
+        return mysqli_fetch_assoc($this->lasIdMessage($nickName, $contactNickName))['LastID'];
     }
 
 

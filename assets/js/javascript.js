@@ -235,18 +235,19 @@ function upload(url, formData, successCallback, errorCallback) {
       } else {
         successCallback();
       }
+      sendSocket("create_message:msg" + xhr.responseText);
     } else {
       errorCallback(xhr.responseText);
     }
+    
   };
   xhr.send(formData);
 }
 
 function uploadAttachment(url, formData) {
-  upload(url, formData, function (result) {
+  upload(url, formData, function (response) {
     loading(false);
     updateMessages();
-    sendSocket("create_message:msg" + result);
     var attachmentDiv = document.getElementById('attachment');
     attachmentDiv.style.backgroundColor = "";
   }, function (errorText) {
@@ -1208,7 +1209,7 @@ function hasNewMsgByContact(msg) {
   if (from === nickNameContact) {
     hasNewMsgByCurrentContact(from, message);
   } else {
-    if (!message.includes("delete_message") || message.includes("create_message")) {
+    if (!message.includes("delete_message") && message.includes("create_message")) {
       if (contact) {
         const count = contact.querySelector(".newMsg");
 
@@ -1225,12 +1226,12 @@ function hasNewMsgByContact(msg) {
         console.error("Elemento de contato não encontrado para: " + from);
       }
     }
+    //mover para topo contato 
+    const contactsContainer = document.querySelector(".contacts");
+    contactsContainer.querySelector('form').remove();
+    contactsContainer.insertBefore(contact, contactsContainer.firstChild);
+    addSearchBar();
   }
-  //mover para topo contato 
-  const contactsContainer = document.querySelector(".contacts");
-  contactsContainer.querySelector('form').remove();
-  contactsContainer.insertBefore(contact, contactsContainer.firstChild);
-  addSearchBar();
 }
 
 function addSearchBar() {
