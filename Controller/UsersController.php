@@ -126,7 +126,7 @@ class UsersController
 
             foreach ($contacts as $contact) {
                 if (strcmp($nick, $this->nickSession) !== 0) {
-                    echo "<a contact$contact[1] href=\"messages.php?contactNickName=" . $contact[1] . "\" >";
+                    echo "<a id=\"contact$contact[1]\" href=\"messages.php?contactNickName=" . $contact[1] . "\" >";
                     echo "<h2 ";
                     echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp</h2></a>";
                 }
