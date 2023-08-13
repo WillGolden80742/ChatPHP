@@ -214,7 +214,7 @@ class UsersModel
         }
 
         // Apagar a mensagem
-        $this->conFactory->query("DELETE FROM messages WHERE Idmessage = " . $id);
+        $this->conFactory->query("DELETE FROM messages WHERE Idmessage = " . $id . " AND MsgFrom = '" . $nick . "' AND MsgTo = '" . $contactNickName . "'");
     }
 
 
