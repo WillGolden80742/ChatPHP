@@ -105,9 +105,7 @@ class UsersController
                     $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
                 }
             }
-            $count = "";
-            $count = $this->newMg(new StringT($contact[1]));
-            $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp" .  $count . "</h2></a>";
+            $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp</h2></a>";
         }
         return $html;
     }
@@ -130,7 +128,7 @@ class UsersController
                 if (strcmp($nick, $this->nickSession) !== 0) {
                     echo "<a href=\"messages.php?contactNickName=" . $contact[1] . "\" >";
                     echo "<h2 ";
-                    echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp" . $this->newMg(new StringT($contact[1])) . "</h2></a>";
+                    echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp</h2></a>";
                 }
             }
         }
@@ -175,7 +173,6 @@ class UsersController
 
     function messages($queryMessages, StringT $contactNickName, $async)
     {
-        $this->receivedMsg($contactNickName);
         $messages = array();
         if (mysqli_num_rows($queryMessages) > 0) {
             $idMessage = '0';
@@ -287,50 +284,6 @@ class UsersController
     {
         $imageExtensions = array('jpg', 'jpeg', 'png', 'webp', 'gif'); // Adicione aqui as extensões de imagem suportadas
         return in_array($extensao, $imageExtensions);
-    }
-
-    function newMg(StringT $contactNickName)
-    {
-        $result = $this->user->newMsg($contactNickName, new StringT($this->nickSession), 0);
-        $count = "0";
-        while ($row = mysqli_fetch_assoc($result)) {
-            $count = $row["countMsg"];
-            if (strpos($count, "0") !== false) {
-                $result =  $this->user->newMsg($contactNickName, new StringT($this->nickSession), 2);
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $count = $row["countMsg"];
-                    if (strpos($count, "0") !== false) {
-                        $count = "";
-                    } else {
-                        $count = "<span id=" . $contactNickName . " class='newMsg'>&nbsp1</span>";
-                    }
-                }
-            } else {
-                $count = "<span id=" . $contactNickName . " class='newMsg'>&nbsp" . $count . "</span>";
-            }
-        }
-        return $count;
-    }
-
-    function hasNewMsgByContact(StringT $nickNameContact)
-    {
-        usleep(500000);
-        $result = $this->user->hasNewMsgByContact(new StringT($this->nickSession));
-        $count = "0";
-        while ($row = mysqli_fetch_assoc($result)) {
-            $count = $row["countMsg"];
-            if (strpos($count, "0") !== false) {
-                return "0";
-            } else {
-                $this->user->delMsg(new StringT($this->nickSession));
-                return $this->contacts(new StringT($this->nickSession), new StringT($nickNameContact), true);
-            }
-        }
-    }
-
-    function receivedMsg(StringT $contactNickName)
-    {
-        $this->user->receivedMsg($contactNickName, new StringT($this->nickSession));
     }
 
     function lasIdMessage($nick, $contactNickName)

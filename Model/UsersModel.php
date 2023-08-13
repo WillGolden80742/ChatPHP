@@ -170,40 +170,10 @@ class UsersModel
         return $this->conFactory->query("call  lastMessage('" . $nickName . "','" . $contactNickName . "')");
     }
 
-    function hasNewMsgByCurrentContact(StringT $contactNickName, StringT $nick)
-    {
-        // Recomendado uso de prepare statement 
-        return $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '" . $contactNickName . "' AND messages.MsgTo = '" . $nick . "' AND messages.received = '0'");
-    }
-
     function isDeleteMessage(StringT $contactNickName, StringT $nick)
     {
         // Recomendado uso de prepare statement 
         return $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '" . $contactNickName . "' AND messages.MsgTo = '" . $nick . "' AND messages.received = '2'");
-    }
-
-    function newMsg(StringT $contactNickName, StringT $nick, $value)
-    {
-        // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call newMsg('" . $nick . "','" . $contactNickName . "','" . $value . "')");
-    }
-
-    function hasNewMsgByContact(StringT $nick)
-    {
-        // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call newMsgs('" . $nick . "')");
-    }
-
-    function delMsg(StringT $nick)
-    {
-        // Recomendado uso de prepare statement 
-        $this->conFactory->query("DELETE FROM newMsg WHERE msgTo = '" . $nick . "'");
-    }
-
-    function receivedMsg(StringT $contactNickName, StringT $nick)
-    {
-        // Recomendado uso de prepare statement 
-        $this->conFactory->query("UPDATE messages SET received = 1 WHERE messages.MsgFrom = '" . $contactNickName . "' and messages.MsgTo = '" . $nick . "'");
     }
 
     function lasIdMessage($nick, $contactNickName)
@@ -220,7 +190,6 @@ class UsersModel
             $query->bindParam(':nick', $nick);
             $query->bindParam(':contactNickName', $contactNickName);
             $connection->execute($query);
-            $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('" . $nick . "','" . $contactNickName . "')");
         }
     }
 
