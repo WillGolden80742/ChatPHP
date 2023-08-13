@@ -1212,26 +1212,27 @@ function hasNewMsgByContact(msg) {
       if (contact) {
         const count = contact.querySelector(".newMsg");
         if (count) {
-          count.innerHTML = "&nbsp;" + (parseInt(count.innerHTML.replace("&nbsp;", "")) + 1);
+          count.innerHTML =  + (parseInt(count.innerHTML) + 1);
         } else {
           const newCount = document.createElement("span");
           newCount.id = nickNameContact;
           newCount.className = "newMsg";
-          newCount.innerHTML = "&nbsp;1";
+          newCount.innerHTML = "1";
           contact.querySelector("h2").appendChild(newCount);
         }
       } else {
         console.error("Elemento de contato não encontrado para: " + from);
       } 
-      const contactsContainer = document.querySelector(".contacts");
-      contactsContainer.querySelector('form').remove();
-      contactsContainer.insertBefore(contact, contactsContainer.firstChild);
-      addSearchBar();
+      moveToUp(contact);
     }
   }
 }
 
-function addSearchBar() {
+function moveToUp(contact) {
+  // Remove form e adicion contato no top
+  const contactsContainer = document.querySelector(".contacts");
+  contactsContainer.querySelector('form').remove();
+  contactsContainer.insertBefore(contact, contactsContainer.firstChild);
   // Criação do elemento <form>
   var formElement = document.createElement("form");
   formElement.setAttribute("action", "index.php");
