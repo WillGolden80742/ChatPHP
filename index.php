@@ -66,7 +66,7 @@ $auth = new AuthenticateModel();
     }
 
     hasNewMsgByContact(data);
-    console.log(data);
+    console.log(event.data);
   };
 
   ws.onclose = () => {
