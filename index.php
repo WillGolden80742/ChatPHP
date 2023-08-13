@@ -58,7 +58,6 @@ $auth = new AuthenticateModel();
         deletedMsg.splice(indexToRemove, 1);
       }
     }
-
     hasNewMsgByContact(data);
     console.log(event.data);
   };

@@ -1222,15 +1222,14 @@ function hasNewMsgByContact(msg) {
           newCount.innerHTML = "&nbsp;1";
           contact.querySelector("h2").appendChild(newCount);
         }
+        const contactsContainer = document.querySelector(".contacts");
+        contactsContainer.querySelector('form').remove();
+        contactsContainer.insertBefore(contact, contactsContainer.firstChild);
+        addSearchBar();
       } else {
         console.error("Elemento de contato não encontrado para: " + from);
       }
     }
-    //mover para topo contato 
-    const contactsContainer = document.querySelector(".contacts");
-    contactsContainer.querySelector('form').remove();
-    contactsContainer.insertBefore(contact, contactsContainer.firstChild);
-    addSearchBar();
   }
 }
 
@@ -1256,9 +1255,9 @@ function addSearchBar() {
 function hasNewMsgByCurrentContact(from, message) {
 
   if (message.includes("create_message") || message.includes("delete_message")) {
+    const idMsg = message.split(":")[1].replace("msg", "");
     if (message.includes("create_message")) {
       const formData = new FormData();
-      const idMsg = message.split("create_message:")[1].replace("msg", "");
       formData.append('nickNameContact', from);
       formData.append('idMsg', idMsg);
       fetch('lastMsgByCurrentContact.php', {
@@ -1293,8 +1292,7 @@ function hasNewMsgByCurrentContact(from, message) {
         });
     }
     if (message.includes("delete_message")) {
-      const messageId = message.split("delete_message:")[1];
-      const element = document.getElementById(messageId);
+      const element = document.getElementById("msg" + idMsg);
       if (element) {
         element.remove();
         sendSocket("deleted:msg" + idMsg);

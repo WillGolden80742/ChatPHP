@@ -1,4 +1,5 @@
 <?php
+
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Server\IoServer;
@@ -21,7 +22,7 @@ class Chat implements MessageComponentInterface
     public function onOpen(ConnectionInterface $conn)
     {
         $this->clients->attach($conn);
-        echo "Nova conexão! ({$conn->resourceId})\n";
+        echo "New connection! ({$conn->resourceId})\n";
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
@@ -47,13 +48,27 @@ class Chat implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn)
     {
         $this->clients->detach($conn);
-        echo "Conexão {$conn->resourceId} foi fechada\n";
+        echo "Connection {$conn->resourceId} has been closed\n";
+
+        // Auto-restart the server in case it stops unexpectedly
+        $this->restartServer();
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
-        echo "Ocorreu um erro: {$e->getMessage()}\n";
+        echo "An error occurred: {$e->getMessage()}\n";
         $conn->close();
+
+        // Auto-restart the server in case of error
+        $this->restartServer();
+    }
+
+    protected function restartServer()
+    {
+        echo "Restarting the WebSocket server...\n";
+        // Delay for a moment to ensure the previous instance has fully closed
+        sleep(3);
+        exec('php ' . __FILE__);
     }
 }
 
@@ -66,5 +81,5 @@ $server = IoServer::factory(
     8080
 );
 
-echo "Servidor WebSocket iniciado na porta 8080...\n";
+echo "WebSocket server started on port 8080...\n";
 $server->run();
