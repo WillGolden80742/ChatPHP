@@ -1204,23 +1204,52 @@ function hasNewMsgByContact(msg) {
   const parsedMsg = JSON.parse(msg);
   const from = parsedMsg.from;
   const message = parsedMsg.message;
-  const contact = document.querySelector("#contact" + from + " h2");
-  if (from == nickNameContact) {
+  const contact = document.querySelector("#contact" + from);
+
+  if (from === nickNameContact) {
     hasNewMsgByCurrentContact(from, message);
   } else {
     if (!message.includes("delete_message") || message.includes("create_message")) {
       if (contact) {
         const count = contact.querySelector(".newMsg");
+
         if (count) {
           count.innerHTML = "&nbsp;" + (parseInt(count.innerHTML.replace("&nbsp;", "")) + 1);
         } else {
-          contact.innerHTML += "<span id=\"" + nickNameContact + "\" class=\"newMsg\">&nbsp;1</span>";
+          const newCount = document.createElement("span");
+          newCount.id = nickNameContact;
+          newCount.className = "newMsg";
+          newCount.innerHTML = "&nbsp;1";
+          contact.querySelector("h2").appendChild(newCount);
         }
       } else {
-        console.error("Contact element not found for: " + from);
+        console.error("Elemento de contato não encontrado para: " + from);
       }
     }
   }
+  const contactsContainer = document.querySelector(".contacts");
+  contactsContainer.querySelector('form').remove();
+  contactsContainer.insertBefore(contact, contactsContainer.firstChild);
+  addSearchBar();
+}
+
+function addSearchBar() {
+  // Criação do elemento <form>
+  var formElement = document.createElement("form");
+  formElement.setAttribute("action", "index.php");
+  formElement.setAttribute("method", "post");
+
+  // Criação do elemento <input> para pesquisa
+  var inputElement = document.createElement("input");
+  inputElement.setAttribute("class", "search");
+  inputElement.setAttribute("placeholder", "Pesquisar contatos ...");
+  inputElement.setAttribute("type", "text");
+  inputElement.setAttribute("name", "search");
+
+  formElement.appendChild(inputElement);
+
+  var contactsElement = document.querySelector(".contacts");
+  contactsElement.insertBefore(formElement, contactsElement.firstChild);
 }
 
 function hasNewMsgByCurrentContact(from, message) {
