@@ -1074,8 +1074,6 @@ async function addMessage(id, text) {
   await downloadLastTitle();
 }
 
-
-
 function waitingMsg() {
   var messagesElement = document.getElementById('messages');
   var newDiv = document.createElement('div');
