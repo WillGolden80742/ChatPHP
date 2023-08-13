@@ -225,7 +225,7 @@ class UsersController
                 $mensagens .= "<p>" . $msg[0] . "<br><span style='float:right;'>" . $msg[1] . "</span></p>";
                 $mensagens .= "</div>";
             }
-        } else {
+        } else if (count($messages) > 1) {
             $mensagens = "<h3><center>Nenhuma mensagem de @" . $contactNickName . " até o momento<br>Faça seu primeiro envio!</center></h3>";
         }
         $mensagens .= "<script>main();</script>";

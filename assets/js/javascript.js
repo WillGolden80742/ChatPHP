@@ -1205,7 +1205,15 @@ function hasNewMsgByContact(msg) {
   const from = msg.from;
   const message = msg.message;
   const contact = document.querySelector("#contact" + from);
-
+  if (!message.includes("delete_message") && message.includes("create_message")) {
+    const idMsg = message.split(":")[1];
+    if (message.includes("create_message")) {
+      sendSocket("received:" + idMsg);
+    }
+    if (message.includes("create_message")) {
+      sendSocket("deleted:" + idMsg);
+    }
+  }
   if (from === nickNameContact) {
     hasNewMsgByCurrentContact(from, message);
   } else {
@@ -1222,14 +1230,15 @@ function hasNewMsgByContact(msg) {
           newCount.innerHTML = "&nbsp;1";
           contact.querySelector("h2").appendChild(newCount);
         }
-        const contactsContainer = document.querySelector(".contacts");
-        contactsContainer.querySelector('form').remove();
-        contactsContainer.insertBefore(contact, contactsContainer.firstChild);
-        addSearchBar();
       } else {
         console.error("Elemento de contato não encontrado para: " + from);
       }
     }
+    //mover para topo contato 
+    const contactsContainer = document.querySelector(".contacts");
+    contactsContainer.querySelector('form').remove();
+    contactsContainer.insertBefore(contact, contactsContainer.firstChild);
+    addSearchBar();
   }
 }
 
@@ -1285,7 +1294,6 @@ function hasNewMsgByCurrentContact(from, message) {
               }
             }
           }
-          sendSocket("received:msg" + idMsg);
         })
         .catch(error => {
           console.error('Erro na requisição:', error);
@@ -1295,7 +1303,6 @@ function hasNewMsgByCurrentContact(from, message) {
       const element = document.getElementById("msg" + idMsg);
       if (element) {
         element.remove();
-        sendSocket("deleted:msg" + idMsg);
       }
       downButton(false);
     }

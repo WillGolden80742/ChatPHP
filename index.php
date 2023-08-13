@@ -33,78 +33,75 @@ $auth = new AuthenticateModel();
     }
   });
 
-  const receivedMsg = [];
-  const deletedMsg = [];
-  const ws = new WebSocket('ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080');
-  ws.onopen = () => {
-    console.log('Conexão estabelecida.');
-    sendSocket("online");
-  };
+  const receivedMsg = new Set();
+const deletedMsg = new Set();
+const ws = new WebSocket(`ws://${location.host}:8080`);
 
-  ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    const message = data.message;
+ws.onopen = () => {
+  console.log('Conexão estabelecida.');
+  sendSocket("online");
+};
 
-    if (message.includes("received:")) {
-      const idToRemove = message.split("received:")[1];
-      const indexToRemove = receivedMsg.indexOf(idToRemove);
-      if (indexToRemove !== -1) {
-        receivedMsg.splice(indexToRemove, 1);
-      }
-    } else if (message.includes("deleted:")) {
-      const idToRemove = message.split("deleted:")[1];
-      const indexToRemove = deletedMsg.indexOf(idToRemove);
-      if (indexToRemove !== -1) {
-        deletedMsg.splice(indexToRemove, 1);
-      }
-    }
-    hasNewMsgByContact(data);
-    console.log(event.data);
-  };
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  const message = data.message;
 
-  ws.onclose = () => {
-    console.log('Conexão fechada.');
-    const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
-    if (reload) {
-      location.reload();
-    }
-  };
+  if (message.startsWith("received:")) {
+    const idToRemove = message.split("received:")[1];
+    receivedMsg.delete(idToRemove);
+  } else if (message.startsWith("deleted:")) {
+    const idToRemove = message.split("deleted:")[1];
+    deletedMsg.delete(idToRemove);
+  }
+  
+  hasNewMsgByContact(data);
+  console.log(event.data);
+};
 
-  function sendSocket(value) {
-    const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
-    const nickNameTo = '<?php echo $nickNameContact; ?>';
+ws.onclose = () => {
+  console.log('Conexão fechada.');
+  const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
+  if (reload) {
+    location.reload();
+  }
+};
 
-    if (value.includes("create_message")) {
-      receivedMsg.push(value.split("create_message:")[1]);
-    } else if (value.includes("delete_message")) {
-      deletedMsg.push(value.split("delete_message:")[1]);
-    }
+function sendSocket(value) {
+  const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
+  const nickNameTo = '<?php echo $nickNameContact; ?>';
 
-    if (value.trim() !== '' && nickNameFrom.trim() !== '') {
-      if (value.includes("create_message") || value.includes("delete_message")) {
-        for (const element of receivedMsg) {
-          ws.send(JSON.stringify({
-            nickNameFrom: nickNameFrom,
-            nickNameTo: nickNameTo,
-            message: "create_message:" + element
-          }));
-        }
-        for (const element of deletedMsg) {
-          ws.send(JSON.stringify({
-            nickNameFrom: nickNameFrom,
-            nickNameTo: nickNameTo,
-            message: "delete_message:" + element
-          }));
-        }
-      } else {
+  if (value.includes("create_message")) {
+    receivedMsg.add(value.split("create_message:")[1]);
+  } else if (value.includes("delete_message")) {
+    deletedMsg.add(value.split("delete_message:")[1]);
+  }
+
+  if (value.trim() !== '' && nickNameFrom.trim() !== '') {
+    if (value.includes("create_message") || value.includes("delete_message")) {
+      for (const element of receivedMsg) {
         ws.send(JSON.stringify({
           nickNameFrom: nickNameFrom,
           nickNameTo: nickNameTo,
-          message: value
+          message: "create_message:" + element
         }));
       }
+      for (const element of deletedMsg) {
+        ws.send(JSON.stringify({
+          nickNameFrom: nickNameFrom,
+          nickNameTo: nickNameTo,
+          message: "delete_message:" + element
+        }));
+      }
+    } else {
+      ws.send(JSON.stringify({
+        nickNameFrom: nickNameFrom,
+        nickNameTo: nickNameTo,
+        message: value
+      }));
     }
   }
+}
+
 </script>
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/md5.min.js"></script>
