@@ -1211,7 +1211,6 @@ function hasNewMsgByContact(msg) {
     if (!message.includes("delete_message") && message.includes("create_message")) {
       if (contact) {
         const count = contact.querySelector(".newMsg");
-
         if (count) {
           count.innerHTML = "&nbsp;" + (parseInt(count.innerHTML.replace("&nbsp;", "")) + 1);
         } else {
@@ -1224,12 +1223,11 @@ function hasNewMsgByContact(msg) {
       } else {
         console.error("Elemento de contato não encontrado para: " + from);
       }
+      const contactsContainer = document.querySelector(".contacts");
+      contactsContainer.querySelector('form').remove();
+      contactsContainer.insertBefore(contact, contactsContainer.firstChild);
+      addSearchBar();
     }
-    //mover para topo contato 
-    const contactsContainer = document.querySelector(".contacts");
-    contactsContainer.querySelector('form').remove();
-    contactsContainer.insertBefore(contact, contactsContainer.firstChild);
-    addSearchBar();
   }
 }
 
