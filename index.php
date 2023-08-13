@@ -34,65 +34,33 @@ $auth = new AuthenticateModel();
   });
 
   const receivedMsg = new Set();
-const deletedMsg = new Set();
-const ws = new WebSocket(`ws://${location.host}:8080`);
+  const deletedMsg = new Set();
+  const ws = new WebSocket(`ws://${location.host}:8080`);
 
-ws.onopen = () => {
-  console.log('Conexão estabelecida.');
-  sendSocket("online");
-};
+  ws.onopen = () => {
+    console.log('Conexão estabelecida.');
+    sendSocket("online");
+  };
 
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  const message = data.message;
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    const message = data.message;
+    hasNewMsgByContact(data);
+    console.log(event.data);
+  };
 
-  if (message.startsWith("received:")) {
-    const idToRemove = message.split("received:")[1];
-    receivedMsg.delete(idToRemove);
-  } else if (message.startsWith("deleted:")) {
-    const idToRemove = message.split("deleted:")[1];
-    deletedMsg.delete(idToRemove);
-  }
-  
-  hasNewMsgByContact(data);
-  console.log(event.data);
-};
+  ws.onclose = () => {
+    console.log('Conexão fechada.');
+    const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
+    if (reload) {
+      location.reload();
+    }
+  };
 
-ws.onclose = () => {
-  console.log('Conexão fechada.');
-  const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
-  if (reload) {
-    location.reload();
-  }
-};
-
-function sendSocket(value) {
-  const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
-  const nickNameTo = '<?php echo $nickNameContact; ?>';
-
-  if (value.includes("create_message")) {
-    receivedMsg.add(value.split("create_message:")[1]);
-  } else if (value.includes("delete_message")) {
-    deletedMsg.add(value.split("delete_message:")[1]);
-  }
-
-  if (value.trim() !== '' && nickNameFrom.trim() !== '') {
-    if (value.includes("create_message") || value.includes("delete_message")) {
-      for (const element of receivedMsg) {
-        ws.send(JSON.stringify({
-          nickNameFrom: nickNameFrom,
-          nickNameTo: nickNameTo,
-          message: "create_message:" + element
-        }));
-      }
-      for (const element of deletedMsg) {
-        ws.send(JSON.stringify({
-          nickNameFrom: nickNameFrom,
-          nickNameTo: nickNameTo,
-          message: "delete_message:" + element
-        }));
-      }
-    } else {
+  function sendSocket(value) {
+    const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
+    const nickNameTo = '<?php echo $nickNameContact; ?>';
+    if (value.trim() !== '' && nickNameFrom.trim() !== '') {
       ws.send(JSON.stringify({
         nickNameFrom: nickNameFrom,
         nickNameTo: nickNameTo,
@@ -100,8 +68,6 @@ function sendSocket(value) {
       }));
     }
   }
-}
-
 </script>
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/md5.min.js"></script>

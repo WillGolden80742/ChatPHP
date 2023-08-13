@@ -1205,15 +1205,6 @@ function hasNewMsgByContact(msg) {
   const from = msg.from;
   const message = msg.message;
   const contact = document.querySelector("#contact" + from);
-  if (!message.includes("delete_message") && message.includes("create_message")) {
-    const idMsg = message.split(":")[1];
-    if (message.includes("create_message")) {
-      sendSocket("received:" + idMsg);
-    }
-    if (message.includes("create_message")) {
-      sendSocket("deleted:" + idMsg);
-    }
-  }
   if (from === nickNameContact) {
     hasNewMsgByCurrentContact(from, message);
   } else {
