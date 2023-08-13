@@ -152,7 +152,7 @@ class UsersController
     function allMessages(StringT $contactNickName)
     {
         $query = $this->allMessagesQuery($contactNickName);
-        return $this->messages($query, $contactNickName, true);
+        return $this->messages($query, $contactNickName);
     }
 
     function allMessagesQuery(StringT $contactNickName)
@@ -163,7 +163,7 @@ class UsersController
     function lastMessage(StringT $contactNickName)
     {
         $query = $this->lastMessageQuery($contactNickName);
-        return $this->messages($query, $contactNickName, true);
+        return $this->messages($query, $contactNickName);
     }
 
     function lastMessageQuery(StringT $contactNickName)
