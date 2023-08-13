@@ -171,7 +171,7 @@ class UsersController
         return $this->user->lastMessage(new StringT($this->nickSession), $contactNickName);
     }
 
-    function messages($queryMessages, StringT $contactNickName, $async)
+    function messages($queryMessages, StringT $contactNickName)
     {
         $messages = array();
         if (mysqli_num_rows($queryMessages) > 0) {
