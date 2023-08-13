@@ -1227,6 +1227,7 @@ function hasNewMsgByContact(msg) {
       }
     }
   }
+  //mover para topo contato 
   const contactsContainer = document.querySelector(".contacts");
   contactsContainer.querySelector('form').remove();
   contactsContainer.insertBefore(contact, contactsContainer.firstChild);
