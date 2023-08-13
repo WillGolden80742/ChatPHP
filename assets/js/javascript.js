@@ -279,8 +279,10 @@ function removeDownButton() {
   }
 }
 
+var isDeleting = false;
 function deleteMessage(id) {
-  if (confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+  if (!isDeleting && confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+    isDeleting = true;
     sendSocket("delete_message:msg" + id);
     document.getElementById("msg" + id).remove();
     loading(true);
@@ -290,6 +292,7 @@ function deleteMessage(id) {
       data: { nickNameContact: nickNameContact },
       dataType: 'json'
     }).done(function () {
+      isDeleting = false;
       loading(false);
     });
   }
