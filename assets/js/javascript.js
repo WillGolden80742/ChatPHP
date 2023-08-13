@@ -1267,7 +1267,7 @@ function hasNewMsgByCurrentContact(from, message) {
         .then(response => response.json())
         .then(result => {
           const idMsg = message.split("create_message:")[1];
-          if (!document.querySelector("#"+idMsg)) {
+          if (!document.getElementById(idMsg)) {
             var messagesDiv = document.querySelector('#messages');
             msgsContents += result;
             if (messagesDiv) {
