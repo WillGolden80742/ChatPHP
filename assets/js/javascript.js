@@ -1134,15 +1134,16 @@ function updateMessages(contact = nickNameContact, name = nickNameContact) {
 }
 
 function updateContacts(contact = nickNameContact, name = nickNameContact) {
+  const currentContact = document.querySelector("#contact"+contact+" h2");
+  const count = currentContact.querySelector(".newMsg");
+  if (count) {
+    count.remove();
+  }
   var h2Elements = document.querySelectorAll('.contacts h2');
   h2Elements.forEach(function (h2) {
     h2.style.background = 'none';
     h2.style.color = '#2b5278';
     h2.style.boxShadow = 'none';
-  });
-  var spanElements = document.querySelectorAll('span[id^=\"' + contact + '\"]');
-  spanElements.forEach(function (span) {
-    span.remove();
   });
   var h2Element = document.querySelector('#contact' + contact + ' h2');
   h2Element.style.color = 'white';
@@ -1202,44 +1203,25 @@ function toggle(value = true, landscape = false) {
 }
 
 function hasNewMsgByContact(msg) {
-  const formData = new FormData();
-  formData.append('nickNameContact', nickNameContact);
-  fetch('hasNewMsgByContact.php', {
-    method: 'POST',
-    body: formData
-  })
-    .then(response => response.json())
-    .then(result => {
-      if (result !== "0") {
-        document.getElementById('contacts').innerHTML = result;
-        responsiveCont();
+  const from = JSON.parse(msg).from;
+  const message = JSON.parse(msg).message;
+  const contact = document.querySelector("#contact"+from+" h2");
+  console.log(contact);
+  if (from == nickNameContact) { 
+    hasNewMsgByCurrentContact(from,message);
+  } else {
+    if (!message.includes("delete_message")) {
+      const count = contact.querySelector(".newMsg");
+      if (count) {
+        count.innerHTML="&nbsp;"+(parseInt(count.innerHTML.replace("&nbsp;",""))+1);
+      } else {
+        contact.innerHTML+="<span id=\""+nickNameContact+"\" class=\"newMsg\">&nbsp;1</span>";
       }
-      if (JSON.parse(msg).from == nickNameContact) { 
-        hasNewMsgByCurrentContact(msg);
-      }
-    })
-    .catch(error => {
-      console.error('Erro na requisição:', error);
-    });
-}
-
-function responsiveCont() {
-  var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  var contactID = document.getElementById(nickNameContact);
-  if (contactID) {
-    if (screenWidth > screenHeight) {
-      contactID.style.display = 'none';
-    } else {
-      contactID.style.display = 'inline';
     }
   }
 }
 
-function hasNewMsgByCurrentContact(msg) {
-  const jsonObject = JSON.parse(msg);
-  const message = jsonObject.message;
-  const from = jsonObject.from;
+function hasNewMsgByCurrentContact(from,message) {
 
   if (message === "create_message" || message.includes("delete_message")) {
     if (message === "create_message") {
