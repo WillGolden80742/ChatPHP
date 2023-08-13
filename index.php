@@ -4,11 +4,7 @@ $user = new UsersController();
 $auth = new AuthenticateModel();
 ?>
 
-<script src="assets/js/javascript.js"></script>
-<script src="assets/js/jquery-3.6.0.min.js"></script>
-<script src="assets/js/md5.min.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
-
 <script>
   const cookie = new Map();
   const audioTime = new Map();
@@ -30,20 +26,14 @@ $auth = new AuthenticateModel();
 
   var nickNameContact = "<?php echo $nickNameContact; ?>";
 
-  $(document).ready(function() {
-    <?php
-    if (!empty($nickNameContact)) {
-      echo "down ();";
+  document.addEventListener("DOMContentLoaded", function() {
+    var nickNameContact = <?php echo json_encode($nickNameContact); ?>;
+
+    if (nickNameContact !== "") {
+      down();
     }
-    ?>
   });
 
-  <?php
-  $lines_array = file("assets/js/javascript.js");
-  foreach ($lines_array as $line) {
-    echo $line;
-  }
-  ?>
   const ws = new WebSocket('ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080');
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
@@ -76,12 +66,14 @@ $auth = new AuthenticateModel();
     }
   }
 </script>
+<script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/md5.min.js"></script>
+<script src="assets/js/javascript.js"></script>
+
 <style id="styleIndex">
 
 
 </style>
-
-
 
 <?php
 
