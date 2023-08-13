@@ -38,6 +38,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `lastMessage` (IN `nickName` VARCHAR
     LIMIT 1;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `messageByID` (
+    IN `nickName` VARCHAR(20),
+    IN `contactNickName` VARCHAR(20),
+    IN `messageId` INT
+)  NO SQL BEGIN
+    SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
+    FROM messages m
+    LEFT JOIN anexo an ON m.Idmessage = an.mensagem
+    WHERE ((m.MsgFrom = contactNickName AND m.MsgTo = nickName) OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName))
+        AND m.Idmessage = messageId
+    ORDER BY m.date DESC
+    LIMIT 1;
+END$$
+
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
 FROM messages m
 LEFT JOIN anexo an ON m.Idmessage = an.mensagem
