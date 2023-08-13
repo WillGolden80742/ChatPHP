@@ -243,10 +243,10 @@ function upload(url, formData, successCallback, errorCallback) {
 }
 
 function uploadAttachment(url, formData) {
-  upload(url, formData, function () {
+  upload(url, formData, function (result) {
     loading(false);
     updateMessages();
-    sendSocket("create_message");
+    sendSocket("create_message:msg" + result);
     var attachmentDiv = document.getElementById('attachment');
     attachmentDiv.style.backgroundColor = "";
   }, function (errorText) {
@@ -918,9 +918,9 @@ function createMessage() {
           dataType: 'html'
         }).done(function (text) {
           addMessage(id, text);
-          sendSocket("create_message");
           down();
         });
+        sendSocket("create_message:msg" + result);
         loading(false);
       });
     } else {
@@ -1201,9 +1201,8 @@ function toggle(value = true, landscape = false) {
 }
 
 function hasNewMsgByContact(msg) {
-  const parsedMsg = JSON.parse(msg);
-  const from = parsedMsg.from;
-  const message = parsedMsg.message;
+  const from = msg.from;
+  const message = msg.message;
   const contact = document.querySelector("#contact" + from);
 
   if (from === nickNameContact) {
@@ -1255,8 +1254,8 @@ function addSearchBar() {
 
 function hasNewMsgByCurrentContact(from, message) {
 
-  if (message === "create_message" || message.includes("delete_message")) {
-    if (message === "create_message") {
+  if (message.includes("create_message") || message.includes("delete_message")) {
+    if (message.includes("create_message")) {
       const formData = new FormData();
       formData.append('nickNameContact', from);
 
@@ -1266,21 +1265,24 @@ function hasNewMsgByCurrentContact(from, message) {
       })
         .then(response => response.json())
         .then(result => {
-          var messagesDiv = document.querySelector('#messages');
-          msgsContents += result;
-          if (messagesDiv) {
-            if (messagesDiv.querySelector(".msg")) {
-              getAudioTimes();
-              messagesDiv.innerHTML += result;
-              const messagesElement = document.getElementById("messages");
-              const h = messagesElement.scrollHeight;
-              if ((messagesElement.scrollTop / h) * 100 >= 80) {
-                down();
-              } else {
-                downButton(true);
+          const idMsg = message.split("create_message:")[1];
+          if (!document.querySelector("#"+idMsg)) {
+            var messagesDiv = document.querySelector('#messages');
+            msgsContents += result;
+            if (messagesDiv) {
+              if (messagesDiv.querySelector(".msg")) {
+                getAudioTimes();
+                messagesDiv.innerHTML += result;
+                const messagesElement = document.getElementById("messages");
+                const h = messagesElement.scrollHeight;
+                if ((messagesElement.scrollTop / h) * 100 >= 80) {
+                  down();
+                } else {
+                  downButton(true);
+                }
+                timestamp = new Date().getTime();
+                downloadAllMidia();
               }
-              timestamp = new Date().getTime();
-              downloadAllMidia();
             }
           }
         })

@@ -33,6 +33,8 @@ $auth = new AuthenticateModel();
     }
   });
 
+  const receivedMsg = [];
+  const deletedMsg = [];
   const ws = new WebSocket('ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080');
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
@@ -40,9 +42,31 @@ $auth = new AuthenticateModel();
   };
 
   ws.onmessage = (event) => {
-    const message = event.data;
-    hasNewMsgByContact(message);
-    console.log(message);
+    const data = JSON.parse(event.data);
+    const message = data.message;
+
+    if (message.includes("create_message:")) {
+      const id = message.split("create_message:")[1];
+      sendSocket("received:" + id);
+    } else if (message.includes("delete_message:")) {
+      const id = message.split("delete_message:")[1];
+      sendSocket("deleted:" + id);
+    } else if (message.includes("received:")) {
+      const idToRemove = message.split("received:")[1];
+      const indexToRemove = receivedMsg.indexOf(idToRemove);
+      if (indexToRemove !== -1) {
+        receivedMsg.splice(indexToRemove, 1);
+      }
+    } else if (message.includes("deleted:")) {
+      const idToRemove = message.split("deleted:")[1];
+      const indexToRemove = deletedMsg.indexOf(idToRemove);
+      if (indexToRemove !== -1) {
+        deletedMsg.splice(indexToRemove, 1);
+      }
+    }
+
+    hasNewMsgByContact(data);
+    console.log(data);
   };
 
   ws.onclose = () => {
@@ -54,14 +78,38 @@ $auth = new AuthenticateModel();
   };
 
   function sendSocket(value) {
-    const nickNameFrom = '<?php echo new StringT($_SESSION['nickName']); ?>';
+    const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
     const nickNameTo = '<?php echo $nickNameContact; ?>';
+
+    if (value.includes("create_message")) {
+      receivedMsg.push(value.split("create_message:")[1]);
+    } else if (value.includes("delete_message")) {
+      deletedMsg.push(value.split("delete_message:")[1]);
+    }
+
     if (value.trim() !== '' && nickNameFrom.trim() !== '') {
-      ws.send(JSON.stringify({
-        nickNameFrom: nickNameFrom,
-        nickNameTo: nickNameTo,
-        message: value
-      }));
+      if (value.includes("create_message") || value.includes("delete_message")) {
+        for (const element of receivedMsg) {
+          ws.send(JSON.stringify({
+            nickNameFrom: nickNameFrom,
+            nickNameTo: nickNameTo,
+            message: "create_message:" + element
+          }));
+        }
+        for (const element of deletedMsg) {
+          ws.send(JSON.stringify({
+            nickNameFrom: nickNameFrom,
+            nickNameTo: nickNameTo,
+            message: "delete_message:" + element
+          }));
+        }
+      } else {
+        ws.send(JSON.stringify({
+          nickNameFrom: nickNameFrom,
+          nickNameTo: nickNameTo,
+          message: value
+        }));
+      }
     }
   }
 </script>
