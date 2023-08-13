@@ -45,10 +45,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `messagesWithAttachment` (IN `nickNa
 UNION
 SELECT messages.Idmessage, messages.Messages, messages.MsgFrom,messages.MsgTo, messages.Date as dataOrd, DATE_FORMAT(messages.date, '%H:%i') as HourMsg, "" AS NomeArquivo, "" AS hashArquivo From messages WHERE messages.MsgFrom = contactNickName AND messages.MsgTo = nickName AND messages.Messages != "" OR messages.MsgFrom = nickName AND messages.MsgTo = contactNickName AND messages.Messages != "" ORDER BY dataOrd DESC LIMIT 0,15$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsg` (IN `userNickName` VARCHAR(20), IN `contactuserNickName` VARCHAR(20), IN `received` INT(1))   SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = contactuserNickName AND messages.MsgTo = userNickName AND messages.received = received$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `newMsgs` (IN `userNickName` VARCHAR(20))   SELECT COUNT(newMsg.msgTo) as countMsg FROM newMsg WHERE newMsg.msgTo = userNickName$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))   SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%") OR clientes.nomeCliente LIKE CONCAT("%",contactNickName,"%")$$
 
 DELIMITER ;
@@ -105,15 +101,6 @@ CREATE TABLE `messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
-
---
--- Estrutura para tabela `newMsg`
---
-
-CREATE TABLE `newMsg` (
-  `msgFrom` varchar(20) NOT NULL,
-  `msgTo` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -174,12 +161,6 @@ ALTER TABLE `messages`
   ADD KEY `Idmessage` (`Idmessage`),
   ADD KEY `Idmessage_2` (`Idmessage`);
 
---
--- Índices de tabela `newMsg`
---
-ALTER TABLE `newMsg`
-  ADD KEY `msgFrom_Fk` (`msgFrom`),
-  ADD KEY `msgTo_Fk` (`msgTo`);
 
 --
 -- Índices de tabela `profilepicture`
@@ -221,13 +202,6 @@ ALTER TABLE `anexo`
 ALTER TABLE `messages`
   ADD CONSTRAINT `msgFromCliente` FOREIGN KEY (`MsgFrom`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `msgToCliente` FOREIGN KEY (`MsgTo`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Restrições para tabelas `newMsg`
---
-ALTER TABLE `newMsg`
-  ADD CONSTRAINT `msgFrom_Fk` FOREIGN KEY (`msgFrom`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `msgTo_Fk` FOREIGN KEY (`msgTo`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para tabelas `profilepicture`
