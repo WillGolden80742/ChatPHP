@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 26/06/2023 às 05:33
+-- Tempo de geração: 13/08/2023 às 06:06
 -- Versão do servidor: 10.4.27-MariaDB
 -- Versão do PHP: 8.1.12
 
@@ -20,24 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `ChatPHP`
 --
-
-DELIMITER $$
---
--- Procedimentos
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `contatos` (IN `userNickName` VARCHAR(20))  NO SQL select clientes.nickName as nickNameContato, clientes.nomeCliente AS Contato, messages.Messages, max(messages.date) as DateFormated FROM clientes INNER JOIN messages on messages .MsgFrom = clientes.nickName or messages.MsgTo = clientes.nickName WHERE (messages.MsgFrom = userNickName AND clientes.nickName != userNickName) OR  (messages.MsgTo = userNickName AND clientes.nickName != userNickName) GROUP BY nickNameContato ORDER BY DateFormated DESC$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteMessage` (IN `idMsg` INT(20), IN `nickName` VARCHAR(20))   DELETE FROM messages WHERE messages.Idmessage = idMsg and messages.MsgFrom = nickName$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
-FROM messages m
-LEFT JOIN anexo an ON m.Idmessage = an.mensagem
-WHERE (m.MsgFrom = contactNickName AND m.MsgTo = nickName) OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName)
-ORDER BY DATE_FORMAT(m.date, '%Y/%m/%d %H:%i:%s') ASC$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))   SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%") OR clientes.nomeCliente LIKE CONCAT("%",contactNickName,"%")$$
-
-DELIMITER ;
+CREATE DATABASE IF NOT EXISTS `ChatPHP` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ChatPHP`;
 
 -- --------------------------------------------------------
 
@@ -75,6 +59,16 @@ CREATE TABLE `clientes` (
   `senha` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `clientes`
+--
+
+INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
+('Alyssom', 'ally77', '0e3a1b6281353561aa19e3423d9737168e4247aae6194a3c366d09ef75be3e26a814a61420974cfc99534a79e5114af4d6aee63028a2203e2d06d4e3fe08dadd'),
+('Гуммо', 'gvmmo', '73ff16a44c59b42ffaaedebd4958b46c31b0081690fe4f7c2eddbb4afc17929d50daab5a17157d38d8d2e3e8f29808f8a8fa6ec97b99337c4b852c1bd56a3368'),
+('Eloa', 'lola', '4b92d552c953acd11c6370b4f107518c00df07e6ca99269a1dae70bdb7d1747966e1fd25c28e2d265a46851b02d3ef36ceb131d6c70b7e51ddb26aed92a9415c'),
+('Уилл Голден', 'willGolden', 'a8d853d9087fe946983f10db963a28488a1ee6474a0684ad29111d5c948b431b5fa0d1f5a33335ebf0615fc3c540ecaec687783f62ff58c48ed6cb2badb8f4e4');
+
 -- --------------------------------------------------------
 
 --
@@ -83,14 +77,11 @@ CREATE TABLE `clientes` (
 
 CREATE TABLE `messages` (
   `Idmessage` int(20) NOT NULL,
-  `Messages` varchar(600) NOT NULL,
+  `Messages` varchar(4196) NOT NULL,
   `MsgFrom` varchar(20) NOT NULL,
   `MsgTo` varchar(20) NOT NULL,
-  `Date` varchar(20) NOT NULL DEFAULT current_timestamp(),
-  `received` tinyint(1) NOT NULL DEFAULT 0
+  `Date` varchar(20) NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
 
 -- --------------------------------------------------------
 
@@ -150,7 +141,6 @@ ALTER TABLE `messages`
   ADD KEY `msgFromCliente` (`MsgFrom`),
   ADD KEY `Idmessage` (`Idmessage`),
   ADD KEY `Idmessage_2` (`Idmessage`);
-
 
 --
 -- Índices de tabela `profilepicture`

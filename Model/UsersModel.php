@@ -170,12 +170,6 @@ class UsersModel
         return $this->conFactory->query("call  lastMessage('" . $nickName . "','" . $contactNickName . "')");
     }
 
-    function isDeleteMessage(StringT $contactNickName, StringT $nick)
-    {
-        // Recomendado uso de prepare statement 
-        return $this->conFactory->query("SELECT COUNT(messages.Idmessage) as countMsg FROM messages WHERE messages.MsgFrom = '" . $contactNickName . "' AND messages.MsgTo = '" . $nick . "' AND messages.received = '2'");
-    }
-
     function lasIdMessage($nick, $contactNickName)
     {
         return $this->conFactory->query("SELECT MAX(messages.Idmessage) as LastID From messages WHERE MsgFrom = '$nick' AND MsgTo = '$contactNickName'");
@@ -214,12 +208,6 @@ class UsersModel
 
         // Apagar a mensagem
         $this->conFactory->query("DELETE FROM messages WHERE Idmessage = " . $id);
-
-        // Inserir nova mensagem
-        $this->conFactory->query("INSERT INTO newMsg (msgFrom, msgTo) VALUES ('" . $nick . "','" . $contactNickName . "')");
-
-        // Atualizar o status da mensagem para '2'
-        $this->conFactory->query("UPDATE messages SET received = '2' WHERE MsgFrom = '" . $nick . "' AND MsgTo = '" . $contactNickName . "'");
     }
 
 
