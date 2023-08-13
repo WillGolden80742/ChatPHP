@@ -6,6 +6,15 @@ $auth = new AuthenticateModel();
 
 <link rel="stylesheet" href="assets/css/styles.css">
 <script>
+  <?php
+  $nickNameContact = "";
+  if (!empty($_GET['contactNickName'])) {
+    $nickNameContact = new StringT($_GET['contactNickName']);
+    $sessions = new Sessions();
+    $sessions->clearSession($nickNameContact);
+  }
+  ?>
+  var nickNameContact = "<?php echo $nickNameContact; ?>";
   const cookie = new Map();
   const audioTime = new Map();
   const currentUrl = window.location.href;
@@ -15,16 +24,6 @@ $auth = new AuthenticateModel();
   } else if (home.includes('editProfile.php')) {
     document.title = "Edite Perfil";
   }
-  <?php
-  $nickNameContact = "";
-  if (!empty($_GET['contactNickName'])) {
-    $nickNameContact = new StringT($_GET['contactNickName']);
-    $sessions = new Sessions();
-    $sessions->clearSession($nickNameContact);
-  }
-  ?>
-
-  var nickNameContact = "<?php echo $nickNameContact; ?>";
 
   document.addEventListener("DOMContentLoaded", function() {
     var nickNameContact = <?php echo json_encode($nickNameContact); ?>;
