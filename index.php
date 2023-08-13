@@ -45,13 +45,7 @@ $auth = new AuthenticateModel();
     const data = JSON.parse(event.data);
     const message = data.message;
 
-    if (message.includes("create_message:")) {
-      const id = message.split("create_message:")[1];
-      sendSocket("received:" + id);
-    } else if (message.includes("delete_message:")) {
-      const id = message.split("delete_message:")[1];
-      sendSocket("deleted:" + id);
-    } else if (message.includes("received:")) {
+    if (message.includes("received:")) {
       const idToRemove = message.split("received:")[1];
       const indexToRemove = receivedMsg.indexOf(idToRemove);
       if (indexToRemove !== -1) {

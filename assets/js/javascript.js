@@ -239,7 +239,7 @@ function upload(url, formData, successCallback, errorCallback) {
     } else {
       errorCallback(xhr.responseText);
     }
-    
+
   };
   xhr.send(formData);
 }
@@ -1258,7 +1258,7 @@ function hasNewMsgByCurrentContact(from, message) {
   if (message.includes("create_message") || message.includes("delete_message")) {
     if (message.includes("create_message")) {
       const formData = new FormData();
-      const idMsg = message.split("create_message:")[1].replace("msg","");
+      const idMsg = message.split("create_message:")[1].replace("msg", "");
       formData.append('nickNameContact', from);
       formData.append('idMsg', idMsg);
       fetch('lastMsgByCurrentContact.php', {
@@ -1267,7 +1267,7 @@ function hasNewMsgByCurrentContact(from, message) {
       })
         .then(response => response.json())
         .then(result => {
-          if (!document.getElementById("msg"+idMsg)) {
+          if (!document.getElementById("msg" + idMsg)) {
             var messagesDiv = document.querySelector('#messages');
             msgsContents += result;
             if (messagesDiv) {
@@ -1286,6 +1286,7 @@ function hasNewMsgByCurrentContact(from, message) {
               }
             }
           }
+          sendSocket("received:msg" + idMsg);
         })
         .catch(error => {
           console.error('Erro na requisição:', error);
@@ -1296,6 +1297,7 @@ function hasNewMsgByCurrentContact(from, message) {
       const element = document.getElementById(messageId);
       if (element) {
         element.remove();
+        sendSocket("deleted:msg" + idMsg);
       }
       downButton(false);
     }
