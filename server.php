@@ -11,69 +11,72 @@ class Chat implements MessageComponentInterface
 {
     protected $clients;
     protected $nickNameMap;
-    protected $messageRateLimit = 3; // Allow 3 messages per second
+    protected $messageLimits;
 
     public function __construct()
     {
         $this->clients = new \SplObjectStorage();
         $this->nickNameMap = [];
+        $this->messageLimits = [];
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
         $this->clients->attach($conn);
-        echo "New connection! ({$conn->resourceId})\n";
+        echo "Nova conexão! ({$conn->resourceId})\n";
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
         $data = json_decode($msg, true);
-        if (!$this->isValidMessage($data)) {
-            return;
-        }
-        
         $nickNameFrom = $data['nickNameFrom'];
-        $this->nickNameMap[$nickNameFrom] = $from;
 
-        if ($this->isRateLimited($from)) {
+        // Check message rate limit
+        if (!$this->isMessageAllowed($nickNameFrom)) {
             return;
         }
 
-        $nickNameTo = $data['nickNameTo'];
-        $message = $data['message'];
-
-        if (isset($this->nickNameMap[$nickNameTo])) {
-            $client = $this->nickNameMap[$nickNameTo];
-            $client->send(json_encode([
-                'from' => $nickNameFrom,
-                'message' => $message
-            ]));
+        $this->nickNameMap[$nickNameFrom] = $from;
+        if (isset($data['nickNameFrom']) && isset($data['nickNameTo']) && isset($data['message'])) {
+            $nickNameTo = $data['nickNameTo'];
+            $message = $data['message'];
+            if (isset($this->nickNameMap[$nickNameTo])) {
+                $client = $this->nickNameMap[$nickNameTo];
+                $client->send(json_encode([
+                    'from' => $nickNameFrom,
+                    'message' => $message
+                ]));
+            }
         }
+    }
+
+    protected function isMessageAllowed($nickName)
+    {
+        $currentTime = time();
+        if (!isset($this->messageLimits[$nickName])) {
+            $this->messageLimits[$nickName] = $currentTime;
+            return true;
+        }
+
+        $lastMessageTime = $this->messageLimits[$nickName];
+        if ($currentTime - $lastMessageTime >= 3) {
+            $this->messageLimits[$nickName] = $currentTime;
+            return true;
+        }
+
+        return false;
     }
 
     public function onClose(ConnectionInterface $conn)
     {
         $this->clients->detach($conn);
-        echo "Connection {$conn->resourceId} has been closed\n";
+        echo "Conexão {$conn->resourceId} foi fechada\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
-        echo "An error occurred: {$e->getMessage()}\n";
+        echo "Ocorreu um erro: {$e->getMessage()}\n";
         $conn->close();
-    }
-
-    protected function isValidMessage($data)
-    {
-        // Implement your own validation logic here
-        return isset($data['nickNameFrom']) && isset($data['nickNameTo']) && isset($data['message']);
-    }
-
-    protected function isRateLimited($conn)
-    {
-        // Implement rate limiting logic here
-        // Track and compare the message rate for each connection
-        return false; // Modify this based on your implementation
     }
 }
 
@@ -86,5 +89,5 @@ $server = IoServer::factory(
     8080
 );
 
-echo "WebSocket server started on port 8080...\n";
+echo "Servidor WebSocket iniciado na porta 8080...\n";
 $server->run();
