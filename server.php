@@ -59,7 +59,7 @@ class Chat implements MessageComponentInterface
         }
 
         $lastMessageTime = $this->messageLimits[$nickName];
-        if ($currentTime - $lastMessageTime >= 3) {
+        if ($currentTime - $lastMessageTime >= 1) {
             $this->messageLimits[$nickName] = $currentTime;
             return true;
         }
