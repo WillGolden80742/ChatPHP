@@ -5,8 +5,8 @@ $auth = new AuthenticateModel();
 ?>
 
 <script src="assets/js/javascript.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.18.0/js/md5.min.js"></script>
+<script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/md5.min.js"></script>
 <link rel="stylesheet" href="assets/css/styles.css">
 
 <script>
