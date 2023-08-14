@@ -1126,12 +1126,14 @@ function updateMessages(contact = nickNameContact, name = nickNameContact) {
   nickNameContact = contact;
   const currentUrl = window.location.href;
   if (currentUrl.includes('messages.php')) {
+    document.querySelector("#picContact"+nickNameContact+" img").src = "Images/loadingProfilePic.webp";
     $.ajax({
       url: 'updateMsg.php',
       method: 'POST',
       data: { contactNickName: contact },
       dataType: 'html'
     }).done(function (result) {
+      document.querySelector("#picContact"+nickNameContact+" img").src = "Images/blank.png";
       document.getElementById('messages').innerHTML = result;
       msgsContents = result;
       if (document.getElementById('login') !== null) {
