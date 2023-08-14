@@ -550,97 +550,102 @@ async function downloadMidia(id, hash, cookie) {
 
 async function downloadAllMidia() {
   const time = timestamp;
-  await downloadAllTitles(time);
-  await downloadAllImages(time);
-  await downloadAllAudios(time);
+  await Promise.all([
+      downloadAllTitles(time),
+      downloadAllImages(time),
+      downloadAllAudios(time)
+  ]);
 }
 
-
 async function downloadAllImages(time) {
-  const imageElements = Array.from(document.querySelectorAll('.image_file img')).reverse();
-
+  const imageElements = Array.from(document.querySelectorAll('.image_file')).reverse();
+  
   for (const imageElement of imageElements) {
-    if (time !== timestamp) {
-      return;
-    }
-
-    try {
-      const hash = imageElement.getAttribute('id');
-      const id = hash; // ou qualquer outra lógica para obter o ID desejado
-      await downloadMidia(id, hash, cookie).then(function () {
-        imageElement.style.backgroundImage = 'none';
-      });
-    } catch (error) {
-      console.error(error);
-      // Trate o erro aqui, se necessário
-    }
+      if (time !== timestamp) {
+          return;
+      }
+      
+      try {
+          const hash = imageElement.querySelector('img').getAttribute('id');
+          const id = hash; // ou qualquer outra lógica para obter o ID desejado
+          await downloadMidia(id, hash, cookie);
+          imageElement.style.backgroundImage = 'none';
+      } catch (error) {
+          console.error(error);
+          // Trate o erro aqui, se necessário
+      }
   }
 }
 
 async function downloadAllAudios(time) {
   const audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
-
+  
   for (const audioElement of audioElements) {
-    if (time !== timestamp) {
-      return;
-    }
-
-    try {
-      const hash = audioElement.getAttribute('id');
-      const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-      await downloadMidia(id, hash, cookie);
-
-      if (audioTime.has(hash)) {
-        const audioTimeData = audioTime.get(hash);
-        if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
-          audioElement.currentTime = audioTimeData[0];
-          if (!audioTimeData[1]) {
-            togglePlay(hash);
-          }
-        }
+      if (time !== timestamp) {
+          return;
       }
-    } catch (error) {
-      console.error(error);
-      // Trate o erro aqui, se necessário
-    }
+      
+      try {
+          const hash = audioElement.getAttribute('id');
+          const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
+          await downloadMidia(id, hash, cookie);
+          
+          if (audioTime.has(hash)) {
+              const audioTimeData = audioTime.get(hash);
+              
+              if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
+                  audioElement.currentTime = audioTimeData[0];
+                  
+                  if (!audioTimeData[1]) {
+                      togglePlay(hash);
+                  }
+              }
+          }
+      } catch (error) {
+          console.error(error);
+          // Trate o erro aqui, se necessário
+      }
   }
 }
 
 async function downloadLastTitle() {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
-  const ultimoElemento = elementos[0];
-
-  if (!ultimoElemento) {
-    return;
+  
+  if (!elementos[0]) {
+      return;
   }
-
-  const linkElemento = document.getElementById(ultimoElemento.id);
+  
+  const linkElemento = document.getElementById(elementos[0].id);
   const link = linkElemento.href;
-
+  
   if (cookie.has(link)) {
-    linkElemento.innerHTML = cookie.get(link);
+      linkElemento.innerHTML = cookie.get(link);
   } else {
-    await downloadTitle(linkElemento, link);
+      await downloadTitle(linkElemento, link);
   }
 }
 
 async function downloadAllTitles(time) {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
+  
   for (const elemento of elementos) {
-    if (time !== timestamp) {
-      return;
-    }
-    const linkElemento = document.getElementById(elemento.id);
-    if (!linkElemento) {
-      // Se o elemento não foi encontrado, pule para o próximo
-      continue;
-    }
-    const link = linkElemento.href;
-    if (cookie.has(link)) {
-      linkElemento.innerHTML = cookie.get(link);
-    } else {
-      await downloadTitle(linkElemento, link);
-    }
+      if (time !== timestamp) {
+          return;
+      }
+      
+      const linkElemento = document.getElementById(elemento.id);
+      
+      if (!linkElemento) {
+          continue;
+      }
+      
+      const link = linkElemento.href;
+      
+      if (cookie.has(link)) {
+          linkElemento.innerHTML = cookie.get(link);
+      } else {
+          await downloadTitle(linkElemento, link);
+      }
   }
 }
 
