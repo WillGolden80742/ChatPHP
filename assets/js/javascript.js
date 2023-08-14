@@ -307,43 +307,51 @@ function getDate() {
   return currentDate;
 }
 
-
 var downloading = false;
 
-function showPlayer(hash, event) {
+async function showPlayer(hash, event) {
   if (!downloading) {
-    downloading = true;
-    var videoDiv = event.target.querySelector("img");
-    if (videoDiv) {
-      videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
-    }
-    const parts = hash.split('.');
-    const format = parts[parts.length - 1].toLowerCase();
-    if (cookie.has(hash)) {
-      if (videoDiv) {
-        videoDiv.style.backgroundImage = 'url(Images/video.svg)';
-      }
-      var url = cookie.get(hash);
-      embedVideo(url, url);
-      downloading = false;
-    } else {
-      downloadBase64(hash)
-        .then(function (dados) {
-          var contentBlob = b64toBlob(dados, type(format) + "/" + format);
-          urlContent = URL.createObjectURL(contentBlob);
+      try {
+          downloading = true;
+          var videoDiv = event.target.querySelector("img");
+          
           if (videoDiv) {
-            videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+              videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
           }
-          embedVideo(urlContent, urlContent);
-          cookie.set(hash, urlContent);
-          downloading = false;
-        }).catch(function (erro) {
-          console.error(erro);
+          
+          const parts = hash.split('.');
+          const format = parts[parts.length - 1].toLowerCase();
+          
+          if (cookie.has(hash)) {
+              if (videoDiv) {
+                  videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+              }
+              
+              var url = cookie.get(hash);
+              embedVideo(url, url);
+              
+              downloading = false;
+          } else {
+              const dados = await downloadBase64(hash);
+              const contentBlob = b64toBlob(dados, type(format) + "/" + format);
+              const urlContent = URL.createObjectURL(contentBlob);
+              
+              if (videoDiv) {
+                  videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+              }
+              
+              embedVideo(urlContent, urlContent);
+              cookie.set(hash, urlContent);
+              
+              downloading = false;
+          }
+      } catch (error) {
+          console.error(error);
           // Trate o erro aqui, se necessário
-        });
-    }
+      }
   }
 }
+
 
 function downloadFile(nomeHash, nome) {
   if (cookie.has(nomeHash)) {
@@ -507,7 +515,6 @@ async function togglePlay(hash, event) {
     }
   });
 }
-
 
 
 async function downloadMidia(id, hash, cookie) {
