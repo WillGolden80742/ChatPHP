@@ -1112,55 +1112,40 @@ function waitingMsg() {
   down();
 }
 
-async function updateMessages(contact = nickNameContact, name = nickNameContact) {
+function updateMessages(contact = nickNameContact, name = nickNameContact) {
   closeEmoji();
-  
   if (contact !== nickNameContact) {
-      document.title = contact;
-      
-      for (let key of audioTime.keys()) {
-          audioTime.set(key, [0, true]);
-      }
+    document.title = contact;
+    for (let key of audioTime.keys()) {
+      audioTime.set(key, [0, true]);
+    }
   } else {
-      getAudioTimes();
+    getAudioTimes();
   }
-  
   timestamp = new Date().getTime();
   nickNameContact = contact;
-  
   const currentUrl = window.location.href;
-  
   if (currentUrl.includes('messages.php')) {
-      try {
-          const result = await $.ajax({
-              url: 'updateMsg.php',
-              method: 'POST',
-              data: { contactNickName: contact },
-              dataType: 'html'
-          });
-          
-          document.getElementById('messages').innerHTML = result;
-          msgsContents = result;
-          
-          if (document.getElementById('login') !== null) {
-              window.location.href = 'authenticate.php';
-          }
-          
-          downloadAllMidia();
-          
-          var newUrl = 'messages.php?contactNickName=' + contact;
-          history.pushState(null, '', newUrl);
-          
-          updateContacts(contact, name);
-      } catch (error) {
-          console.error(error);
-          // Trate o erro aqui, se necessário
+    $.ajax({
+      url: 'updateMsg.php',
+      method: 'POST',
+      data: { contactNickName: contact },
+      dataType: 'html'
+    }).done(function (result) {
+      document.getElementById('messages').innerHTML = result;
+      msgsContents = result;
+      if (document.getElementById('login') !== null) {
+        window.location.href = 'authenticate.php';
       }
+      downloadAllMidia();
+      var newUrl = 'messages.php?contactNickName=' + contact;
+      history.pushState(null, '', newUrl);
+      updateContacts(contact, name);
+    });
   } else {
-      window.location.href = 'messages.php?contactNickName=' + contact;
+    window.location.href = 'messages.php?contactNickName=' + contact;
   }
 }
-
 
 function updateContacts(contact = nickNameContact, name = nickNameContact) {
   const currentContact = document.querySelector("#contact" + contact + " h2");
