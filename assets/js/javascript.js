@@ -1126,7 +1126,7 @@ function updateMessages(contact = nickNameContact, name = nickNameContact) {
   nickNameContact = contact;
   const currentUrl = window.location.href;
   if (currentUrl.includes('messages.php')) {
-    document.querySelector("#picContact"+nickNameContact+" img").src = "Images/loadingProfilePic.webp";
+    document.querySelector("#picContact"+nickNameContact+" img").src = "Images/loadingContact.gif";
     $.ajax({
       url: 'updateMsg.php',
       method: 'POST',
