@@ -757,8 +757,16 @@
     padding:2.5px;
   }
 
+  .loadingMessage {
+    height: 18px;
+  }
+
   @media (orientation: portrait) or (max-width: 900px) {
 
+    .loadingMessage {
+      height: 32px;
+    }
+  
     .msg .delete {
       margin-top: -60px;
     }

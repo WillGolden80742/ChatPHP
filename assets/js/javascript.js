@@ -1117,7 +1117,7 @@ async function addMessage(id, text, loading) {
   if (loading) {
       var loadingImage = document.createElement('img');
       loadingImage.src = 'Images/loading.gif';
-      loadingImage.height = '18';
+      loadingImage.className = 'loadingMessage';
       loadingImage.style.float = 'right';
       textParagraph.appendChild(loadingImage);
   } else {
