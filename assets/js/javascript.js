@@ -282,28 +282,28 @@ function removeDownButton() {
 var isDeleting = false;
 
 async function deleteMessage(id) {
-    if (!isDeleting && confirm("Tem certeza de que deseja apagar esta mensagem?")) {
-        isDeleting = true;
-        sendSocket("delete_message:msg" + id);
-        document.getElementById("msg" + id).remove();
-        loading(true);
-        
-        try {
-            await $.ajax({
-                url: 'delete.php?id=' + id,
-                method: 'POST',
-                data: { nickNameContact: nickNameContact },
-                dataType: 'json'
-            });
+  if (!isDeleting && confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+    isDeleting = true;
+    sendSocket("delete_message:msg" + id);
+    document.getElementById("msg" + id).remove();
+    loading(true);
 
-            isDeleting = false;
-            loading(false);
-        } catch (error) {
-            console.error(error);
-            isDeleting = false;
-            loading(false);
-        }
+    try {
+      await $.ajax({
+        url: 'delete.php?id=' + id,
+        method: 'POST',
+        data: { nickNameContact: nickNameContact },
+        dataType: 'json'
+      });
+
+      isDeleting = false;
+      loading(false);
+    } catch (error) {
+      console.error(error);
+      isDeleting = false;
+      loading(false);
     }
+  }
 }
 
 
@@ -931,7 +931,9 @@ async function createMessage() {
       (messageText == " " && messageText.length <= 500 && !(inputFile.files.length > 0))) {
       loading(true);
       document.getElementById('text').value = "";
-
+      const randID = "a"+parseInt(Math.random()*100);
+      addMessage(randID,messageText,true);
+      down();
       try {
         const result = await $.ajax({
           url: 'createMessage.php',
@@ -948,9 +950,8 @@ async function createMessage() {
           data: { msg: messageText },
           dataType: 'html'
         });
-
-        addMessage(id, text);
-        down();
+        document.querySelector("#msg"+randID).remove();
+        addMessage(id, text,false);
         sendSocket("create_message:msg" + result);
         loading(false);
       } catch (error) {
@@ -1092,7 +1093,7 @@ function loadFile(blob) {
 }
 
 
-async function addMessage(id, text) {
+async function addMessage(id, text, loading) {
   var msgElement = document.createElement('div');
   msgElement.classList.add('msg', 'msg-left');
   msgElement.id = 'msg' + id;
@@ -1101,7 +1102,7 @@ async function addMessage(id, text) {
   deleteLink.href = '#';
   deleteLink.classList.add('delete');
   deleteLink.onclick = function () {
-    deleteMessage(id);
+      deleteMessage(id);
   };
 
   var deleteText = document.createElement('b');
@@ -1113,10 +1114,18 @@ async function addMessage(id, text) {
   textParagraph.innerHTML = text;
   textParagraph.appendChild(document.createElement('br'));
 
-  var dateSpan = document.createElement('span');
-  dateSpan.style.float = 'right';
-  dateSpan.appendChild(document.createTextNode(getDate()));
-  textParagraph.appendChild(dateSpan);
+  if (loading) {
+      var loadingImage = document.createElement('img');
+      loadingImage.src = 'Images/loading.gif';
+      loadingImage.height = '18';
+      loadingImage.style.float = 'right';
+      textParagraph.appendChild(loadingImage);
+  } else {
+      var dateSpan = document.createElement('span');
+      dateSpan.style.float = 'right';
+      dateSpan.appendChild(document.createTextNode(getDate()));
+      textParagraph.appendChild(dateSpan);
+  }
 
   msgElement.appendChild(deleteLink);
   msgElement.appendChild(textParagraph);
@@ -1125,6 +1134,7 @@ async function addMessage(id, text) {
   messagesElement.appendChild(msgElement);
   await downloadLastTitle();
 }
+
 
 function waitingMsg() {
   var messagesElement = document.getElementById('messages');
