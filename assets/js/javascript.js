@@ -894,16 +894,16 @@ function close() {
   downloadAllMidia();
 }
 
-
+const maxLength = 4096
 function messageValidate() {
   const textLength = document.getElementById("text").value.length;
   const inputFile = document.getElementById('file');
   const sendButton = document.getElementById('send');
   const attachmentDiv = document.getElementById('attachment');
 
-  if (textLength > 0 && textLength <= 500 && sendButton.style.backgroundImage !== "url(\"Images/send_vectorized.svg\")" || inputFile.files.length > 0) {
+  if (textLength > 0 && textLength <= maxLength && sendButton.style.backgroundImage !== "url(\"Images/send_vectorized.svg\")" || inputFile.files.length > 0) {
     sendButton.style.backgroundImage = "url(\"Images/send_vectorized.svg\")";
-  } else if (textLength == 0 || textLength > 500 && sendButton.style.backgroundImage !== "url(\"Images/micIcon.svg\")") {
+  } else if (textLength == 0 || textLength > maxLength && sendButton.style.backgroundImage !== "url(\"Images/micIcon.svg\")") {
     sendButton.style.backgroundImage = "url(\"Images/micIcon.svg\")";
   }
 
@@ -927,8 +927,8 @@ async function createMessage() {
     var inputFile = document.getElementById('file');
     closeEmoji();
 
-    if ((messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0)) ||
-      (messageText == " " && messageText.length <= 500 && !(inputFile.files.length > 0))) {
+    if ((messageText.length > 0 && messageText.length <= maxLength && !(inputFile.files.length > 0)) ||
+      (messageText == " " && messageText.length <= maxLength && !(inputFile.files.length > 0))) {
       loading(true);
       document.getElementById('text').value = "";
       const randID = "a"+parseInt(Math.random()*100);
