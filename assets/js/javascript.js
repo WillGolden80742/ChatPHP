@@ -280,23 +280,32 @@ function removeDownButton() {
 }
 
 var isDeleting = false;
-function deleteMessage(id) {
-  if (!isDeleting && confirm("Tem certeza de que deseja apagar esta mensagem?")) {
-    isDeleting = true;
-    sendSocket("delete_message:msg" + id);
-    document.getElementById("msg" + id).remove();
-    loading(true);
-    $.ajax({
-      url: 'delete.php?id=' + id,
-      method: 'POST',
-      data: { nickNameContact: nickNameContact },
-      dataType: 'json'
-    }).done(function () {
-      isDeleting = false;
-      loading(false);
-    });
-  }
+
+async function deleteMessage(id) {
+    if (!isDeleting && confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+        isDeleting = true;
+        sendSocket("delete_message:msg" + id);
+        document.getElementById("msg" + id).remove();
+        loading(true);
+        
+        try {
+            await $.ajax({
+                url: 'delete.php?id=' + id,
+                method: 'POST',
+                data: { nickNameContact: nickNameContact },
+                dataType: 'json'
+            });
+
+            isDeleting = false;
+            loading(false);
+        } catch (error) {
+            console.error(error);
+            isDeleting = false;
+            loading(false);
+        }
+    }
 }
+
 
 
 function getDate() {
@@ -311,44 +320,44 @@ var downloading = false;
 
 async function showPlayer(hash, event) {
   if (!downloading) {
-      try {
-          downloading = true;
-          var videoDiv = event.target.querySelector("img");
-          
-          if (videoDiv) {
-              videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
-          }
-          
-          const parts = hash.split('.');
-          const format = parts[parts.length - 1].toLowerCase();
-          
-          if (cookie.has(hash)) {
-              if (videoDiv) {
-                  videoDiv.style.backgroundImage = 'url(Images/video.svg)';
-              }
-              
-              var url = cookie.get(hash);
-              embedVideo(url, url);
-              
-              downloading = false;
-          } else {
-              const dados = await downloadBase64(hash);
-              const contentBlob = b64toBlob(dados, type(format) + "/" + format);
-              const urlContent = URL.createObjectURL(contentBlob);
-              
-              if (videoDiv) {
-                  videoDiv.style.backgroundImage = 'url(Images/video.svg)';
-              }
-              
-              embedVideo(urlContent, urlContent);
-              cookie.set(hash, urlContent);
-              
-              downloading = false;
-          }
-      } catch (error) {
-          console.error(error);
-          // Trate o erro aqui, se necessário
+    try {
+      downloading = true;
+      var videoDiv = event.target.querySelector("img");
+
+      if (videoDiv) {
+        videoDiv.style.backgroundImage = 'url(Images/loading.gif)';
       }
+
+      const parts = hash.split('.');
+      const format = parts[parts.length - 1].toLowerCase();
+
+      if (cookie.has(hash)) {
+        if (videoDiv) {
+          videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+        }
+
+        var url = cookie.get(hash);
+        embedVideo(url, url);
+
+        downloading = false;
+      } else {
+        const dados = await downloadBase64(hash);
+        const contentBlob = b64toBlob(dados, type(format) + "/" + format);
+        const urlContent = URL.createObjectURL(contentBlob);
+
+        if (videoDiv) {
+          videoDiv.style.backgroundImage = 'url(Images/video.svg)';
+        }
+
+        embedVideo(urlContent, urlContent);
+        cookie.set(hash, urlContent);
+
+        downloading = false;
+      }
+    } catch (error) {
+      console.error(error);
+      // Trate o erro aqui, se necessário
+    }
   }
 }
 
@@ -558,101 +567,101 @@ async function downloadMidia(id, hash, cookie) {
 async function downloadAllMidia() {
   const time = timestamp;
   await Promise.all([
-      downloadAllTitles(time),
-      downloadAllImages(time),
-      downloadAllAudios(time)
+    downloadAllTitles(time),
+    downloadAllImages(time),
+    downloadAllAudios(time)
   ]);
 }
 
 async function downloadAllImages(time) {
   const imageElements = Array.from(document.querySelectorAll('.image_file')).reverse();
-  
+
   for (const imageElement of imageElements) {
-      if (time !== timestamp) {
-          return;
-      }
-      
-      try {
-          const hash = imageElement.querySelector('img').getAttribute('id');
-          const id = hash; // ou qualquer outra lógica para obter o ID desejado
-          await downloadMidia(id, hash, cookie);
-          imageElement.style.backgroundImage = 'none';
-      } catch (error) {
-          console.error(error);
-          // Trate o erro aqui, se necessário
-      }
+    if (time !== timestamp) {
+      return;
+    }
+
+    try {
+      const hash = imageElement.querySelector('img').getAttribute('id');
+      const id = hash; // ou qualquer outra lógica para obter o ID desejado
+      await downloadMidia(id, hash, cookie);
+      imageElement.style.backgroundImage = 'none';
+    } catch (error) {
+      console.error(error);
+      // Trate o erro aqui, se necessário
+    }
   }
 }
 
 async function downloadAllAudios(time) {
   const audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
-  
+
   for (const audioElement of audioElements) {
-      if (time !== timestamp) {
-          return;
-      }
-      
-      try {
-          const hash = audioElement.getAttribute('id');
-          const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-          await downloadMidia(id, hash, cookie);
-          
-          if (audioTime.has(hash)) {
-              const audioTimeData = audioTime.get(hash);
-              
-              if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
-                  audioElement.currentTime = audioTimeData[0];
-                  
-                  if (!audioTimeData[1]) {
-                      togglePlay(hash);
-                  }
-              }
+    if (time !== timestamp) {
+      return;
+    }
+
+    try {
+      const hash = audioElement.getAttribute('id');
+      const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
+      await downloadMidia(id, hash, cookie);
+
+      if (audioTime.has(hash)) {
+        const audioTimeData = audioTime.get(hash);
+
+        if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
+          audioElement.currentTime = audioTimeData[0];
+
+          if (!audioTimeData[1]) {
+            togglePlay(hash);
           }
-      } catch (error) {
-          console.error(error);
-          // Trate o erro aqui, se necessário
+        }
       }
+    } catch (error) {
+      console.error(error);
+      // Trate o erro aqui, se necessário
+    }
   }
 }
 
 async function downloadLastTitle() {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
-  
+
   if (!elementos[0]) {
-      return;
+    return;
   }
-  
+
   const linkElemento = document.getElementById(elementos[0].id);
   const link = linkElemento.href;
-  
+
   if (cookie.has(link)) {
-      linkElemento.innerHTML = cookie.get(link);
+    linkElemento.innerHTML = cookie.get(link);
   } else {
-      await downloadTitle(linkElemento, link);
+    await downloadTitle(linkElemento, link);
   }
 }
 
 async function downloadAllTitles(time) {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
-  
+
   for (const elemento of elementos) {
-      if (time !== timestamp) {
-          return;
-      }
-      
-      const linkElemento = document.getElementById(elemento.id);
-      
-      if (!linkElemento) {
-          continue;
-      }
-      
-      const link = linkElemento.href;
-      
-      if (cookie.has(link)) {
-          linkElemento.innerHTML = cookie.get(link);
-      } else {
-          await downloadTitle(linkElemento, link);
-      }
+    if (time !== timestamp) {
+      return;
+    }
+
+    const linkElemento = document.getElementById(elemento.id);
+
+    if (!linkElemento) {
+      continue;
+    }
+
+    const link = linkElemento.href;
+
+    if (cookie.has(link)) {
+      linkElemento.innerHTML = cookie.get(link);
+    } else {
+      await downloadTitle(linkElemento, link);
+    }
   }
 }
 
@@ -910,35 +919,44 @@ function stringToMD5(inputString) {
   return md5Hash;
 }
 
-function createMessage() {
+async function createMessage() {
   var messageText = document.getElementById('text').value;
   const send = document.querySelector(".send").style.backgroundImage;
+
   if (send == "url(\"Images/send_vectorized.svg\")") {
     var inputFile = document.getElementById('file');
     closeEmoji();
-    if (messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0) || messageText == " " && messageText.length <= 500 && !(inputFile.files.length > 0)) {
+
+    if ((messageText.length > 0 && messageText.length <= 500 && !(inputFile.files.length > 0)) ||
+      (messageText == " " && messageText.length <= 500 && !(inputFile.files.length > 0))) {
       loading(true);
       document.getElementById('text').value = "";
-      $.ajax({
-        url: 'createMessage.php',
-        method: 'POST',
-        data: { nickNameContact: nickNameContact, messageText: messageText },
-        dataType: 'json'
-      }).done(function (result) {
-        date =
-          id = result;
-        $.ajax({
+
+      try {
+        const result = await $.ajax({
+          url: 'createMessage.php',
+          method: 'POST',
+          data: { nickNameContact: nickNameContact, messageText: messageText },
+          dataType: 'json'
+        });
+
+        const id = result;
+
+        const text = await $.ajax({
           url: 'getThumb.php?',
           method: 'GET',
           data: { msg: messageText },
           dataType: 'html'
-        }).done(function (text) {
-          addMessage(id, text);
-          down();
         });
+
+        addMessage(id, text);
+        down();
         sendSocket("create_message:msg" + result);
         loading(false);
-      });
+      } catch (error) {
+        console.error(error);
+        loading(false);
+      }
     } else {
       loading(true);
       document.getElementById('text').value = "";
@@ -947,20 +965,38 @@ function createMessage() {
       formData.append('arquivo', arquivo);
       formData.append('messageText', messageText);
       formData.append('contactNickName', nickNameContact);
+
       var file = formData.get('arquivo');
       var fileExtension = file.name.split('.').pop().toLowerCase();
       var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
 
       if (imageFormats.includes(fileExtension)) {
-        imgToJPG(file, 'resizedImage.jpg', function (resizedFile) {
-          resizeImage(resizedFile, 1280, function (finalFile) {
-            formData.set('arquivo', finalFile);
-            uploadAttachment('uploadFile.php', formData);
+        try {
+          const resizedFile = await new Promise((resolve) => {
+            imgToJPG(file, 'resizedImage.jpg', function (resizedFile) {
+              resolve(resizedFile);
+            });
           });
-        });
+
+          const finalFile = await new Promise((resolve) => {
+            resizeImage(resizedFile, 1280, function (finalFile) {
+              resolve(finalFile);
+            });
+          });
+
+          formData.set('arquivo', finalFile);
+          await uploadAttachment('uploadFile.php', formData);
+        } catch (error) {
+          console.error(error);
+        }
       } else {
-        uploadAttachment('uploadFile.php', formData);
+        try {
+          await uploadAttachment('uploadFile.php', formData);
+        } catch (error) {
+          console.error(error);
+        }
       }
+
       waitingMsg();
       inputFile.value = "";
     }
@@ -1114,54 +1150,54 @@ function waitingMsg() {
 
 async function updateMessages(contact = nickNameContact, name = nickNameContact) {
   closeEmoji();
-  
+
   if (contact !== nickNameContact) {
-      document.title = contact;
-      
-      for (let key of audioTime.keys()) {
-          audioTime.set(key, [0, true]);
-      }
+    document.title = contact;
+
+    for (let key of audioTime.keys()) {
+      audioTime.set(key, [0, true]);
+    }
   } else {
-      getAudioTimes();
+    getAudioTimes();
   }
-  
+
   timestamp = new Date().getTime();
   nickNameContact = contact;
   const currentUrl = window.location.href;
-  
+
   if (currentUrl.includes('messages.php')) {
-      const picContactImg = document.querySelector("#picContact" + nickNameContact + " img");
-      picContactImg.src = "Images/loadingContact.gif";
-      
-      try {
-          const result = await $.ajax({
-              url: 'updateMsg.php',
-              method: 'POST',
-              data: { contactNickName: contact },
-              dataType: 'html'
-          });
+    const picContactImg = document.querySelector("#picContact" + nickNameContact + " img");
+    picContactImg.src = "Images/loadingContact.gif";
 
-          picContactImg.src = "Images/blank.png";
-          
-          document.getElementById('messages').innerHTML = result;
-          msgsContents = result;
+    try {
+      const result = await $.ajax({
+        url: 'updateMsg.php',
+        method: 'POST',
+        data: { contactNickName: contact },
+        dataType: 'html'
+      });
 
-          if (document.getElementById('login') !== null) {
-              window.location.href = 'authenticate.php';
-          }
-          
-          downloadAllMidia();
-          
-          var newUrl = 'messages.php?contactNickName=' + contact;
-          history.pushState(null, '', newUrl);
-          
-          updateContacts(contact, name);
-      } catch (error) {
-          console.error(error);
-          // Trate o erro aqui, se necessário
+      picContactImg.src = "Images/blank.png";
+
+      document.getElementById('messages').innerHTML = result;
+      msgsContents = result;
+
+      if (document.getElementById('login') !== null) {
+        window.location.href = 'authenticate.php';
       }
+
+      downloadAllMidia();
+
+      var newUrl = 'messages.php?contactNickName=' + contact;
+      history.pushState(null, '', newUrl);
+
+      updateContacts(contact, name);
+    } catch (error) {
+      console.error(error);
+      // Trate o erro aqui, se necessário
+    }
   } else {
-      window.location.href = 'messages.php?contactNickName=' + contact;
+    window.location.href = 'messages.php?contactNickName=' + contact;
   }
 }
 
