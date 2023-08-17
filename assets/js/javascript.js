@@ -279,11 +279,15 @@ function removeDownButton() {
   }
 }
 
+var isDeleting = false;
+
 async function deleteMessage(id) {
-  if (confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+  if (!isDeleting && confirm("Tem certeza de que deseja apagar esta mensagem?")) {
+    isDeleting = true;
     sendSocket("delete_message:msg" + id);
     document.getElementById("msg" + id).remove();
     loading(true);
+
     try {
       await $.ajax({
         url: 'delete.php?id=' + id,
@@ -291,9 +295,12 @@ async function deleteMessage(id) {
         data: { nickNameContact: nickNameContact },
         dataType: 'json'
       });
+
+      isDeleting = false;
       loading(false);
     } catch (error) {
       console.error(error);
+      isDeleting = false;
       loading(false);
     }
   }
