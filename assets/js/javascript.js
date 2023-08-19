@@ -31,7 +31,13 @@ async function main() {
 
 function openfile(value) {
   if (profilePicSrc == null) {
-    document.getElementById(value).click();
+    if (value == 'file') {
+      if (document.querySelector('.msg')) {
+        document.getElementById(value).click();
+      }
+    } else {
+      document.getElementById(value).click();
+    }
   } else {
     document.getElementById('stylePic').innerHTML += ".salvar {display:none;}";
     loadPicStatus(false);
@@ -720,6 +726,7 @@ function type(format) {
 }
 
 function embedYoutube(id) {
+  messageAreaEnable(false);
   getAudioTimes();
   timestamp = new Date().getTime();
   scrollPos = document.getElementById('messages').scrollTop;
@@ -823,6 +830,7 @@ function closeEmoji() {
 }
 
 function embedVideo(link, id) {
+  messageAreaEnable(false);
   getAudioTimes();
   timestamp = new Date().getTime();
   scrollPos = document.getElementById('messages').scrollTop;
@@ -891,6 +899,7 @@ function closeVideo() {
 
 
 function embedImage(hash, event) {
+  messageAreaEnable(false);
   getAudioTimes();
   timestamp = new Date().getTime();
   var imageSrc = event.target.src;
@@ -935,9 +944,16 @@ function closeImage() {
 }
 
 function close() {
+  messageAreaEnable(true);
   document.getElementById('messages').innerHTML = msgsContents;
   document.getElementById('messages').scrollTo(0, scrollPos);
   downloadAllMidia();
+}
+
+function messageAreaEnable(value) {
+  document.querySelector('.text').disabled = !value;
+  document.querySelector('.send').disabled = !value;
+  document.querySelector('.attachment').disabled = !value;
 }
 
 const maxLength = 4096
