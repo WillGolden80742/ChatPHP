@@ -434,7 +434,7 @@ async function downloadBase64(nomeHash) {
 
 var currentIDPlayer = "";
 
-async function togglePlay(hash,event) {
+async function togglePlay(hash, event) {
   var playButton;
   var playerMidia;
 
@@ -723,7 +723,9 @@ function embedYoutube(id) {
   getAudioTimes();
   timestamp = new Date().getTime();
   scrollPos = document.getElementById('messages').scrollTop;
-  msgsContents = document.getElementById('messages').innerHTML;
+  if (document.querySelector(".msg")) {
+    msgsContents = document.getElementById('messages').innerHTML;
+  }
   document.getElementById('messages').innerHTML = '';
 
   var aElement = document.createElement('a');
@@ -781,8 +783,9 @@ function embedEmojis() {
     ];
 
     scrollPos = document.getElementById('messages').scrollTop;
-    msgsContents = document.getElementById('messages').innerHTML;
-
+    if (document.querySelector(".msg")) {
+      msgsContents = document.getElementById('messages').innerHTML;
+    }
     // Limpa o conteúdo atual
     document.getElementById('messages').innerHTML = '';
     // Cria o div com scrollbar
@@ -823,7 +826,9 @@ function embedVideo(link, id) {
   getAudioTimes();
   timestamp = new Date().getTime();
   scrollPos = document.getElementById('messages').scrollTop;
-  msgsContents = document.getElementById('messages').innerHTML;
+  if (document.querySelector(".msg")) {
+    msgsContents = document.getElementById('messages').innerHTML;
+  }
   document.getElementById('messages').innerHTML = '';
   var aElement = document.createElement('a');
   aElement.href = link;
@@ -890,7 +895,9 @@ function embedImage(hash, event) {
   timestamp = new Date().getTime();
   var imageSrc = event.target.src;
   scrollPos = document.getElementById('messages').scrollTop;
-  msgsContents = document.getElementById('messages').innerHTML;
+  if (document.querySelector(".msg")) {
+    msgsContents = document.getElementById('messages').innerHTML;
+  }
   document.getElementById('messages').innerHTML = '';
 
   var aElement = document.createElement('a');
