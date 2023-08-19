@@ -101,11 +101,13 @@ function uploadPic() {
   if (arquivo.type === 'image/gif' || arquivo.type === 'image/png' || arquivo.type === 'image/webp') {
     imgToJPG(arquivo, 'profilepic.jpg', function (file) {
       formData.append('pic', file);
-      uploadFile('uploadPic.php', formData);
+      formData.append('action','uploadPic');
+      uploadFile('actions.php', formData);
     });
   } else {
     formData.append('pic', arquivo);
-    uploadFile('uploadPic.php', formData);
+    formData.append('action','uploadPic');
+    uploadFile('actions.php', formData);
   }
 }
 
@@ -120,6 +122,7 @@ function uploadProfile() {
   formData.append('name', name);
   formData.append('nick', nick);
   formData.append('pass', pass);
+  formData.append('action','uploadProfile');
 
   var xhttp = new XMLHttpRequest();
 
@@ -130,7 +133,7 @@ function uploadProfile() {
     }
   };
 
-  xhttp.open("POST", "uploadProfile.php", true);
+  xhttp.open("POST", "actions.php", true);
   xhttp.send(formData);
 }
 
@@ -144,6 +147,7 @@ function uploadPassword() {
   formData.append('currentPass', currentPass);
   formData.append('pass', newPass);
   formData.append('passConfirmation', passConfirmation);
+  formData.append('action','uploadPassword');
 
   var xhttp = new XMLHttpRequest();
 
@@ -153,7 +157,7 @@ function uploadPassword() {
       editProfileMessage = this.responseText;
     }
   };
-  xhttp.open("POST", "uploadPassword.php", true);
+  xhttp.open("POST", "actions.php", true);
   xhttp.send(formData);
 }
 
@@ -296,9 +300,9 @@ async function deleteMessage(id) {
 
     try {
       await $.ajax({
-        url: 'delete.php?id=' + id,
+        url: 'actions.php',
         method: 'POST',
-        data: { nickNameContact: nickNameContact },
+        data: { action: 'deleteMessage', id: id, nickNameContact: nickNameContact },
         dataType: 'json'
       });
 
@@ -376,7 +380,11 @@ function downloadFile(nomeHash, nome) {
     downloadLink.click();
   } else {
     var xhr = new XMLHttpRequest();
-    var url = 'downloadFile.php?hashName=' + nomeHash;
+    var url = 'actions.php';
+    var formData = new FormData();
+    formData.append('hashName', nomeHash);
+    formData.append('action', 'downloadFile');
+
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         var base64Data = xhr.responseText;
@@ -397,10 +405,12 @@ function downloadFile(nomeHash, nome) {
         downloadLink.click();
       }
     };
-    xhr.open('GET', url, true);
-    xhr.send();
+
+    xhr.open('POST', url, true);
+    xhr.send(formData);
   }
 }
+
 
 
 function b64toBlob(b64Data, contentType) {
@@ -427,11 +437,19 @@ function b64toBlob(b64Data, contentType) {
 
 async function downloadBase64(nomeHash) {
   try {
+    const formData = new FormData();
+    formData.append('hashName', nomeHash);
+    formData.append('action', 'downloadFile');
+
     const dados = await $.ajax({
-      url: `downloadFile.php?hashName=${nomeHash}`,
+      url: 'actions.php',
       method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
       dataType: 'text'
     });
+
     return dados;
   } catch (error) {
     throw error;
@@ -998,18 +1016,18 @@ async function createMessage() {
       down();
       try {
         const result = await $.ajax({
-          url: 'createMessage.php',
+          url: 'actions.php',
           method: 'POST',
-          data: { nickNameContact: nickNameContact, messageText: messageText },
+          data: { action: "createMessage", nickNameContact: nickNameContact, messageText: messageText },
           dataType: 'json'
         });
 
         const id = result;
 
         const text = await $.ajax({
-          url: 'getThumb.php?',
-          method: 'GET',
-          data: { msg: messageText },
+          url: 'actions.php?',
+          method: 'POST',
+          data: {action: 'getThumb', msg: messageText },
           dataType: 'html'
         });
         document.querySelector("#msg" + randID).remove();
@@ -1028,7 +1046,7 @@ async function createMessage() {
       formData.append('arquivo', arquivo);
       formData.append('messageText', messageText);
       formData.append('contactNickName', nickNameContact);
-
+      formData.append('action','uploadFile');
       var file = formData.get('arquivo');
       var fileExtension = file.name.split('.').pop().toLowerCase();
       var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
@@ -1048,13 +1066,14 @@ async function createMessage() {
           });
 
           formData.set('arquivo', finalFile);
-          await uploadAttachment('uploadFile.php', formData);
+          formData.append('action','uploadFile');
+          await uploadAttachment('actions.php', formData);
         } catch (error) {
           console.error(error);
         }
       } else {
         try {
-          await uploadAttachment('uploadFile.php', formData);
+          await uploadAttachment('actions.php', formData);
         } catch (error) {
           console.error(error);
         }
@@ -1150,10 +1169,10 @@ function loadFile(blob) {
   formData.append('arquivo', new File([blob], "audio." + stringToMD5(Math.random() + "") + ".wav", { type: 'audio/wav' }));
   formData.append('messageText', '');
   formData.append('contactNickName', nickNameContact);
-  uploadAttachment('uploadFile.php', formData);
+  formData.append('action','uploadFile');
+  uploadAttachment('actions.php', formData);
   waitingMsg();
 }
-
 
 async function addMessage(id, text, loading) {
   var msgElement = document.createElement('div');
@@ -1243,9 +1262,9 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
 
     try {
       const result = await $.ajax({
-        url: 'updateMsg.php',
+        url: 'actions.php',
         method: 'POST',
-        data: { contactNickName: contact },
+        data: {action: 'updateMsg', contactNickName: contact },
         dataType: 'html'
       });
 
@@ -1410,9 +1429,10 @@ function hasNewMsgByCurrentContact(from, message) {
     const idMsg = message.split(":")[1].replace("msg", "");
     if (message.includes("create_message")) {
       const formData = new FormData();
+      formData.append('action', 'messageByID');
       formData.append('nickNameContact', from);
       formData.append('idMsg', idMsg);
-      fetch('messageByID.php', {
+      fetch('actions.php', {
         method: 'POST',
         body: formData
       })
