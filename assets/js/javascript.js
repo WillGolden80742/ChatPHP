@@ -778,7 +778,6 @@ function emojiClicked(event) {
   var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   const currentTextElement = document.querySelector(".text");
-  const element = event.target;
   const xClick = event.offsetX;
   const Width = currentTextElement.offsetWidth;
   const xDiff = Width - xClick;
@@ -832,7 +831,6 @@ function embedEmojis() {
       }
     });
 
-    // Adiciona o div aos messages
     document.getElementById('messages').appendChild(emojiDiv);
   } else {
     closeEmoji();
