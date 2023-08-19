@@ -436,14 +436,17 @@ var currentIDPlayer = "";
 
 async function togglePlay(hash, event) {
   var playButton;
-  var playerAudio;
+  var playerMidia;
 
   if (event) {
     playButton = event.target;
-    playerAudio = playButton.querySelector('audio');
+    playerMidia = playButton.querySelector('audio');
+    if (!playerMidia) {
+      playerMidia = document.querySelector(".media_file").parentNode.querySelector('video')
+    }
   } else {
     playButton = document.getElementById(hash).parentNode;
-    playerAudio = document.getElementById(hash);
+    playerMidia = document.getElementById(hash);
   }
 
   var progressBar = playButton.closest('.player').querySelector('.progress-bar');
@@ -462,25 +465,25 @@ async function togglePlay(hash, event) {
       audio.pause();
     });
     playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
-    playerAudio.play();
+    playerMidia.play();
 
     currentIDPlayer = hash;
   } else {
-    if (playerAudio.paused) {
-      playerAudio.play();
+    if (playerMidia.paused) {
+      playerMidia.play();
       playButton.style.backgroundImage = pauseIcon;
     } else {
-      playerAudio.pause();
+      playerMidia.pause();
       playButton.style.backgroundImage = playIcon;
     }
   }
 
 
   // Update progress bar
-  playerAudio.addEventListener('timeupdate', function () {
+  playerMidia.addEventListener('timeupdate', function () {
     if (currentIDPlayer === hash) {
-      var duration = playerAudio.duration;
-      var currentTime = playerAudio.currentTime;
+      var duration = playerMidia.duration;
+      var currentTime = playerMidia.currentTime;
       if (duration === 0 || currentTime === 0) {
         currentTimeElement.textContent = "0:00";
         durationElement.textContent = "0:00";
@@ -503,7 +506,7 @@ async function togglePlay(hash, event) {
   });
 
   // Monitor the audio playback completion event
-  playerAudio.addEventListener('ended', function () {
+  playerMidia.addEventListener('ended', function () {
     if (currentIDPlayer === hash) {
       playButton.style.backgroundImage = playIcon;
       currentIDPlayer = ""; // Clear the current player ID
@@ -516,10 +519,10 @@ async function togglePlay(hash, event) {
     if (currentIDPlayer === hash) {
       var progressWidth = progressBar.offsetWidth;
       var clickPosition = e.offsetX;
-      var seekTime = (clickPosition / progressWidth) * playerAudio.duration;
+      var seekTime = (clickPosition / progressWidth) * playerMidia.duration;
 
       if (!isNaN(seekTime) && isFinite(seekTime)) {
-        playerAudio.currentTime = seekTime;
+        playerMidia.currentTime = seekTime;
       }
     }
   });
@@ -594,7 +597,7 @@ async function downloadAllImages(time) {
 }
 
 async function downloadAllAudios(time) {
-  const audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
+  const audioElements = Array.from(document.querySelectorAll('.media_file audio')).reverse();
 
   for (const audioElement of audioElements) {
     if (time !== timestamp) {
@@ -682,7 +685,7 @@ async function downloadTitle(linkElemento, link) {
 }
 
 function getAudioTimes() {
-  var audioElements = Array.from(document.querySelectorAll('.audio_file audio')).reverse();
+  var audioElements = Array.from(document.querySelectorAll('.media_file audio')).reverse();
   for (let i = 0; i < audioElements.length; i++) {
     try {
       var hash = audioElements[i].getAttribute('id');
@@ -832,13 +835,46 @@ function embedVideo(link, id) {
   divElement.classList.add('embed-close');
   document.getElementById('messages').appendChild(divElement);
 
-  var iframeElement = document.createElement('iframe');
-  iframeElement.src = id;
-  iframeElement.frameBorder = 0;
-  iframeElement.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-  iframeElement.allowFullscreen = true;
-  iframeElement.classList.add('embed-iframe');
-  document.getElementById('messages').appendChild(iframeElement);
+  var videoElement = document.createElement('video');
+  videoElement.src = id;
+  videoElement.controls = true;
+  videoElement.controls = false;
+  videoElement.classList.add('embed-video');
+  document.getElementById('messages').appendChild(videoElement);
+  var mediaFileDiv = document.createElement('div');
+  mediaFileDiv.classList.add('media_file');
+  var playerDiv = document.createElement('div');
+  playerDiv.classList.add('player');
+  var controlsDiv = document.createElement('div');
+  controlsDiv.classList.add('controls');
+  var playButtonDiv = document.createElement('div');
+  playButtonDiv.style.backgroundImage = "url('Images/Player/play-button.svg')";
+  playButtonDiv.classList.add('play-button');
+  playButtonDiv.onclick = function (event) {
+    togglePlay(id, event);
+  };
+  var timeDiv = document.createElement('div');
+  timeDiv.classList.add('time');
+  var currentTimeSpan = document.createElement('span');
+  currentTimeSpan.classList.add('current-time');
+  currentTimeSpan.textContent = '0:00';
+  var durationSpan = document.createElement('span');
+  durationSpan.classList.add('duration');
+  durationSpan.textContent = '0:00';
+  timeDiv.appendChild(currentTimeSpan);
+  timeDiv.appendChild(durationSpan);
+  var progressBarDiv = document.createElement('div');
+  progressBarDiv.classList.add('progress-bar');
+  var progressDiv = document.createElement('div');
+  progressDiv.classList.add('progress');
+  progressBarDiv.appendChild(progressDiv);
+  controlsDiv.appendChild(playButtonDiv);
+  controlsDiv.appendChild(timeDiv);
+  controlsDiv.appendChild(progressBarDiv);
+  playerDiv.appendChild(controlsDiv);
+  mediaFileDiv.appendChild(playerDiv);
+  mediaFileDiv.style.marginTop = "0px";
+  document.getElementById('messages').appendChild(mediaFileDiv);
 }
 
 function closeVideo() {
@@ -931,8 +967,8 @@ async function createMessage() {
       (messageText == " " && messageText.length <= maxLength && !(inputFile.files.length > 0))) {
       loading(true);
       document.getElementById('text').value = "";
-      const randID = "a"+parseInt(Math.random()*100);
-      addMessage(randID,messageText,true);
+      const randID = "a" + parseInt(Math.random() * 100);
+      addMessage(randID, messageText, true);
       down();
       try {
         const result = await $.ajax({
@@ -950,8 +986,8 @@ async function createMessage() {
           data: { msg: messageText },
           dataType: 'html'
         });
-        document.querySelector("#msg"+randID).remove();
-        addMessage(id, text,false);
+        document.querySelector("#msg" + randID).remove();
+        addMessage(id, text, false);
         sendSocket("create_message:msg" + result);
         loading(false);
       } catch (error) {
@@ -1102,7 +1138,7 @@ async function addMessage(id, text, loading) {
   deleteLink.href = '#';
   deleteLink.classList.add('delete');
   deleteLink.onclick = function () {
-      deleteMessage(id);
+    deleteMessage(id);
   };
 
   var deleteText = document.createElement('b');
@@ -1115,16 +1151,16 @@ async function addMessage(id, text, loading) {
   textParagraph.appendChild(document.createElement('br'));
 
   if (loading) {
-      var loadingImage = document.createElement('img');
-      loadingImage.src = 'Images/loading.gif';
-      loadingImage.className = 'loadingMessage';
-      loadingImage.style.float = 'right';
-      textParagraph.appendChild(loadingImage);
+    var loadingImage = document.createElement('img');
+    loadingImage.src = 'Images/loading.gif';
+    loadingImage.className = 'loadingMessage';
+    loadingImage.style.float = 'right';
+    textParagraph.appendChild(loadingImage);
   } else {
-      var dateSpan = document.createElement('span');
-      dateSpan.style.float = 'right';
-      dateSpan.appendChild(document.createTextNode(getDate()));
-      textParagraph.appendChild(dateSpan);
+    var dateSpan = document.createElement('span');
+    dateSpan.style.float = 'right';
+    dateSpan.appendChild(document.createTextNode(getDate()));
+    textParagraph.appendChild(dateSpan);
   }
 
   msgElement.appendChild(deleteLink);

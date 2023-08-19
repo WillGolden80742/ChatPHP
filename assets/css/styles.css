@@ -198,7 +198,7 @@
     overflow-x: auto;
   }
 
-  .audio_file {
+  .media_file {
     margin-top: 5px;
     width: 100%;
     border-radius: 10px;
@@ -621,6 +621,11 @@
     backdrop-filter: blur(5px);
   }
 
+  .embed-video {
+    width:-webkit-fill-available;
+    height:calc(100% - 50px);
+    background-color :black;
+  }
 
   .embed-iframe {
     position: relative;
@@ -642,7 +647,7 @@
   }
 
 
-  .audio_file .name {
+  .media_file .name {
     border-radius: 5px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -762,6 +767,10 @@
   }
 
   @media (orientation: portrait) or (max-width: 900px) {
+
+    .embed-video {
+      height:calc(100% - 100px);
+    }
 
     .loadingMessage {
       height: 32px;

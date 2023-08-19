@@ -209,11 +209,11 @@
     border-radius: 20px;
   }
 
-  .audio_file {
+  .media_file {
     width: 100%
   }
 
-  .player, .audio_file .name {
+  .player, .media_file .name {
     border-radius: 10px;
   }
 
@@ -223,7 +223,7 @@
     border-top-right-radius: 0px;
   }
 
-  .audio_file .name {
+  .media_file .name {
     font-size: 28px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;

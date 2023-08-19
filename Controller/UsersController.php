@@ -242,7 +242,7 @@ class UsersController
                                 <a href=\"#\" ><img class=\"videoIcon\" src=\"Images/blank.png\"  style=\"float:left\" />" . $nome . "</a>
                             </div>";
             } elseif ($this->isAudio($extensao)) {
-                return "<div class=\"audio_file\">
+                return "<div class=\"media_file\">
                                 <center><p class='name'>$nome</p></center>
                                 <div class=\"player\">
                                     <div class=\"controls\">
