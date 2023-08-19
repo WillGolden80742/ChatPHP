@@ -434,19 +434,21 @@ async function downloadBase64(nomeHash) {
 
 var currentIDPlayer = "";
 
-async function togglePlay(hash, event) {
+async function togglePlay(hash,event) {
   var playButton;
   var playerMidia;
 
-  if (event) {
-    playButton = event.target;
-    playerMidia = playButton.querySelector('audio');
-    if (!playerMidia) {
-      playerMidia = document.querySelector(".media_file").parentNode.querySelector('video')
-    }
+  if (document.querySelector('.embed-video')) {
+    playerMidia = document.querySelector('.embed-video');
+    playButton = document.querySelector('.play-button');
   } else {
-    playButton = document.getElementById(hash).parentNode;
-    playerMidia = document.getElementById(hash);
+    if (event) {
+      playButton = event.target;
+      playerMidia = playButton.querySelector('audio');
+    } else {
+      playButton = document.getElementById(hash).parentNode;
+      playerMidia = document.getElementById(hash);
+    }
   }
 
   var progressBar = playButton.closest('.player').querySelector('.progress-bar');
@@ -837,6 +839,9 @@ function embedVideo(link, id) {
   videoElement.controls = true;
   videoElement.controls = false;
   videoElement.classList.add('embed-video');
+  videoElement.onclick = function (event) {
+    togglePlay(id);
+  };
   document.getElementById('messages').appendChild(videoElement);
   var mediaFileDiv = document.createElement('div');
   mediaFileDiv.classList.add('media_file');
@@ -848,7 +853,7 @@ function embedVideo(link, id) {
   playButtonDiv.style.backgroundImage = "url('Images/Player/play-button.svg')";
   playButtonDiv.classList.add('play-button');
   playButtonDiv.onclick = function (event) {
-    togglePlay(id, event);
+    togglePlay(id);
   };
   var timeDiv = document.createElement('div');
   timeDiv.classList.add('time');
