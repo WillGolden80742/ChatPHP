@@ -721,8 +721,10 @@
 
   .current-time,
   .duration {
+    color: white;
     font-size: 12px;
     margin: 0 5px;
+    font-weight: bolder;
   }
 
   .linkMsg {
