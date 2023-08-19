@@ -823,18 +823,15 @@ function embedVideo(link, id) {
   scrollPos = document.getElementById('messages').scrollTop;
   msgsContents = document.getElementById('messages').innerHTML;
   document.getElementById('messages').innerHTML = '';
-
   var aElement = document.createElement('a');
   aElement.href = link;
   aElement.target = '_blank';
   aElement.classList.add('embed-link');
   document.getElementById('messages').appendChild(aElement);
-
   var divElement = document.createElement('div');
   divElement.onclick = closeVideo;
   divElement.classList.add('embed-close');
   document.getElementById('messages').appendChild(divElement);
-
   var videoElement = document.createElement('video');
   videoElement.src = id;
   videoElement.controls = true;
