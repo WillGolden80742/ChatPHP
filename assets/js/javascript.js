@@ -908,7 +908,7 @@ function embedVideo(link, id) {
   playerDiv.style.backgroundColor = "rgb(23, 37, 52)";
   playerDiv.style.marginBottom = "-10px";
   mediaFileDiv.appendChild(playerDiv);
-  mediaFileDiv.style.marginTop = "0px";
+  mediaFileDiv.style.marginTop = "-1px";
   document.getElementById('messages').appendChild(mediaFileDiv);
 }
 
