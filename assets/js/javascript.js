@@ -906,6 +906,7 @@ function embedVideo(link, id) {
   controlsDiv.appendChild(progressBarDiv);
   playerDiv.appendChild(controlsDiv);
   playerDiv.style.backgroundColor = "rgb(23, 37, 52)";
+  playerDiv.style.marginBottom = "-10px";
   mediaFileDiv.appendChild(playerDiv);
   mediaFileDiv.style.marginTop = "0px";
   document.getElementById('messages').appendChild(mediaFileDiv);
