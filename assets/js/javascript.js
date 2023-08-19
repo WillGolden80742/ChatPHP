@@ -101,12 +101,12 @@ function uploadPic() {
   if (arquivo.type === 'image/gif' || arquivo.type === 'image/png' || arquivo.type === 'image/webp') {
     imgToJPG(arquivo, 'profilepic.jpg', function (file) {
       formData.append('pic', file);
-      formData.append('action','uploadPic');
+      formData.append('action', 'uploadPic');
       uploadFile('actions.php', formData);
     });
   } else {
     formData.append('pic', arquivo);
-    formData.append('action','uploadPic');
+    formData.append('action', 'uploadPic');
     uploadFile('actions.php', formData);
   }
 }
@@ -122,7 +122,7 @@ function uploadProfile() {
   formData.append('name', name);
   formData.append('nick', nick);
   formData.append('pass', pass);
-  formData.append('action','uploadProfile');
+  formData.append('action', 'uploadProfile');
 
   var xhttp = new XMLHttpRequest();
 
@@ -147,7 +147,7 @@ function uploadPassword() {
   formData.append('currentPass', currentPass);
   formData.append('pass', newPass);
   formData.append('passConfirmation', passConfirmation);
-  formData.append('action','uploadPassword');
+  formData.append('action', 'uploadPassword');
 
   var xhttp = new XMLHttpRequest();
 
@@ -1026,7 +1026,7 @@ async function createMessage() {
         const text = await $.ajax({
           url: 'actions.php?',
           method: 'POST',
-          data: {action: 'getThumb', msg: messageText },
+          data: { action: 'getThumb', msg: messageText },
           dataType: 'html'
         });
         document.querySelector("#msg" + randID).remove();
@@ -1045,7 +1045,7 @@ async function createMessage() {
       formData.append('arquivo', arquivo);
       formData.append('messageText', messageText);
       formData.append('contactNickName', nickNameContact);
-      formData.append('action','uploadFile');
+      formData.append('action', 'uploadFile');
       var file = formData.get('arquivo');
       var fileExtension = file.name.split('.').pop().toLowerCase();
       var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
@@ -1065,7 +1065,7 @@ async function createMessage() {
           });
 
           formData.set('arquivo', finalFile);
-          formData.append('action','uploadFile');
+          formData.append('action', 'uploadFile');
           await uploadAttachment('actions.php', formData);
         } catch (error) {
           console.error(error);
@@ -1168,7 +1168,7 @@ function loadFile(blob) {
   formData.append('arquivo', new File([blob], "audio." + stringToMD5(Math.random() + "") + ".wav", { type: 'audio/wav' }));
   formData.append('messageText', '');
   formData.append('contactNickName', nickNameContact);
-  formData.append('action','uploadFile');
+  formData.append('action', 'uploadFile');
   uploadAttachment('actions.php', formData);
   waitingMsg();
 }
@@ -1263,7 +1263,7 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
       const result = await $.ajax({
         url: 'actions.php',
         method: 'POST',
-        data: {action: 'updateMsg', contactNickName: contact },
+        data: { action: 'updateMsg', contactNickName: contact },
         dataType: 'html'
       });
 
