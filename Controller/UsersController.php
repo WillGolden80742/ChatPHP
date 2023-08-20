@@ -236,45 +236,58 @@ class UsersController
     {
         $extensao = pathinfo($nome, PATHINFO_EXTENSION);
 
-        if (!empty($nome)) {
-            if ($this->isVideo($extensao)) {
-                return "<div class=\"attachment_file\" onclick=\"showPlayer('$hash',event);\">    
-                                <a href=\"#\" ><img class=\"videoIcon\" src=\"Images/blank.png\"  style=\"float:left\" />" . $nome . "</a>
-                            </div>";
-            } elseif ($this->isAudio($extensao)) {
-                return "<div class=\"media_file\">
-                                <center><p class='name'>$nome</p></center>
-                                <div class=\"player\">
-                                    <div class=\"controls\">
-                                        <div class=\"play-button\" onclick=\"togglePlay('$hash',event);\" >
-                                            <audio class=\"audioPlayer\" id='$hash' style=\"display:none;width:-webkit-fill-available;\" controls > Seu navegador não suporta a reprodução deste áudio. </audio>
-                                        </div>
-                                        <div class=\"time\">
-                                            <span class=\"current-time\">0:00</span>
-                                            <span class=\"duration\">0:00</span>
-                                        </div>
-                                        <div class=\"progress-bar\">
-                                            <div class=\"progress\"></div>
-                                        </div>
-                                        <div class=\"download-button\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\"></div>
-                                    </div>
-                                </div>
-                            </div>";
-            } elseif ($this->isImage($extensao)) {
-                return "<div class=\"image_file\">
-                                <center>
-                                    <img id=\"$hash\" onclick=\"embedImage('$hash',event)\" height=\"250px\" >
-                                </center>
-                            </div>";
-            } else {
-                return "<div class=\"attachment_file\">
-                                <a href=\"#\" onclick=\"downloadFile('" . $hash . "','" . $nome . "')\"><img class=\"fileIcon\" src=\"Images/blank.png\"/>" . $nome . "</a>
-                            </div>";
-            }
-        } else {
+        if (empty($nome)) {
             return '';
         }
+
+        if ($this->isVideo($extensao)) {
+            return 
+                <<<HTML
+                <div class="attachment_file" onclick="showPlayer('$hash',event);">
+                    <a href="#"><img class="videoIcon" src="Images/blank.png" style="float:left" />$nome</a>
+                </div>
+                HTML;
+        } elseif ($this->isAudio($extensao)) {
+            return 
+                <<<HTML
+                <div class="media_file">
+                    <center><p class="name">$nome</p></center>
+                    <div class="player">
+                        <div class="controls">
+                            <div class="play-button" onclick="togglePlay('$hash',event);">
+                                <audio class="audioPlayer" id="$hash" style="display:none;width:-webkit-fill-available;" controls>Seu navegador não suporta a reprodução deste áudio.</audio>
+                            </div>
+                            <div class="time">
+                                <span class="current-time">0:00</span>
+                                <span class="duration">0:00</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="download-button" onclick="downloadFile('$hash','$nome')"></div>
+                        </div>
+                    </div>
+                </div>
+                HTML;
+        } elseif ($this->isImage($extensao)) {
+            return 
+                <<<HTML
+                <div class="image_file">
+                    <center>
+                        <img id="$hash" onclick="embedImage('$hash',event)" height="250px">
+                    </center>
+                </div>
+                HTML;
+        } else {
+            return 
+                <<<HTML
+                <div class="attachment_file">
+                    <a href="#" onclick="downloadFile('$hash','$nome')"><img class="fileIcon" src="Images/blank.png"/>$nome</a>
+                </div>
+                HTML;
+        }
     }
+
 
 
     function isVideo($extensao)
