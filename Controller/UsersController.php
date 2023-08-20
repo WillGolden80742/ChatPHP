@@ -140,14 +140,13 @@ class UsersController
         while ($row = mysqli_fetch_assoc($result)) {
             $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
         }
-
         echo
-            <<<HTML
-            <form action="index.php" method="post">
-                <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
-            </form>
-            <a href="index.php"><h3>Limpar busca</h3></a>
-            HTML;
+        <<<HTML
+        <form action="index.php" method="post">
+            <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
+        </form>
+        <a href="index.php"><h3>Limpar busca</h3></a>
+        HTML;
 
         if (count($contacts) > 0) {
             foreach ($contacts as $contact) {
