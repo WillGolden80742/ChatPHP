@@ -146,7 +146,6 @@
     margin-right: 0;
   }
 
-
   .send {
     background: none;
     border: none;
@@ -715,7 +714,6 @@
     margin: 0 10px;
     position: relative;
     cursor: pointer;
-    /* Adicionado para permitir a interação com a barra de progresso */
     border-radius: 10px;
   }
 
@@ -723,7 +721,6 @@
     height: 100%;
     background-color: #30a3e7;
     width: 0;
-    /* Altere aqui para definir o progresso atual */
     transition: 0.25s;
     border-radius: 10px;
   }
