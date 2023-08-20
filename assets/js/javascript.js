@@ -341,12 +341,12 @@ async function showPlayer(hash, event) {
       const parts = hash.split('.');
       const format = parts[parts.length - 1].toLowerCase();
 
-      if (cookie.has(hash)) {
+      if (cacheMap.has(hash)) {
         if (videoDiv) {
           videoDiv.style.backgroundImage = 'url(Images/video.svg)';
         }
 
-        var url = cookie.get(hash);
+        var url = cacheMap.get(hash);
         embedVideo(url, url);
 
         downloading = false;
@@ -360,7 +360,7 @@ async function showPlayer(hash, event) {
         }
 
         embedVideo(urlContent, urlContent);
-        cookie.set(hash, urlContent);
+        cacheMap.set(hash, urlContent);
 
         downloading = false;
       }
@@ -373,9 +373,9 @@ async function showPlayer(hash, event) {
 
 
 function downloadFile(nomeHash, nome) {
-  if (cookie.has(nomeHash)) {
+  if (cacheMap.has(nomeHash)) {
     var downloadLink = document.createElement('a');
-    downloadLink.href = cookie.get(nomeHash);
+    downloadLink.href = cacheMap.get(nomeHash);
     downloadLink.download = nome;
     downloadLink.click();
   } else {
@@ -555,13 +555,13 @@ async function togglePlay(hash, event) {
 }
 
 
-async function downloadMidia(id, hash, cookie) {
+async function downloadMidia(id, hash, cacheMap) {
   try {
     const elements = Array.from(document.querySelectorAll('[id="' + id + '"]'));
 
     elements.forEach(async function (element) {
-      if (cookie.has(hash)) {
-        element.src = cookie.get(hash);
+      if (cacheMap.has(hash)) {
+        element.src = cacheMap.get(hash);
       } else {
         const parts = hash.split('.');
         const format = parts[parts.length - 1].toLowerCase();
@@ -569,7 +569,7 @@ async function downloadMidia(id, hash, cookie) {
         const contentBlob = b64toBlob(dados, type(format) + '/' + format);
         const url = URL.createObjectURL(contentBlob);
         element.src = url;
-        cookie.set(hash, url);
+        cacheMap.set(hash, url);
       }
       elements.forEach(function (audio) {
         const parentElement = audio.closest(".player");
@@ -613,7 +613,7 @@ async function downloadAllImages(time) {
     try {
       const hash = imageElement.querySelector('img').getAttribute('id');
       const id = hash; // ou qualquer outra lógica para obter o ID desejado
-      await downloadMidia(id, hash, cookie);
+      await downloadMidia(id, hash, cacheMap);
     } catch (error) {
       console.error(error);
       // Trate o erro aqui, se necessário
@@ -632,7 +632,7 @@ async function downloadAllAudios(time) {
     try {
       const hash = audioElement.getAttribute('id');
       const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-      await downloadMidia(id, hash, cookie);
+      await downloadMidia(id, hash, cacheMap);
 
       if (audioTime.has(hash)) {
         const audioTimeData = audioTime.get(hash);
@@ -652,6 +652,27 @@ async function downloadAllAudios(time) {
   }
 }
 
+function getCache(key) {
+  const storage = localStorage.getItem(key);
+  if (storage !== null) {
+    return storage;
+  }
+  return cacheMap.get(key) || null;
+}
+
+function hasCache(key) {
+  return getCache(key) !== null;
+}
+
+function setCache(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (ex) {
+    cacheMap.set(key, value);
+  }
+}
+
+
 async function downloadLastTitle() {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
 
@@ -662,8 +683,8 @@ async function downloadLastTitle() {
   const linkElemento = document.getElementById(elementos[0].id);
   const link = linkElemento.href;
 
-  if (cookie.has(link)) {
-    linkElemento.innerHTML = cookie.get(link);
+  if (hasCache(link)) {
+    linkElemento.innerHTML = getCache(link);
   } else {
     await downloadTitle(linkElemento, link);
   }
@@ -685,8 +706,8 @@ async function downloadAllTitles(time) {
 
     const link = linkElemento.href;
 
-    if (cookie.has(link)) {
-      linkElemento.innerHTML = cookie.get(link);
+    if (hasCache(link)) {
+      linkElemento.innerHTML = getCache(link);
     } else {
       await downloadTitle(linkElemento, link);
     }
@@ -702,7 +723,7 @@ async function downloadTitle(linkElemento, link) {
       dataType: 'json'
     });
     const formattedResult = `${result}<span style='opacity:0.5;'>${link}</span>`;
-    cookie.set(link, formattedResult);
+    setCache(link, formattedResult);
     linkElemento.innerHTML = formattedResult;
   } catch (error) {
     console.error(error);

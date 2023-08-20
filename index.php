@@ -15,7 +15,7 @@ $auth = new AuthenticateModel();
   }
   ?>
   var nickNameContact = "<?php echo $nickNameContact; ?>";
-  const cookie = new Map();
+  const cacheMap = new Map();
   const audioTime = new Map();
   const currentUrl = window.location.href;
   const home = currentUrl.split("ChatPHP/")[1];
