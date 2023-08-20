@@ -196,10 +196,10 @@ class UsersController
                 if (strcmp($contact[1], $this->nickSession) !== 0) {
                     echo
                     <<<HTML
-                        <a id="contact$contact[1]" href="messages.php?contactNickName=$contact[1]">
-                            <h2><div class='picContact'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2>
-                        </a>
-                        HTML;
+                    <a id="contact$contact[1]" href="messages.php?contactNickName=$contact[1]">
+                        <h2><div class='picContact'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2>
+                    </a>
+                    HTML;
                 }
             }
         }
