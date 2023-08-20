@@ -72,6 +72,10 @@
     height: 600px;
     overflow-x: auto;
   }
+  
+  .uploading {
+    width: 200px;
+  }
 
   .image_file img {
     width: auto;
