@@ -614,7 +614,6 @@ async function downloadAllImages(time) {
       const hash = imageElement.querySelector('img').getAttribute('id');
       const id = hash; // ou qualquer outra lógica para obter o ID desejado
       await downloadMidia(id, hash, cookie);
-      imageElement.style.backgroundImage = 'none';
     } catch (error) {
       console.error(error);
       // Trate o erro aqui, se necessário

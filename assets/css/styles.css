@@ -187,10 +187,6 @@
     width: 99%;
     border-radius: 5px;
     overflow-x: hidden;
-    background-image: url("../../Images/download.gif");
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
   }
 
   .image_file:hover {

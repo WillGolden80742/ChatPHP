@@ -9,21 +9,6 @@ class Message
         $this->msg = $this->links($this->msg);
     }
 
-    function get_title($url)
-    {
-        if (empty($this->getSession($url))) {
-            $currentURL = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-            $arrURL = explode("/", $currentURL);
-            $sizeArrURL = count($arrURL) - 1;
-            $currentURL = str_replace($arrURL[$sizeArrURL], "", $currentURL);
-            $title = json_decode(file_get_contents($currentURL . "getTitle.php?link=" . $url));
-            $this->setSession($url, $title);
-            return $title;
-        } else {
-            return $this->getSession($url);
-        }
-    }
-
     function setSession($key, $value)
     {
         $key = "a" . $key;

@@ -328,7 +328,7 @@ class UsersController
                 <<<HTML
                 <div class="image_file">
                     <center>
-                        <img id="$hash" onclick="embedImage('$hash',event)" height="250px">
+                        <img id="$hash" onclick="embedImage('$hash',event)" src="Images/download.gif" height="250px">
                     </center>
                 </div>
                 HTML;
