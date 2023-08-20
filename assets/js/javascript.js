@@ -766,7 +766,7 @@ function embedYoutube(id) {
   var iframeElement = document.createElement('iframe');
   iframeElement.src = 'https://www.youtube.com/embed/' + id;
   iframeElement.title = 'YouTube video player';
-  iframeElement.frameBorder = 0;
+  iframeElement.style.border = 0;
   iframeElement.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   iframeElement.allowFullscreen = true;
   iframeElement.classList.add('embed-iframe');
