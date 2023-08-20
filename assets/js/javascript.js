@@ -672,6 +672,20 @@ function setCache(key, value) {
   }
 }
 
+function getCacheSize() {
+  let totalSize = 0;
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+    totalSize += key.length + value.length;
+  }
+  return totalSize;
+}
+
+function getCachePercent() {
+  return (getCacheSize()/(5242880))*100;
+}
 
 async function downloadLastTitle() {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();
