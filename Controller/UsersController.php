@@ -37,7 +37,12 @@ class UsersController
         $maxCharLimit = 20;
 
         if (mb_strlen($newNick) > $maxCharLimit || mb_strlen($name) > $maxCharLimit) {
-            echo "<center class='statusMsg'><h3 style=\"color:red;\">O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.</h3></center>";
+            echo
+            <<<HTML
+            <center class='statusMsg'>
+                <h3 style="color:red;">O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.</h3>
+            </center>
+            HTML;
             return;
         }
 
@@ -47,34 +52,72 @@ class UsersController
                     $this->nickSession = $newNick;
                     $_SESSION['nickName'] = $newNick;
                     $this->auth->updateToken();
-                    echo "<center class='statusMsg'><h3 style=\"color:white;\">Alteração com sucesso!</h3></center>";
+                    echo
+                    <<<HTML
+                    <center class='statusMsg'>
+                        <h3 style="color:white;">Alteração com sucesso!</h3>
+                    </center>
+                    HTML;
                 } else {
-                    echo "<center class='statusMsg'><h3 style=\"color:red;\">Erro!</h3></center>";
+                    echo
+                    <<<HTML
+                    <center class='statusMsg'>
+                        <h3 style="color:red;">Erro!</h3>
+                    </center>
+                    HTML;
                 }
             } else if ($this->auth->checkNick($newNick)) {
-                echo "<center class='statusMsg'><h3 style=\"color:red;\">@" . $newNick . " já existente</h3></center>";
+                echo
+                <<<HTML
+                <center class='statusMsg'>
+                    <h3 style="color:red;">@$newNick já existente</h3>
+                </center>
+                HTML;
             }
         } else {
-            echo "<center class='statusMsg'><h3 style=\"color:red;\">senha incorreta</h3></center>";
+            echo
+            <<<HTML
+            <center class='statusMsg'>
+                <h3 style="color:red;">senha incorreta</h3>
+            </center>
+            HTML;
         }
     }
+
 
     function uploadPassword($pass, $newPass, $newPassConfirmation)
     {
         if ($this->auth->checkLogin(new StringT($this->nickSession), $pass)) {
             $passCertification = $this->auth->passCertification($newPass, $newPassConfirmation);
+
             if ($passCertification === "") {
                 if ($this->user->uploadPassword(new StringT($this->nickSession), $this->auth->encrypt($this->nickSession . $newPass))) {
                     $this->auth->updateToken();
-                    echo "<center class='statusMsg'><h3 style=\"color:white;\">Senha alterada com sucesso!</h3></center>";
+                    echo
+                    <<<HTML
+                    <center class='statusMsg'>
+                        <h3 style="color:white;">Senha alterada com sucesso!</h3>
+                    </center>
+                    HTML;
                 }
             } else {
-                echo "<center class='statusMsg'><h3 style=\"color:red;\">" . $passCertification . "</h3></center>";
+                echo
+                <<<HTML
+                <center class='statusMsg'>
+                    <h3 style="color:red;">$passCertification</h3>
+                </center>
+                HTML;
             }
         } else {
-            echo "<center class='statusMsg'><h3 style=\"color:red;\">senha incorreta</h3></center>";
+            echo
+            <<<HTML
+            <center class='statusMsg'>
+                <h3 style="color:red;">senha incorreta</h3>
+            </center>
+            HTML;
         }
     }
+
 
     function name(StringT $nick)
     {
@@ -328,7 +371,7 @@ class UsersController
                 <<<HTML
                 <div class="image_file">
                     <center>
-                        <img id="$hash" onclick="embedImage('$hash',event)" src="Images/download.gif" height="250px">
+                        <img id="$hash" onclick="embedImage('$hash',event)" src="Images/downloading.gif" height="250px">
                     </center>
                 </div>
                 HTML;
