@@ -111,7 +111,6 @@ class AuthenticateController
         } else {
             header("Location: authenticate.php");
             die();
-            return false;
         }
     }
 

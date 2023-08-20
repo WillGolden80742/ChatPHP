@@ -529,8 +529,6 @@
 
   .contacts {
     float: left;
-    display: inline-block;
-    position: relative;
   }
 
   .contacts a h2 {
