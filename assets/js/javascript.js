@@ -328,6 +328,8 @@ function getDate() {
 
 var downloading = false;
 
+
+
 async function showPlayer(hash, event) {
   if (!downloading) {
     try {
@@ -662,8 +664,8 @@ async function downloadLastTitle() {
   const linkElemento = document.getElementById(elementos[0].id);
   const link = linkElemento.href;
 
-  if (cookie.has(link)) {
-    linkElemento.innerHTML = cookie.get(link);
+  if (localStorage.getItem(link) !== null) {
+    linkElemento.innerHTML = localStorage.getItem(link);
   } else {
     await downloadTitle(linkElemento, link);
   }
@@ -685,8 +687,8 @@ async function downloadAllTitles(time) {
 
     const link = linkElemento.href;
 
-    if (cookie.has(link)) {
-      linkElemento.innerHTML = cookie.get(link);
+    if (localStorage.getItem(link) !== null) {
+      linkElemento.innerHTML = localStorage.getItem(link);
     } else {
       await downloadTitle(linkElemento, link);
     }
@@ -702,7 +704,7 @@ async function downloadTitle(linkElemento, link) {
       dataType: 'json'
     });
     const formattedResult = `${result}<span style='opacity:0.5;'>${link}</span>`;
-    cookie.set(link, formattedResult);
+    localStorage.setItem(link, formattedResult);
     linkElemento.innerHTML = formattedResult;
   } catch (error) {
     console.error(error);
