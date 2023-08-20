@@ -185,9 +185,11 @@ class UsersController
     function messages($queryMessages, StringT $contactNickName)
     {
         $messages = array();
+
         if (mysqli_num_rows($queryMessages) > 0) {
             $idMessage = '0';
             $count = 0;
+
             while ($row = mysqli_fetch_assoc($queryMessages)) {
                 if (strcmp($row["Idmessage"], $idMessage) !== 0) {
                     if (!empty($row["Messages"])) {
@@ -196,41 +198,63 @@ class UsersController
                         } else {
                             $left = false;
                         }
+
                         $message = new Message($row["Messages"]);
                         $hour = $row["HourMsg"];
                         $id = $row["Idmessage"];
                         $nome_anexo = $this->getMedia($row["nome_anexo"], $row["arquivo_anexo"]);
+
                         $messages[$count++] = array($message . $nome_anexo, $hour, $id, $left);
                     }
                 }
+
                 $idMessage = "" . $row["Idmessage"];
             }
         }
+
         if (count($messages) > 0) {
             $mensagens = "";
+
             if (count($messages) > 1) {
-                $mensagens = "<center id='down' ><img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.svg'/></center>";
-                $mensagens .= "<br>";
+                $mensagens =
+                    <<<HTML
+                    <center id='down' >
+                        <img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.svg'/>
+                    </center>
+                    <br>
+                    HTML;
             }
+
             foreach ($messages as $msg) {
-                if ($msg[3]) {
-                    $margin = "right";
-                } else {
-                    $margin = "left";
-                }
-                $mensagens .= "<div class='msg msg-" . $margin . "' id=\"msg$msg[2]\" >";
+                $margin = $msg[3] ? "right" : "left";
+                $mensagens .=
+                    <<<HTML
+                    <div class='msg msg-$margin' id="msg$msg[2]" >
+                    HTML;
                 if (!$msg[3]) {
-                    $mensagens .= "<a href='#' class=\"delete\" onclick='deleteMessage(" . $msg[2] . ");'><b>Apagar</b><br></a>";
+                    $mensagens .=
+                    <<<HTML
+                    <a href='#' class="delete" onclick='deleteMessage($msg[2]);'><b>Apagar</b><br></a>
+                    HTML;
                 }
-                $mensagens .= "<p>" . $msg[0] . "<br><span style='float:right;'>" . $msg[1] . "</span></p>";
-                $mensagens .= "</div>";
+                $mensagens .= 
+                    <<<HTML
+                    <p>$msg[0]<br><span style='float:right;'>$msg[1]</span></p>
+                    </div>
+                    HTML;
             }
         } else if (count($messages) > 1) {
-            $mensagens = "<h3><center>Nenhuma mensagem de @" . $contactNickName . " até o momento<br>Faça seu primeiro envio!</center></h3>";
+            $mensagens = 
+            <<<HTML
+                <h3><center>Nenhuma mensagem de @$contactNickName até o momento<br>Faça seu primeiro envio!</center></h3>
+            HTML;
         }
+
         $mensagens .= "<script>main();</script>";
+
         return $mensagens;
     }
+
 
     function getMedia($nome, $hash)
     {
@@ -241,14 +265,14 @@ class UsersController
         }
 
         if ($this->isVideo($extensao)) {
-            return 
+            return
                 <<<HTML
                 <div class="attachment_file" onclick="showPlayer('$hash',event);">
                     <a href="#"><img class="videoIcon" src="Images/blank.png" style="float:left" />$nome</a>
                 </div>
                 HTML;
         } elseif ($this->isAudio($extensao)) {
-            return 
+            return
                 <<<HTML
                 <div class="media_file">
                     <center><p class="name">$nome</p></center>
@@ -270,7 +294,7 @@ class UsersController
                 </div>
                 HTML;
         } elseif ($this->isImage($extensao)) {
-            return 
+            return
                 <<<HTML
                 <div class="image_file">
                     <center>
@@ -279,7 +303,7 @@ class UsersController
                 </div>
                 HTML;
         } else {
-            return 
+            return
                 <<<HTML
                 <div class="attachment_file">
                     <a href="#" onclick="downloadFile('$hash','$nome')"><img class="fileIcon" src="Images/blank.png"/>$nome</a>
