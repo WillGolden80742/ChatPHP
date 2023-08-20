@@ -4,11 +4,30 @@ $user = new UsersController();
 $auth = new AuthenticateModel();
 header("Content-type: application/json; charset=utf-8");
 
-use Goutte\Client;
-use Symfony\Component\HttpClient\HttpClient;
+class SimpleCrawler {
+    public function request($url) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return $response;
+    }
 
-$client = new Client(HttpClient::create());
-$crawler = $client->request('GET', $_GET['link']);
-$crawler->filter('title')->each(function ($node) {
-    echo json_encode($node->text() . " | ");
-});
+    public function filter($content, $tag) {
+        $pattern = "/<$tag\b[^>]*>(.*?)<\/$tag>/is";
+        preg_match_all($pattern, $content, $matches);
+        return $matches[1];
+    }
+}
+
+$customCrawler = new SimpleCrawler();
+$link = $_GET['link'];
+$response = $customCrawler->request($link);
+$titles = $customCrawler->filter($response, 'title');
+
+$result = [];
+foreach ($titles as $title) {
+    $result[] = strip_tags($title) . " | ";
+}
+
+echo json_encode($result);
