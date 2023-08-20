@@ -1231,8 +1231,7 @@ function waitingMsg() {
   var newLink = document.createElement('a');
   newLink.href = '#';
 
-  newLink.appendChild(newImg);
-  newLink.appendChild(document.createTextNode('Enviado'));
+  newLink.appendChild(newImg);;
   newDiv.appendChild(newLink);
   messagesElement.appendChild(newDiv);
   down();

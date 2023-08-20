@@ -244,6 +244,10 @@
     display: inline-flex;
   }
 
+  .attachment_file a {
+    place-items: center;
+  }
+
   .fileIcon, .loadIcon, .videoIcon {
     width: 40px;
     height: 40px;
@@ -253,10 +257,11 @@
     background-position: center;
     margin-right: 10px;
     border-radius: 10px;
+
   }
 
   .loadIcon {
-    background-image: url("../../Images/loading.gif");
+    background-image: url("../../Images/blueLoading.gif");
   }
 
   .videoIcon {
@@ -273,12 +278,24 @@
   }
 
   .uploading {
-    width: 40.5%;
     float: right;
-    margin-right: 10px;
+    margin-right: 28px;
     backdrop-filter: blur(5px);
     color: white;
     font-weight: bolder;
+    padding: 10px;
+    border-radius: 20px;
+    width: 70px;
+  }
+
+  .uploading .loadIcon {
+    width: -webkit-fill-available;
+    margin: 0;
+    background-size: 100%;
+  }
+
+  .uploading a {
+    width: 100%;
   }
 
   .attachment:hover {
