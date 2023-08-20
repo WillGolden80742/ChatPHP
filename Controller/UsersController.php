@@ -142,7 +142,7 @@ class UsersController
         }
 
         echo
-        <<<HTML
+            <<<HTML
             <form action="index.php" method="post">
                 <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
             </form>
