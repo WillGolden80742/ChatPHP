@@ -1,7 +1,6 @@
 <?php
 include 'Controller/UsersController.php';
 $user = new UsersController();
-$auth = new AuthenticateModel();
 header("Content-type: application/json; charset=utf-8");
 
 class SimpleCrawler {
