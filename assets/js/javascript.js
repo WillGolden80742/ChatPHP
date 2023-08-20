@@ -837,14 +837,6 @@ function embedEmojis() {
   }
 }
 
-function closeEmoji() {
-  const isOpen = document.querySelector(".emoji-div");
-  if (isOpen) {
-    document.querySelector('.text').style.backgroundImage = "url('Images/emojiIcon.svg')";
-    close();
-  }
-}
-
 function embedVideo(link, id) {
   messageAreaEnable(false);
   getAudioTimes();
@@ -910,11 +902,6 @@ function embedVideo(link, id) {
   document.getElementById('messages').appendChild(mediaFileDiv);
 }
 
-function closeVideo() {
-  close();
-}
-
-
 function embedImage(hash, event) {
   messageAreaEnable(false);
   getAudioTimes();
@@ -958,6 +945,18 @@ function embedImage(hash, event) {
 
 function closeImage() {
   close();
+}
+
+function closeVideo() {
+  close();
+}
+
+function closeEmoji() {
+  const isOpen = document.querySelector(".emoji-div");
+  if (isOpen) {
+    document.querySelector('.text').style.backgroundImage = "url('Images/emojiIcon.svg')";
+    close();
+  }
 }
 
 function close() {
