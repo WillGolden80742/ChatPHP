@@ -261,7 +261,7 @@
   }
 
   .loadIcon {
-    background-image: url("../../Images/blueLoading.gif");
+    background-image: url("../../Images/loading.gif");
   }
 
   .videoIcon {
@@ -280,12 +280,12 @@
   .uploading {
     float: right;
     margin-right: 28px;
-    backdrop-filter: blur(5px);
     color: white;
     font-weight: bolder;
     padding: 10px;
     border-radius: 20px;
     width: 70px;
+    background-color:rgba(40, 81, 123);
   }
 
   .uploading .loadIcon {
