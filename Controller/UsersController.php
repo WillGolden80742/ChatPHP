@@ -89,48 +89,79 @@ class UsersController
         $result = $this->user->contacts($nick);
         $count = 0;
         $contacts = array();
+
         while ($row = mysqli_fetch_assoc($result)) {
             $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
         }
-        $html = "<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
+
+        $html =
+            <<<HTML
+            <form action="index.php" method="post">
+                <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
+            </form>
+            HTML;
+
         foreach ($contacts as $contact) {
             if (basename($_SERVER['PHP_SELF']) == "messages.php" || $sync) {
-                $html .= "<a id=\"contact$contact[1]\" onclick=\"updateMessages('$contact[1]','$contact[0]')\">";
+                $html .=
+                    <<<HTML
+                    <a id="contact$contact[1]" onclick="updateMessages('$contact[1]','$contact[0]')">
+                    HTML;
             } else {
-                $html .= "<a id=\"contact$contact[1]\" href='messages.php?contactNickName=" . $contact[1] . "'>";
+                $html .=
+                    <<<HTML
+                    <a id="contact$contact[1]" href="messages.php?contactNickName={$contact[1]}">
+                    HTML;
             }
             $html .= "<h2";
+
             if (!empty($nickNameContact)) {
                 if (!strcmp($nickNameContact, $contact[1])) {
                     $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
                 }
             }
-            $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp</h2></a>";
+
+            $html .=
+                <<<HTML
+                ><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>
+                HTML;
         }
+
         return $html;
     }
+
 
     function searchContact(StringT $nick)
     {
         $result =  $this->user->searchContact($nick);
         $count = 0;
         $contacts = array();
+
         while ($row = mysqli_fetch_assoc($result)) {
             $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
         }
-        echo "<form action=\"index.php\" method=\"post\"><input class=\"search\" placeholder='Pesquisar contatos ...' type=text name=search></form>";
-        echo "<a href=\"index.php\"><h3>Limpar busca";
-        echo "</h3></a>";
+
+        echo
+        <<<HTML
+            <form action="index.php" method="post">
+                <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
+            </form>
+            <a href="index.php"><h3>Limpar busca</h3></a>
+            HTML;
+
         if (count($contacts) > 0) {
-            // output data of each row
             foreach ($contacts as $contact) {
-                if (strcmp($nick, $this->nickSession) !== 0) {
-                    echo "<a id=\"contact$contact[1]\" href=\"messages.php?contactNickName=" . $contact[1] . "\" >";
-                    echo "<h2 ";
-                    echo " ><div class='picContact' ><img src='Images/blank.png' style='background-image:url(" . $this->downloadProfilePic(new StringT($contact[1])) . ");' /></div>&nbsp&nbsp" . $contact[0] . " &nbsp</h2></a>";
+                if (strcmp($contact[1], $this->nickSession) !== 0) {
+                    echo
+                    <<<HTML
+                        <a id="contact$contact[1]" href="messages.php?contactNickName=$contact[1]">
+                            <h2><div class='picContact'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2>
+                        </a>
+                        HTML;
                 }
             }
         }
+
         echo "</div>";
     }
 
@@ -233,19 +264,19 @@ class UsersController
                     HTML;
                 if (!$msg[3]) {
                     $mensagens .=
-                    <<<HTML
+                        <<<HTML
                     <a href='#' class="delete" onclick='deleteMessage($msg[2]);'><b>Apagar</b><br></a>
                     HTML;
                 }
-                $mensagens .= 
+                $mensagens .=
                     <<<HTML
                     <p>$msg[0]<br><span style='float:right;'>$msg[1]</span></p>
                     </div>
                     HTML;
             }
         } else if (count($messages) > 1) {
-            $mensagens = 
-            <<<HTML
+            $mensagens =
+                <<<HTML
                 <h3><center>Nenhuma mensagem de @$contactNickName até o momento<br>Faça seu primeiro envio!</center></h3>
             HTML;
         }
