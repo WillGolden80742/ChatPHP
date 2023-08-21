@@ -1,3 +1,4 @@
+<link rel="icon" type="image/ico" href="Images/favicon.ico">
 <?php
 include 'Controller/UsersController.php';
 $user = new UsersController();
@@ -24,7 +25,6 @@ $auth = new AuthenticateModel();
   } else if (home.includes('editProfile.php')) {
     document.title = "Edite Perfil";
   }
-
   document.addEventListener("DOMContentLoaded", function() {
     var nickNameContact = <?php echo json_encode($nickNameContact); ?>;
 

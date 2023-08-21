@@ -3,6 +3,7 @@
 
 <head>
     <title>ChatPHP</title>
+    <link rel="icon" type="image/ico" href="Images/favicon.ico">
     <script src="assets/js/javascript.js"></script>
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
