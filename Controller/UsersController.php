@@ -183,7 +183,7 @@ class UsersController
         while ($row = mysqli_fetch_assoc($result)) {
             $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
         }
-        echo
+        $html =
         <<<HTML
         <form action="index.php" method="post">
             <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
@@ -194,7 +194,7 @@ class UsersController
         if (count($contacts) > 0) {
             foreach ($contacts as $contact) {
                 if (strcmp($contact[1], $this->nickSession) !== 0) {
-                    echo
+                    $html .=
                     <<<HTML
                     <a id="contact$contact[1]" href="messages.php?contactNickName=$contact[1]">
                         <h2><div class='picContact'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2>
@@ -204,7 +204,8 @@ class UsersController
             }
         }
 
-        echo "</div>";
+        $html .="</div>";
+        return $html;
     }
 
     function downloadProfilePic(StringT $contactNickName)
