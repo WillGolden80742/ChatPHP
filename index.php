@@ -102,7 +102,7 @@ if (empty($_POST["search"])) {
     echo $user->contacts($userNickName, $nickNameContact);
   }
 } else {
-  $contacts = $user->searchContact(new StringT($_POST["search"]));
+  $user->searchContact(new StringT($_POST["search"]));
 }
 echo "</div>";
 
