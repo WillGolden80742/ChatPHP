@@ -1,0 +1,265 @@
+assets/js/javascript.js:
+
+Here are the main global variables and functions:
+
+Global variables:
+
+audioTime - Map with audio playback times
+cacheMap - Map for cache of downloaded media
+currentIDPlayer - Active audio player ID
+downloading - Indicates if you are downloading media
+h - Height of message container
+isDeleting - Indicates whether a message is being deleted
+maxLength - Maximum length allowed for messages
+msgsContents - Stores the content of previous messages
+nickNameContact - Nickname of the current contact
+orientationDevice - Screen orientation ("portrait" or "landscape")
+profilePicSrc - URL of the user's profile picture
+screenWidth - returns the Width of the browser viewport. 
+screenHeight - returns the Height of the browser viewport. 
+scrollPos - Scroll position of messages
+send - Current send button icon
+timestamp - Timestamp for asynchronous flow control
+updatedMsg - Boolean indicating whether messages have been updated
+
+Functions:
+
+addMessage - Adds a new message to the screen
+b64toBlob - Convert base64 to Blob
+close - Closes embedded elements
+closeEmoji - Closes emoji picker
+closeImage - Close image view
+closeVideo - Close video player
+countMessage - Update message counter
+createMessage - Creates a new message
+deleteMessage - Deletes a message
+down - Scroll down messages
+downButton - Show/hide scroll button
+downloadAllAudios - Download all audios
+downloadAllImages - Download all images
+downloadAllMidia - Download all media
+downloadAllTitles - Download all titles from link
+downloadBase64 - Download file in base64
+downloadFile - Download file
+downloadMedia - Download specific media
+downloadTitle - Download title from specific link
+embedEmojis - Displays emoji picker
+embedImage - Displays enlarged image
+embedVideo - Display video player
+embedYoutube - Display Youtube video
+emojiClicked - Checks for click on emoji icon
+getCache - Get cached value
+getCachePercent - Get used percentage of the cache
+getCacheSize - Get total cache size
+getDate - Returns formatted date
+hasCache - Checks for cached values
+hasNewMsg - Handle new message
+hasNewMsgByCurrentContact - Handle new message from current contact
+imgToJPG - Convert image to JPG
+loadFile - Loads recorded audio file
+loading - Show/hide loading indicator
+loadPicStatus - Update image upload status
+loadProfileContent - Load profile form content
+main - Initial function, downloads media
+messageAreaEnable - Enable/disable message area
+messageValidate - Validates message form state
+moveToUp - Move contact to the top
+openfile - Open image or file input
+removeDownButton - Removes scroll button if needed
+resizeImage - Resize image
+setCache - Set value in cache
+showPlayer - Display media player
+startRecording - Starts audio recording
+stringToMD5 - Convert string to MD5
+toggle - Toggle element visibility
+togglePlay - Toggle media playback
+updateContacts - Update contact details
+updateMessages - Update messages on screen
+upload - Generic upload function via AJAX
+uploadAttachment - Upload attachment file
+uploadFile - Upload generic file
+uploadPassword - Send password change form
+uploadPic - Upload profile picture
+uploadProfile - Upload profile edit form
+waitingMsg - Display send indicator
+
+Controller/AuthenticateController.php:
+
+Here are the main global variables and functions in the AuthenticateController class:
+
+Global variables:
+
+$authModel - AuthenticateModel class object for authentication operations
+
+Functions:
+
+__construct() - initializes the $authModel object
+login() - logs in the user
+checkLogin() - checks login credentials
+signUp() - register new user
+nameCertification() - validate username
+nickCertification() - validates user nickname
+passCertification() - validate user password
+checkNick() - checks if nickname already exists
+isLogged() - checks if user is logged in
+updateToken() - update session token
+logout() - logs out the user
+encrypt() - encrypts a string
+The main functionalities are:
+
+Authentication (login, signup, validations, session)
+password encryption
+Name, nickname and password validations
+Login checks and existing nickname
+The class provides the necessary methods for access control and user authentication.
+
+
+Controller/FileController.php
+
+Here are the main global variables and functions in the FileController class:
+
+Global variables:
+
+$file - array with uploaded file information
+$error - string with error message, if any
+$maxSize - maximum allowed size in bytes
+$extension - file extension
+Functions:
+
+__construct() - initializes properties with data from the file
+getImage() - resize image and return bytes
+getFormat() - get file extension/format
+formatMB() - format size in MB
+getError() - get error message
+The main logic is in getImage(), which does:
+
+Extension validation (gif, png, jpg, jpeg)
+Resizing keeping aspect ratio
+Conversion to JPEG with standard quality
+Check if new size is less than maximum
+Byte reading and return
+If an error occurs, the message is stored in $error.
+
+This class provides the necessary methods for uploading and manipulating images on the server.
+
+Controller/Message.php:
+
+Here are the main global variables and functions in the Message class:
+
+Global variables:
+
+$msg - message string
+$countLinks - static link counter
+Functions:
+
+__construct() - initialize the message and handle it
+setSession() - stores value in session
+getSession() - get session value
+links() - searches and formats links
+link() - formats individual link
+youtube() - format Youtube link
+splitLink() - clear link to get ID
+href() - default link to https
+isYoutube() - checks if it's a Youtube link
+__toString() - returns formatted message
+The main logic is in:
+
+__construct() - receives the message and calls the formatting methods
+links() - looks for links and URLs and calls link() and youtube()
+link() - formats normal links, adding ID and HTML tag
+youtube() - format Youtube link, getting video ID
+The class provides the necessary methods for cleaning, validating and formatting the message, preparing it for display on the front-end.
+
+Controller/UsersController.php:
+
+Here are the main global variables and functions in the UsersController class:
+
+Global variables:
+
+$auth - AuthenticateController class object for authentication
+$sessions - Sessions class object for session control
+$user - object of the UsersModel class for database operations
+$nickSession - logged in user nickname stored in session
+
+Functions:
+
+__construct() - constructor method, authenticate and get nickname in session
+uploadFile() - upload message file
+downloadFile() - download file by hash
+uploadProfilePic() - upload profile picture
+uploadProfile() - update user profile
+uploadPassword() - change user password
+name() - get the username by nickname
+contacts() - get the list of contacts
+searchContact() - search contacts by name
+downloadProfilePic() - downloads the profile picture
+allMessages() - get all messages from a contact
+lastMessage() - get the last message from a contact
+messageByID() - get specific message by ID
+messages() - renders messages in HTML
+getMedia() - renders attached media in HTML
+isVideo() - checks if it's a video by extension
+isAudio() - checks if it's audio by extension
+isImage() - checks if it's an image by extension
+lasIdMessage() - get the last message ID
+createMessage() - creates a new message
+deleteMessage() - deletes a Message
+
+Model/AuthenticateModel.php:
+
+Here are the main global variables and functions in the AuthenticateModel class:
+
+Global variables:
+
+$conFactoryPDO - database connection object
+Functions:
+
+__construct() - initializes the database connection
+checkLogin() - checks user login
+signUp() - sign up new user
+checkNick() - checks if nickname already exists
+createToken() - creates session token
+checkToken() - check session token
+deleteToken() - delete session token
+The main functions are:
+
+checkLogin() - actually authenticates, checking the user and password in the database
+signUp() - registers a new user in the database
+checkNick() - checks if the nickname is already registered
+createToken()/checkToken() - manage session token to keep user logged in
+The class provides methods to authenticate the user against the database and manage the user's session on the system.
+
+Model/UsersModel.php:
+
+Here are the main global variables and functions in the UsersModel class:
+
+Global variables:
+
+$conFactory - MySQL database connection object
+$conFactoryPDO - PDO database connection object
+$auth - AuthenticateController class object
+Functions:
+
+__construct() - initialize connections and authentication
+uploadFile() - upload file and link message
+downloadFile() - download file by hash
+uploadProfilePic() - update profile picture
+uploadProfile() - updates profile data
+uploadPassword() - update password
+name() - get username
+downloadProfilePic() - download profile picture
+searchContact() - search contact by name
+contacts() - get list of contacts
+messages() - get messages from a contact
+lastMessage() - get last message from a contact
+messageByID() - get message by ID
+lasIdMessage() - get last message ID
+createMessage() - creates a new message
+deleteMessage() - deletes a message
+getNumberOfAttachments() - get number of attachments
+The main functionalities provided by the class are database interactions for:
+
+Profile and file management
+operations with messages
+Interaction with attachments and files
+The class abstracts the database and provides methods for the business logic.

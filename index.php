@@ -43,7 +43,7 @@ $auth = new AuthenticateModel();
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const message = data.message;
-    hasNewMsgByContact(data);
+    hasNewMsg(data);
     console.log(event.data);
   };
 

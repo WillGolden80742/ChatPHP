@@ -5,6 +5,8 @@ var profilePicSrc;
 var updatedMsg = false;
 var orientationDevice = "landscape";
 var timestamp = new Date().getTime();
+var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
 main();
 async function main() {
@@ -14,8 +16,8 @@ async function main() {
     console.error(erro);
   }
   function handleScreenResolutionChange() {
-    var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
     if (screenWidth > screenHeight && orientationDevice == "portrait") {
       if (window.location.href.includes("index.php") && window.location.href.includes("messages.php"))
@@ -684,7 +686,7 @@ function getCacheSize() {
 }
 
 function getCachePercent() {
-  return (getCacheSize()/(5242880))*100;
+  return (getCacheSize() / (5242880)) * 100;
 }
 
 async function downloadLastTitle() {
@@ -809,8 +811,6 @@ function embedYoutube(id) {
 }
 
 function emojiClicked(event) {
-  var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
   const currentTextElement = document.querySelector(".text");
   const xClick = event.offsetX;
   const Width = currentTextElement.offsetWidth;
@@ -819,11 +819,11 @@ function emojiClicked(event) {
   const size = parseInt(window.getComputedStyle(textElement).backgroundSize.replace("px", ""));
 
   if (screenWidth > screenHeight) {
-    if (yClick <= (size + 10) && xDiff <= (size + 10)) {
+    if (yClick <= (size + 20) && xDiff <= (size + 20)) {
       embedEmojis();
     }
   } else {
-    if (yClick <= (size + 20) && xDiff <= (size + 20)) {
+    if (yClick <= (size + 40) && xDiff <= (size + 40)) {
       embedEmojis();
     }
   }
@@ -1393,7 +1393,7 @@ function toggle(value = true, landscape = false) {
   down();
 }
 
-function hasNewMsgByContact(msg) {
+function hasNewMsg(msg) {
   const from = msg.from;
   const message = msg.message;
   const contact = document.querySelector("#contact" + from);
@@ -1548,7 +1548,6 @@ function loading(b) {
     sendElement.style.backgroundPositionX = "";
   }
 }
-
 
 
 
