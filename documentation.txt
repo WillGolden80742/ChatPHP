@@ -114,6 +114,7 @@ $username - Database user
 $password - Database password
 $dbname - Database name
 $conn - PDO connection object
+
 Functions:
 
 __construct() - Initialize database credentials
@@ -160,7 +161,6 @@ password encryption
 Name, nickname and password validations
 Login checks and existing nickname
 The class provides the necessary methods for access control and user authentication.
-
 
 Controller/FileController.php
 
