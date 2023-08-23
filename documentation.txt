@@ -1,3 +1,23 @@
+Introduction:
+
+This documentation provides a summary of the main global variables and functions for the messaging system developed in PHP, Javascript and MySQL.
+
+The system consists of a messaging site with features such as:
+
+User registration and login
+Contact list
+Sending text messages
+Uploading attached media (images, audio, video)
+profile management
+The documented classes and files provide the core functionality of the system:
+
+User authentication and session (Controller/AuthenticateController.php)
+File upload and manipulation (Controller/FileController.php)
+Formatting and handling messages (Controller/Message.php)
+Interaction with the database (ConnectionFactory/ConnectionFactoryPDO.php, Model/AuthenticateModel.php, Model/UsersModel.php)
+Frontend logic in Javascript (assets/js/javascript.js)
+Each file contains the list of global variables used and the relevant functions, together with a brief description of the function of each.
+
 assets/js/javascript.js:
 
 Here are the main global variables and functions:
@@ -82,6 +102,34 @@ uploadPassword - Send password change form
 uploadPic - Upload profile picture
 uploadProfile - Upload profile edit form
 waitingMsg - Display send indicator
+
+ConnectionFactory/ConnectionFactoryPDO.php:
+
+The main global variables and functions in the ConnectionFactoryPDO class are:
+
+Global variables:
+
+$servername - Database server name
+$username - Database user
+$password - Database password
+$dbname - Database name
+$conn - PDO connection object
+Functions:
+
+__construct() - Initialize database credentials
+connect() - Creates the PDO connection to the database
+query() - Prepare an SQL query
+execute() - Executes the prepared query
+close() - Closes the database connection
+The class manages the connection to the MySQL database using PDO.
+
+The main functionalities are:
+
+Initialize database access credentials
+Open and close the PDO connection
+Prepare and execute SQL queries
+Return query results
+In this way, the class abstracts the connection details and allows you to execute SQL commands easily.
 
 Controller/AuthenticateController.php:
 
