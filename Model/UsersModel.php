@@ -159,10 +159,10 @@ class UsersModel
     }
     // MESSAGES 
 
-    function messages(StringT $nickName, StringT $contactNickName)
+    function messages(StringT $nickName, StringT $contactNickName,$pag=1)
     {
         // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call messages('" . $nickName . "','" . $contactNickName . "')");
+        return $this->conFactory->query("call messagePaginated('" . $nickName . "','" . $contactNickName . "',$pag)");
     }
 
     function lastMessage(StringT $nickName, StringT $contactNickName)
