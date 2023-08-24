@@ -57,7 +57,7 @@ function loadPicStatus(value, keepPic = false) {
       profilePic.src = "Images/edit.png";
       document.querySelector(".salvar").style.display = "none";
       if (keepPic) {
-        const profilePic = document.getElementById("profilePic");
+        profilePic = document.getElementById("profilePic");
         profilePicSrc = profilePic.style.backgroundImage;
       } else {
         profilePic.style.backgroundImage = profilePicSrc;
@@ -66,16 +66,6 @@ function loadPicStatus(value, keepPic = false) {
     }
   }
 }
-
-
-function loadingPicStatus(status) {
-  if (status) {
-    profilePic.src = "Images/loadingProfilePic.webp";
-  } else {
-    profilePic.src = "Images/edit.png";
-  }
-}
-
 
 function handlePhotoUpload(event) {
   const fileInput = event.target;
