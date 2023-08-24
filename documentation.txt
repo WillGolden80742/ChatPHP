@@ -29,6 +29,7 @@ cacheMap - Map for cache of downloaded media
 currentIDPlayer - Active audio player ID
 downloading - Indicates if you are downloading media
 h - Height of message container
+indexMessage - control pagination message loading
 isDeleting - Indicates whether a message is being deleted
 maxLength - Maximum length allowed for messages
 msgsContents - Stores the content of previous messages
@@ -78,6 +79,7 @@ hasNewMsgByCurrentContact - Handle new message from current contact
 imgToJPG - Convert image to JPG
 loadFile - Loads recorded audio file
 loading - Show/hide loading indicator
+loadMoreMessages - load message according to what the user scrolls up
 loadPicStatus - Update image upload status
 loadProfileContent - Load profile form content
 main - Initial function, downloads media
