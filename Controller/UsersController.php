@@ -184,7 +184,7 @@ class UsersController
             $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
         }
         $html =
-        <<<HTML
+            <<<HTML
         <form action="index.php" method="post">
             <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
         </form>
@@ -195,7 +195,7 @@ class UsersController
             foreach ($contacts as $contact) {
                 if (strcmp($contact[1], $this->nickSession) !== 0) {
                     $html .=
-                    <<<HTML
+                        <<<HTML
                     <a id="contact$contact[1]" href="messages.php?contactNickName=$contact[1]">
                         <h2><div class='picContact'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2>
                     </a>
@@ -204,7 +204,7 @@ class UsersController
             }
         }
 
-        $html .="</div>";
+        $html .= "</div>";
         return $html;
     }
 
@@ -256,6 +256,17 @@ class UsersController
         return $this->user->messageByID(new StringT($this->nickSession), $contactNickName, $id);
     }
 
+    function messageByPag(StringT $contactNickName, StringT $pag)
+    {
+        $query = $this->messageByPagQuery($contactNickName, $pag);
+        return $this->messages($query, $contactNickName);
+    }
+
+    function messageByPagQuery(StringT $contactNickName, StringT $pag)
+    {
+        return $this->user->messages(new StringT($this->nickSession), $contactNickName, $pag);
+    }
+
     function messages($queryMessages, StringT $contactNickName)
     {
         $messages = array();
@@ -288,16 +299,6 @@ class UsersController
 
         if (count($messages) > 0) {
             $mensagens = "";
-
-            if (count($messages) > 1) {
-                $mensagens =
-                    <<<HTML
-                    <center id='down' >
-                        <img  onclick='down();' style='position:fixed;bottom: 30%; background:white; border-radius: 100%;' width='50px' src='Images/down.svg'/>
-                    </center>
-                    <br>
-                    HTML;
-            }
 
             foreach ($messages as $msg) {
                 $margin = $msg[3] ? "right" : "left";

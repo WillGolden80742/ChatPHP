@@ -36,6 +36,16 @@ switch ($action) {
             echo json_encode('Parâmetro "nickNameContact" não foi fornecido.');
         }
         break;
+    case 'messageByPag':
+        include 'Controller/UsersController.php';
+        if (isset($_POST['nickNameContact'])) {
+            $user = new UsersController();
+            $result = $user->messageByPag(new StringT($_POST['nickNameContact']), new StringT($_POST['pagIndex']));
+            echo json_encode($result);
+        } else {
+            echo json_encode('Parâmetro "nickNameContact" não foi fornecido.');
+        }
+        break;
     case 'updateMsg':
         include 'Controller/UsersController.php';
         $user = new UsersController();

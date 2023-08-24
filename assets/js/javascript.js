@@ -275,11 +275,65 @@ function down() {
 }
 
 function removeDownButton() {
-  if (((document.getElementById("messages").scrollTop) / h) * 100 >= 99) {
+  const messagesElement = document.getElementById("messages");;
+  if (((messagesElement.scrollTop) / h) * 100 >= 99) {
     downButton(false);
-    h = document.getElementById("messages").scrollTop;
+    h = messagesElement.scrollTop;
+  } else if (messagesElement.scrollTop == 0) {
+    loadMoreMessages();
   }
 }
+
+let indexMessage = 1;
+
+function loadMoreMessages() {
+  if (indexMessage === 0) return;
+
+  const messagesDiv = document.querySelector('#messages');
+
+  if (!messagesDiv) return;
+
+  const formData = new FormData();
+  formData.append('action', 'messageByPag');
+  formData.append('nickNameContact', nickNameContact);
+  formData.append('pagIndex', ++indexMessage);
+
+  fetch('actions.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(result => {
+    msgsContents = result + msgsContents;
+
+    const msgElements = document.querySelectorAll(".msg");
+    if (msgElements.length) {
+      getAudioTimes();
+      messagesDiv.insertAdjacentHTML('afterbegin', result);
+      const h = messagesDiv.scrollHeight;
+      const timestamp = new Date().getTime();
+      downloadAllMidia();
+    }
+    adjustScrollPosition();
+  })
+  .catch(error => {
+    console.error('Erro na requisição:', error);
+    indexMessage = 0;
+  });
+}
+
+function calculateScrollPercentage(index) {
+  return 100 / index;
+}
+
+function adjustScrollPosition() {
+  const messagesElement = document.getElementById("messages");
+  const scrollPercentage = calculateScrollPercentage(indexMessage);
+  const windowHeight = messagesElement.scrollHeight;
+  const scrollPosition = (scrollPercentage / 100) * windowHeight;
+  messagesElement.scrollTo(0, scrollPosition - 300);
+}
+
 
 var isDeleting = false;
 
@@ -1261,6 +1315,7 @@ function waitingMsg() {
 }
 
 async function updateMessages(contact = nickNameContact, name = nickNameContact) {
+  indexMessage = 1;
   closeEmoji();
 
   if (contact !== nickNameContact) {
@@ -1495,11 +1550,13 @@ function hasNewMsgByCurrentContact(from, message) {
 
 
 function downButton(value) {
-  var element = document.getElementById("down");
   var messagesElement = document.getElementById("messages");
 
   if (value) {
     messagesElement.style.boxShadow = "inset 0px -20px 8px 0px rgba(0, 0, 0, 0.35)";
+
+    var center = document.createElement("center");
+    center.id = "down";
 
     var img = document.createElement("img");
     img.onclick = down;
@@ -1511,11 +1568,15 @@ function downButton(value) {
     img.width = "50";
     img.src = "Images/down.svg";
 
-    element.innerHTML = "";
-    element.appendChild(img);
+    center.appendChild(img);
+    center.style.zIndex=10000;
+    messagesElement.appendChild(center);
   } else {
     messagesElement.style.boxShadow = "none";
-    element.innerHTML = "";
+    var existingDown = document.getElementById("down");
+    if (existingDown) {
+      existingDown.remove();
+    }
   }
 }
 
