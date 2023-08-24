@@ -310,11 +310,11 @@ function loadMoreMessages() {
     if (msgElements.length) {
       getAudioTimes();
       messagesDiv.insertAdjacentHTML('afterbegin', result);
-      const h = messagesDiv.scrollHeight;
-      const timestamp = new Date().getTime();
+      h = messagesDiv.scrollHeight;
+      timestamp = new Date().getTime();
       downloadAllMidia();
+      adjustScrollPosition();
     }
-    adjustScrollPosition();
   })
   .catch(error => {
     console.error('Erro na requisição:', error);
