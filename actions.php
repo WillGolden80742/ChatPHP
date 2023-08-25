@@ -18,7 +18,7 @@ switch ($action) {
         include 'Controller/UsersController.php';
         $user = new UsersController();
         if (!empty($_POST['hashName'])) {
-            echo $user->downloadFile($_POST['hashName'], true);
+            echo $user->downloadFile($_POST['hashName']);
         }
         break;
     case 'getThumb':
