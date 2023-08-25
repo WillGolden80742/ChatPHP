@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 13/08/2023 às 17:31
+-- Tempo de geração: 25/08/2023 às 04:50
 -- Versão do servidor: 10.4.27-MariaDB
 -- Versão do PHP: 8.1.12
 
@@ -38,11 +38,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `lastMessage` (IN `nickName` VARCHAR
     LIMIT 1;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `messageByID` (
-    IN `nickName` VARCHAR(20),
-    IN `contactNickName` VARCHAR(20),
-    IN `messageId` INT
-)  NO SQL BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `messageByID` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20), IN `messageId` INT)  NO SQL BEGIN
     SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
     FROM messages m
     LEFT JOIN anexo an ON m.Idmessage = an.mensagem
@@ -52,6 +48,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `messageByID` (
     LIMIT 1;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `messagePaginated` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20), IN `partNumber` INT)  NO SQL BEGIN
+    DECLARE startIdx INT;
+    DECLARE pageSize INT;
+    
+    SET pageSize = 10; -- Número de mensagens por página
+    
+    -- Calcula o índice de início da seleção com base na parte fornecida
+    SET startIdx = (partNumber - 1) * pageSize;
+    
+    SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg,
+           an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
+    FROM messages m
+    LEFT JOIN anexo an ON m.Idmessage = an.mensagem
+    WHERE (m.MsgFrom = contactNickName AND m.MsgTo = nickName)
+       OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName)
+    ORDER BY m.date DESC -- Ordena por data mais recente primeiro
+    LIMIT startIdx, pageSize;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
 FROM messages m

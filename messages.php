@@ -20,7 +20,15 @@ if (!empty($_GET['contactNickName'])) {
 <div class="messages" id="messages" onscroll="removeDownButton();">
 
   <?php
-  echo $user->allMessages($contactNickName);
+    $messages = $user->allMessages($contactNickName);
+    if (strcmp($messages, "") == 0) {
+      echo
+      <<<HTML
+      <h3><center>Nenhuma mensagem de @$contactNickName até o momento<br>Faça seu primeiro envio!</center></h3>
+      HTML;
+    } else {
+      echo $messages;
+    }
   ?>
 
 </div>

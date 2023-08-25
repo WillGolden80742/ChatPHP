@@ -16,6 +16,7 @@ async function main() {
     console.error(erro);
   }
   function handleScreenResolutionChange() {
+
     screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
@@ -25,6 +26,12 @@ async function main() {
       orientationDevice = "landscape";
     } else if (screenHeight > screenWidth) {
       orientationDevice = "portrait";
+    }
+    const down = document.querySelector("#down");
+    if (down) {
+      const messagesElement = document.querySelector("#messages");
+      down.style.top = (messagesElement.offsetTop + 25) + "px";
+      down.style.left = (messagesElement.offsetLeft + (messagesElement.offsetWidth / 2)) - 25 + "px";
     }
   }
   window.addEventListener('resize', handleScreenResolutionChange);
@@ -275,11 +282,9 @@ function down() {
 }
 
 function removeDownButton() {
-  const messagesElement = document.getElementById("messages");;
-  if (((messagesElement.scrollTop) / h) * 100 >= 99) {
+  if (getScrollPercentage() >= 90) {
     downButton(false);
-    h = messagesElement.scrollTop;
-  } else if (messagesElement.scrollTop == 0) {
+  } else if (getScrollPercentage() === 0) {
     loadMoreMessages();
   }
 }
@@ -290,36 +295,46 @@ function loadMoreMessages() {
   if (indexMessage === 0) return;
 
   const messagesDiv = document.querySelector('#messages');
-
-  if (!messagesDiv) return;
+  const msg = document.querySelector('.msg');
+  if (!msg) return;
 
   const formData = new FormData();
   formData.append('action', 'messageByPag');
   formData.append('nickNameContact', nickNameContact);
   formData.append('pagIndex', ++indexMessage);
-
+  loadingAnimationMessages(true);
   fetch('actions.php', {
     method: 'POST',
     body: formData
   })
-  .then(response => response.json())
-  .then(result => {
-    msgsContents = result + msgsContents;
+    .then(response => response.json())
+    .then(result => {
+      if (result == "") {
+        indexMessage = 0;
+        const noMoreMessagesText = "Você já viu todas mensagens de @" + nickNameContact;
+        const h3Element = document.createElement('h3');
+        const centerElement = document.createElement('center');
+        const textNode = document.createTextNode(noMoreMessagesText);
+        centerElement.appendChild(textNode);
+        h3Element.appendChild(centerElement);
+        messagesDiv.insertBefore(h3Element, messagesDiv.firstChild);
+      }
+      msgsContents = result + msgsContents;
 
-    const msgElements = document.querySelectorAll(".msg");
-    if (msgElements.length) {
-      getAudioTimes();
-      messagesDiv.insertAdjacentHTML('afterbegin', result);
-      h = messagesDiv.scrollHeight;
-      timestamp = new Date().getTime();
-      downloadAllMidia();
-      adjustScrollPosition();
-    }
-  })
-  .catch(error => {
-    console.error('Erro na requisição:', error);
-    indexMessage = 0;
-  });
+      const msgElements = document.querySelectorAll(".msg");
+      if (msgElements.length) {
+        getAudioTimes();
+        messagesDiv.insertAdjacentHTML('afterbegin', result);
+        loadingAnimationMessages(false);
+        h = messagesDiv.scrollHeight;
+        timestamp = new Date().getTime();
+        downloadAllMidia();
+        adjustScrollPosition();
+      }
+    })
+    .catch(error => {
+      console.error('Erro na requisição:', error);
+    });
 }
 
 function calculateScrollPercentage(index) {
@@ -331,9 +346,20 @@ function adjustScrollPosition() {
   const scrollPercentage = calculateScrollPercentage(indexMessage);
   const windowHeight = messagesElement.scrollHeight;
   const scrollPosition = (scrollPercentage / 100) * windowHeight;
-  messagesElement.scrollTo(0, scrollPosition - 300);
+  messagesElement.scrollTo(0, scrollPosition+300);
 }
 
+function loadingAnimationMessages(value) {
+  const picContactImg = document.querySelector("#picContact" + nickNameContact + " img");
+  const picMessages = document.querySelector('.picMessage img');
+  if (value) {
+    picContactImg.src = "Images/loadingContact.gif";
+    picMessages.src = "Images/loadingContact.gif";
+  } else {
+    picContactImg.src = "Images/blank.png";
+    picMessages.src = "Images/blank.png";
+  }
+}
 
 var isDeleting = false;
 
@@ -1333,9 +1359,9 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
   const currentUrl = window.location.href;
 
   if (currentUrl.includes('messages.php')) {
-    const picContactImg = document.querySelector("#picContact" + nickNameContact + " img");
-    picContactImg.src = "Images/loadingContact.gif";
 
+    loadingAnimationMessages(true);
+    
     try {
       const result = await $.ajax({
         url: 'actions.php',
@@ -1344,7 +1370,7 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
         dataType: 'html'
       });
 
-      picContactImg.src = "Images/blank.png";
+      loadingAnimationMessages(false);
 
       document.getElementById('messages').innerHTML = result;
       msgsContents = result;
@@ -1521,9 +1547,9 @@ function hasNewMsgByCurrentContact(from, message) {
               if (messagesDiv.querySelector(".msg")) {
                 getAudioTimes();
                 messagesDiv.innerHTML += result;
-                const messagesElement = document.getElementById("messages");
-                const h = messagesElement.scrollHeight;
-                if ((messagesElement.scrollTop / h) * 100 >= 80) {
+                messagesElement = document.getElementById("messages");
+                console.log("scrollPercentage:" + getScrollPercentage());
+                if (getScrollPercentage() > 90) {
                   down();
                 } else {
                   downButton(true);
@@ -1549,27 +1575,33 @@ function hasNewMsgByCurrentContact(from, message) {
 }
 
 
+function getScrollPercentage() {
+  const element = document.querySelector("#messages");
+  var contentHeight = element.scrollHeight - element.clientHeight;
+  var scrollPosition = element.scrollTop;
+  return (scrollPosition / contentHeight) * 100;
+}
+
 function downButton(value) {
   var messagesElement = document.getElementById("messages");
 
   if (value) {
+    var existingDown = document.getElementById("down");
+    if (existingDown) {
+      existingDown.remove();
+    }
+
     messagesElement.style.boxShadow = "inset 0px -20px 8px 0px rgba(0, 0, 0, 0.35)";
 
-    var center = document.createElement("center");
+    var center = document.createElement("div");
     center.id = "down";
 
     var img = document.createElement("img");
     img.onclick = down;
-    img.style.position = "fixed";
-    img.style.marginTop = "2%";
-    img.style.boxShadow = "0px 2px 13px 15px rgba(0, 0, 0, 0.35)";
-    img.style.borderRadius = "100%";
-    img.style.background = "white";
-    img.width = "50";
     img.src = "Images/down.svg";
-
+    center.style.top = (document.querySelector("#messages").offsetTop + 25) + "px";
+    center.style.left = (messagesElement.offsetLeft + (messagesElement.offsetWidth / 2)) - 25 + "px";
     center.appendChild(img);
-    center.style.zIndex=10000;
     messagesElement.appendChild(center);
   } else {
     messagesElement.style.boxShadow = "none";
@@ -1579,6 +1611,8 @@ function downButton(value) {
     }
   }
 }
+
+
 
 
 function loading(b) {

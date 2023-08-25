@@ -488,6 +488,11 @@
     background-color: none;
   }
 
+  .messages::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
   .send {
     border: 3px solid rgba(0, 0, 0, 0);
   }
@@ -772,6 +777,21 @@
 
   .loadingMessage {
     height: 18px;
+  }
+
+  #down {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    left: 50%;
+    z-index: 10000;
+  }
+  
+  #down img {
+    box-shadow: 0px 2px 13px 15px rgba(0, 0, 0, 0.35);
+    border-radius: 100%;
+    background: white;
+    width: 50px;
   }
 
   @media (orientation: portrait) or (max-width: 900px) {

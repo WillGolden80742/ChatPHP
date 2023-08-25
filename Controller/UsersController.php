@@ -300,7 +300,7 @@ class UsersController
         if (count($messages) > 0) {
             $mensagens = "";
 
-            foreach ($messages as $msg) {
+            foreach (array_reverse($messages) as $msg) {
                 $margin = $msg[3] ? "right" : "left";
                 $mensagens .=
                     <<<HTML
@@ -318,15 +318,10 @@ class UsersController
                     </div>
                     HTML;
             }
-        } else if (count($messages) > 1) {
-            $mensagens =
-                <<<HTML
-                <h3><center>Nenhuma mensagem de @$contactNickName até o momento<br>Faça seu primeiro envio!</center></h3>
-            HTML;
+            $mensagens .= "<script>main();</script>";
+        } else {
+            $mensagens = "";
         }
-
-        $mensagens .= "<script>main();</script>";
-
         return $mensagens;
     }
 
