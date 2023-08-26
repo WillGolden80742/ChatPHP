@@ -1614,6 +1614,10 @@ function hasNewMsgByCurrentContact(from, message) {
 
 function getScrollPercentage() {
   const element = document.querySelector("#messages");
+  const hasVerticalScrollbar = element.scrollHeight > element.clientHeight;
+  if (!hasVerticalScrollbar) {
+    return 100;
+  }
   var contentHeight = element.scrollHeight - element.clientHeight;
   var scrollPosition = element.scrollTop;
   return (scrollPosition / contentHeight) * 100;
