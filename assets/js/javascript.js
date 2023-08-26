@@ -916,7 +916,7 @@ function embedEmojis() {
     document.getElementById('messages').innerHTML = '';
     // Cria o div com scrollbar
     let emojiDiv = document.createElement('div');
-    emojiDiv.classList.add('emoji-div');
+    emojiDiv.classList.add('emoji-div', 'media');
 
     // Adiciona os emojis
     emojis.forEach(emoji => {
@@ -961,7 +961,7 @@ function embedVideo(link, id) {
   videoElement.src = id;
   videoElement.controls = true;
   videoElement.controls = false;
-  videoElement.classList.add('embed-video');
+  videoElement.classList.add('embed-video', 'media');
   videoElement.onclick = function (event) {
     togglePlay(id);
   };
@@ -1032,7 +1032,7 @@ function embedImage(hash, event) {
   document.getElementById('messages').appendChild(divElement);
 
   var imageContainer = document.createElement('div');
-  imageContainer.classList.add('embed-image-container');
+  imageContainer.classList.add('embed-image-container', 'media');
   document.getElementById('messages').appendChild(imageContainer);
 
   var centerElement = document.createElement('div');
@@ -1467,8 +1467,11 @@ function hasNewMsg(msg) {
   const from = msg.from;
   const message = msg.message;
   const contact = document.querySelector("#contact" + from);
-  if (!contact) {
+  if (!contact && !message.includes("delete_message") && message.includes("create_message")) {
     addContact(from);
+    if (from === nickNameContact) {
+      hasNewMsgByCurrentContact(from, message);
+    }
   } else {
     if (from === nickNameContact) {
       hasNewMsgByCurrentContact(from, message);
@@ -1494,9 +1497,6 @@ function addContact(from) {
   aElement.setAttribute('onclick', "updateMessages('" + from + "','" + from + "')");
 
   const h2Element = document.createElement('h2');
-  h2Element.style.color = 'white';
-  h2Element.style.backgroundColor = '#2b5278';
-  h2Element.style.boxShadow = '0px 0px 10px 5px rgb(0 0 0 / 35%)';
 
   const divElement = document.createElement('div');
   divElement.classList.add('picContact');
@@ -1507,7 +1507,7 @@ function addContact(from) {
   imgElement.style.backgroundImage = "url('Images/profilePic.svg')";
 
   // Adicionando texto ao h2
-  const h2Text = document.createTextNode('\u00A0\u00A0'+from);
+  const h2Text = document.createTextNode('\u00A0\u00A0' + from+'\u00A0\u00A0');
   h2Element.appendChild(divElement);
   divElement.appendChild(imgElement);
   h2Element.appendChild(h2Text);
@@ -1580,7 +1580,7 @@ function hasNewMsgByCurrentContact(from, message) {
             var messagesDiv = document.querySelector('#messages');
             msgsContents += result;
             if (messagesDiv) {
-              if (messagesDiv.querySelector(".msg")) {
+              if (!messagesDiv.querySelector(".media")) {
                 getAudioTimes();
                 const scrollPercentage = getScrollPercentage();
                 messagesDiv.innerHTML += result;

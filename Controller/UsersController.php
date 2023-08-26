@@ -309,7 +309,7 @@ class UsersController
                 if (!$msg[3]) {
                     $mensagens .=
                         <<<HTML
-                    <a href='#' class="delete" onclick='deleteMessage($msg[2]);'><b>Apagar</b><br></a>
+                    <a class="delete" onclick='deleteMessage($msg[2]);'><b>Apagar</b><br></a>
                     HTML;
                 }
                 $mensagens .=
@@ -338,7 +338,7 @@ class UsersController
             return
                 <<<HTML
                 <div class="attachment_file" onclick="showPlayer('$hash',event);">
-                    <a href="#"><img class="videoIcon" src="Images/blank.png" style="float:left" />$nome</a>
+                    <a><img class="videoIcon" src="Images/blank.png" style="float:left" />$nome</a>
                 </div>
                 HTML;
         } elseif ($this->isAudio($extensao)) {
@@ -376,7 +376,7 @@ class UsersController
             return
                 <<<HTML
                 <div class="attachment_file">
-                    <a href="#" onclick="downloadFile('$hash','$nome')"><img class="fileIcon" src="Images/blank.png"/>$nome</a>
+                    <a onclick="downloadFile('$hash','$nome')"><img class="fileIcon" src="Images/blank.png"/>$nome</a>
                 </div>
                 HTML;
         }
