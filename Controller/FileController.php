@@ -37,7 +37,7 @@ class FileController
             if ($image !== null) {
                 $originalWidth = imagesx($image);
                 $originalHeight = imagesy($image);
-                $newWidth = 400;
+                $newWidth = 256;
                 $newHeight = ($originalHeight / $originalWidth) * $newWidth;
 
                 $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
