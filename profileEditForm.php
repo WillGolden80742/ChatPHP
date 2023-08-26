@@ -9,7 +9,7 @@ if (!isset($user) && !isset($auth)) {
 
 
 <input id="editProfilePic" accept=".jpeg,.jpg,.webp,.png" onchange="handlePhotoUpload(event)" style="display:none;" id="editProfile" type="file" name="pic">
-<input class="inputSubmit salvar" onclick="uploadPic()" type="submit" value="SALVAR">
+<center><input class="inputSubmit salvar" onclick="uploadPic()" type="submit" value="SALVAR"><center>
 </br>
 
 
