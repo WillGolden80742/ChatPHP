@@ -1183,6 +1183,9 @@ async function createMessage() {
       waitingMsg();
       inputFile.value = "";
     }
+    if(!document.querySelector('#contact'+nickNameContact)) {
+      refreshContacts();
+    }
   } else {
     startRecording();
   }
