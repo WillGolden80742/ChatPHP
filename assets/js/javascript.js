@@ -1,6 +1,5 @@
 var msgsContents = "";
 var scrollPos = 0;
-var h;
 var profilePicSrc;
 var updatedMsg = false;
 var orientationDevice = "landscape";
@@ -277,7 +276,6 @@ function down() {
   if (messagesElement) {
     messagesElement.scrollTo(0, messagesElement.scrollHeight);
     downButton(false);
-    h = messagesElement.scrollTop;
   }
 }
 
@@ -324,12 +322,12 @@ function loadMoreMessages() {
       const msgElements = document.querySelectorAll(".msg");
       if (msgElements.length) {
         getAudioTimes();
+        const idLastMsg = document.querySelector('.msg').id; 
         messagesDiv.insertAdjacentHTML('afterbegin', result);
         loadingAnimationMessages(false);
-        h = messagesDiv.scrollHeight;
         timestamp = new Date().getTime();
         downloadAllMidia();
-        adjustScrollPosition();
+        adjustScrollPosition(idLastMsg);
       }
     })
     .catch(error => {
@@ -337,16 +335,11 @@ function loadMoreMessages() {
     });
 }
 
-function calculateScrollPercentage(index) {
-  return 100 / index;
-}
-
-function adjustScrollPosition() {
-  const messagesElement = document.getElementById("messages");
-  const scrollPercentage = calculateScrollPercentage(indexMessage);
-  const windowHeight = messagesElement.scrollHeight;
-  const scrollPosition = (scrollPercentage / 100) * windowHeight;
-  messagesElement.scrollTo(0, scrollPosition+300);
+function adjustScrollPosition(value) {
+  var messagesDiv = document.querySelector('.messages');
+  var childDiv = document.getElementById(value);
+  var offsetTop = childDiv.offsetTop-100;
+  messagesDiv.scrollTop = offsetTop;
 }
 
 function loadingAnimationMessages(value) {
