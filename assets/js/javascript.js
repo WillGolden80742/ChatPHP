@@ -348,10 +348,14 @@ function loadingAnimationMessages(value) {
   const picMessages = document.querySelector('.picMessage img');
   if (value) {
     picContactImg.src = "Images/loadingContact.gif";
-    picMessages.src = "Images/loadingContact.gif";
+    if (picMessages) {
+      picMessages.src = "Images/loadingContact.gif";
+    }
   } else {
     picContactImg.src = "Images/blank.png";
-    picMessages.src = "Images/blank.png";
+    if (picMessages) {
+      picMessages.src = "Images/blank.png";
+    }
   }
 }
 
@@ -1463,21 +1467,54 @@ function hasNewMsg(msg) {
   const from = msg.from;
   const message = msg.message;
   const contact = document.querySelector("#contact" + from);
-  if (from === nickNameContact) {
-    hasNewMsgByCurrentContact(from, message);
-    if (!message.includes("delete_message") && message.includes("create_message")) {
-      countMessage(contact, true);
-    }
+  if (!contact) {
+    addContact(from);
   } else {
-    if (!message.includes("delete_message") && message.includes("create_message")) {
-      if (contact) {
-        countMessage(contact, false);
-      } else {
-        console.error("Elemento de contato não encontrado para: " + from);
+    if (from === nickNameContact) {
+      hasNewMsgByCurrentContact(from, message);
+      if (!message.includes("delete_message") && message.includes("create_message")) {
+        countMessage(contact, true);
       }
-      moveToUp(contact);
+    } else {
+      if (!message.includes("delete_message") && message.includes("create_message")) {
+        if (contact) {
+          countMessage(contact, false);
+        } else {
+          console.error("Elemento de contato não encontrado para: " + from);
+        }
+        moveToUp(contact);
+      }
     }
   }
+}
+
+function addContact(from) {
+  const aElement = document.createElement('a');
+  aElement.setAttribute('id', 'contactwillGolden');
+  aElement.setAttribute('onclick', "updateMessages('" + from + "','" + from + "')");
+
+  const h2Element = document.createElement('h2');
+  h2Element.style.color = 'white';
+  h2Element.style.backgroundColor = '#2b5278';
+  h2Element.style.boxShadow = '0px 0px 10px 5px rgb(0 0 0 / 35%)';
+
+  const divElement = document.createElement('div');
+  divElement.classList.add('picContact');
+  divElement.setAttribute('id', 'picContact' + from);
+
+  const imgElement = document.createElement('img');
+  imgElement.setAttribute('src', 'Images/blank.png');
+  imgElement.style.backgroundImage = "url('Images/profilePic.svg')";
+
+  // Adicionando texto ao h2
+  const h2Text = document.createTextNode('\u00A0\u00A0'+from);
+  h2Element.appendChild(divElement);
+  divElement.appendChild(imgElement);
+  h2Element.appendChild(h2Text);
+
+  // Adicionando h2 ao link (a)
+  aElement.appendChild(h2Element);
+  document.querySelector('.contacts').appendChild(aElement);
 }
 
 function countMessage(contact, isCurrentContact) {
@@ -1545,10 +1582,11 @@ function hasNewMsgByCurrentContact(from, message) {
             if (messagesDiv) {
               if (messagesDiv.querySelector(".msg")) {
                 getAudioTimes();
+                const scrollPercentage = getScrollPercentage();
                 messagesDiv.innerHTML += result;
                 messagesElement = document.getElementById("messages");
                 console.log("scrollPercentage:" + getScrollPercentage());
-                if (getScrollPercentage() > 90) {
+                if (scrollPercentage > 90) {
                   down();
                 } else {
                   downButton(true);
