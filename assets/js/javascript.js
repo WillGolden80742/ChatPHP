@@ -338,7 +338,7 @@ function loadMoreMessages() {
 function adjustScrollPosition(value) {
   var messagesDiv = document.querySelector('.messages');
   var childDiv = document.getElementById(value);
-  var offsetTop = childDiv.offsetTop-100;
+  var offsetTop = childDiv.offsetTop-200;
   messagesDiv.scrollTop = offsetTop;
 }
 
