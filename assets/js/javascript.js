@@ -313,7 +313,7 @@ function loadMoreMessages() {
         const h3Element = document.createElement('h3');
         const centerElement = document.createElement('div');
         const textNode = document.createTextNode(noMoreMessagesText);
-        centerElement.className('center');
+        centerElement.classList.add('center');
         centerElement.appendChild(textNode);
         h3Element.appendChild(centerElement);
         messagesDiv.insertBefore(h3Element, messagesDiv.firstChild);
@@ -323,7 +323,7 @@ function loadMoreMessages() {
       const msgElements = document.querySelectorAll(".msg");
       if (msgElements.length) {
         getAudioTimes();
-        const idLastMsg = document.querySelector('.msg').id; 
+        const idLastMsg = document.querySelector('.msg').id;
         messagesDiv.insertAdjacentHTML('afterbegin', result);
         loadingAnimationMessages(false);
         timestamp = new Date().getTime();
@@ -339,7 +339,7 @@ function loadMoreMessages() {
 function adjustScrollPosition(value) {
   var messagesDiv = document.querySelector('.messages');
   var childDiv = document.getElementById(value);
-  var offsetTop = childDiv.offsetTop-200;
+  var offsetTop = childDiv.offsetTop - 200;
   messagesDiv.scrollTop = offsetTop;
 }
 
@@ -1032,7 +1032,7 @@ function embedImage(hash, event) {
   document.getElementById('messages').appendChild(imageContainer);
 
   var centerElement = document.createElement('div');
-  centerElement.className('center');
+  centerElement.classList.add('center');
   imageContainer.appendChild(centerElement);
 
   var imgElement = document.createElement('img');
@@ -1356,7 +1356,7 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
   if (currentUrl.includes('messages.php')) {
 
     loadingAnimationMessages(true);
-    
+
     try {
       const result = await $.ajax({
         url: 'actions.php',
@@ -1481,43 +1481,47 @@ function hasNewMsg(msg) {
 }
 
 function countMessage(contact, isCurrentContact) {
-  var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  if (screenHeight > screenWidth || !isCurrentContact) {
-    const count = contact.querySelector(".newMsg");
-    if (count) {
-      count.innerHTML = + (parseInt(count.innerHTML) + 1);
-    } else {
-      const newCount = document.createElement("span");
-      newCount.id = nickNameContact;
-      newCount.className = "newMsg";
-      newCount.innerHTML = "1";
-      contact.querySelector("h2").appendChild(newCount);
+  if (contact) {
+    var screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    if (screenHeight > screenWidth || !isCurrentContact) {
+      const count = contact.querySelector(".newMsg");
+      if (count) {
+        count.innerHTML = + (parseInt(count.innerHTML) + 1);
+      } else {
+        const newCount = document.createElement("span");
+        newCount.id = nickNameContact;
+        newCount.className = "newMsg";
+        newCount.innerHTML = "1";
+        contact.querySelector("h2").appendChild(newCount);
+      }
     }
   }
 }
 
 function moveToUp(contact) {
-  // Remove form e adicion contato no top
-  const contactsContainer = document.querySelector(".contacts");
-  contactsContainer.querySelector('form').remove();
-  contactsContainer.insertBefore(contact, contactsContainer.firstChild);
-  // Criação do elemento <form>
-  var formElement = document.createElement("form");
-  formElement.setAttribute("action", "index.php");
-  formElement.setAttribute("method", "post");
+  if (contact) {
+    // Remove form e adicion contato no top
+    const contactsContainer = document.querySelector(".contacts");
+    contactsContainer.querySelector('form').remove();
+    contactsContainer.insertBefore(contact, contactsContainer.firstChild);
+    // Criação do elemento <form>
+    var formElement = document.createElement("form");
+    formElement.setAttribute("action", "index.php");
+    formElement.setAttribute("method", "post");
 
-  // Criação do elemento <input> para pesquisa
-  var inputElement = document.createElement("input");
-  inputElement.setAttribute("class", "search");
-  inputElement.setAttribute("placeholder", "Pesquisar contatos ...");
-  inputElement.setAttribute("type", "text");
-  inputElement.setAttribute("name", "search");
+    // Criação do elemento <input> para pesquisa
+    var inputElement = document.createElement("input");
+    inputElement.setAttribute("class", "search");
+    inputElement.setAttribute("placeholder", "Pesquisar contatos ...");
+    inputElement.setAttribute("type", "text");
+    inputElement.setAttribute("name", "search");
 
-  formElement.appendChild(inputElement);
+    formElement.appendChild(inputElement);
 
-  var contactsElement = document.querySelector(".contacts");
-  contactsElement.insertBefore(formElement, contactsElement.firstChild);
+    var contactsElement = document.querySelector(".contacts");
+    contactsElement.insertBefore(formElement, contactsElement.firstChild);
+  }
 }
 
 function hasNewMsgByCurrentContact(from, message) {
@@ -1590,7 +1594,7 @@ function downButton(value) {
 
     var center = document.createElement("div");
     center.id = "down";
-    center.className('center')
+    center.classList.add('center')
     var img = document.createElement("img");
     img.onclick = down;
     img.src = "Images/down.svg";
