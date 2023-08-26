@@ -827,6 +827,44 @@ function getAudioTimes() {
   }
 }
 
+
+async function fetchImageAsBlob(url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return blob;
+}
+
+const imageObjectsCache = {};
+async function createImageObjects() {
+  const imgElements = document.querySelectorAll('.picContact img');
+  const imageObjects = [];
+
+  for (const imgElement of imgElements) {
+    const picContactId =  imgElement.closest('.picContact').id;
+
+    const backgroundImageStyle = getComputedStyle(imgElement).backgroundImage;
+    const imageUrl = backgroundImageStyle.slice(4, -1).replace(/['"]/g, '');
+
+    if (imageObjectsCache[picContactId]) {
+      // Se o objeto de URL já estiver em cache, reutiliza
+      imageObjects.push(imageObjectsCache[picContactId]);
+    } else {
+      const blob = await fetchImageAsBlob(imageUrl);
+      const imageUrlObject = URL.createObjectURL(blob);
+      imageObjectsCache[picContactId] = imageUrlObject; // Armazena em cache usando o ID como chave
+      imageObjects.push(imageUrlObject);
+    }
+  }
+  return imageObjects;
+}
+
+createImageObjects().then(imageUrlObjects => {
+  const picContactElements = document.querySelectorAll('.picContact img');
+  picContactElements.forEach((picContactElement, index) => {
+    picContactElement.style.backgroundImage = `url(${imageUrlObjects[index]})`;
+  });
+});
+
 function type(format) {
   format = format.toLowerCase();
   switch (format) {
