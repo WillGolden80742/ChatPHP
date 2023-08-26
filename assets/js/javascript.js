@@ -1468,7 +1468,7 @@ function hasNewMsg(msg) {
   const message = msg.message;
   const contact = document.querySelector("#contact" + from);
   if (!contact && !message.includes("delete_message") && message.includes("create_message")) {
-    addContact(from);
+    refreshContacts();
     if (from === nickNameContact) {
       hasNewMsgByCurrentContact(from, message);
     }
@@ -1491,30 +1491,21 @@ function hasNewMsg(msg) {
   }
 }
 
-function addContact(from) {
-  const aElement = document.createElement('a');
-  aElement.setAttribute('id', 'contactwillGolden');
-  aElement.setAttribute('onclick', "updateMessages('" + from + "','" + from + "')");
-
-  const h2Element = document.createElement('h2');
-
-  const divElement = document.createElement('div');
-  divElement.classList.add('picContact');
-  divElement.setAttribute('id', 'picContact' + from);
-
-  const imgElement = document.createElement('img');
-  imgElement.setAttribute('src', 'Images/blank.png');
-  imgElement.style.backgroundImage = "url('Images/profilePic.svg')";
-
-  // Adicionando texto ao h2
-  const h2Text = document.createTextNode('\u00A0\u00A0' + from+'\u00A0\u00A0');
-  h2Element.appendChild(divElement);
-  divElement.appendChild(imgElement);
-  h2Element.appendChild(h2Text);
-
-  // Adicionando h2 ao link (a)
-  aElement.appendChild(h2Element);
-  document.querySelector('.contacts').appendChild(aElement);
+function refreshContacts() {
+  const formData = new FormData();
+  formData.append('contactNickName', nickNameContact);
+  formData.append('action', 'contacts');
+  fetch('actions.php', {
+    method: 'POST',
+    body: formData
+  })
+    .then(response => response.json())
+    .then(result => {
+      document.querySelector('.contacts').innerHTML = result;
+    })
+    .catch(error => {
+      console.error('Erro na requisição:', error);
+    });
 }
 
 function countMessage(contact, isCurrentContact) {

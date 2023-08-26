@@ -9,6 +9,19 @@ switch ($action) {
         $user = new UsersController();
         echo json_encode($user->createMessage($_POST["messageText"], new StringT($_POST["nickNameContact"])));
         break;
+    case 'contacts':
+        include 'Controller/UsersController.php';
+        $user = new UsersController();
+        $nickNameContact = "";
+        if (!empty($_POST['contactNickName'])) {
+            $nickNameContact = new StringT($_POST['contactNickName']);
+        }
+        if (empty($nickNameContact)) {
+            echo json_encode($user->contacts(new StringT($_SESSION['nickName']), new StringT(null)));
+        } else {
+            echo json_encode($user->contacts(new StringT($_SESSION['nickName']), $nickNameContact));
+        }
+        break;
     case 'deleteMessage':
         include 'Controller/UsersController.php';
         $user = new UsersController();
