@@ -259,22 +259,31 @@ class UsersController
 
     function messages($queryMessages, StringT $contactNickName)
     {
-        $messages = [];
+        $messages = array();
 
-        foreach ($queryMessages as $row) {
-            if (!empty($row["Messages"])) {
-                $left = ($row["MsgFrom"] === $contactNickName);
-                $message = new Message($row["Messages"]);
-                $hour = $row["HourMsg"];
-                $id = $row["Idmessage"];
-                $nome_anexo = $this->getMedia($row["nome_anexo"], $row["arquivo_anexo"]);
+        if (mysqli_num_rows($queryMessages) > 0) {
+            $idMessage = '0';
+            $count = 0;
 
-                $messages[] = [
-                    $message . $nome_anexo,
-                    $hour,
-                    $id,
-                    $left
-                ];
+            while ($row = mysqli_fetch_assoc($queryMessages)) {
+                if (strcmp($row["Idmessage"], $idMessage) !== 0) {
+                    if (!empty($row["Messages"])) {
+                        if (strcmp($row["MsgFrom"], $contactNickName) == 0) {
+                            $left = true;
+                        } else {
+                            $left = false;
+                        }
+
+                        $message = new Message($row["Messages"]);
+                        $hour = $row["HourMsg"];
+                        $id = $row["Idmessage"];
+                        $nome_anexo = $this->getMedia($row["nome_anexo"], $row["arquivo_anexo"]);
+
+                        $messages[$count++] = array($message . $nome_anexo, $hour, $id, $left);
+                    }
+                }
+
+                $idMessage = "" . $row["Idmessage"];
             }
         }
 
@@ -283,34 +292,28 @@ class UsersController
 
             foreach (array_reverse($messages) as $msg) {
                 $margin = $msg[3] ? "right" : "left";
-
                 $mensagens .=
                     <<<HTML
-                    <div class='msg msg-$margin' id="msg$msg[2]">
+                    <div class='msg msg-$margin' id="msg$msg[2]" >
                     HTML;
-
                 if (!$msg[3]) {
                     $mensagens .=
                         <<<HTML
                     <a class="delete" onclick='deleteMessage($msg[2]);'><b>Apagar</b><br></a>
                     HTML;
                 }
-
                 $mensagens .=
                     <<<HTML
                     <p>$msg[0]<br><span style='float:right;'>$msg[1]</span></p>
-                </div>
-                HTML;
+                    </div>
+                    HTML;
             }
-
             $mensagens .= "<script>main();</script>";
         } else {
             $mensagens = "";
         }
-
         return $mensagens;
     }
-
 
 
     function getMedia($nome, $hash)
