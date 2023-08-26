@@ -127,86 +127,76 @@ class UsersController
         }
     }
 
+    function generateContactsHtml($contact, $nickNameContact, $sync)
+    {
+        $html = "<a id='contact$contact[1]'";
+
+        if (basename($_SERVER['PHP_SELF']) == "messages.php" || $sync) {
+            $html .= " onclick=\"updateMessages('$contact[1]','$contact[0]')\">";
+        } else {
+            $html .= " href=\"messages.php?contactNickName={$contact[1]}\">";
+        }
+
+        $html .= "<h2";
+
+        if (!empty($nickNameContact) && !strcmp($nickNameContact, $contact[1])) {
+            $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
+        }
+
+        $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
+
+        return $html;
+    }
+
     function contacts(StringT $nick, StringT $nickNameContact, $sync = false)
     {
         $result = $this->user->contacts($nick);
-        $count = 0;
-        $contacts = array();
+        $contacts = [];
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
+            $contacts[] = [$row["Contato"], $row["nickNameContato"]];
         }
 
-        $html =
-            <<<HTML
+        $html = <<<HTML
             <form action="index.php" method="post">
                 <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
             </form>
-            HTML;
+    HTML;
 
         foreach ($contacts as $contact) {
-            if (basename($_SERVER['PHP_SELF']) == "messages.php" || $sync) {
-                $html .=
-                    <<<HTML
-                    <a id="contact$contact[1]" onclick="updateMessages('$contact[1]','$contact[0]')">
-                    HTML;
-            } else {
-                $html .=
-                    <<<HTML
-                    <a id="contact$contact[1]" href="messages.php?contactNickName={$contact[1]}">
-                    HTML;
-            }
-            $html .= "<h2";
-
-            if (!empty($nickNameContact)) {
-                if (!strcmp($nickNameContact, $contact[1])) {
-                    $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
-                }
-            }
-
-            $html .=
-                <<<HTML
-                ><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>
-                HTML;
+            $html .= $this->generateContactsHtml($contact, $nickNameContact, $sync);
         }
 
         return $html;
     }
 
-
     function searchContact(StringT $nick)
     {
-        $result =  $this->user->searchContact($nick);
-        $count = 0;
-        $contacts = array();
+        $result = $this->user->searchContact($nick);
+        $contacts = [];
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $contacts[$count++] = array($row["Contato"], $row["nickNameContato"]);
+            $contacts[] = [$row["Contato"], $row["nickNameContato"]];
         }
-        $html =
-            <<<HTML
-        <form action="index.php" method="post">
-            <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
-        </form>
-        <a href="index.php"><h3>Limpar busca</h3></a>
-        HTML;
 
-        if (count($contacts) > 0) {
-            foreach ($contacts as $contact) {
-                if (strcmp($contact[1], $this->nickSession) !== 0) {
-                    $html .=
-                        <<<HTML
-                    <a id="contact$contact[1]" href="messages.php?contactNickName=$contact[1]">
-                        <h2><div class='picContact'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2>
-                    </a>
-                    HTML;
-                }
+        $html = <<<HTML
+            <form action="index.php" method="post">
+                <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
+            </form>
+            <a href="index.php"><h3>Limpar busca</h3></a>
+    HTML;
+
+        foreach ($contacts as $contact) {
+            if (strcmp($contact[1], $this->nickSession) !== 0) {
+                $html .= $this->generateContactsHtml($contact, "", false);
             }
         }
 
         $html .= "</div>";
+
         return $html;
     }
+
 
     function downloadProfilePic(StringT $contactNickName)
     {
@@ -301,13 +291,13 @@ class UsersController
 
                 if (!$msg[3]) {
                     $mensagens .=
-                    <<<HTML
+                        <<<HTML
                     <a class="delete" onclick='deleteMessage($msg[2]);'><b>Apagar</b><br></a>
                     HTML;
                 }
 
                 $mensagens .=
-                <<<HTML
+                    <<<HTML
                     <p>$msg[0]<br><span style='float:right;'>$msg[1]</span></p>
                 </div>
                 HTML;

@@ -623,6 +623,42 @@ async function togglePlay(hash, event) {
 }
 
 
+function getCache(key) {
+  const storage = localStorage.getItem(key);
+  if (storage !== null) {
+    return storage;
+  }
+  return cacheMap.get(key) || null;
+}
+
+function hasCache(key) {
+  return getCache(key) !== null;
+}
+
+function setCache(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (ex) {
+    cacheMap.set(key, value);
+  }
+}
+
+function getCacheSize() {
+  let totalSize = 0;
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+    totalSize += key.length + value.length;
+  }
+  return totalSize;
+}
+
+function getCachePercent() {
+  return (getCacheSize() / (5242880)) * 100;
+}
+
+
 async function downloadMidia(id, hash, cacheMap) {
   try {
     const elements = Array.from(document.querySelectorAll('[id="' + id + '"]'));
@@ -718,41 +754,6 @@ async function downloadAllAudios(time) {
       // Trate o erro aqui, se necessário
     }
   }
-}
-
-function getCache(key) {
-  const storage = localStorage.getItem(key);
-  if (storage !== null) {
-    return storage;
-  }
-  return cacheMap.get(key) || null;
-}
-
-function hasCache(key) {
-  return getCache(key) !== null;
-}
-
-function setCache(key, value) {
-  try {
-    localStorage.setItem(key, value);
-  } catch (ex) {
-    cacheMap.set(key, value);
-  }
-}
-
-function getCacheSize() {
-  let totalSize = 0;
-
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    const value = localStorage.getItem(key);
-    totalSize += key.length + value.length;
-  }
-  return totalSize;
-}
-
-function getCachePercent() {
-  return (getCacheSize() / (5242880)) * 100;
 }
 
 async function downloadLastTitle() {
