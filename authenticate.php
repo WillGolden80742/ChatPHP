@@ -41,6 +41,12 @@
             position: relative;
         }
 
+        .center {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
         @media only screen and (max-width: 1080px) {
             body {
                 background-size: 100%;
@@ -93,11 +99,11 @@
                 font-size: 64px;
             }
 
-            center h3 {
+            .center h3 {
                 font-size: 32px;
             }
 
-            center {
+            .center {
                 transform: translateY(50%);
             }
         }
@@ -110,6 +116,23 @@
     $userNickName = "";
     include 'Controller/AuthenticateController.php';
     $user = new AuthenticateController();
+    $action = isset($_POST['action']) ? $_POST['action'] : '';
+    switch ($action) {
+        case 'login':
+            if (!empty($_POST["nickLogin"]) && !empty($_POST["passLogin"])) {
+                $nick = $_POST["nickLogin"];
+                $pass = $_POST["passLogin"];
+                $user->login(new StringT($nick), $pass);
+                echo "<script>showLogin();</script>";
+            }
+            break;
+        case 'signUp':
+            if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
+                $user->signUp($_POST["name"], $_POST["nick"], $_POST["pass"], $_POST["passConfirmation"]);
+                echo "<script>showSignUp();</script>";
+            }
+            break;
+    }
     ?>
 
     <div class="header">
@@ -123,7 +146,7 @@
 
 
     <div class="signUp" id="signUp">
-        <center>
+        <div class="center">
             <img class="chat_logo" src="Images/chat.svg" />
             <form action="authenticate.php" method="post">
                 <br>
@@ -135,14 +158,15 @@
                 <br>
                 <input class="inputPassword" placeholder="Password Confirmation" type="password" name="passConfirmation"><br>
                 <br>
+                <input type="hidden" name="action" value="signUp"><br>
                 <input class="inputSubmit" type="submit" value="SIGN UP">
             </form>
-        </center>
+        </div>
 
     </div>
 
     <div class="login" id="login">
-        <center>
+        <div class="center">
             <img class="chat_logo" src="Images/chat.svg" />
             <form action="authenticate.php" method="post">
                 <br>
@@ -150,23 +174,12 @@
                 <br>
                 <input class="inputPassword" placeholder="Password" type="password" name="passLogin"><br>
                 <br>
+                <input type="hidden" name="action" value="login"><br>
                 <input class="inputSubmit" type="submit" value="LOGIN">
             </form>
-        </center>
+        </div>
 
     </div>
-    <?php
-    if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
-        $user->signUp($_POST["name"], $_POST["nick"], $_POST["pass"], $_POST["passConfirmation"]);
-        echo "<script>showSignUp();</script>";
-    }
-    if (!empty($_POST["nickLogin"]) && !empty($_POST["passLogin"])) {
-        $nick = $_POST["nickLogin"];
-        $pass = $_POST["passLogin"];
-        $user->login(new StringT($nick), $pass);
-        echo "<script>showLogin();</script>";
-    }
-    ?>
     <script>
         function showLogin() {
             document.getElementById('login').style.display = 'block';

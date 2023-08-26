@@ -18,6 +18,12 @@ include 'Controller/FileController.php';
             border: none;
             box-shadow: none;
         }
+
+        .center {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
     </style>
     <script>
         function toggleTab(tabName) {
@@ -32,7 +38,7 @@ include 'Controller/FileController.php';
 
 <body class="container">
     <div class="editProfile">
-        <center>
+        <div class="center">
             <?php
             $pic = null;
             if (!empty($_FILES["pic"])) {
@@ -50,7 +56,7 @@ include 'Controller/FileController.php';
             <div id="profileContent">
                 <?php include "profileEditForm.php"; ?>
             </div>
-        </center>
+        </div>
     </div>
 </body>
 

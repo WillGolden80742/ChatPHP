@@ -24,7 +24,7 @@ if (!empty($_GET['contactNickName'])) {
     if (strcmp($messages, "") == 0) {
       echo
       <<<HTML
-      <h3><center>Nenhuma mensagem de @$contactNickName até o momento<br>Faça seu primeiro envio!</center></h3>
+      <h3><div class="center">Nenhuma mensagem de @$contactNickName até o momento<br>Faça seu primeiro envio!</div></h3>
       HTML;
     } else {
       echo $messages;

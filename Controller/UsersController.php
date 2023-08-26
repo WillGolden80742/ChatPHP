@@ -39,9 +39,9 @@ class UsersController
         if (mb_strlen($newNick) > $maxCharLimit || mb_strlen($name) > $maxCharLimit) {
             echo
             <<<HTML
-            <center class='statusMsg'>
+            <div class='statusMsg center'>
                 <h3 style="color:red;">O apelido e o nome devem ter no máximo {$maxCharLimit} caracteres.</h3>
-            </center>
+            </div>
             HTML;
             return;
         }
@@ -54,32 +54,32 @@ class UsersController
                     $this->auth->updateToken();
                     echo
                     <<<HTML
-                    <center class='statusMsg'>
+                    <div class='statusMsg center'>
                         <h3 style="color:white;">Alteração com sucesso!</h3>
-                    </center>
+                    </div>
                     HTML;
                 } else {
                     echo
                     <<<HTML
-                    <center class='statusMsg'>
+                    <div class='statusMsg center'>
                         <h3 style="color:red;">Erro!</h3>
-                    </center>
+                    </div>
                     HTML;
                 }
             } else if ($this->auth->checkNick($newNick)) {
                 echo
                 <<<HTML
-                <center class='statusMsg'>
+                <div class='statusMsg center'>
                     <h3 style="color:red;">@$newNick já existente</h3>
-                </center>
+                </div>
                 HTML;
             }
         } else {
             echo
             <<<HTML
-            <center class='statusMsg'>
+            <div class='statusMsg center'>
                 <h3 style="color:red;">senha incorreta</h3>
-            </center>
+            </div>
             HTML;
         }
     }
@@ -95,25 +95,25 @@ class UsersController
                     $this->auth->updateToken();
                     echo
                     <<<HTML
-                    <center class='statusMsg'>
+                    <div class='statusMsg'>
                         <h3 style="color:white;">Senha alterada com sucesso!</h3>
-                    </center>
+                    </div>
                     HTML;
                 }
             } else {
                 echo
                 <<<HTML
-                <center class='statusMsg'>
+                <div class='statusMsg center'>
                     <h3 style="color:red;">$passCertification</h3>
-                </center>
+                </div>
                 HTML;
             }
         } else {
             echo
             <<<HTML
-            <center class='statusMsg'>
+            <div class='statusMsg center'>
                 <h3 style="color:red;">senha incorreta</h3>
-            </center>
+            </div>
             HTML;
         }
     }
@@ -345,7 +345,7 @@ class UsersController
             return
                 <<<HTML
                 <div class="media_file">
-                    <center><p class="name">$nome</p></center>
+                    <div class="center"><p class="name">$nome</p></div>
                     <div class="player">
                         <div class="controls">
                             <div class="play-button" onclick="togglePlay('$hash',event);">
@@ -367,9 +367,9 @@ class UsersController
             return
                 <<<HTML
                 <div class="image_file">
-                    <center>
+                    <div class="center">
                         <img id="$hash" onclick="embedImage('$hash',event)" src="Images/download.gif" height="250px">
-                    </center>
+                    </div>
                 </div>
                 HTML;
         } else {

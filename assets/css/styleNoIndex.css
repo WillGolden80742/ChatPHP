@@ -30,6 +30,12 @@
   display: none;
 }
 
+.center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 @media (orientation: portrait) or (max-width:900px) {
 
   * {
@@ -72,7 +78,7 @@
     height: 600px;
     overflow-x: auto;
   }
-  
+
   .uploading {
     width: 200px;
   }
@@ -253,6 +259,6 @@
   .editProfile, .home, .contacts, .text, .messages {
     border-radius: 20px;
   }
-  
+
 
 }

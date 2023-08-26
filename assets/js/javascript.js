@@ -311,8 +311,9 @@ function loadMoreMessages() {
         indexMessage = 0;
         const noMoreMessagesText = "Você já viu todas mensagens de @" + nickNameContact;
         const h3Element = document.createElement('h3');
-        const centerElement = document.createElement('center');
+        const centerElement = document.createElement('div');
         const textNode = document.createTextNode(noMoreMessagesText);
+        centerElement.className('center');
         centerElement.appendChild(textNode);
         h3Element.appendChild(centerElement);
         messagesDiv.insertBefore(h3Element, messagesDiv.firstChild);
@@ -1030,7 +1031,8 @@ function embedImage(hash, event) {
   imageContainer.classList.add('embed-image-container');
   document.getElementById('messages').appendChild(imageContainer);
 
-  var centerElement = document.createElement('center');
+  var centerElement = document.createElement('div');
+  centerElement.className('center');
   imageContainer.appendChild(centerElement);
 
   var imgElement = document.createElement('img');
@@ -1588,7 +1590,7 @@ function downButton(value) {
 
     var center = document.createElement("div");
     center.id = "down";
-
+    center.className('center')
     var img = document.createElement("img");
     img.onclick = down;
     img.src = "Images/down.svg";

@@ -16,7 +16,7 @@ class AuthenticateController
             header("Location: index.php");
             die();
         } else {
-            echo "<center class='statusMsg' onmouseover=\"removerStatusMsg();\" ><h3 style=\"color:red;\" > nickname ou senha incorreta </h3></center>";
+            echo "<div class='statusMsg center' onmouseover=\"removerStatusMsg();\" ><h3 style=\"color:red;\" > nickname ou senha incorreta </h3></div>";
         }
     }
 
@@ -42,7 +42,7 @@ class AuthenticateController
                 $this->login(new StringT($nick), $pass);
             }
         } else {
-            $error = "<center class='statusMsg' onmouseover=\"removerStatusMsg();\" ><h3 style=\"color:red;\">";
+            $error = "<div class='statusMsg center' onmouseover=\"removerStatusMsg();\" ><h3 style=\"color:red;\">";
             if ($nameCertification !== "") {
                 $error .= $nameCertification . "<br>";
             }
@@ -52,7 +52,7 @@ class AuthenticateController
             if ($passCertification !== "") {
                 $error .= $passCertification . "<br>";
             }
-            $error .= "</h3></center>";
+            $error .= "</h3></div>";
         }
         echo $error;
     }
@@ -123,6 +123,7 @@ class AuthenticateController
     function logout()
     {
         $this->authModel->deleteToken();
+
         header("Location: authenticate.php");
         die();
     }
