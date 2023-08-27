@@ -201,8 +201,14 @@
     overflow-x: hidden;
   }
 
+  .image_file img {
+    width:250px;
+    height:250px;
+    object-fit: cover;
+  }
+
   .image_file:hover {
-    overflow-x: auto;
+    overflow-y: auto;
   }
 
   .media_file {
