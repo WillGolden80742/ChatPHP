@@ -128,7 +128,7 @@
 
   .contacts a h2 img {
     border-radius: 100px;
-    background-image: url("Images/profilePic.svg");
+    background-image: url("../../Images/profilePic.svg");
     height: 40px;
     width: 40px;
     position: relative;
@@ -456,7 +456,7 @@
 
   .picMessage img {
     border-radius: 100px;
-    background-image: url("Images/profilePic.png");
+    background-image: url("../../Images/profilePic.svg");
     height: 128px;
     width: 128px;
     display: flex;
