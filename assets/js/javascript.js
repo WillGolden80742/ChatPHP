@@ -820,54 +820,54 @@ function getAudioTimes() {
 const imageObjectsCache = {};
 
 async function fetchImageAsBase64(nickNameContact) {
-    try {
-        const formData = new FormData();
-        formData.append('nickNameContact', nickNameContact);
-        formData.append('action', 'downloadProfilePic');
-        
-        const dados = await $.ajax({
-            url: 'actions.php',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: 'json'
-        });
-        
-        return dados;
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const formData = new FormData();
+    formData.append('nickNameContact', nickNameContact);
+    formData.append('action', 'downloadProfilePic');
+
+    const dados = await $.ajax({
+      url: 'actions.php',
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: 'json'
+    });
+
+    return dados;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function createImageObject(picContactId) {
-    if (!imageObjectsCache[picContactId]) {
-        const blob = await fetchImageAsBase64(picContactId);
-        if (blob) {
-            const contentBlob = b64toBlob(blob, type('jpg') + "/" + 'jpg');
-            const imageUrlObject = URL.createObjectURL(contentBlob);
-            imageObjectsCache[picContactId] = imageUrlObject;
-        } else {
-            imageObjectsCache[picContactId] = null; // Para indicar que não há imagem
-        }
+  if (!imageObjectsCache[picContactId]) {
+    const blob = await fetchImageAsBase64(picContactId);
+    if (blob) {
+      const contentBlob = b64toBlob(blob, type('jpg') + "/" + 'jpg');
+      const imageUrlObject = URL.createObjectURL(contentBlob);
+      imageObjectsCache[picContactId] = imageUrlObject;
+    } else {
+      imageObjectsCache[picContactId] = null; // Para indicar que não há imagem
     }
-    return imageObjectsCache[picContactId];
+  }
+  return imageObjectsCache[picContactId];
 }
 
 async function downloadAllPicContacts() {
-    const imgElements = document.querySelectorAll('.picContact img');
-    const imageUrlObjects = await Promise.all(Array.from(imgElements).map(async (imgElement) => {
-        const picContactId = imgElement.closest('.picContact').id.replace('picContact', '');
-        return createImageObject(picContactId);
-    }));
-    
-    imgElements.forEach((picContactElement, index) => {
-        const imageUrlObject = imageUrlObjects[index];
-        
-        if (imageUrlObject !== null) {
-            picContactElement.src = imageUrlObject;
-        }
-    });
+  const imgElements = document.querySelectorAll('.picContact img');
+  const imageUrlObjects = await Promise.all(Array.from(imgElements).map(async (imgElement) => {
+    const picContactId = imgElement.closest('.picContact').id;
+    return createImageObject(picContactId);
+  }));
+
+  imgElements.forEach((picContactElement, index) => {
+    const imageUrlObject = imageUrlObjects[index];
+    if (imageUrlObject !== null) {
+      picContactElement.style.backgroundImage = `url(${imageUrlObject})`;
+    }
+    picContactElement.src = 'Images/blank.png';
+  });
 }
 
 
@@ -1458,7 +1458,7 @@ function updateContacts(contact = nickNameContact, name = nickNameContact) {
   h2Element.style.backgroundColor = '#2b5278';
   h2Element.style.boxShadow = '0px 0px 10px 5px rgba(0, 0, 0, 0.35)';
   document.getElementById('userName').innerHTML = name;
-  var imgElement = document.querySelector('#picContact' + contact + ' img');
+  var imgElement = document.querySelector('#' + contact + ' img');
   var imgContacts = document.querySelector('.picMessage img');
   imgContacts.style.backgroundImage = imgElement.style.backgroundImage;
   toggle(false);

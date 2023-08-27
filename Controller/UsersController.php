@@ -143,7 +143,7 @@ class UsersController
             $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
         }
 
-        $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url(Images/profilePic.svg);' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
+        $html .= "><div class='picContact' id='$contact[1]'><img src='Images/roundLoading.gif' style='background-image:url(Images/profilePic.svg);' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
         $html .= "<script>downloadAllPicContacts();</script>";
         return $html;
     }

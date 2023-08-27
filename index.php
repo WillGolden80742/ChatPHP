@@ -83,7 +83,14 @@ echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.svg\" /></a>
 echo "<a class='back' onclick='toggle();' ><img src=\"Images/left-arrow.svg\" /></a>";
 if (!empty($nickNameContact)) {
   echo "<a class='picMessage' >";
-  echo "<img src='Images/blank.png' style='background-image:url(" . $user->downloadProfilePic($nickNameContact) . ");' />";
+  $pic = "";
+  $data = $user->downloadProfilePic(new StringT($nickNameContact));
+  if (!empty($data) > 0) {
+    $pic = "data:image/jpg;base64," . $data;
+  } else {
+    $pic = "Images/profilePic.svg";
+  }
+  echo "<img src='Images/blank.png' style='background-image:url(" . $pic. ");' />";
   echo "<a class='userName' id='userName'>";
   echo $user->name($nickNameContact);
   echo "</a>";
