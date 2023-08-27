@@ -1147,170 +1147,208 @@ function stringToMD5(inputString) {
 }
 
 async function createMessage() {
-  var messageText = document.getElementById('text').value;
+  const messageText = document.getElementById('text').value;
   const send = document.querySelector(".send").style.backgroundImage;
 
-  if (send == "url(\"Images/send_vectorized.svg\")") {
-    var inputFile = document.getElementById('file');
-    closeEmoji();
-
-    if ((messageText.length > 0 && messageText.length <= maxLength && !(inputFile.files.length > 0)) ||
-      (messageText == " " && messageText.length <= maxLength && !(inputFile.files.length > 0))) {
-      loading(true);
-      document.getElementById('text').value = "";
-      const randID = "a" + parseInt(Math.random() * 100);
-      addMessage(randID, messageText, true);
-      down();
-      try {
-        const result = await $.ajax({
-          url: 'actions.php',
-          method: 'POST',
-          data: { action: "createMessage", nickNameContact: nickNameContact, messageText: messageText },
-          dataType: 'json'
-        });
-
-        const id = result;
-
-        const text = await $.ajax({
-          url: 'actions.php?',
-          method: 'POST',
-          data: { action: 'getThumb', msg: messageText },
-          dataType: 'html'
-        });
-        document.querySelector("#msg" + randID).remove();
-        addMessage(id, text, false);
-        sendSocket("create_message:msg" + result);
-        loading(false);
-      } catch (error) {
-        console.error(error);
-        loading(false);
-      }
-    } else {
-      loading(true);
-      document.getElementById('text').value = "";
-      var formData = new FormData();
-      var arquivo = inputFile.files[0];
-      formData.append('arquivo', arquivo);
-      formData.append('messageText', messageText);
-      formData.append('contactNickName', nickNameContact);
-      formData.append('action', 'uploadFile');
-      var file = formData.get('arquivo');
-      var fileExtension = file.name.split('.').pop().toLowerCase();
-      var imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
-
-      if (imageFormats.includes(fileExtension)) {
-        try {
-          const resizedFile = await new Promise((resolve) => {
-            imgToJPG(file, 'resizedImage.jpg', function (resizedFile) {
-              resolve(resizedFile);
-            });
-          });
-
-          const finalFile = await new Promise((resolve) => {
-            resizeImage(resizedFile, 1280, function (finalFile) {
-              resolve(finalFile);
-            });
-          });
-
-          formData.set('arquivo', finalFile);
-          formData.append('action', 'uploadFile');
-          await uploadAttachment('actions.php', formData);
-        } catch (error) {
-          console.error(error);
-        }
-      } else {
-        try {
-          await uploadAttachment('actions.php', formData);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-
-      waitingMsg();
-      inputFile.value = "";
-    }
-    if (!document.querySelector('#contact' + nickNameContact)) {
-      refreshContacts();
-    }
+  if (send === "url(\"Images/send_vectorized.svg\")") {
+      await processTextMessage(messageText);
   } else {
-    startRecording();
+      startRecording();
   }
 }
 
+async function processTextMessage(messageText) {
+  const inputFile = document.getElementById('file');
+  closeEmoji();
+
+  if (isMessageValid(messageText, inputFile)) {
+      loading(true);
+      document.getElementById('text').value = "";
+
+      const randID = "a" + parseInt(Math.random() * 100);
+      addMessage(randID, messageText, true);
+      down();
+
+      try {
+          const result = await createMessageOnServer(messageText);
+          const text = await getMessageText (messageText);
+          console.log("text"+text+"result"+result);
+          document.querySelector("#msg" + randID).remove();
+          addMessage(result, text, false);
+
+          sendSocket("create_message:msg" + result);
+          loading(false);
+      } catch (error) {
+          console.error(error);
+          loading(false);
+      }
+  } else {
+      await processFileMessage(inputFile, messageText);
+  }
+
+  refreshContacts();
+}
+
+function isMessageValid(messageText, inputFile) {
+  const maxLength = 100; // Assuming maxLength is defined somewhere
+  return (
+      (messageText.trim().length > 0 && messageText.length <= maxLength && inputFile.files.length === 0) ||
+      (messageText.trim() === "" && messageText.length <= maxLength && inputFile.files.length === 0)
+  );
+}
+
+async function createMessageOnServer(messageText) {
+  try {
+      const result = await $.ajax({
+          url: 'actions.php',
+          method: 'POST',
+          data: {
+              action: "createMessage",
+              nickNameContact: nickNameContact, // Assuming nickNameContact is defined somewhere
+              messageText: messageText
+          },
+          dataType: 'json'
+      });
+
+      return result;
+  } catch (error) {
+      throw error;
+  }
+}
+
+async function getMessageText (getMessageText) {
+  try {
+      const text = await $.ajax({
+          url: 'actions.php?',
+          method: 'POST',
+          data: {
+              action: 'getThumb',
+              msg: getMessageText
+          },
+          dataType: 'html'
+      });
+
+      return text;
+  } catch (error) {
+      throw error;
+  }
+}
+
+async function processFileMessage(inputFile, messageText) {
+  loading(true);
+  document.getElementById('text').value = "";
+
+  const formData = new FormData();
+  const arquivo = inputFile.files[0];
+  formData.append('arquivo', arquivo);
+  formData.append('messageText', messageText);
+  formData.append('contactNickName', nickNameContact); // Assuming nickNameContact is defined somewhere
+  formData.append('action', 'uploadFile');
+
+  const fileExtension = arquivo.name.split('.').pop().toLowerCase();
+  const imageFormats = ['webp', 'png', 'jpeg', 'jpg'];
+
+  if (imageFormats.includes(fileExtension)) {
+      try {
+          const resizedFile = await resizeAndConvertToJPG(arquivo);
+          formData.set('arquivo', resizedFile);
+          await uploadAttachment('actions.php', formData);
+      } catch (error) {
+          console.error(error);
+      }
+  } else {
+      try {
+          await uploadAttachment('actions.php', formData);
+      } catch (error) {
+          console.error(error);
+      }
+  }
+
+  waitingMsg();
+  inputFile.value = "";
+}
+
+async function resizeAndConvertToJPG(file) {
+  const resizedFile = await new Promise((resolve) => {
+      imgToJPG(file, 'resizedImage.jpg', function (resizedFile) {
+          resolve(resizedFile);
+      });
+  });
+
+  return new Promise((resolve) => {
+      resizeImage(resizedFile, 1280, function (finalFile) {
+          resolve(finalFile);
+      });
+  });
+}
+
+
 
 async function startRecording() {
-  const detectInputAudioPermissions = async () => {
-    const constraints = { audio: true };
-    try {
+  const sendButton = document.querySelector(".send");
+  const textInput = document.querySelector(".text");
+
+  sendButton.style.backgroundImage = "url(\"Images/micSelectedIcon.svg\")";
+  textInput.disabled = true;
+
+  const permissionsGranted = await detectInputAudioPermissions();
+
+  if (permissionsGranted) {
+      console.log('Audio input device has permissions.');
+      const mediaRecorder = await startAudioRecording();
+      setupRecordingHandlers(sendButton, textInput, mediaRecorder);
+  } else {
+      alert("The HTML5 audio API does not work in this browser or the connection is not secure.");
+      sendButton.style.backgroundImage = "url(\"Images/micDisabled.svg\")";
+      textInput.disabled = false;
+  }
+}
+
+async function detectInputAudioPermissions() {
+  const constraints = { audio: true };
+
+  try {
       const stream = await navigator.mediaDevices?.getUserMedia?.(constraints);
       if (stream) {
-        for (const track of stream.getTracks()) {
-          track.stop();
-        }
-        return true;
+          for (const track of stream.getTracks()) {
+              track.stop();
+          }
+          return true;
       }
       return false;
-    } catch (error) {
+  } catch (error) {
       return false;
-    }
-  };
-  (async () => {
-    if (await detectInputAudioPermissions()) {
-      console.log('Audio input device has permissions.');
-    } else {
-      console.error('Audio input device is not available or does not have permissions.');
-    }
-  })();
-  const sendButtom = document.querySelector(".send");
-  sendButtom.style.backgroundImage = "url(\"Images/micSelectedIcon.svg\")";
-  const text = document.querySelector(".text");
-  text.disabled = true;
-  await detectInputAudioPermissions();
-  // Verificar se o navegador suporta a API de áudio do HTML5
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    // Opções de configuração para a captura de áudio
-    const options = { audio: true };
-
-    // Iniciar a captura de áudio
-    navigator.mediaDevices.getUserMedia(options)
-      .then(function (stream) {
-        const mediaRecorder = new MediaRecorder(stream);
-        const chunks = [];
-
-        // Evento disparado quando houver dados disponíveis para gravação
-        mediaRecorder.ondataavailable = function (event) {
-          chunks.push(event.data);
-        };
-
-        // Evento disparado quando a gravação é concluída
-        mediaRecorder.onstop = function () {
-          // Criar um objeto Blob a partir dos dados gravados
-          const blob = new Blob(chunks, { 'type': 'audio/wav' });
-
-          // Chamar a função para abrir uma nova guia com o áudio gravado
-          loadFile(blob);
-        };
-
-        // Iniciar a gravação por 5 segundos
-        mediaRecorder.start();
-        sendButtom.onclick = () => {
-          mediaRecorder.stop();
-          sendButtom.style.backgroundImage = "url(\"Images/micIcon.svg\")";
-          text.disabled = false;
-          sendButtom.onclick = () => {
-            createMessage();
-          }
-        }
-      })
-      .catch(function (error) {
-        console.error("Erro ao acessar o microfone: ", error);
-      });
-  } else {
-    console.error("A API de áudio do HTML5 não é suportada neste navegador.");
-    alert("A API de áudio do HTML5 não funciona neste navegador ou a conexão não é segura.");
-    sendButtom.style.backgroundImage = "url(\"Images/micDisabled.svg\")";
-    text.disabled = false;
   }
+}
+
+async function startAudioRecording() {
+  const options = { audio: true };
+  const stream = await navigator.mediaDevices.getUserMedia(options);
+  const mediaRecorder = new MediaRecorder(stream);
+  const chunks = [];
+
+  mediaRecorder.ondataavailable = function (event) {
+      chunks.push(event.data);
+  };
+
+  mediaRecorder.onstop = function () {
+      const blob = new Blob(chunks, { 'type': 'audio/wav' });
+      loadFile(blob);
+  };
+
+  mediaRecorder.start();
+  return mediaRecorder;
+}
+
+function setupRecordingHandlers(sendButton, textInput, mediaRecorder) {
+  sendButton.onclick = () => {
+      mediaRecorder.stop();
+      sendButton.style.backgroundImage = "url(\"Images/micIcon.svg\")";
+      textInput.disabled = false;
+      sendButton.onclick = () => {
+          createMessage();
+      };
+  };
 }
 
 function loadFile(blob) {
