@@ -51,7 +51,13 @@ include 'Controller/FileController.php';
                     echo $fileController->getError();
                 }
             }
-            echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(" . $user->downloadProfilePic(new StringT($_SESSION['nickName'])) . ");' onclick='openfile(\"editProfilePic\");' /></div>";
+            $data = $user->downloadProfilePic(new StringT($_SESSION['nickName']));
+            if (!empty($data) > 0) {
+                $pic = "data:image/jpg;base64," . $data;
+            } else {
+                $pic = "Images/profilePic.svg";
+            }
+            echo "<div ><img src='Images/edit.png' id=\"profilePic\" class='profilePic' style='background-image:url(" . $pic. ");' onclick='openfile(\"editProfilePic\");' /></div>";
             ?>
             <div id="profileContent">
                 <?php include "profileEditForm.php"; ?>
