@@ -388,7 +388,6 @@ async function deleteMessage(id) {
 }
 
 
-
 function getDate() {
   currentDate = new Date();
   currentDate = currentDate.toLocaleString('pt-BR');
@@ -1657,73 +1656,54 @@ function getScrollPercentage() {
   return (scrollPosition / contentHeight) * 100;
 }
 
-function downButton(value) {
-  var messagesElement = document.getElementById("messages");
+function createRoundButton(elementId, imageSrc, clickHandler) {
+  const messagesElement = document.getElementById("messages");
+  const existingElement = document.getElementById(elementId);
 
-  if (value) {
-    var existingDown = document.getElementById("down");
-    if (existingDown) {
-      existingDown.remove();
-    }
+  if (existingElement) {
+    existingElement.remove();
+  }
 
-    messagesElement.style.boxShadow = "inset 0px -20px 8px 0px rgba(0, 0, 0, 0.35)";
+  if (imageSrc) {
+    messagesElement.style.boxShadow = `inset 0px ${elementId === "down" ? "-20px" : "20px"} 8px 0px rgba(0, 0, 0, 0.35)`;
 
-    var center = document.createElement("div");
-    center.id = "down";
-    center.classList.add('center')
-    var img = document.createElement("img");
-    img.onclick = down;
-    img.src = "Images/down.svg";
+    const center = document.createElement("div");
+    center.id = elementId;
+    center.classList.add("center");
+
+    const img = document.createElement("img");
+    img.onclick = clickHandler;
+    img.src = imageSrc;
+
     center.appendChild(img);
     messagesElement.appendChild(center);
-    var width = document.querySelector('#down img').offsetWidth/2;
-    center.style.top = (document.querySelector("#messages").offsetTop + width) + "px";
-    center.style.left = (messagesElement.offsetLeft + (messagesElement.offsetWidth / 2)) - width + "px";
+
+    const imgWidth = document.querySelector(`#${elementId} img`).offsetWidth / 2;
+    const leftPosition = messagesElement.offsetLeft + messagesElement.offsetWidth / 2 - imgWidth;
+
+    center.style.top = `${document.querySelector("#messages").offsetTop + imgWidth}px`;
+    center.style.left = `${leftPosition}px`;
   } else {
     messagesElement.style.boxShadow = "none";
-    var existingDown = document.getElementById("down");
-    if (existingDown) {
-      existingDown.remove();
+    if (existingElement) {
+      existingElement.remove();
     }
   }
+}
+
+function downButton(value) {
+  const imageSrc = value ? "Images/down.svg" : null;
+  createRoundButton("down", imageSrc, down);
 }
 
 function loadingButton(value) {
-  const messagesElement = document.getElementById("messages");
-
-  if (value) {
-    var existingDown = document.getElementById("loading");
-    if (existingDown) {
-      existingDown.remove();
-    }
-
-    messagesElement.style.boxShadow = "inset 0px 20px 8px 0px rgba(0, 0, 0, 0.35)";
-
-    var center = document.createElement("div");
-    center.id = "loading";
-    center.classList.add('center')
-    var img = document.createElement("img");
-    img.onclick = removeLoadingButton;
-    img.src = "Images/roundLoading.gif";
-    center.appendChild(img);
-    messagesElement.appendChild(center);
-    var width = document.querySelector('#loading img').offsetWidth/2;
-    center.style.top = (document.querySelector("#messages").offsetTop + width) + "px";
-    center.style.left = (messagesElement.offsetLeft + (messagesElement.offsetWidth / 2)) - width + "px";
-  } else {
-    removeLoadingButton();
-  }
+  const imageSrc = value ? "Images/roundLoading.gif" : null;
+  createRoundButton("loading", imageSrc, removeLoadingButton);
 }
 
 function removeLoadingButton() {
-  const messagesElement = document.getElementById("messages");
-  messagesElement.style.boxShadow = "none";
-  var existingDown = document.getElementById("loading");
-  if (existingDown) {
-    existingDown.remove();
-  }
+  createRoundButton("loading", null, null);
 }
-
 
 
 
