@@ -306,7 +306,7 @@ function loadMoreMessages() {
   formData.append('action', 'messageByPag');
   formData.append('nickNameContact', nickNameContact);
   formData.append('pagIndex', ++indexMessage);
-  loadingAnimationMessages(true);
+  loadingButton(true);
   fetch('actions.php', {
     method: 'POST',
     body: formData
@@ -331,7 +331,7 @@ function loadMoreMessages() {
         getAudioTimes();
         const idLastMsg = document.querySelector('.msg').id;
         messagesDiv.insertAdjacentHTML('afterbegin', result);
-        loadingAnimationMessages(false);
+        loadingButton(false);
         timestamp = new Date().getTime();
         downloadAllMidia();
         adjustScrollPosition(idLastMsg);
@@ -347,17 +347,6 @@ function adjustScrollPosition(value) {
   var childDiv = document.getElementById(value);
   var offsetTop = childDiv.offsetTop - 200;
   messagesDiv.scrollTop = offsetTop;
-}
-
-function loadingAnimationMessages(value) {
-  const picContactImg = document.querySelector("#picContact" + nickNameContact + " img");
-  if (value) {
-    loadingButton(true);
-    picContactImg.src = "Images/roundLoading.gif";
-  } else {
-    loadingButton(false);
-    picContactImg.src = "Images/blank.png";
-  }
 }
 
 var isDeleting = false;
@@ -866,7 +855,6 @@ async function createImageObject(picContactId) {
 }
 
 async function downloadAllPicContacts() {
-  
     const imgElements = document.querySelectorAll('.picContact img');
     const imageUrlObjects = await Promise.all(Array.from(imgElements).map(async (imgElement) => {
         const picContactId = imgElement.closest('.picContact').id.replace('picContact', '');
@@ -877,7 +865,7 @@ async function downloadAllPicContacts() {
         const imageUrlObject = imageUrlObjects[index];
         
         if (imageUrlObject !== null) {
-            picContactElement.style.backgroundImage = `url(${imageUrlObject})`;
+            picContactElement.src = imageUrlObject;
         }
     });
 }
@@ -1418,7 +1406,7 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
 
   if (currentUrl.includes('messages.php')) {
 
-    loadingAnimationMessages(true);
+    loadingButton(true);
 
     try {
       const result = await $.ajax({
@@ -1428,7 +1416,7 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
         dataType: 'html'
       });
 
-      loadingAnimationMessages(false);
+      loadingButton(false);
 
       document.getElementById('messages').innerHTML = result;
       msgsContents = result;
