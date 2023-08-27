@@ -26,14 +26,14 @@ async function main() {
     }
     const down = document.querySelector("#down");
     if (down) {
-      const width = document.querySelector('#down img').offsetWidth/2;
+      const width = document.querySelector('#down img').offsetWidth / 2;
       const messagesElement = document.querySelector("#messages");
       down.style.top = (messagesElement.offsetTop + width) + "px";
       down.style.left = (messagesElement.offsetLeft + (messagesElement.offsetWidth / 2)) - width + "px";
     }
     const loading = document.querySelector("#loading");
     if (loading) {
-      const width = document.querySelector('#loading img').offsetWidth/2;
+      const width = document.querySelector('#loading img').offsetWidth / 2;
       const messagesElement = document.querySelector("#messages");
       loading.style.top = (messagesElement.offsetTop + width) + "px";
       loading.style.left = (messagesElement.offsetLeft + (messagesElement.offsetWidth / 2)) - width + "px";
@@ -704,7 +704,7 @@ async function downloadAllMidia() {
   await Promise.all([
     downloadAllTitles(time),
     downloadAllImages(time),
-    downloadAllAudios(time)
+    downloadAllAudios(time),
   ]);
 }
 
@@ -828,43 +828,60 @@ function getAudioTimes() {
   }
 }
 
-
-async function fetchImageAsBlob(url) {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return blob;
-}
-
 const imageObjectsCache = {};
-async function createImageObjects() {
-  const imgElements = document.querySelectorAll('.picContact img');
-  const imageObjects = [];
 
-  for (const imgElement of imgElements) {
-    const picContactId = imgElement.closest('.picContact').id;
-
-    const backgroundImageStyle = getComputedStyle(imgElement).backgroundImage;
-    const imageUrl = backgroundImageStyle.slice(4, -1).replace(/['"]/g, '');
-
-    if (imageObjectsCache[picContactId]) {
-      // Se o objeto de URL já estiver em cache, reutiliza
-      imageObjects.push(imageObjectsCache[picContactId]);
-    } else {
-      const blob = await fetchImageAsBlob(imageUrl);
-      const imageUrlObject = URL.createObjectURL(blob);
-      imageObjectsCache[picContactId] = imageUrlObject; // Armazena em cache usando o ID como chave
-      imageObjects.push(imageUrlObject);
+async function fetchImageAsBase64(nickNameContact) {
+    try {
+        const formData = new FormData();
+        formData.append('nickNameContact', nickNameContact);
+        formData.append('action', 'downloadProfilePic');
+        
+        const dados = await $.ajax({
+            url: 'actions.php',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json'
+        });
+        
+        return dados;
+    } catch (error) {
+        throw error;
     }
-  }
-  return imageObjects;
 }
 
-createImageObjects().then(imageUrlObjects => {
-  const picContactElements = document.querySelectorAll('.picContact img');
-  picContactElements.forEach((picContactElement, index) => {
-    picContactElement.style.backgroundImage = `url(${imageUrlObjects[index]})`;
-  });
-});
+async function createImageObject(picContactId) {
+    if (!imageObjectsCache[picContactId]) {
+        const blob = await fetchImageAsBase64(picContactId);
+        if (blob) {
+            const contentBlob = b64toBlob(blob, type('jpg') + "/" + 'jpg');
+            const imageUrlObject = URL.createObjectURL(contentBlob);
+            imageObjectsCache[picContactId] = imageUrlObject;
+        } else {
+            imageObjectsCache[picContactId] = null; // Para indicar que não há imagem
+        }
+    }
+    return imageObjectsCache[picContactId];
+}
+
+async function downloadAllPicContacts() {
+  
+    const imgElements = document.querySelectorAll('.picContact img');
+    const imageUrlObjects = await Promise.all(Array.from(imgElements).map(async (imgElement) => {
+        const picContactId = imgElement.closest('.picContact').id.replace('picContact', '');
+        return createImageObject(picContactId);
+    }));
+    
+    imgElements.forEach((picContactElement, index) => {
+        const imageUrlObject = imageUrlObjects[index];
+        
+        if (imageUrlObject !== null) {
+            picContactElement.style.backgroundImage = `url(${imageUrlObject})`;
+        }
+    });
+}
+
 
 function type(format) {
   format = format.toLowerCase();
@@ -1544,6 +1561,7 @@ function refreshContacts() {
     .then(response => response.json())
     .then(result => {
       document.querySelector('.contacts').innerHTML = result;
+      downloadAllPicContacts();
     })
     .catch(error => {
       console.error('Erro na requisição:', error);

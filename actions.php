@@ -34,6 +34,13 @@ switch ($action) {
             echo $user->downloadFile($_POST['hashName']);
         }
         break;
+    case 'downloadProfilePic':
+        include 'Controller/UsersController.php';
+        $user = new UsersController();
+        if (!empty($_POST['nickNameContact'])) {
+            echo json_encode($user->downloadProfilePic(new StringT($_POST['nickNameContact'])));
+        }
+        break;
     case 'getThumb':
         include 'Controller/Message.php';
         session_start();

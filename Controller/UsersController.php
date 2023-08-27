@@ -143,8 +143,8 @@ class UsersController
             $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
         }
 
-        $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url({$this->downloadProfilePic(new StringT($contact[1]))});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
-
+        $html .= "><div class='picContact' id='picContact$contact[1]'><img src='Images/blank.png' style='background-image:url(Images/profilePic.svg);' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
+        $html .= "<script>downloadAllPicContacts();</script>";
         return $html;
     }
 
@@ -201,13 +201,12 @@ class UsersController
     function downloadProfilePic(StringT $contactNickName)
     {
         $result = $this->user->downloadProfilePic($contactNickName);
+        $pic = "";
         if (!empty($result) > 0) {
             foreach ($result as $value) {
-                $pic = "data:image/" . $value["format"] . ";base64," . base64_encode($value["picture"]);
+                $pic = base64_encode($value["picture"]);
             }
-        } else {
-            $pic = "Images/profilePic.svg";
-        }
+        } 
         return $pic;
     }
 
