@@ -1111,7 +1111,6 @@ function closeEmoji() {
 function close() {
   messageAreaEnable(true);
   document.getElementById('messages').innerHTML = msgsContents;
-  document.getElementById('messages').scrollTo(0, scrollPos);
   downloadAllMidia();
 }
 
