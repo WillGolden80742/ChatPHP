@@ -179,7 +179,7 @@ class UsersController
         if (empty($pic)) {
             $pic = 'Images/profilePic.svg';
         }
-        $html .= "><div class='picContact' id='$contact[1]'><img style='background-image:url({$pic});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
+        $html .= "><div class='picContact' id='$contact[1]'><img src='Images/blank.png' style='background-image:url({$pic});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
         $html .= "<script>downloadAllPicContacts();</script>";
         return $html;
     }
