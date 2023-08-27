@@ -155,7 +155,7 @@ function uploadPassword() {
 
   var xhttp = new XMLHttpRequest();
 
-  xhttp.onreadystatechange = function (content) {
+  xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       loadProfileContent(); // Atualiza o conteúdo após enviar o formulário
       editProfileMessage = this.responseText;
