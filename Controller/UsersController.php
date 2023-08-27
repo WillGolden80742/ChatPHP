@@ -26,6 +26,39 @@ class UsersController
         return base64_encode($this->user->downloadFile($nomeHash));
     }
 
+    function downloadProfilePic($contactNickName, $width = 256)
+    {
+        $result = $this->user->downloadProfilePic($contactNickName);
+        $pic = "";
+
+        if (!empty($result)) {
+            foreach ($result as $value) {
+                if ($width < 256) {
+                    $image = imagecreatefromstring($value["picture"]);
+                    $originalWidth = imagesx($image);
+                    $originalHeight = imagesy($image);
+
+                    $newHeight = ($width / $originalWidth) * $originalHeight;
+
+                    $newImage = imagecreatetruecolor($width, $newHeight);
+                    imagecopyresampled($newImage, $image, 0, 0, 0, 0, $width, $newHeight, $originalWidth, $originalHeight);
+
+                    ob_start();
+                    imagejpeg($newImage, null, 90); // 90 is the image quality
+                    $pic = "data:image/jpg;base64," . base64_encode(ob_get_contents());
+                    ob_end_clean();
+
+                    imagedestroy($image);
+                    imagedestroy($newImage);
+                } else {
+                    $pic = base64_encode($value["picture"]);
+                }
+            }
+        }
+
+        return $pic;
+    }
+
     function uploadProfilePic(StringT $nick, $pic, $format)
     {
         $this->user->uploadProfilePic($nick, $pic, $format);
@@ -142,8 +175,11 @@ class UsersController
         if (!empty($nickNameContact) && !strcmp($nickNameContact, $contact[1])) {
             $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
         }
-
-        $html .= "><div class='picContact' id='$contact[1]'><img src='Images/roundLoading.gif' style='background-image:url(Images/profilePic.svg);' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
+        $pic = $this->downloadProfilePic(new StringT($contact[1]),32);
+        if (empty($pic)) {
+            $pic = 'Images/profilePic.svg';
+        }
+        $html .= "><div class='picContact' id='$contact[1]'><img src='Images/roundLoading.gif' style='background-image:url({$pic});' /></div>&nbsp&nbsp{$contact[0]} &nbsp</h2></a>";
         $html .= "<script>downloadAllPicContacts();</script>";
         return $html;
     }
@@ -195,19 +231,6 @@ class UsersController
         $html .= "</div>";
 
         return $html;
-    }
-
-
-    function downloadProfilePic(StringT $contactNickName)
-    {
-        $result = $this->user->downloadProfilePic($contactNickName);
-        $pic = "";
-        if (!empty($result) > 0) {
-            foreach ($result as $value) {
-                $pic = base64_encode($value["picture"]);
-            }
-        } 
-        return $pic;
     }
 
     // MESSAGES 

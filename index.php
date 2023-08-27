@@ -90,7 +90,7 @@ if (!empty($nickNameContact)) {
   } else {
     $pic = "Images/profilePic.svg";
   }
-  echo "<img src='Images/blank.png' style='background-image:url(" . $pic. ");' />";
+  echo "<img src='$pic' />";
   echo "<a class='userName' id='userName'>";
   echo $user->name($nickNameContact);
   echo "</a>";

@@ -864,9 +864,11 @@ async function downloadAllPicContacts() {
   imgElements.forEach((picContactElement, index) => {
     const imageUrlObject = imageUrlObjects[index];
     if (imageUrlObject !== null) {
-      picContactElement.style.backgroundImage = `url(${imageUrlObject})`;
+      picContactElement.src = `${imageUrlObject}`;
+    } else {
+      picContactElement.src = `Images/blank.png`;
     }
-    picContactElement.src = 'Images/blank.png';
+    picContactElement.style.backgroundImage = "url(Images/blank.png);";
   });
 }
 
@@ -1460,7 +1462,7 @@ function updateContacts(contact = nickNameContact, name = nickNameContact) {
   document.getElementById('userName').innerHTML = name;
   var imgElement = document.querySelector('#' + contact + ' img');
   var imgContacts = document.querySelector('.picMessage img');
-  imgContacts.style.backgroundImage = imgElement.style.backgroundImage;
+  imgContacts.src = imgElement.src;
   toggle(false);
 }
 

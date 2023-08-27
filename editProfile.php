@@ -41,16 +41,6 @@ include 'Controller/FileController.php';
         <div class="center">
             <?php
             $pic = null;
-            if (!empty($_FILES["pic"])) {
-                $fileController = new FileController($_FILES["pic"]);
-                $file = $fileController->getImage();
-                $format = $fileController->getFormat();
-                if ($file) {
-                    $user->uploadProfilePic(new StringT($_SESSION['nickName']), $file, $format);
-                } else {
-                    echo $fileController->getError();
-                }
-            }
             $data = $user->downloadProfilePic(new StringT($_SESSION['nickName']));
             if (!empty($data) > 0) {
                 $pic = "data:image/jpg;base64," . $data;

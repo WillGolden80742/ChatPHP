@@ -138,8 +138,11 @@
   .back img {
     float: left;
   }
-
+  .picMessage {
+    overflow: hidden;
+  }
   .picMessage img {
+    object-fit: cover;
     float: left;
     margin-left: 20px;
     top: 0;

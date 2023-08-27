@@ -81,6 +81,11 @@
     display: flex;
   }
 
+
+  .contacts a h2 .picContact {
+    overflow: hidden;
+  }
+
   .contacts a h2:hover {
     background-color: #2b5278;
     box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%);
@@ -134,6 +139,7 @@
     background-size: 100vw auto;
     background-position-x: 50%;
     background-size: cover;
+    object-fit: cover;
   }
 
   .messages {
@@ -234,7 +240,7 @@
   .attachment_file {
     margin-top: 5px;
     padding: 4%;
-    padding-left:0;
+    padding-left: 0;
     background-color: rgba(135, 197, 255, 0.5);
     width: 95%;
     border-radius: 5px;
@@ -286,7 +292,7 @@
     padding: 10px;
     border-radius: 20px;
     width: 70px;
-    background-color:rgba(40, 81, 123);
+    background-color: rgba(40, 81, 123);
   }
 
   .uploading .loadIcon {
@@ -642,9 +648,9 @@
   }
 
   .embed-video {
-    width:-webkit-fill-available;
-    height:calc(100% - 50px);
-    background-color :black;
+    width: -webkit-fill-available;
+    height: calc(100% - 50px);
+    background-color: black;
   }
 
   .embed-iframe {
@@ -777,8 +783,8 @@
     color: white;
     background-color: #2b5278;
     text-align: center;
-    border-radius:5px;
-    padding:2.5px;
+    border-radius: 5px;
+    padding: 2.5px;
   }
 
   .loadingMessage {
@@ -792,7 +798,7 @@
     left: 50%;
     z-index: 10000;
   }
-  
+
   #down img {
     box-shadow: 0px 2px 13px 15px rgba(0, 0, 0, 0.35);
     border-radius: 100%;
@@ -807,26 +813,29 @@
     left: 50%;
     z-index: 10000;
   }
-  
+
   #loading img {
     border-radius: 100%;
     width: 50px;
+
   }
+
+
 
   @media (orientation: portrait) or (max-width: 900px) {
 
-    #down img, #loading  img {
+    #down img, #loading img {
       width: 150px;
     }
 
     .embed-video {
-      height:calc(100% - 100px);
+      height: calc(100% - 100px);
     }
 
     .loadingMessage {
       height: 32px;
     }
-  
+
     .msg .delete {
       margin-top: -60px;
     }
@@ -935,8 +944,8 @@
       font-size: 36px;
       height: 40px;
       min-width: 40px;
-      border-radius:10px;
-      padding:5px;
+      border-radius: 10px;
+      padding: 5px;
     }
 
     .emoji {

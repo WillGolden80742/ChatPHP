@@ -91,7 +91,7 @@ switch ($action) {
         $user = new UsersController();
         if (!empty($_FILES["pic"])) {
             $fileController = new FileController($_FILES["pic"]);
-            $file = $fileController->getImage();
+            $file = $fileController->getImage(256);
             $format = $fileController->getFormat();
             if ($file) {
                 $user->uploadProfilePic(new StringT($_SESSION['nickName']), $file, $format);

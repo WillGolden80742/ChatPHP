@@ -12,7 +12,7 @@ class FileController
         $this->extension = pathinfo($this->file['name'], PATHINFO_EXTENSION);
     }
 
-    function getImage()
+    function getImage($width=256)
     {
         if (!file_exists("tmp")) {
             mkdir("tmp");
@@ -37,7 +37,7 @@ class FileController
             if ($image !== null) {
                 $originalWidth = imagesx($image);
                 $originalHeight = imagesy($image);
-                $newWidth = 256;
+                $newWidth = $width;
                 $newHeight = ($originalHeight / $originalWidth) * $newWidth;
 
                 $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
