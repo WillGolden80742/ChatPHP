@@ -24,84 +24,84 @@ Here are the main global variables and functions rewritten with the additional f
 
 Global variables:
 
-audioTime - Map to store audio playback times
+audioTime - Map for storing audio playback times
 cacheMap - Map to cache downloaded media
-currentIDPlayer - ID of currently active audio player
-downloading - Boolean indicating if media is downloading
+currentIDPlayer - ID of the currently active audio player
+downloading - Boolean indicating whether media is being downloaded
 imageObjectsCache - Cache for contact profile pictures
-indexMessage - Controls message pagination loading
-isDeleting - Boolean indicating if a message is being deleted
-maxLength - Maximum allowed length for messages
-msgsContents - Stores previous message content
-nickNameContact - Nickname of current contact
+indexMessage - Control message loading by paging
+isDeleting - Boolean indicating whether the message is being deleted
+maxLength - Maximum length allowed for messages
+msgsContents - Store previous message content
+nickNameContact - Nickname of the current contact
 orientationDevice - Screen orientation ("portrait" or "landscape")
-profilePicSrc - URL of user's profile picture
-screenHeight - Browser viewport height
-screenWidth - Browser viewport width
-timestamp - Timestamp for async flow control
-updatedMsg - Boolean if messages were updated
+profilePicSrc - URL of the user's profile picture
+screenHeight - Height of browser viewport
+screenWidth - Width of the browser viewport
+timestamp - Timestamp for asynchronous flow control
+updatedMsg - Boolean if messages have been updated
 
 Functions:
 
-addMessage - Adds new message to screen
+addMessage - Adds a new message to the screen
 b64toBlob - Convert base64 to Blob
-close - Close embedded elements
-closeEmoji - Close emoji picker
+close - Closes inline elements
+closeEmoji - Closes emoji selector
 closeImage - Close image view
-closeVideo - Close video player
+closeVideo - Closes video player
 countMessage - Update message counter
 createImageObject - Get image object from cache or fetch
-createMessage - Creates new message
+createMessage - Create new message
 deleteMessage - Deletes a message
 down - Scroll down messages
 downButton - Show/hide scroll button
 downloadAllAudios - Download all audios
 downloadAllImages - Download all images
 downloadAllMidia - Download all media
-downloadAllPicContacts - Download all contact pictures
-downloadAllTitles - Download all link titles
+downloadAllPicContacts - Download all profile pictures
+downloadAllTitles - Download all titles from links
 downloadBase64 - Download file as base64
 downloadFile - Download file
 downloadMedia - Download specific media
 downloadTitle - Download title from link
-embedEmojis - Show emoji picker
-embedImage - Display enlarged image
-embedVideo - Display video player
+embedEmojis - Shows emoji picker
+embedImage - Displays enlarged image
+embedVideo - Displays video player
 embedYoutube - Display Youtube video
-emojiClicked - Check for emoji icon click
+emojiClicked - Checks for click on emoji icon
 fetchImageAsBase64 - Fetch image as base64
 getCache - Get cached value
 getCachePercent - Get cache usage percentage
 getCacheSize - Get total cache size
 getDate - Get formatted date
-hasCache - Check for cached values
+hasCache - Check cached values
 hasNewMsg - Handle new message
 hasNewMsgByCurrentContact - Handle new msg from current contact
 imgToJPG - Convert image to JPG
-loadFile - Load recorded audio file
-loadMoreMessages - Load messages on scroll up
+loadFile - Loads recorded audio file
+loadMoreMessages - Load messages when scrolling up
 loadPicStatus - Update image upload status
 loadProfileContent - Load profile form content
 loading - Show/hide loading indicator
-main - Initial function, downloads media
+main - Initial function, download media
 messageAreaEnable - Enable/disable message area
-messageValidate - Validate message form state
-moveToUp - Move contact to top
+messageValidate - Validates message form state
+moveToUp - Move contact to the top
 openfile - Open image/file input
-removeDownButton - Remove scroll button if needed
+removeDownButton - Removes scroll button if needed
 resizeImage - Resize image
-setCache - Set cache value
+setCache - Set cached value
 showPlayer - Display media player
-startRecording - Start audio recording
+startRecording - Starts audio recording
 stringToMD5 - Convert string to MD5
 toggle - Toggle element visibility
 togglePlay - Toggle media playback
-updateContacts - Update contact details
+updateContacts - Updates contact details
 updateMessages - Update messages on screen
 upload - Generic AJAX upload
 uploadAttachment - Upload attachment file
 uploadFile - Upload generic file
-uploadPassword - Send password change form
+uploadPassword - Upload password change form
 uploadPic - Upload profile picture
 uploadProfile - Upload profile edit form
 waitingMsg - Display send indicator
