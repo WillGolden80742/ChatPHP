@@ -875,25 +875,15 @@ async function downloadAllPicContacts() {
 
 
 function type(format) {
-  format = format.toLowerCase();
-  switch (format) {
-    case 'mp3':
-    case 'wav':
-    case 'ogg':
-      return 'audio';
-    case 'mp4':
-    case 'avi':
-    case 'mov':
-      return 'video';
-    case 'jpg':
-    case 'jpeg':
-    case 'png':
-      return 'image';
-    default:
-      return 'unknown';
-  }
-}
+  const formatMapping = {
+      'mp3': 'audio', 'wav': 'audio', 'ogg': 'audio',
+      'mp4': 'video', 'avi': 'video', 'mov': 'video',
+      'jpg': 'image', 'jpeg': 'image', 'png': 'image'
+  };
 
+  format = format.toLowerCase();
+  return formatMapping[format] || 'unknown';
+}
 
 function emojiClicked(event) {
   const currentTextElement = document.querySelector(".text");
