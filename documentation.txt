@@ -20,84 +20,85 @@ Each file contains the list of global variables used and the relevant functions,
 
 assets/js/javascript.js:
 
-Here are the main global variables and functions:
+Here are the main global variables and functions rewritten with the additional functions:
 
 Global variables:
 
-audioTime - Map with audio playback times
-cacheMap - Map for cache of downloaded media
-currentIDPlayer - Active audio player ID
-downloading - Indicates if you are downloading media
-h - Height of message container
-indexMessage - control pagination message loading
-isDeleting - Indicates whether a message is being deleted
-maxLength - Maximum length allowed for messages
-msgsContents - Stores the content of previous messages
-nickNameContact - Nickname of the current contact
+audioTime - Map to store audio playback times
+cacheMap - Map to cache downloaded media
+currentIDPlayer - ID of currently active audio player
+downloading - Boolean indicating if media is downloading
+imageObjectsCache - Cache for contact profile pictures
+indexMessage - Controls message pagination loading
+isDeleting - Boolean indicating if a message is being deleted
+maxLength - Maximum allowed length for messages
+msgsContents - Stores previous message content
+nickNameContact - Nickname of current contact
 orientationDevice - Screen orientation ("portrait" or "landscape")
-profilePicSrc - URL of the user's profile picture
-screenWidth - returns the Width of the browser viewport. 
-screenHeight - returns the Height of the browser viewport. 
-scrollPos - Scroll position of messages
-send - Current send button icon
-timestamp - Timestamp for asynchronous flow control
-updatedMsg - Boolean indicating whether messages have been updated
+profilePicSrc - URL of user's profile picture
+screenHeight - Browser viewport height
+screenWidth - Browser viewport width
+timestamp - Timestamp for async flow control
+updatedMsg - Boolean if messages were updated
 
 Functions:
 
-addMessage - Adds a new message to the screen
+addMessage - Adds new message to screen
 b64toBlob - Convert base64 to Blob
-close - Closes embedded elements
-closeEmoji - Closes emoji picker
+close - Close embedded elements
+closeEmoji - Close emoji picker
 closeImage - Close image view
 closeVideo - Close video player
 countMessage - Update message counter
-createMessage - Creates a new message
+createImageObject - Get image object from cache or fetch
+createMessage - Creates new message
 deleteMessage - Deletes a message
 down - Scroll down messages
 downButton - Show/hide scroll button
 downloadAllAudios - Download all audios
 downloadAllImages - Download all images
 downloadAllMidia - Download all media
-downloadAllTitles - Download all titles from link
-downloadBase64 - Download file in base64
+downloadAllPicContacts - Download all contact pictures
+downloadAllTitles - Download all link titles
+downloadBase64 - Download file as base64
 downloadFile - Download file
 downloadMedia - Download specific media
-downloadTitle - Download title from specific link
-embedEmojis - Displays emoji picker
-embedImage - Displays enlarged image
+downloadTitle - Download title from link
+embedEmojis - Show emoji picker
+embedImage - Display enlarged image
 embedVideo - Display video player
 embedYoutube - Display Youtube video
-emojiClicked - Checks for click on emoji icon
+emojiClicked - Check for emoji icon click
+fetchImageAsBase64 - Fetch image as base64
 getCache - Get cached value
-getCachePercent - Get used percentage of the cache
+getCachePercent - Get cache usage percentage
 getCacheSize - Get total cache size
-getDate - Returns formatted date
-hasCache - Checks for cached values
+getDate - Get formatted date
+hasCache - Check for cached values
 hasNewMsg - Handle new message
-hasNewMsgByCurrentContact - Handle new message from current contact
+hasNewMsgByCurrentContact - Handle new msg from current contact
 imgToJPG - Convert image to JPG
-loadFile - Loads recorded audio file
-loading - Show/hide loading indicator
-loadMoreMessages - load message according to what the user scrolls up
+loadFile - Load recorded audio file
+loadMoreMessages - Load messages on scroll up
 loadPicStatus - Update image upload status
 loadProfileContent - Load profile form content
+loading - Show/hide loading indicator
 main - Initial function, downloads media
 messageAreaEnable - Enable/disable message area
-messageValidate - Validates message form state
-moveToUp - Move contact to the top
-openfile - Open image or file input
-removeDownButton - Removes scroll button if needed
+messageValidate - Validate message form state
+moveToUp - Move contact to top
+openfile - Open image/file input
+removeDownButton - Remove scroll button if needed
 resizeImage - Resize image
-setCache - Set value in cache
+setCache - Set cache value
 showPlayer - Display media player
-startRecording - Starts audio recording
+startRecording - Start audio recording
 stringToMD5 - Convert string to MD5
 toggle - Toggle element visibility
 togglePlay - Toggle media playback
 updateContacts - Update contact details
 updateMessages - Update messages on screen
-upload - Generic upload function via AJAX
+upload - Generic AJAX upload
 uploadAttachment - Upload attachment file
 uploadFile - Upload generic file
 uploadPassword - Send password change form
