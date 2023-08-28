@@ -283,7 +283,7 @@
 
   .attachment_file:hover .videoIcon {
     transition: 0.25s;
-    background-image: url("../../Images/download-button.svg");
+    background-image: url("../../Images/player.svg");
   }
 
   .fileIcon {
