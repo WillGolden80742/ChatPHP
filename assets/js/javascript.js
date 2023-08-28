@@ -1050,11 +1050,11 @@ function embedVideo(link, id) {
   messagesElement.appendChild(mediaFileDiv);
 }
 
-function embedImage(hash, event) {
+function embedImage(hash) {
   messageAreaEnable(false);
   getAudioTimes();
   timestamp = new Date().getTime();
-  var imageSrc = event.target.src;
+  var imageSrc = document.getElementById(hash).src;
   var messagesElement = document.getElementById('messages'); 
   if (document.querySelector(".msg")) {
     msgsContents = messagesElement.innerHTML;

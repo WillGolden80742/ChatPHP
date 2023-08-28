@@ -378,9 +378,9 @@ class UsersController
         } elseif ($this->isImage($extensao)) {
             return
                 <<<HTML
-                <div class="image_file">
+                <div class="image_file"  onclick="embedImage('$hash')" >
                     <div class="center">
-                        <img id="$hash" onclick="embedImage('$hash',event)" src="Images/download.gif" height="250px">
+                        <img id="$hash" src="Images/download.gif" height="250px">
                     </div>
                 </div>
                 HTML;
