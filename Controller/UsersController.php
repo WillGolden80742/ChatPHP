@@ -193,11 +193,12 @@ class UsersController
             $contacts[] = [$row["Contato"], $row["nickNameContato"]];
         }
 
-        $html = <<<HTML
+        $html =
+            <<<HTML
             <form action="index.php" method="post">
                 <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
             </form>
-    HTML;
+            HTML;
 
         foreach ($contacts as $contact) {
             $html .= $this->generateContactsHtml($contact, $nickNameContact, $sync);
@@ -215,12 +216,13 @@ class UsersController
             $contacts[] = [$row["Contato"], $row["nickNameContato"]];
         }
 
-        $html = <<<HTML
+        $html =
+            <<<HTML
             <form action="index.php" method="post">
                 <input class="search" placeholder='Pesquisar contatos ...' type="text" name="search">
             </form>
             <a href="index.php"><h3>Limpar busca</h3></a>
-    HTML;
+            HTML;
 
         foreach ($contacts as $contact) {
             if (strcmp($contact[1], $this->nickSession) !== 0) {
