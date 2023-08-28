@@ -387,8 +387,8 @@ class UsersController
         } else {
             return
                 <<<HTML
-                <div class="attachment_file">
-                    <a onclick="downloadFile('$hash','$nome')"><img class="fileIcon" src="Images/blank.png"/>$nome</a>
+                <div class="attachment_file" onclick="downloadFile('$hash','$nome')">
+                    <a><img class="fileIcon" src="Images/blank.png"/>$nome</a>
                 </div>
                 HTML;
         }
