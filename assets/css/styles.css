@@ -215,6 +215,10 @@
     margin-top: 5px;
     width: 100%;
     border-radius: 10px;
+    background-image: linear-gradient(to bottom, rgba(88, 139, 189,0.5), rgba(49, 66, 86,0.5)), url('../../Images/musicTexture.svg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   .emoji {
@@ -686,7 +690,6 @@
     border-radius: 5px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    background-color: rgba(127, 127, 127, 0.5);
     padding: 10px;
     margin-bottom: 0;
     border-bottom: 0;
@@ -695,7 +698,6 @@
 
   .player {
     width: -webkit-fill-available;
-    background-color: rgba(127, 127, 127, 0.5);
     padding: 10px;
     border-radius: 5px;
     border-top-left-radius: 0;
