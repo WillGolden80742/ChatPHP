@@ -351,7 +351,7 @@ class UsersController
         if ($this->isVideo($extensao)) {
             return
                 <<<HTML
-                <div class="attachment_file" onclick="showPlayer('$hash',event);">
+                <div class="video_file" onclick="showPlayer('$hash',event);">
                     <a><img class="videoIcon" src="Images/blank.png" style="float:left" />$nome</a>
                 </div>
                 HTML;

@@ -243,7 +243,7 @@
     background-color: rgba(135, 197, 255, 0.5);
   }
 
-  .attachment_file {
+  .attachment_file, .video_file {
     margin-top: 5px;
     padding: 4%;
     padding-left: 0;
@@ -252,12 +252,13 @@
     border-radius: 5px;
   }
 
-  .attachment_file a {
-    font-size: 22px;
-    display: inline-flex;
+  .video_file {
+    background: linear-gradient(to bottom, #588bbd, #314256);
   }
 
-  .attachment_file a {
+  .attachment_file a, .video_file a {
+    font-size: 22px;
+    display: inline-flex;
     place-items: center;
   }
 
@@ -281,7 +282,7 @@
     background-image: url("../../Images/video.svg");
   }
 
-  .attachment_file:hover .videoIcon {
+  .video_file:hover .videoIcon {
     transition: 0.25s;
     background-image: url("../../Images/player.svg");
   }

@@ -207,16 +207,16 @@
     background-size: 48px;
   }
 
-  .attachment_file a {
+  .attachment_file a, .video_file a {
     font-size: 48px;
   }
 
-  .attachment_file img {
+  .attachment_file img, .video_file img {
     width: 80px;
     height: 80px;
   }
 
-  .attachment_file, .image_file, .thumb-video img {
+  .attachment_file, .video_file, .image_file, .thumb-video img {
     border-radius: 20px;
   }
 
