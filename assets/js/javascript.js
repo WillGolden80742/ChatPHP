@@ -724,26 +724,27 @@ async function downloadAllAudios(time) {
     if (time !== timestamp) {
       return;
     }
+    if (!audioElement.src) {
+      try {
+        const hash = audioElement.getAttribute('id');
+        const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
+        await downloadMidia(id, hash, cacheMap);
 
-    try {
-      const hash = audioElement.getAttribute('id');
-      const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-      await downloadMidia(id, hash, cacheMap);
+        if (audioTime.has(hash)) {
+          const audioTimeData = audioTime.get(hash);
 
-      if (audioTime.has(hash)) {
-        const audioTimeData = audioTime.get(hash);
+          if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
+            audioElement.currentTime = audioTimeData[0];
 
-        if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
-          audioElement.currentTime = audioTimeData[0];
-
-          if (!audioTimeData[1]) {
-            togglePlay(hash);
+            if (!audioTimeData[1]) {
+              togglePlay(hash);
+            }
           }
         }
+      } catch (error) {
+        console.error(error);
+        // Trate o erro aqui, se necessário
       }
-    } catch (error) {
-      console.error(error);
-      // Trate o erro aqui, se necessário
     }
   }
 }
