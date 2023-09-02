@@ -407,7 +407,7 @@ async function showPlayer(hash, event) {
         }
 
         var url = cacheMap.get(hash);
-        embedVideo(url, url);
+        embedVideo(url, hash);
 
         downloading = false;
       } else {
@@ -419,7 +419,7 @@ async function showPlayer(hash, event) {
           videoDiv.style.backgroundImage = 'url(Images/video.svg)';
         }
 
-        embedVideo(urlContent, urlContent);
+        embedVideo(urlContent, hash);
         cacheMap.set(hash, urlContent);
 
         downloading = false;
@@ -1005,7 +1005,7 @@ function embedVideo(link, id) {
   divElement.classList.add('embed-close');
   messagesElement.appendChild(divElement);
   var videoElement = document.createElement('video');
-  videoElement.src = id;
+  videoElement.src = link;
   videoElement.controls = true;
   videoElement.controls = false;
   videoElement.classList.add('embed-video', 'media');
@@ -1039,10 +1039,20 @@ function embedVideo(link, id) {
   progressBarDiv.classList.add('progress-bar');
   var progressDiv = document.createElement('div');
   progressDiv.classList.add('progress');
+  var downloadButtonDiv = document.createElement('div');
+  downloadButtonDiv.style.backgroundImage = "url('Images/Player/download-button.svg')";
+  downloadButtonDiv.classList.add('download-button');
+  downloadButtonDiv.onclick = function() {
+    var downloadLink = document.createElement('a');
+    downloadLink.href = link;
+    downloadLink.download = id;
+    downloadLink.click();
+  };
   progressBarDiv.appendChild(progressDiv);
   controlsDiv.appendChild(playButtonDiv);
   controlsDiv.appendChild(timeDiv);
   controlsDiv.appendChild(progressBarDiv);
+  controlsDiv.appendChild(downloadButtonDiv);
   playerDiv.appendChild(controlsDiv);
   playerDiv.style.backgroundColor = "rgb(23, 37, 52)";
   playerDiv.style.marginBottom = "-10px";
