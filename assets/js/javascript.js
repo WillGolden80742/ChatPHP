@@ -1193,7 +1193,6 @@ async function processTextMessage(messageText) {
 }
 
 function isMessageValid(messageText, inputFile) {
-  const maxLength = 100; // Assuming maxLength is defined somewhere
   return (
       (messageText.trim().length > 0 && messageText.length <= maxLength && inputFile.files.length === 0) ||
       (messageText.trim() === "" && messageText.length <= maxLength && inputFile.files.length === 0)
