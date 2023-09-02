@@ -31,6 +31,8 @@ class Message
             $msg = $this->youtube($msg);
             $msgArray = explode("<style id=\"embed\">", $msg);
             return "<style id=\"embed\">" . $msgArray[1] . $this->link($msgArray[0]);
+        } else if ($this->isSpotify($msg)) {
+            return $this->spotify($msg);
         } else {
             return $this->link($this->msg);
         }
@@ -65,7 +67,22 @@ class Message
 
         return $text;
     }
-
+    function spotify($text)
+    {
+        // Remove "https://" ou "http://"
+        $text = preg_replace('/^(https?:\/\/)/i', '', $text);
+    
+        // Remove parâmetros irrelevantes, como "?si=..."
+        $text = preg_replace('/\?.*$/i', '', $text);
+    
+        $pattern = '/open\.spotify\.com\/([^\/]+)\/track\/([^?]+)/i';
+        $replacement = '<iframe style="border-radius: 12px" src="https://open.spotify.com/embed/track/$2" width="100%" height="250" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+    
+        $embeddedText = preg_replace($pattern, $replacement, $text);
+    
+        return $embeddedText;
+    }
+    
     function youtube($text)
     {
 
@@ -121,6 +138,17 @@ class Message
             return false;
         }
     }
+
+    function isSpotify($text)
+    {
+        $pattern = '/open\.spotify\.com\/[^\/]+\/track\//i';
+        if (preg_match($pattern, $text)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public function __toString(): string
     {
