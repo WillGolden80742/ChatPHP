@@ -254,7 +254,7 @@
   }
 
   .video_file {
-    background-image: linear-gradient(to bottom, rgba(88, 139, 189,0.5), rgba(49, 66, 86,0.5)), url('../../Images/movieTexture.svg');
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255,0.25), rgba(0,0,0,0.25), url('../../Images/movieTexture.svg');
     background-repeat: no-repeat;
     background-size: cover;
   }
