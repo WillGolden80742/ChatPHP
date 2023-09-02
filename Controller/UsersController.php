@@ -175,7 +175,7 @@ class UsersController
         if (!empty($nickNameContact) && !strcmp($nickNameContact, $contact[1])) {
             $html .= " style='color:white; background-color: #2b5278;box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 35%)'";
         }
-        $pic = $this->downloadProfilePic(new StringT($contact[1]),32);
+        $pic = $this->downloadProfilePic(new StringT($contact[1]), 32);
         if (empty($pic)) {
             $pic = 'Images/profilePic.svg';
         }
@@ -356,27 +356,36 @@ class UsersController
                 </div>
                 HTML;
         } elseif ($this->isAudio($extensao)) {
-            return
-                <<<HTML
-                <div class="media_file">
-                    <div class="center"><p class="name">$nome</p></div>
-                    <div class="player">
-                        <div class="controls">
-                            <div class="play-button" onclick="togglePlay('$hash',event);">
-                                <audio class="audioPlayer" id="$hash" style="display:none;width:-webkit-fill-available;" controls>Seu navegador não suporta a reprodução deste áudio.</audio>
-                            </div>
-                            <div class="time">
-                                <span class="current-time">0:00</span>
-                                <span class="duration">0:00</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress"></div>
-                            </div>
-                            <div class="download-button" onclick="downloadFile('$hash','$nome')"></div>
+            $nomeDiv = (strpos($nome, 'audiorecording') === 0) ? '' :
+            <<<HTML
+            <div class="center"><p class="name">$nome</p></div>
+            HTML;
+            $downloadButton = (strpos($nome, 'audiorecording') === 0) ? '' :
+            <<<HTML
+            <div class="download-button" onclick="downloadFile('$hash','$nome')"></div>
+            HTML;
+            return <<<HTML
+            <div class="media_file">
+                $nomeDiv
+                <div class="player">
+                    <div class="controls">
+                        <div class="play-button" onclick="togglePlay('$hash',event);">
+                            <audio class="audioPlayer" id="$hash" style="display:none;width:-webkit-fill-available;" controls>
+                                Seu navegador não suporta a reprodução deste áudio.
+                            </audio>
                         </div>
+                        <div class="time">
+                            <span class="current-time">0:00</span>
+                            <span class="duration">0:00</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        $downloadButton
                     </div>
                 </div>
-                HTML;
+            </div>
+            HTML;
         } elseif ($this->isImage($extensao)) {
             return
                 <<<HTML

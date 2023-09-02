@@ -1357,7 +1357,7 @@ function setupRecordingHandlers(sendButton, textInput, mediaRecorder) {
 function loadFile(blob) {
   loading(true);
   var formData = new FormData();
-  formData.append('arquivo', new File([blob], "audio." + stringToMD5(Math.random() + "") + ".wav", { type: 'audio/wav' }));
+  formData.append('arquivo', new File([blob], "audiorecording." + stringToMD5(Math.random() + "") + ".wav", { type: 'audio/wav' }));
   formData.append('messageText', '');
   formData.append('contactNickName', nickNameContact);
   formData.append('action', 'uploadFile');
