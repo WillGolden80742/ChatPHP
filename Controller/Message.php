@@ -40,33 +40,20 @@ class Message
 
     function link($text)
     {
-
-        $urlY1 = "https://";
-        $urlY2 = "http://";
-        $urlY3 = "www.";
-
-        if (str_contains($text, $urlY1) || str_contains($text, $urlY2) || str_contains($text, $urlY3)) {
-
-            if (str_contains($text, $urlY1)) {
-                $id = explode($urlY1, $text)[1];
-                $id = $this->splitLink($id);
-                $id = $urlY1 . $id;
-            } else if (str_contains($text, $urlY2)) {
-                $id = explode($urlY2, $text)[1];
-                $id = $this->splitLink($id);
-                $id = $urlY2 . $id;
-            } else if (str_contains($text, $urlY3)) {
-                $id = explode($urlY3, $text)[1];
-                $id = $this->splitLink($id);
-                $id = $urlY3 . $id;
-            }
+        // Define a expressão regular para encontrar URLs
+        $pattern = '/(https?:\/\/(?:www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}(?:\/\S*)?)/';
+    
+        // Substitui todas as URLs no texto por links HTML
+        $text = preg_replace_callback($pattern, function ($matches) {
+            $url = $matches[0];
             self::$countLinks++;
             $linkId = self::$countLinks . uniqid();
-            $text = str_replace($id, "<a class='linkMsg' id='$linkId' href='" . $this->href($id) . "' target=\"_blank\">" . $this->href($id) . "</a>", $text);
-        }
-
+            return "<a class='linkMsg' id='$linkId' href='$url' target='_blank'>$url</a>";
+        }, $text);
+    
         return $text;
     }
+    
     function spotify($text)
     {
         // Remove "https://" ou "http://"

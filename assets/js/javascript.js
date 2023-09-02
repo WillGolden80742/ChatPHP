@@ -1185,7 +1185,6 @@ async function processTextMessage(messageText) {
       try {
           const result = await createMessageOnServer(messageText);
           const text = await getMessageText (messageText);
-          console.log("text"+text+"result"+result);
           document.querySelector("#msg" + randID).remove();
           addMessage(result, text, false);
 
@@ -1676,7 +1675,6 @@ function hasNewMsgByCurrentContact(from, message) {
                 const scrollPercentage = getScrollPercentage();
                 messagesDiv.innerHTML += result;
                 messagesElement = document.getElementById("messages");
-                console.log("scrollPercentage:" + getScrollPercentage());
                 if (scrollPercentage > 90) {
                   down();
                 } else {
