@@ -202,8 +202,8 @@
   }
 
   .image_file img {
-    width:250px;
-    height:250px;
+    width: 250px;
+    height: 250px;
     object-fit: cover;
   }
 
@@ -215,7 +215,7 @@
     margin-top: 5px;
     width: 100%;
     border-radius: 10px;
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255,0.25), rgba(0,0,0,0.25));
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25));
   }
 
   .emoji {
@@ -254,7 +254,7 @@
   }
 
   .video_file {
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255,0.25), rgba(0,0,0,0.25)), url('../../Images/movieTexture.svg');
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)), url('../../Images/movieTexture.svg');
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -831,16 +831,26 @@
 
   .spotify_embed {
     border-radius: 12px;
-    width:100%;
-    height:162px;
-    border:none;
+    width: 100%;
+    height: 162px;
+    border: none;
   }
 
   @media (orientation: portrait) or (max-width: 900px) {
 
+    .embed-iframe {
+      margin-top:110px;
+      scale:3;
+      height:34%;
+      width:34%;
+      display: flex;
+      align-self: center;
+      transform: translateY(35%);
+    }
+
     .spotify_embed {
       border-radius: 24px;
-      height:256px;
+      height: 256px;
     }
 
     #down img, #loading img {
