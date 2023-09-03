@@ -63,7 +63,7 @@ class Message
         $text = preg_replace('/\?.*$/i', '', $text);
     
         $pattern = '/open\.spotify\.com\/([^\/]+)\/track\/([^?]+)/i';
-        $replacement = '<iframe style="border-radius: 12px" src="https://open.spotify.com/embed/track/$2" width="100%" height="162" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+        $replacement = '<iframe class="spotify_embed" src="https://open.spotify.com/embed/track/$2" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
     
         $embeddedText = preg_replace($pattern, $replacement, $text);
     

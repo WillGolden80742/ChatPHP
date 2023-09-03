@@ -829,9 +829,19 @@
     box-shadow: 0px 0px 13px 15px rgba(0, 0, 0, 0.35);
   }
 
-
+  .spotify_embed {
+    border-radius: 12px;
+    width:100%;
+    height:162px;
+    border:none;
+  }
 
   @media (orientation: portrait) or (max-width: 900px) {
+
+    .spotify_embed {
+      border-radius: 24px;
+      height:252px;
+    }
 
     #down img, #loading img {
       width: 150px;
