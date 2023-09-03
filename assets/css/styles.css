@@ -721,11 +721,11 @@
 
 
   .play-button {
-    background-image: url("../../Images/Player/loading.gif");
+    background-image: url("../../Images/Player/play-button.svg");
   }
 
   .download-button {
-    background-image: url("../../Images/Player/loading.gif");
+    background-image: url("../../Images/Player/download-button.svg");
   }
 
   .progress-bar {

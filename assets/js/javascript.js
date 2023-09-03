@@ -329,7 +329,6 @@ function loadMoreMessages() {
 
       const msgElements = document.querySelectorAll(".msg");
       if (msgElements.length) {
-        getAudioTimes();
         const idLastMsg = document.querySelector('.msg').id;
         messagesDiv.insertAdjacentHTML('afterbegin', result);
         loadingButton(false);
@@ -521,11 +520,13 @@ var currentIDPlayer = "";
 async function togglePlay(hash, event) {
   var playButton;
   var playerMidia;
-
+  var type="";
   if (document.querySelector('.embed-video')) {
+    type="video";
     playerMidia = document.querySelector('.embed-video');
     playButton = document.querySelector('.play-button');
   } else {
+    type="audio";
     if (event) {
       playButton = event.target;
       playerMidia = playButton.querySelector('audio');
@@ -534,84 +535,85 @@ async function togglePlay(hash, event) {
       playerMidia = document.getElementById(hash);
     }
   }
-
   var progressBar = playButton.closest('.player').querySelector('.progress-bar');
   var progress = playButton.closest('.player').querySelector('.progress-bar .progress');
   var currentTimeElement = playButton.closest('.player').querySelector('.time .current-time');
   var durationElement = playButton.closest('.player').querySelector('.time .duration');
-
   const playIcon = "url('Images/Player/play-button.svg')";
   const pauseIcon = "url('Images/Player/pause-button.svg')";
-
-  if (currentIDPlayer !== hash) {
-    document.querySelectorAll(".play-button").forEach(function (playButton) {
-      playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
-    });
-    document.querySelectorAll('.audioPlayer').forEach(function (audio) {
-      audio.pause();
-    });
-    playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
-    playerMidia.play();
-
-    currentIDPlayer = hash;
+  if (type=="audio" && !playerMidia.src) {
+    currentIDPlayer=hash;
+    await downloadAudio(playerMidia);
   } else {
-    if (playerMidia.paused) {
+    if (currentIDPlayer !== hash) {
+      document.querySelectorAll(".play-button").forEach(function (playButton) {
+        playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+      });
+      document.querySelectorAll('.audioPlayer').forEach(function (audio) {
+        audio.pause();
+      });
+      playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
       playerMidia.play();
-      playButton.style.backgroundImage = pauseIcon;
+
+      currentIDPlayer = hash;
     } else {
-      playerMidia.pause();
-      playButton.style.backgroundImage = playIcon;
+      if (playerMidia.paused) {
+        playerMidia.play();
+        playButton.style.backgroundImage = pauseIcon;
+      } else {
+        playerMidia.pause();
+        playButton.style.backgroundImage = playIcon;
+      }
     }
   }
 
+    // Update progress bar
+    playerMidia.addEventListener('timeupdate', function () {
+      if (currentIDPlayer === hash) {
+        var duration = playerMidia.duration;
+        var currentTime = playerMidia.currentTime;
+        if (duration === 0 || currentTime === 0) {
+          currentTimeElement.textContent = "0:00";
+          durationElement.textContent = "0:00";
+          progress.style.width = "0%";
+        } else {
+          var progressPercentage = (currentTime / duration) * 100;
+          progress.style.width = progressPercentage + "%";
 
-  // Update progress bar
-  playerMidia.addEventListener('timeupdate', function () {
-    if (currentIDPlayer === hash) {
-      var duration = playerMidia.duration;
-      var currentTime = playerMidia.currentTime;
-      if (duration === 0 || currentTime === 0) {
-        currentTimeElement.textContent = "0:00";
-        durationElement.textContent = "0:00";
-        progress.style.width = "0%";
-      } else {
-        var progressPercentage = (currentTime / duration) * 100;
-        progress.style.width = progressPercentage + "%";
+          // Update current time
+          var currentMinutes = Math.floor(currentTime / 60);
+          var currentSeconds = Math.floor(currentTime % 60);
+          currentTimeElement.textContent = currentMinutes + ":" + (currentSeconds < 10 ? "0" : "") + currentSeconds;
 
-        // Update current time
-        var currentMinutes = Math.floor(currentTime / 60);
-        var currentSeconds = Math.floor(currentTime % 60);
-        currentTimeElement.textContent = currentMinutes + ":" + (currentSeconds < 10 ? "0" : "") + currentSeconds;
-
-        // Update duration
-        var durationMinutes = Math.floor(duration / 60);
-        var durationSeconds = Math.floor(duration % 60);
-        durationElement.textContent = durationMinutes + ":" + (durationSeconds < 10 ? "0" : "") + durationSeconds;
+          // Update duration
+          var durationMinutes = Math.floor(duration / 60);
+          var durationSeconds = Math.floor(duration % 60);
+          durationElement.textContent = durationMinutes + ":" + (durationSeconds < 10 ? "0" : "") + durationSeconds;
+        }
       }
-    }
-  });
+    });
 
-  // Monitor the audio playback completion event
-  playerMidia.addEventListener('ended', function () {
-    if (currentIDPlayer === hash) {
-      playButton.style.backgroundImage = playIcon;
-      currentIDPlayer = ""; // Clear the current player ID
-      progress.style.width = "0%"; // Set the progress bar width to 100%
-    }
-  });
-
-  // Seek to a specific time on progress bar click
-  progressBar.addEventListener('click', function (e) {
-    if (currentIDPlayer === hash) {
-      var progressWidth = progressBar.offsetWidth;
-      var clickPosition = e.offsetX;
-      var seekTime = (clickPosition / progressWidth) * playerMidia.duration;
-
-      if (!isNaN(seekTime) && isFinite(seekTime)) {
-        playerMidia.currentTime = seekTime;
+    // Monitor the audio playback completion event
+    playerMidia.addEventListener('ended', function () {
+      if (currentIDPlayer === hash) {
+        playButton.style.backgroundImage = playIcon;
+        currentIDPlayer = ""; // Clear the current player ID
+        progress.style.width = "0%"; // Set the progress bar width to 100%
       }
-    }
-  });
+    });
+
+    // Seek to a specific time on progress bar click
+    progressBar.addEventListener('click', function (e) {
+      if (currentIDPlayer === hash) {
+        var progressWidth = progressBar.offsetWidth;
+        var clickPosition = e.offsetX;
+        var seekTime = (clickPosition / progressWidth) * playerMidia.duration;
+
+        if (!isNaN(seekTime) && isFinite(seekTime)) {
+          playerMidia.currentTime = seekTime;
+        }
+      }
+    });
 }
 
 
@@ -667,21 +669,6 @@ async function downloadMidia(id, hash, cacheMap) {
         element.src = url;
         cacheMap.set(hash, url);
       }
-      elements.forEach(function (audio) {
-        const parentElement = audio.closest(".player");
-
-        if (parentElement) {
-          const playButton = parentElement.querySelector(".controls .play-button");
-          if (playButton) {
-            playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
-          }
-
-          const downloadButton = parentElement.querySelector(".controls .download-button");
-          if (downloadButton) {
-            downloadButton.style.backgroundImage = "url('Images/Player/download-button.svg')";
-          }
-        }
-      });
     });
   } catch (erro) {
     console.error(erro);
@@ -693,8 +680,7 @@ async function downloadAllMidia() {
   const time = timestamp;
   await Promise.all([
     downloadAllTitles(time),
-    downloadAllImages(time),
-    downloadAllAudios(time),
+    downloadAllImages(time)
   ]);
 }
 
@@ -705,7 +691,6 @@ async function downloadAllImages(time) {
     if (time !== timestamp) {
       return;
     }
-
     try {
       const hash = imageElement.querySelector('img').getAttribute('id');
       const id = hash; // ou qualquer outra lógica para obter o ID desejado
@@ -717,36 +702,30 @@ async function downloadAllImages(time) {
   }
 }
 
-async function downloadAllAudios(time) {
-  const audioElements = Array.from(document.querySelectorAll('.media_file audio')).reverse();
-
-  for (const audioElement of audioElements) {
-    if (time !== timestamp) {
-      return;
-    }
-    if (!audioElement.src) {
-      try {
-        const hash = audioElement.getAttribute('id');
-        const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-        await downloadMidia(id, hash, cacheMap);
-
-        if (audioTime.has(hash)) {
-          const audioTimeData = audioTime.get(hash);
-
-          if (audioTimeData[0] !== 0 && audioTimeData[0] !== audioElement.duration) {
-            audioElement.currentTime = audioTimeData[0];
-
-            if (!audioTimeData[1]) {
-              togglePlay(hash);
-            }
-          }
-        }
-      } catch (error) {
-        console.error(error);
-        // Trate o erro aqui, se necessário
+async function downloadAudio (audioElement) {
+  if (!audioElement.src) {
+    try {
+      const playButton = audioElement.parentNode;
+      playButton.style.backgroundImage="url('Images/Player/loading.gif')";
+      const downloadButton = audioElement.parentNode.parentNode.querySelector('.download-button');
+      if (downloadButton) {
+        downloadButton.style.backgroundImage="url('Images/Player/loading.gif')"; 
       }
+      const hash = audioElement.getAttribute('id');
+      const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
+      await downloadMidia(id, hash, cacheMap).then(() => {
+        audioElement.play();
+        playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
+        if (downloadButton) {
+          downloadButton.style.backgroundImage = "url('Images/Player/download-button.svg')";
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      // Trate o erro aqui, se necessário
     }
   }
+
 }
 
 async function downloadLastTitle() {
@@ -803,19 +782,6 @@ async function downloadTitle(linkElemento, link) {
     linkElemento.innerHTML = formattedResult;
   } catch (error) {
     console.error(error);
-  }
-}
-
-function getAudioTimes() {
-  var audioElements = Array.from(document.querySelectorAll('.media_file audio')).reverse();
-  for (let i = 0; i < audioElements.length; i++) {
-    try {
-      var hash = audioElements[i].getAttribute('id');
-      audioTime.set(hash, [audioElements[i].currentTime, audioElements[i].paused]);
-    } catch (erro) {
-      console.error(erro);
-      // Trate o erro aqui, se necessário
-    }
   }
 }
 
@@ -908,7 +874,6 @@ function emojiClicked(event) {
 
 function embedYoutube(id) {
   messageAreaEnable(false);
-  getAudioTimes();
   timestamp = new Date().getTime();
   var messagesElement = document.getElementById('messages');
   if (document.querySelector(".msg")) {
@@ -944,7 +909,6 @@ function embedEmojis() {
   const isOpen = document.querySelector(".emoji-div");
   if (!isOpen) {
     document.querySelector('.text').style.backgroundImage = "url('Images/emojiSelectedIcon.svg')";
-    getAudioTimes();
     timestamp = new Date().getTime();
     // Array com emojis
     const emojis = [
@@ -985,7 +949,6 @@ function embedEmojis() {
 
 function embedVideo(link, id) {
   messageAreaEnable(false);
-  getAudioTimes();
   timestamp = new Date().getTime();
   var messagesElement = document.getElementById('messages'); 
   if (document.querySelector(".msg")) {
@@ -1063,7 +1026,6 @@ function embedVideo(link, id) {
 
 function embedImage(hash) {
   messageAreaEnable(false);
-  getAudioTimes();
   timestamp = new Date().getTime();
   var imageSrc = document.getElementById(hash).src;
   var messagesElement = document.getElementById('messages'); 
@@ -1443,12 +1405,6 @@ async function updateMessages(contact = nickNameContact, name = nickNameContact)
 
   if (contact !== nickNameContact) {
     document.title = contact;
-
-    for (let key of audioTime.keys()) {
-      audioTime.set(key, [0, true]);
-    }
-  } else {
-    getAudioTimes();
   }
 
   timestamp = new Date().getTime();
@@ -1671,7 +1627,6 @@ function hasNewMsgByCurrentContact(from, message) {
             msgsContents += result;
             if (messagesDiv) {
               if (!messagesDiv.querySelector(".media")) {
-                getAudioTimes();
                 const scrollPercentage = getScrollPercentage();
                 const newElement = document.createElement('span');
                 newElement.innerHTML = result;
