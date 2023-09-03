@@ -691,11 +691,9 @@ async function downloadMidia(id, hash, cacheMap) {
 
 async function downloadAllMidia() {
   const time = timestamp;
-  await Promise.all([
-    downloadAllTitles(time),
-    downloadAllImages(time),
-    downloadAllAudios(time),
-  ]);
+  downloadAllTitles(time);
+  downloadAllImages(time);
+  downloadAllAudios(time);
 }
 
 async function downloadAllImages(time) {
