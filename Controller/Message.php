@@ -42,7 +42,7 @@ class Message
     {
         // Define a expressão regular para encontrar URLs
         $pattern = '/(https?:\/\/(?:www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}(?:\/\S*)?)/';
-    
+
         // Substitui todas as URLs no texto por links HTML
         $text = preg_replace_callback($pattern, function ($matches) {
             $url = $matches[0];
@@ -50,26 +50,36 @@ class Message
             $linkId = self::$countLinks . uniqid();
             return "<a class='linkMsg' id='$linkId' href='$url' target='_blank'>$url</a>";
         }, $text);
+
+        return $text;
+    }
+    function spotify($text) {
+        // Remova "https://" ou "http://"
+        $text = preg_replace('/^(https?:\/\/)/i', '', $text);
     
+        // Remova parâmetros irrelevantes, como "?si=..."
+        $text = preg_replace('/\?.*$/i', '', $text);
+    
+        // Verifique ambos os estilos de URL
+        $pattern1 = '/open\.spotify\.com\/([^\/]+)\/track\/([^?]+)/i';
+        $pattern2 = '/open\.spotify\.com\/track\/([^?]+)/i';
+    
+        // Verifique se o padrão 1 ou o padrão 2 corresponde à URL
+        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches)) {
+            // Se corresponder a qualquer um dos padrões, use o grupo correspondente
+            $track_id = isset($matches[2]) ? $matches[2] : $matches[1];
+    
+            // Construa a URL desejada
+            $embeddedText = '<iframe class="spotify_embed" src="https://open.spotify.com/embed/track/' . $track_id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+    
+            return $embeddedText;
+        }
+    
+        // Se a URL não corresponder a nenhum dos padrões, retorne o texto original
         return $text;
     }
     
-    function spotify($text)
-    {
-        // Remove "https://" ou "http://"
-        $text = preg_replace('/^(https?:\/\/)/i', '', $text);
-    
-        // Remove parâmetros irrelevantes, como "?si=..."
-        $text = preg_replace('/\?.*$/i', '', $text);
-    
-        $pattern = '/open\.spotify\.com\/([^\/]+)\/track\/([^?]+)/i';
-        $replacement = '<iframe class="spotify_embed" src="https://open.spotify.com/embed/track/$2" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
-    
-        $embeddedText = preg_replace($pattern, $replacement, $text);
-    
-        return $embeddedText;
-    }
-    
+
     function youtube($text)
     {
 
@@ -126,10 +136,11 @@ class Message
         }
     }
 
-    function isSpotify($text)
-    {
-        $pattern = '/open\.spotify\.com\/[^\/]+\/track\//i';
-        if (preg_match($pattern, $text)) {
+    function isSpotify($text) {
+        $pattern1 = '/open\.spotify\.com\/[^\/]+\/track\//i';
+        $pattern2 = '/open\.spotify\.com\/track\//i';
+    
+        if (preg_match($pattern1, $text) || preg_match($pattern2, $text)) {
             return true;
         } else {
             return false;
