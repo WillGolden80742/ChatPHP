@@ -1673,7 +1673,9 @@ function hasNewMsgByCurrentContact(from, message) {
               if (!messagesDiv.querySelector(".media")) {
                 getAudioTimes();
                 const scrollPercentage = getScrollPercentage();
-                messagesDiv.innerHTML += result;
+                const newElement = document.createElement('div');
+                newElement.innerHTML = result;
+                messagesDiv.appendChild(newElement);
                 messagesElement = document.getElementById("messages");
                 if (scrollPercentage > 90) {
                   down();
