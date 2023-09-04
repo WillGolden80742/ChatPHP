@@ -516,7 +516,6 @@ async function downloadBase64(nomeHash) {
 }
 
 var currentIDPlayer = "";
-
 async function togglePlay(hash, event) {
   var playButton;
   var playerMidia;
@@ -702,31 +701,67 @@ async function downloadAllImages(time) {
   }
 }
 
-async function downloadAudio (audioElement) {
-  if (!audioElement.src) {
+async function downloadAudio(audioElement) {
+  const { src, id } = audioElement;
+
+  if (!src) {
     try {
       const playButton = audioElement.parentNode;
-      playButton.style.backgroundImage="url('Images/Player/loading.gif')";
-      const downloadButton = audioElement.parentNode.parentNode.querySelector('.download-button');
+      const downloadButton = playButton.parentNode.querySelector('.download-button');
+      
+      // Set loading images
+      setButtonBackgroundImage(playButton, "url('Images/Player/loading.gif')");
       if (downloadButton) {
-        downloadButton.style.backgroundImage="url('Images/Player/loading.gif')"; 
+        setButtonBackgroundImage(downloadButton, "url('Images/Player/loading.gif')");
       }
-      const hash = audioElement.getAttribute('id');
-      const id = audioElement.getAttribute('id'); // ou qualquer outra lógica para obter o ID desejado
-      await downloadMidia(id, hash, cacheMap).then(() => {
-        audioElement.play();
-        playButton.style.backgroundImage = "url('Images/Player/pause-button.svg')";
-        if (downloadButton) {
-          downloadButton.style.backgroundImage = "url('Images/Player/download-button.svg')";
-        }
-      });
+
+      // Realize o download da mídia usando a função downloadMidia
+      await downloadMidia(id, id, cacheMap);
+
+      // Wait for at least 1 second before updating buttons and removing loading animation
+      await wait(1000);
+
+      // Reset play buttons and pause all audio elements
+      resetPlayButtons();
+      pauseAllAudioElements();
+
+      // Play the audio
+      audioElement.play();
+      setButtonBackgroundImage(playButton, "url('Images/Player/pause-button.svg')");
+      
+      if (downloadButton) {
+        setButtonBackgroundImage(downloadButton, "url('Images/Player/download-button.svg')");
+      }
     } catch (error) {
       console.error(error);
-      // Trate o erro aqui, se necessário
+      // Handle the error here, if necessary
     }
   }
-
+  
+  function setButtonBackgroundImage(button, imageUrl) {
+    if (button) {
+      button.style.backgroundImage = imageUrl;
+    }
+  }
+  
+  function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  
+  function resetPlayButtons() {
+    document.querySelectorAll(".play-button").forEach(function (playButton) {
+      setButtonBackgroundImage(playButton, "url('Images/Player/play-button.svg')");
+    });
+  }
+  
+  function pauseAllAudioElements() {
+    document.querySelectorAll('.audioPlayer').forEach(function (audio) {
+      audio.pause();
+    });
+  }
 }
+
+
 
 async function downloadLastTitle() {
   const elementos = Array.from(document.getElementsByClassName('linkMsg')).reverse();

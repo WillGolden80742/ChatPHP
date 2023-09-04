@@ -730,7 +730,7 @@
 
   .progress-bar {
     flex-grow: 1;
-    height: 20px;
+    height:10px;
     background-color: #ccc;
     margin: 0 10px;
     position: relative;
