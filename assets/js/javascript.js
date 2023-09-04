@@ -737,7 +737,7 @@ async function downloadAudio(audioElement) {
       // Handle the error here, if necessary
     }
   }
-  
+
   function setButtonBackgroundImage(button, imageUrl) {
     if (button) {
       button.style.backgroundImage = imageUrl;
@@ -1289,8 +1289,6 @@ async function resizeAndConvertToJPG(file) {
       });
   });
 }
-
-
 
 async function startRecording() {
   const sendButton = document.querySelector(".send");
