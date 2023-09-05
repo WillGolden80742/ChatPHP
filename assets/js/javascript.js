@@ -615,6 +615,38 @@ async function togglePlay(hash, event) {
     });
 }
 
+function resetAllPlayers() {
+  const audioPlayers = document.querySelectorAll('.audioPlayer');
+  const playButtons = document.querySelectorAll(".play-button");
+  const downloadButtons = document.querySelectorAll(".download-button");
+  const progresses = document.querySelectorAll('.progress');
+  const currentTimes = document.querySelectorAll('.current-time');
+  const durations = document.querySelectorAll('.duration');
+
+  audioPlayers.forEach(function (audioPlayer) {
+    audioPlayer.pause();
+  });
+
+  playButtons.forEach(function (playButton) {
+    playButton.style.backgroundImage = "url('Images/Player/play-button.svg')";
+  });
+
+  downloadButtons.forEach(function (downloadButton) {
+    downloadButton.style.backgroundImage = "url('Images/Player/download-button.svg')";
+  });
+
+  progresses.forEach(function (progress) {
+    progress.style.width = 0;
+  });
+
+  currentTimes.forEach(function (currentTime) {
+    currentTime.innerHTML = "0:00";
+  });
+
+  durations.forEach(function (duration) {
+    duration.innerHTML = "0:00";
+  });
+}
 
 function getCache(key) {
   const storage = localStorage.getItem(key);
@@ -908,6 +940,7 @@ function emojiClicked(event) {
 
 
 function embedYoutube(id) {
+  resetAllPlayers();
   messageAreaEnable(false);
   timestamp = new Date().getTime();
   var messagesElement = document.getElementById('messages');
@@ -941,6 +974,7 @@ function embedYoutube(id) {
   messagesElement.appendChild(iframeElement);
 }
 function embedEmojis() {
+  resetAllPlayers();
   const isOpen = document.querySelector(".emoji-div");
   if (!isOpen) {
     document.querySelector('.text').style.backgroundImage = "url('Images/emojiSelectedIcon.svg')";
@@ -983,6 +1017,7 @@ function embedEmojis() {
 }
 
 function embedVideo(link, id) {
+  resetAllPlayers();
   messageAreaEnable(false);
   timestamp = new Date().getTime();
   var messagesElement = document.getElementById('messages'); 
@@ -1060,6 +1095,7 @@ function embedVideo(link, id) {
 }
 
 function embedImage(hash) {
+  resetAllPlayers();
   messageAreaEnable(false);
   timestamp = new Date().getTime();
   var imageSrc = document.getElementById(hash).src;
