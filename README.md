@@ -1,70 +1,71 @@
-# ChatPHP
+Here is a translation of the ChatPHP description to English:
 
-ChatPHP é um chat web desenvolvido com PHP, MySQL, HTML, CSS e JavaScript.
+# ChatPHP 
 
-## Funcionalidades
+ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 
-- Cadastro e login de usuários com validação
+## Features
 
-- Enviar mensagens de texto em tempo real
+\- User registration and login with validation
 
-- Enviar arquivos como imagens, áudio, vídeo e documentos
+\- Send text messages in real time  
 
-- Notificações de novas mensagens
+\- Send files like images, audio, video and documents
 
-- Pesquisa de contatos pelo nome
+\- New message notifications  
 
-- Edição de perfil do usuário (foto, nome, username)
+\- Contact search by name
 
-- Troca de senha com validação
+\- Edit user profile (photo, name, username)
 
-- Reprodução de áudio e vídeo no chat
+\- Password change with validation
 
-- Pré-visualização de imagens no chat
+\- Audio and video playback in chat
 
-- Envio de emojis
+\- Image preview in chat
 
-- Gravação de áudio
+\- Sending emojis
 
-## Tecnologias
+\- Audio recording
 
-- PHP 8
+## Technologies
 
-- MySQL 
+\- PHP 8
 
-- HTML, CSS, JS
+\- MySQL
 
-- JavaScript
+\- HTML, CSS, JS
 
-- jQuery
+\- JavaScript
 
-- AJAX
-  
-- WebSocket
+\- jQuery
 
-## Instalação
+\- AJAX 
 
-- Importar o banco de dados SQL
+\- WebSocket
 
-- Configurar variáveis de ambiente (.env)
+## Installation
 
-- Instalar dependências com `composer install`
+\- Import the SQL database
 
-- Definir URL base no arquivo de configuração
+\- Configure environment variables (.env)
 
-## Demostrações
+\- Install dependencies with `composer install`
+
+\- Set base URL in config file
+
+## Demos
 
 https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3
 
 https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-998a-04c68f13b2a9
 
-![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/5014f77d-2166-4882-9510-97c2ab5502c5)
+!\[image\](https://github.com/WillGolden80742/ChatPHP/assets/91426752/5014f77d-2166-4882-9510-97c2ab5502c5)
 
-![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/0052d7fc-3bf9-4a3d-8b98-48288c4e118a)
+!\[image\](https://github.com/WillGolden80742/ChatPHP/assets/91426752/0052d7fc-3bf9-4a3d-8b98-48288c4e118a)
 
-![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/dd3e2668-a99a-4907-9d69-c2e89c5be225)
+!\[image\](https://github.com/WillGolden80742/ChatPHP/assets/91426752/dd3e2668-a99a-4907-9d69-c2e89c5be225)
 
+## License
 
-## Licença
-
-ChatPHP está licenciado sob a licença MIT.
+ChatPHP is licensed under the MIT license.
