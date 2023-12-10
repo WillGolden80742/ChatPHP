@@ -1,5 +1,3 @@
-Here is a translation of the ChatPHP description to English:
-
 # ChatPHP 
 
 ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
