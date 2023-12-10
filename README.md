@@ -4,53 +4,53 @@ ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 
 ## Features
 
-\- User registration and login with validation
+- User registration and login with validation
 
-\- Send text messages in real time  
+- Send text messages in real time  
 
-\- Send files like images, audio, video and documents
+- Send files like images, audio, video and documents
 
-\- New message notifications  
+- New message notifications  
 
-\- Contact search by name
+- Contact search by name
 
-\- Edit user profile (photo, name, username)
+- Edit user profile (photo, name, username)
 
-\- Password change with validation
+- Password change with validation
 
-\- Audio and video playback in chat
+- Audio and video playback in chat
 
-\- Image preview in chat
+- Image preview in chat
 
-\- Sending emojis
+- Sending emojis
 
-\- Audio recording
+- Audio recording
 
 ## Technologies
 
-\- PHP 8
+- PHP 8
 
-\- MySQL
+- MySQL
 
-\- HTML, CSS, JS
+- HTML, CSS, JS
 
-\- JavaScript
+- JavaScript
 
-\- jQuery
+- jQuery
 
-\- AJAX 
+- AJAX 
 
-\- WebSocket
+- WebSocket
 
 ## Installation
 
-\- Import the SQL database
+- Import the SQL database
 
-\- Configure environment variables (.env)
+- Configure environment variables (.env)
 
-\- Install dependencies with `composer install`
+- Install dependencies with `composer install`
 
-\- Set base URL in config file
+- Set base URL in config file
 
 ## Demos
 
