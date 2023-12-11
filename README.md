@@ -1,36 +1,36 @@
-# ChatPHP
+# ChatPHP 
 
-ChatPHP é um chat web desenvolvido com PHP, MySQL, HTML, CSS e JavaScript.
+ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 
-## Funcionalidades
+## Features
 
-- Cadastro e login de usuários com validação
+- User registration and login with validation
 
-- Enviar mensagens de texto em tempo real
+- Send text messages in real time  
 
-- Enviar arquivos como imagens, áudio, vídeo e documentos
+- Send files like images, audio, video and documents
 
-- Notificações de novas mensagens
+- New message notifications  
 
-- Pesquisa de contatos pelo nome
+- Contact search by name
 
-- Edição de perfil do usuário (foto, nome, username)
+- Edit user profile (photo, name, username)
 
-- Troca de senha com validação
+- Password change with validation
 
-- Reprodução de áudio e vídeo no chat
+- Audio and video playback in chat
 
-- Pré-visualização de imagens no chat
+- Image preview in chat
 
-- Envio de emojis
+- Sending emojis
 
-- Gravação de áudio
+- Audio recording
 
-## Tecnologias
+## Technologies
 
 - PHP 8
 
-- MySQL 
+- MySQL
 
 - HTML, CSS, JS
 
@@ -38,21 +38,19 @@ ChatPHP é um chat web desenvolvido com PHP, MySQL, HTML, CSS e JavaScript.
 
 - jQuery
 
-- AJAX
-  
+- AJAX 
+
 - WebSocket
 
-## Instalação
+## Installation
 
-- Importar o banco de dados SQL
+- Import the SQL database
 
-- Configurar variáveis de ambiente (.env)
+- Configure environment variables (.env)
 
-- Instalar dependências com `composer install`
-
-- Definir URL base no arquivo de configuração
-
-## Demostrações
+- Install dependencies with `composer install`
+  
+## Demos
 
 https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3
 
@@ -64,7 +62,6 @@ https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-99
 
 ![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/dd3e2668-a99a-4907-9d69-c2e89c5be225)
 
+## License
 
-## Licença
-
-ChatPHP está licenciado sob a licença MIT.
+ChatPHP is licensed under the MIT license.
