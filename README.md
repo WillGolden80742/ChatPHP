@@ -49,9 +49,7 @@ ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 - Configure environment variables (.env)
 
 - Install dependencies with `composer install`
-
-- Set base URL in config file
-
+  
 ## Demos
 
 https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3
