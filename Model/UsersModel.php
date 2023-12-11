@@ -161,6 +161,12 @@ class UsersModel
 
     function messages(StringT $nickName, StringT $contactNickName,$pag=1)
     {
+        $connection = $this->conFactoryPDO;
+        // Excluir entrada em new_messages onde sender é $contactNickName e receiver é $nickName
+        $deleteQuery = $connection->query("DELETE FROM new_messages WHERE sender = :contactNickName AND receiver = :nickName");
+        $deleteQuery->bindParam(':contactNickName', $contactNickName);
+        $deleteQuery->bindParam(':nickName', $nickName);
+        $connection->execute($deleteQuery);
         // Recomendado uso de prepare statement 
         return $this->conFactory->query("call messagePaginated('" . $nickName . "','" . $contactNickName . "',$pag)");
     }
@@ -186,13 +192,60 @@ class UsersModel
     {
         if (strcmp($contactNickName, $nick) !== 0) {
             $connection = $this->conFactoryPDO;
-            $query = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, :nick,:contactNickName)");
-            $query->bindParam(':msg', $msg);
-            $query->bindParam(':nick', $nick);
-            $query->bindParam(':contactNickName', $contactNickName);
-            $connection->execute($query);
+    
+            // Insert message into the 'messages' table
+            $messageQuery = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, :nick, :contactNickName)");
+            $messageQuery->bindParam(':msg', $msg);
+            $messageQuery->bindParam(':nick', $nick);
+            $messageQuery->bindParam(':contactNickName', $contactNickName);
+            $connection->execute($messageQuery);
+    
+            // Get the last inserted message Id
+            $getLastMessageIdQuery = $connection->query("SELECT Idmessage FROM messages WHERE (MsgFrom = :nick AND MsgTo = :contactNickName) OR (MsgFrom = :contactNickName AND MsgTo = :nick) ORDER BY Date DESC LIMIT 1");
+            $getLastMessageIdQuery->bindParam(':nick', $nick);
+            $getLastMessageIdQuery->bindParam(':contactNickName', $contactNickName);
+            $connection->execute($getLastMessageIdQuery);
+            $messageId = $getLastMessageIdQuery->fetchColumn();
+    
+            // Check if a row already exists in 'new_messages' table
+            $checkQuery = $connection->query("SELECT * FROM new_messages WHERE sender = :nick AND receiver = :contactNickName");
+            $checkQuery->bindParam(':nick', $nick);
+            $checkQuery->bindParam(':contactNickName', $contactNickName);
+            $connection->execute($checkQuery);
+    
+            if ($checkQuery->rowCount() > 0) {
+                // If a row exists, update the message_count
+                $updateQuery = $connection->query("UPDATE new_messages SET message_count = message_count + 1, messageId = :messageId WHERE sender = :nick AND receiver = :contactNickName");
+                $updateQuery->bindParam(':messageId', $messageId);
+                $updateQuery->bindParam(':nick', $nick);
+                $updateQuery->bindParam(':contactNickName', $contactNickName);
+                $connection->execute($updateQuery);
+            } else {
+                // If no row exists, create a new row
+                $insertQuery = $connection->query("INSERT INTO new_messages (sender, receiver, messageId) VALUES (:nick, :contactNickName, :messageId)");
+                $insertQuery->bindParam(':nick', $nick);
+                $insertQuery->bindParam(':contactNickName', $contactNickName);
+                $insertQuery->bindParam(':messageId', $messageId);
+                $connection->execute($insertQuery);
+            }
         }
     }
+
+    function getNewMessagesForContact(StringT $contactNickName) {
+
+        $connection = $this->conFactoryPDO;
+
+        // Select new messages from table
+        $getMessagesQuery = $connection->query("SELECT message_count FROM new_messages WHERE sender = :contactNickName");
+        $getMessagesQuery->bindParam(':contactNickName', $contactNickName);
+        $connection->execute($getMessagesQuery);
+        
+        // Get number of messages
+        $numMessages = $getMessagesQuery->fetchColumn();
+      
+        return $numMessages;
+    }
+    
 
     function deleteMessage($id, $contactNickName, $nick)
     {

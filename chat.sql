@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 25/08/2023 às 04:50
--- Versão do servidor: 10.4.27-MariaDB
--- Versão do PHP: 8.1.12
+-- Tempo de geração: 11/12/2023 às 19:10
+-- Versão do servidor: 10.4.28-MariaDB
+-- Versão do PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `ChatPHP`
 --
+CREATE DATABASE IF NOT EXISTS `ChatPHP` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ChatPHP`;
 
 DELIMITER $$
 --
@@ -140,6 +142,19 @@ CREATE TABLE `messages` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `new_messages`
+--
+
+CREATE TABLE `new_messages` (
+  `sender` varchar(20) NOT NULL,
+  `receiver` varchar(20) NOT NULL,
+  `message_count` int(11) NOT NULL DEFAULT 1,
+  `messageId` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `profilepicture`
 --
 
@@ -197,6 +212,14 @@ ALTER TABLE `messages`
   ADD KEY `Idmessage_2` (`Idmessage`);
 
 --
+-- Índices de tabela `new_messages`
+--
+ALTER TABLE `new_messages`
+  ADD PRIMARY KEY (`sender`,`receiver`),
+  ADD KEY `receiver` (`receiver`),
+  ADD KEY `new_messages_ibfk_3` (`messageId`);
+
+--
 -- Índices de tabela `profilepicture`
 --
 ALTER TABLE `profilepicture`
@@ -236,6 +259,14 @@ ALTER TABLE `anexo`
 ALTER TABLE `messages`
   ADD CONSTRAINT `msgFromCliente` FOREIGN KEY (`MsgFrom`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `msgToCliente` FOREIGN KEY (`MsgTo`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `new_messages`
+--
+ALTER TABLE `new_messages`
+  ADD CONSTRAINT `new_messages_ibfk_1` FOREIGN KEY (`sender`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `new_messages_ibfk_2` FOREIGN KEY (`receiver`) REFERENCES `clientes` (`nickName`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `new_messages_ibfk_3` FOREIGN KEY (`messageId`) REFERENCES `messages` (`Idmessage`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para tabelas `profilepicture`
