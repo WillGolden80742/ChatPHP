@@ -161,7 +161,7 @@ class UsersController
     }
 
     public function getNewMessagesForContact($contactNickname) {
-        return $this->user->getNewMessagesForContact($contactNickname);
+        return $this->user->getNewMessagesForContact(new StringT($this->nickSession),new StringT($contactNickname));
     }
 
     function generateContactsHtml($contact, $nickNameContact, $sync)
@@ -184,7 +184,7 @@ class UsersController
             $pic = 'Images/profilePic.svg';
         }
         $html .= "><div class='picContact' id='$contact[1]'><img src='Images/blank.png' style='background-image:url({$pic});' /></div>&nbsp&nbsp{$contact[0]} &nbsp";
-        $numNewMessages = $this->getNewMessagesForContact(new StringT ($contact[1]));
+        $numNewMessages = $this->getNewMessagesForContact($contact[1]);
         if($numNewMessages > 0 && !(!empty($nickNameContact) && !strcmp($nickNameContact, $contact[1]))) {
           $html .= "<span class='newMsg'>";
           $html .= $numNewMessages; 

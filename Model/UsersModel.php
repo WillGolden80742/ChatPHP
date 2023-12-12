@@ -222,20 +222,21 @@ class UsersModel
         }
     }
 
-    function getNewMessagesForContact(StringT $contactNickName) {
-
+    function getNewMessagesForContact(StringT $myNickName, StringT $contactNickName) {
         $connection = $this->conFactoryPDO;
-
-        // Select new messages from table
-        $getMessagesQuery = $connection->query("SELECT message_count FROM new_messages WHERE sender = :contactNickName");
+    
+        // Select new messages from table where receiver is $myNickName
+        $getMessagesQuery = $connection->query("SELECT message_count FROM new_messages WHERE sender = :contactNickName AND receiver = :myNickName");
         $getMessagesQuery->bindParam(':contactNickName', $contactNickName);
+        $getMessagesQuery->bindParam(':myNickName', $myNickName);
         $connection->execute($getMessagesQuery);
-        
+    
         // Get number of messages
         $numMessages = $getMessagesQuery->fetchColumn();
-      
+    
         return $numMessages;
     }
+    
     
 
     function deleteMessage($id, $contactNickName, $nick)
