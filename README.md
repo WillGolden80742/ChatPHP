@@ -42,6 +42,10 @@ ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 
 - WebSocket
 
+## DER 
+
+![DER](https://github.com/WillGolden80742/ChatPHP/assets/91426752/93a7f1db-e2de-4914-982b-d852cc98642d)
+
 ## Installation
 
 - Import the SQL database
@@ -49,10 +53,6 @@ ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 - Configure environment variables (.env)
 
 - Install dependencies with `composer install`
-
-## DER 
-
-![DER](https://github.com/WillGolden80742/ChatPHP/assets/91426752/93a7f1db-e2de-4914-982b-d852cc98642d)
 
 ## Demos
 
