@@ -42,7 +42,9 @@ ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 
 - WebSocket
 
-## DER 
+## DOCUMENTATION
+
+# DER 
 
 ![DER](https://github.com/WillGolden80742/ChatPHP/assets/91426752/93a7f1db-e2de-4914-982b-d852cc98642d)
 
