@@ -1,4 +1,4 @@
-# ChatPHP Documentation
+# ChatPHP
 
 1. [Introduction](#introduction)
 2. [Features](#features)
