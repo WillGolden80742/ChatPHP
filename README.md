@@ -89,7 +89,7 @@ This documentation provides an in-depth overview of the messaging system develop
 - `createMessage`: Create new message.
 - `deleteMessage`: Delete message.
 - `down`: Scroll down through messages.
-- `downButton`: Show/hide scroll button.
+- `downButton`: Show/hide downButton button.
 - `downloadAllAudios`: Download all audios.
 - `downloadAllImages`: Download all images.
 - `downloadAllMidia`: Download all media.
