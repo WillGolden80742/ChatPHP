@@ -59,7 +59,6 @@ This documentation provides an in-depth overview of the messaging system develop
 
 #### Global Variables
 
-- `audioTime`: Map for storing audio playback times.
 - `cacheMap`: Map to cache downloaded media.
 - `currentIDPlayer`: ID of the currently active audio player.
 - `downloading`: Boolean indicating whether media is being downloaded.
