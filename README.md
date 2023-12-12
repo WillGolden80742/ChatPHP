@@ -324,8 +324,8 @@ This class abstracts the database and provides methods for business logic.
 
 ## Demos
 
-![Demo 1](https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3)
-![Demo 2](https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-998a-04c68f13b2a9)
+[Demo 1](https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3)
+[Demo 2](https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-998a-04c68f13b2a9)
 
 ![Demo Image 1](https://github.com/WillGolden80742/ChatPHP/assets/91426752/5014f77d-2166-4882-9510-97c2ab5502c5)
 
