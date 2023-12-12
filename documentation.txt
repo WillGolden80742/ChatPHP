@@ -254,7 +254,7 @@ isAudio() - checks if it's audio by extension
 isImage() - checks if it's an image by extension
 lasIdMessage() - get the last message ID
 createMessage() - creates a new message
-getNewMessagesForContact() - bring count of new messages coming from contacts passed by parameter
+getNewMessagesForContact() - bring count of new messages by contact
 deleteMessage() - deletes a Message
 
 Model/AuthenticateModel.php:
@@ -307,7 +307,7 @@ lastMessage() - get last message from a contact
 messageByID() - get message by ID
 lasIdMessage() - get last message ID
 createMessage() - creates a new message
-getNewMessagesForContact() - bring count of new messages coming from contacts passed by parameter
+getNewMessagesForContact() - bring count of new messages by contact
 deleteMessage() - deletes a message
 getNumberOfAttachments() - get number of attachments
 The main functionalities provided by the class are database interactions for:
