@@ -21,6 +21,8 @@
 6. [Demos](#demos)
 7. [License](#license)
 
+## Introduction <a name="introduction"></a>
+
 ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 
 ## Features
