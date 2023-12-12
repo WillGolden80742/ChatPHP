@@ -89,7 +89,6 @@ This documentation provides an in-depth overview of the messaging system develop
 - `deleteMessage`: Delete message.
 - `down`: Scroll down through messages.
 - `downButton`: Show/hide downButton button.
-- `downloadAllAudios`: Download all audios.
 - `downloadAllImages`: Download all images.
 - `downloadAllMidia`: Download all media.
 - `downloadAllPicContacts`: Download all profile pictures.
