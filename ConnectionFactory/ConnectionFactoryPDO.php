@@ -21,7 +21,6 @@ class ConnectionFactoryPDO
         try {
             $this->conn = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $mysqli->set_charset("utf8mb4");
             return $this->conn;
         } catch (PDOException $e) {
             echo $e->getMessage();

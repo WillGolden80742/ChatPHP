@@ -33,7 +33,6 @@ class ConnectionFactory
     function connect()
     {
         $this->connection = mysqli_connect($this->servername, $this->username, $this->password, $this->dbname);
-        $mysqli->set_charset("utf8mb4");
         return $this->connection;
     }
 
