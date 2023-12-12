@@ -200,13 +200,6 @@ class UsersModel
             $messageQuery->bindParam(':contactNickName', $contactNickName);
             $connection->execute($messageQuery);
     
-            // Get the last inserted message Id
-            $getLastMessageIdQuery = $connection->query("SELECT Idmessage FROM messages WHERE (MsgFrom = :nick AND MsgTo = :contactNickName) OR (MsgFrom = :contactNickName AND MsgTo = :nick) ORDER BY Date DESC LIMIT 1");
-            $getLastMessageIdQuery->bindParam(':nick', $nick);
-            $getLastMessageIdQuery->bindParam(':contactNickName', $contactNickName);
-            $connection->execute($getLastMessageIdQuery);
-            $messageId = $getLastMessageIdQuery->fetchColumn();
-    
             // Check if a row already exists in 'new_messages' table
             $checkQuery = $connection->query("SELECT * FROM new_messages WHERE sender = :nick AND receiver = :contactNickName");
             $checkQuery->bindParam(':nick', $nick);
@@ -215,17 +208,15 @@ class UsersModel
     
             if ($checkQuery->rowCount() > 0) {
                 // If a row exists, update the message_count
-                $updateQuery = $connection->query("UPDATE new_messages SET message_count = message_count + 1, messageId = :messageId WHERE sender = :nick AND receiver = :contactNickName");
-                $updateQuery->bindParam(':messageId', $messageId);
+                $updateQuery = $connection->query("UPDATE new_messages SET message_count = message_count + 1 WHERE sender = :nick AND receiver = :contactNickName");
                 $updateQuery->bindParam(':nick', $nick);
                 $updateQuery->bindParam(':contactNickName', $contactNickName);
                 $connection->execute($updateQuery);
             } else {
                 // If no row exists, create a new row
-                $insertQuery = $connection->query("INSERT INTO new_messages (sender, receiver, messageId) VALUES (:nick, :contactNickName, :messageId)");
+                $insertQuery = $connection->query("INSERT INTO new_messages (sender, receiver) VALUES (:nick, :contactNickName)");
                 $insertQuery->bindParam(':nick', $nick);
                 $insertQuery->bindParam(':contactNickName', $contactNickName);
-                $insertQuery->bindParam(':messageId', $messageId);
                 $connection->execute($insertQuery);
             }
         }
