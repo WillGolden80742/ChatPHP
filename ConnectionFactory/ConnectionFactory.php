@@ -25,6 +25,7 @@ class ConnectionFactory
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
+        $mysqli->set_charset("utf8mb4");
         $query = mysqli_query($this->connection, $sql);
         $this->close();
         return $query;
