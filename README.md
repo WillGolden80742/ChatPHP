@@ -1,5 +1,26 @@
 # ChatPHP 
 
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Technologies](#technologies)
+4. [Documentation](#documentation)
+   - [Messaging System Documentation](#messaging-system-documentation)
+      - [Overview](#overview)
+      - [assets/js/javascript.js](#assetsjsjavascriptjs)
+      - [ConnectionFactory/ConnectionFactoryPDO.php](#connectionfactoryconnectionfactorypdo.php)
+      - [Controller/AuthenticateController.php](#controller/authenticatecontroller.php)
+      - [Controller/FileController.php](#controller/filecontroller.php)
+      - [Controller/Message.php](#controller/message.php)
+      - [Controller/UsersController.php](#controller/userscontroller.php)
+      - [Model/AuthenticateModel.php](#model/authenticatemodel.php)
+      - [Model/UsersModel.php](#model/usersmodel.php)
+   - [DER](#der)
+5. [Installation](#installation)
+6. [Demos](#demos)
+7. [License](#license)
+
 ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
 
 ## Features
