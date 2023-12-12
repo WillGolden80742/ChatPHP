@@ -1,79 +1,59 @@
-# ChatPHP 
-
-## Table of Contents
+# ChatPHP Documentation
 
 1. [Introduction](#introduction)
 2. [Features](#features)
 3. [Technologies](#technologies)
 4. [Documentation](#documentation)
-   - [Messaging System Documentation](#messaging-system-documentation)
-      - [Overview](#overview)
-      - [assets/js/javascript.js](#assetsjsjavascriptjs)
-      - [ConnectionFactory/ConnectionFactoryPDO.php](#connectionfactoryconnectionfactorypdo.php)
-      - [Controller/AuthenticateController.php](#controller/authenticatecontroller.php)
-      - [Controller/FileController.php](#controller/filecontroller.php)
-      - [Controller/Message.php](#controller/message.php)
-      - [Controller/UsersController.php](#controller/userscontroller.php)
-      - [Model/AuthenticateModel.php](#model/authenticatemodel.php)
-      - [Model/UsersModel.php](#model/usersmodel.php)
-   - [DER](#der)
-5. [Installation](#installation)
-6. [Demos](#demos)
-7. [License](#license)
+    - [Messaging System Documentation](#messaging-system-documentation)
+    - [Overview](#overview)
+    - [assets/js/javascript.js](#assetsjsjavascriptjs)
+    - [ConnectionFactory/ConnectionFactoryPDO.php](#connectionfactoryconnectionfactorypdo.php)
+    - [Controller/AuthenticateController.php](#controllerauthenticatecontroller.php)
+    - [Controller/FileController.php](#controllerfilecontroller.php)
+    - [Controller/Message.php](#controllermessage.php)
+    - [Controller/UsersController.php](#controlleruserscontroller.php)
+    - [Model/AuthenticateModel.php](#modelauthenticatemodel.php)
+    - [Model/UsersModel.php](#modelusersmodel.php)
+5. [DER (Database Entity Relationship)](#der-database-entity-relationship)
+6. [Installation](#installation)
+7. [Demos](#demos)
+8. [License](#license)
 
-## Introduction <a name="introduction"></a>
+## Introduction
 
-ChatPHP is a web chat developed with PHP, MySQL, HTML, CSS and JavaScript.
+ChatPHP is a web chat application developed with PHP, MySQL, HTML, CSS, and JavaScript. This document provides comprehensive documentation on the features, technologies used, and the underlying structure of the messaging system.
 
 ## Features
 
 - User registration and login with validation
-
-- Send text messages in real time  
-
-- Send files like images, audio, video and documents
-
-- New message notifications  
-
+- Real-time text messaging
+- File sharing (images, audio, video, documents)
+- New message notifications
 - Contact search by name
-
 - Edit user profile (photo, name, username)
-
 - Password change with validation
-
 - Audio and video playback in chat
-
 - Image preview in chat
-
 - Sending emojis
-
 - Audio recording
 
 ## Technologies
 
 - PHP 8
-
 - MySQL
-
 - HTML, CSS, JS
-
 - JavaScript
-
 - jQuery
-
-- AJAX 
-
+- AJAX
 - WebSocket
 
-# Documentation
+## Documentation
 
-## Messaging System Documentation
+### Messaging System Documentation
 
-## Overview
+#### Overview
 
 This documentation provides an in-depth overview of the messaging system developed in PHP, Javascript, and MySQL. The system encompasses a feature-rich messaging site with functionalities such as user registration and login, contact list management, text messaging, media (images, audio, video) upload, and profile management.
-
-The core functionalities are encapsulated in the following classes and files:
 
 ### `assets/js/javascript.js`
 
@@ -197,7 +177,9 @@ This class abstracts database connections and facilitates the execution of SQL c
 - `nickCertification()`: Validates user nickname.
 - `passCertification()`: Validate user password.
 - `checkNick()`: Checks if nickname already exists.
-- `isLogged()`: Checks if the user is logged in.
+- `isLogged()`: Checks if the user is logged
+
+ in.
 - `updateToken()`: Update session token.
 - `logout()`: Logs out the user.
 - `encrypt()`: Encrypts a string.
@@ -251,9 +233,7 @@ This class provides methods for cleaning, validating, and formatting the message
 
 - `$auth`: `AuthenticateController` class object for authentication.
 - `$sessions`: `Sessions` class object for session control.
--
-
- `$user`: Object of the `UsersModel` class for database operations.
+- `$user`: Object of the `UsersModel` class for database operations.
 - `$nickSession`: Logged-in user nickname stored in session.
 
 #### Functions
@@ -332,29 +312,26 @@ The main functions authenticate the user against the database and manage the use
 
 This class abstracts the database and provides methods for business logic.
 
-# DER 
+## DER (Database Entity Relationship)
 
 ![DER](https://github.com/WillGolden80742/ChatPHP/assets/91426752/93a7f1db-e2de-4914-982b-d852cc98642d)
 
 ## Installation
 
 - Import the SQL database
-
 - Configure environment variables (.env)
-
 - Install dependencies with `composer install`
 
 ## Demos
 
-https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3
+- [Demo 1](https://github.com/WillGolden80742/ChatPHP/assets/91426752/80863b05-3f7b-4618-ba58-45366a515df3)
+- [Demo 2](https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-998a-04c68f13b2a9)
 
-https://github.com/WillGolden80742/ChatPHP/assets/91426752/1e01b925-5ca7-47db-998a-04c68f13b2a9
+![Demo Image 1](https://github.com/WillGolden80742/ChatPHP/assets/91426752/5014f77d-2166-4882-9510-97c2ab5502c5)
 
-![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/5014f77d-2166-4882-9510-97c2ab5502c5)
+![Demo Image 2](https://github.com/WillGolden80742/ChatPHP/assets/91426752/0052d7fc-3bf9-4a3d-8b98-48288c4e118a)
 
-![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/0052d7fc-3bf9-4a3d-8b98-48288c4e118a)
-
-![image](https://github.com/WillGolden80742/ChatPHP/assets/91426752/dd3e2668-a99a-4907-9d69-c2e89c5be225)
+![Demo Image 3](https://github.com/WillGolden80742/ChatPHP/assets/91426752/dd3e2668-a99a-4907-9d69-c2e89c5be225)
 
 ## License
 
