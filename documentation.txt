@@ -24,7 +24,6 @@ Here are the main global variables and functions rewritten with the additional f
 
 Global variables:
 
-audioTime: Map for storing audio playback times
 cacheMap: Map to cache downloaded media
 currentIDPlayer: ID of the currently active audio player
 downloading: Boolean indicating whether media is being downloaded
@@ -54,15 +53,13 @@ createImageObject: Get image object from cache or fetch
 createMessage: Create new message
 deleteMessage: Delete message
 down: Scroll down through messages
-downButton: Show/hide scroll button
-downloadAllAudios: Download all audios
+downButton: Show/hide downButton button
 downloadAllImages: Download all images
 downloadAllMidia: Download all media
 downloadAllPicContacts: Download all profile pictures
 downloadAllTitles: Download all titles from links
 downloadBase64: Download file as base64
 downloadFile: Download file
-downloadMedia: Download specific media
 downloadTitle: Download link title
 embedEmojis: Shows emoji picker
 embedImage: Displays enlarged image
