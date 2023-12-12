@@ -95,7 +95,6 @@ This documentation provides an in-depth overview of the messaging system develop
 - `downloadAllTitles`: Download all titles from links.
 - `downloadBase64`: Download file as base64.
 - `downloadFile`: Download file.
-- `downloadMedia`: Download specific media.
 - `downloadTitle`: Download link title.
 - `embedEmojis`: Shows emoji picker.
 - `embedImage`: Displays enlarged image.
