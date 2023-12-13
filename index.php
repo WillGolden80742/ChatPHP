@@ -57,12 +57,18 @@ $auth = new AuthenticateModel();
   function sendSocket(value) {
     const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
     const nickNameTo = '<?php echo $nickNameContact; ?>';
-    if (value.trim() !== '' && nickNameFrom.trim() !== '') {
-      ws.send(JSON.stringify({
-        nickNameFrom: nickNameFrom,
-        nickNameTo: nickNameTo,
-        message: value
-      }));
+
+    try {
+      if (value.trim() !== '' && nickNameFrom.trim() !== '') {
+        ws.send(JSON.stringify({
+          nickNameFrom: nickNameFrom,
+          nickNameTo: nickNameTo,
+          message: value
+        }));
+      }
+    } catch (error) {
+      console.error('Erro ao enviar mensagem via WebSocket:', error);
+      // Você pode adicionar tratamentos adicionais aqui, se necessário.
     }
   }
 </script>
