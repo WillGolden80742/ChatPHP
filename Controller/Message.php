@@ -53,6 +53,7 @@ class Message
 
         return $text;
     }
+
     function spotify($text) {
         // Remova "https://" ou "http://"
         $text = preg_replace('/^(https?:\/\/)/i', '', $text);
@@ -82,16 +83,24 @@ class Message
 
     function youtube($text)
     {
-
         $urlY1 = "youtube.com/";
         $urlY2 = "youtu.be/";
-
+    
+        // Remove "&feature=youtu.be"
         $text = str_replace("&feature=youtu.be", "", $text);
-
-        if (str_contains($text, "&")) {
-            $text  = "https://www.youtube.com/watch?" . $this->splitLink(explode("&", $text)[1]);
+    
+        // Separate "&t=" if present
+        $timeParameter = "";
+        if (str_contains($text, "&t=")) {
+            $splitText = explode("&t=", $text);
+            $text = $splitText[0];
+            $timeParameter = "&t=" . $splitText[1];
         }
-
+    
+        if (str_contains($text, "&")) {
+            $text = "https://www.youtube.com/watch?" . $this->splitLink(explode("&", $text)[0]);
+        }
+    
         if (str_contains($text, $urlY1)) {
             $id = $text;
             if (str_contains($text, "watch?v=")) {
@@ -102,14 +111,16 @@ class Message
             $id = explode("youtu.be/", $text)[1];
             $id = $this->splitLink($id);
         }
-
+    
         $text .= "<style id=\"embed\"> .thumb-video #$id { background-image:url(\"https://img.youtube.com/vi/" . $id . "/0.jpg\"); } </style>";
         $link = "<div class='thumb-video' id=\"thumb-video$id\"><div class=\"center\"><a><img  id=\"$id\" onClick=\"embedYoutube('$id')\" height=100% src=\"Images/play.svg\"/></a></div></div>";
-
-        $text .= $link;
-
+    
+        $text .= $link . $timeParameter;
+    
         return $text;
     }
+    
+
 
     function splitLink($link)
     {
