@@ -115,6 +115,7 @@ class Message
         $text .= "<style id=\"embed\"> .thumb-video #$id { background-image:url(\"https://img.youtube.com/vi/" . $id . "/0.jpg\"); } </style>";
         $link = "<div class='thumb-video' id=\"thumb-video$id\"><div class=\"center\"><a><img  id=\"$id\" onClick=\"embedYoutube('$id')\" height=100% src=\"Images/play.svg\"/></a></div></div>";
     
+        // Reconcatenate "&t=" parameter
         $text .= $link . $timeParameter;
     
         return $text;
