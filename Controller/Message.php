@@ -65,28 +65,30 @@ class Message
     {
         // Remova "https://" ou "http://"
         $text = preg_replace('/^(https?:\/\/)/i', '', $text);
-
+    
         // Remova parâmetros irrelevantes, como "?si=..."
         $text = preg_replace('/\?.*$/i', '', $text);
-
-        // Verifique ambos os estilos de URL
+    
+        // Verifique todos os estilos de URL
         $pattern1 = '/open\.spotify\.com\/([^\/]+)\/track\/([^?]+)/i';
         $pattern2 = '/open\.spotify\.com\/track\/([^?]+)/i';
-
-        // Verifique se o padrão 1 ou o padrão 2 corresponde à URL
-        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches)) {
+        $pattern3 = '/open\.spotify\.com\/playlist\/([^?]+)/i';
+    
+        // Verifique se o padrão 1, padrão 2 ou padrão 3 corresponde à URL
+        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches)) {
             // Se corresponder a qualquer um dos padrões, use o grupo correspondente
-            $track_id = isset($matches[2]) ? $matches[2] : $matches[1];
-
+            $id = isset($matches[3]) ? $matches[3] : (isset($matches[2]) ? $matches[2] : $matches[1]);
+    
             // Construa a URL desejada
-            $embeddedText = '<iframe class="spotify_embed" src="https://open.spotify.com/embed/track/' . $track_id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
-
+            $embeddedText = '<iframe class="spotify_embed" src="https://open.spotify.com/embed/' . (strpos($text, 'playlist') !== false ? 'playlist' : 'track') . '/' . $id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+    
             return $embeddedText;
         }
-
+    
         // Se a URL não corresponder a nenhum dos padrões, retorne o texto original
         return $text;
     }
+    
 
 
     function youtube($text)
@@ -198,13 +200,15 @@ class Message
     {
         $pattern1 = '/open\.spotify\.com\/[^\/]+\/track\//i';
         $pattern2 = '/open\.spotify\.com\/track\//i';
-
-        if (preg_match($pattern1, $text) || preg_match($pattern2, $text)) {
+        $pattern3 = '/open\.spotify\.com\/playlist\//i';
+    
+        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text)) {
             return true;
         } else {
             return false;
         }
     }
+    
 
 
     public function __toString(): string
