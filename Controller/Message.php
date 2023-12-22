@@ -173,9 +173,10 @@ class Message
     
             // Check for specific cases that should not be treated as YouTube embeddable
             $nonEmbeddablePatterns = [
-                "/youtube\.com\/(channel|@)/",  // Exclude channel and @username
-                "/youtube\.com\/$/",            // Exclude just the base URL
-                "/youtu\.be\/$/",                // Exclude just the base URL for youtu.be
+                "/youtube\.com\/(channel|@)/",   // Exclude channel and @username
+                "/youtube\.com\/$/",             // Exclude just the base URL
+                "/youtu\.be\/$/",                 // Exclude just the base URL for youtu.be
+                "/studio\.youtube\//",            // Exclude studio.youtube
             ];
     
             foreach ($nonEmbeddablePatterns as $pattern) {
@@ -189,8 +190,7 @@ class Message
         } else {
             return false;
         }
-    }
-    
+    }    
     
 
 
