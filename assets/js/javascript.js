@@ -1469,6 +1469,7 @@ function waitingMsg() {
 }
 
 async function updateMessages(contact = nickNameContact, name = nickNameContact) {
+  messageAreaEnable(true);
   indexMessage = 1;
   closeEmoji();
 

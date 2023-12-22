@@ -176,6 +176,7 @@ class Message
                 "/youtube\.com\/(channel|@)/",  // Exclude channel and @username
                 "/^youtube\.com/", // Exclude base URL with studio.youtube.com
                 "/youtu\.be\/$/",                // Exclude just the base URL for youtu.be
+                "/youtube\.com\/$/",                // Exclude just the base URL for youtu.be
                 "/\/studio\.youtube\.com\//",   // Exclude studio.youtube.com in the path
             ];
     
