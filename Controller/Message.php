@@ -138,14 +138,18 @@ class Message
             }
     
             // Build the desired URL
-            $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . '" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
+            if ($widgetType === 'artist') {
+                $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . '/top_tracks" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
+            } else {
+                $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . '" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
+            }
     
             return $embeddedText;
         }
     
         // If the URL doesn't match any of the patterns, return the original text
         return $text;
-    }    
+    }
     
 
     function youtube($text)
