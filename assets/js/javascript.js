@@ -1678,7 +1678,6 @@ function moveToUp(contact) {
 }
 
 function hasNewMsgByCurrentContact(from, message) {
-
   if (message.includes("create_message") || message.includes("delete_message")) {
     const idMsg = message.split(":")[1].replace("msg", "");
     if (message.includes("create_message")) {
