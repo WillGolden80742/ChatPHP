@@ -64,47 +64,38 @@ class Message
 
     function spotify($text)
     {
-        // Remover "https://" ou "http://"
+        // Remove "https://" or "http://"
         $text = preg_replace('/^(https?:\/\/)/i', '', $text);
     
-        // Remover parâmetros irrelevantes, como "?si=..."
+        // Remove irrelevant parameters, such as "?si=..."
         $text = preg_replace('/\?.*$/i', '', $text);
     
-        // Definir padrões de URL
+        // Define patterns for different Spotify URLs
         $patterns = [
-            '/open\.spotify\.com\/[^\/]+\/track\//i',
-            '/open\.spotify\.com\/track\//i',
-            '/open\.spotify\.com\/playlist\//i',
-            '/open\.spotify\.com\\/[^\/]+\/playlist\//i',
-            '/open\.spotify\.com\/[^\/]+\/album\//i',
-            '/open\.spotify\.com\/album\//i'
+            '/open\.spotify\.com\/[^\/]+\/track\//i' => 'track',
+            '/open\.spotify\.com\/track\//i' => 'track',
+            '/open\.spotify\.com\/playlist\//i' => 'playlist',
+            '/open\.spotify\.com\\/[^\/]+\/playlist\//i' => 'playlist',
+            '/open\.spotify\.com\/[^\/]+\/album\//i' => 'album',
+            '/open\.spotify\.com\/album\//i' => 'album'
         ];
     
-        // Verificar se algum padrão corresponde à URL
-        foreach ($patterns as $pattern) {
+        // Check if any pattern matches the URL
+        foreach ($patterns as $pattern => $type) {
             if (preg_match($pattern, $text)) {
-                // Extrair o ID da URL
+                // Extract the ID from the URL
                 $id = preg_replace($pattern, '', $text);
     
-                // Determinar o tipo com base no padrão
-                if (strpos($pattern, 'playlist') !== false) {
-                    $type = 'playlist';
-                } elseif (strpos($pattern, 'album') !== false) {
-                    $type = 'album';
-                } else {
-                    $type = 'track';
-                }
-    
-                // Construir a URL desejada
+                // Build the desired URL
                 $embeddedText = '<iframe class="media_embed" src="https://open.spotify.com/embed/' . $type . '/' . $id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
     
                 return $embeddedText;
             }
         }
     
-        // Se a URL não corresponder a nenhum padrão, retornar o texto original
+        // If the URL doesn't match any of the patterns, return the original text
         return $text;
-    }    
+    }
     
     
     function deezer($text)
@@ -115,41 +106,34 @@ class Message
         // Remove irrelevant parameters, such as "?si=..."
         $text = preg_replace('/\?.*$/i', '', $text);
     
-        // Check all URL styles
-        $pattern1 = '/deezer\.com\/([^\/]+)\/track\/([^?]+)/i';
-        $pattern2 = '/deezer\.com\/([^\/]+)\/artist\/([^?]+)/i';
-        $pattern3 = '/deezer\.com\/([^\/]+)\/album\/([^?]+)/i';
-        $pattern4 = '/deezer\.com\/([^\/]+)\/playlist\/([^?]+)/i'; // New playlist pattern
+        // Define patterns for different Deezer URLs
+        $patterns = [
+            'track' => '/deezer\.com\/([^\/]+)\/track\/([^?]+)/i',
+            'artist' => '/deezer\.com\/([^\/]+)\/artist\/([^?]+)/i',
+            'album' => '/deezer\.com\/([^\/]+)\/album\/([^?]+)/i',
+            'playlist' => '/deezer\.com\/([^\/]+)\/playlist\/([^?]+)/i'
+        ];
     
-        // Check if pattern 1, pattern 2, pattern 3, or pattern 4 matches the URL
-        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches) || preg_match($pattern4, $text, $matches)) {
-            // If it matches any of the patterns, use the corresponding group
-            $id = isset($matches[2]) ? $matches[2] : $matches[3];
+        // Check if any pattern matches the URL
+        foreach ($patterns as $type => $pattern) {
+            if (preg_match($pattern, $text, $matches)) {
+                $id = isset($matches[2]) ? $matches[2] : $matches[3];
+                $widgetType = $type;
     
-            // Determine if it's a track, artist, album, or playlist link
-            if (strpos($text, 'track') !== false) {
-                $widgetType = 'track';
-            } elseif (strpos($text, 'artist') !== false) {
-                $widgetType = 'artist';
-            } elseif (strpos($text, 'album') !== false) {
-                $widgetType = 'album';
-            } elseif (strpos($text, 'playlist') !== false) {
-                $widgetType = 'playlist';
+                // If it's an artist, append '/top_tracks' to the URL
+                $urlSuffix = ($widgetType === 'artist') ? '/top_tracks' : '';
+    
+                // Build the desired URL
+                $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . $urlSuffix . '" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
+    
+                return $embeddedText;
             }
-    
-            // Build the desired URL
-            if ($widgetType === 'artist') {
-                $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . '/top_tracks" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
-            } else {
-                $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . '" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
-            }
-    
-            return $embeddedText;
         }
     
         // If the URL doesn't match any of the patterns, return the original text
         return $text;
     }
+    
     
 
     function youtube($text)
