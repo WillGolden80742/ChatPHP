@@ -107,7 +107,7 @@ class Message
         // Check if pattern 1, pattern 2, or pattern 3 matches the URL
         if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches)) {
             // If it matches any of the patterns, use the corresponding group
-            $id = isset($matches[3]) ? $matches[3] : $matches[2];
+            $id = isset($matches[2]) ? $matches[2] : $matches[3];
     
             // Determine if it's a track, artist, or album link
             if (strpos($text, 'track') !== false) {
@@ -127,6 +127,7 @@ class Message
         // If the URL doesn't match any of the patterns, return the original text
         return $text;
     }
+    
     
     
 
@@ -252,15 +253,14 @@ class Message
     {
         $pattern1 = '/deezer\.com\/[^\/]+\/track\//i';
         $pattern2 = '/deezer\.com\/[^\/]+\/artist\//i';
+        $pattern3 = '/deezer\.com\/[^\/]+\/album\//i';
     
-        if (preg_match($pattern1, $text) || preg_match($pattern2, $text)) {
+        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text)) {
             return true;
         } else {
             return false;
         }
-    }
-
-
+    }    
 
     public function __toString(): string
     {
