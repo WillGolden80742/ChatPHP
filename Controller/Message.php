@@ -102,14 +102,21 @@ class Message
         // Check all URL styles
         $pattern1 = '/deezer\.com\/([^\/]+)\/track\/([^?]+)/i';
         $pattern2 = '/deezer\.com\/([^\/]+)\/artist\/([^?]+)/i';
+        $pattern3 = '/deezer\.com\/([^\/]+)\/album\/([^?]+)/i';
     
-        // Check if pattern 1 or pattern 2 matches the URL
-        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches)) {
+        // Check if pattern 1, pattern 2, or pattern 3 matches the URL
+        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches)) {
             // If it matches any of the patterns, use the corresponding group
             $id = isset($matches[3]) ? $matches[3] : $matches[2];
     
-            // Determine if it's a track or artist link
-            $widgetType = strpos($text, 'track') !== false ? 'track' : 'artist';
+            // Determine if it's a track, artist, or album link
+            if (strpos($text, 'track') !== false) {
+                $widgetType = 'track';
+            } elseif (strpos($text, 'artist') !== false) {
+                $widgetType = 'artist';
+            } elseif (strpos($text, 'album') !== false) {
+                $widgetType = 'album';
+            }
     
             // Build the desired URL
             $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . '" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
@@ -120,6 +127,7 @@ class Message
         // If the URL doesn't match any of the patterns, return the original text
         return $text;
     }
+    
     
 
     function youtube($text)
