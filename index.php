@@ -41,7 +41,8 @@ $auth = new AuthenticateModel();
 
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    const message = data.message;
+    const message = atob(data.message); // Decoding base64
+    data.message = message;
     hasNewMsg(data);
     console.log(event.data);
   };
@@ -61,23 +62,25 @@ $auth = new AuthenticateModel();
     try {
       if (ws.readyState === WebSocket.OPEN) {
         if (value.trim() !== '' && nickNameFrom.trim() !== '') {
+          const encodedMessage = btoa(value); // Encoding to base64
           ws.send(JSON.stringify({
             nickNameFrom: nickNameFrom,
             nickNameTo: nickNameTo,
-            message: value
+            message: encodedMessage
           }));
         } else {
-          console.error('Erro ao enviar mensagem via WebSocket: Valor vazio.');
+          console.error('Error sending message via WebSocket: Empty value or nickname.');
         }
       } else {
-        console.error('Erro ao enviar mensagem via WebSocket: Conexão ainda não estabelecida.');
+        console.error('Error sending message via WebSocket: Connection not established yet.');
       }
     } catch (error) {
-      console.error('Erro ao enviar mensagem via WebSocket:', error);
-      // Você pode adicionar tratamentos adicionais aqui, se necessário.
+      console.error('Error sending message via WebSocket:', error);
+      // Log the error, but do not throw it to avoid disrupting other actions.
     }
   }
 </script>
+
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/md5.min.js"></script>
 <script src="assets/js/javascript.js"></script>
