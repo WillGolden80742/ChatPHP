@@ -243,8 +243,9 @@ class Message
         $pattern1 = '/open\.spotify\.com\/[^\/]+\/track\//i';
         $pattern2 = '/open\.spotify\.com\/track\//i';
         $pattern3 = '/open\.spotify\.com\/playlist\//i';
-
-        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text)) {
+        $pattern4 = '/open\.spotify\.com\/intl-pt\/album\//i';
+    
+        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text) || preg_match($pattern4, $text)) {
             return true;
         } else {
             return false;
