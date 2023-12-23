@@ -103,19 +103,22 @@ class Message
         $pattern1 = '/deezer\.com\/([^\/]+)\/track\/([^?]+)/i';
         $pattern2 = '/deezer\.com\/([^\/]+)\/artist\/([^?]+)/i';
         $pattern3 = '/deezer\.com\/([^\/]+)\/album\/([^?]+)/i';
+        $pattern4 = '/deezer\.com\/([^\/]+)\/playlist\/([^?]+)/i'; // New playlist pattern
     
-        // Check if pattern 1, pattern 2, or pattern 3 matches the URL
-        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches)) {
+        // Check if pattern 1, pattern 2, pattern 3, or pattern 4 matches the URL
+        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches) || preg_match($pattern4, $text, $matches)) {
             // If it matches any of the patterns, use the corresponding group
             $id = isset($matches[2]) ? $matches[2] : $matches[3];
     
-            // Determine if it's a track, artist, or album link
+            // Determine if it's a track, artist, album, or playlist link
             if (strpos($text, 'track') !== false) {
                 $widgetType = 'track';
             } elseif (strpos($text, 'artist') !== false) {
                 $widgetType = 'artist';
             } elseif (strpos($text, 'album') !== false) {
                 $widgetType = 'album';
+            } elseif (strpos($text, 'playlist') !== false) {
+                $widgetType = 'playlist';
             }
     
             // Build the desired URL
@@ -126,9 +129,7 @@ class Message
     
         // If the URL doesn't match any of the patterns, return the original text
         return $text;
-    }
-    
-    
+    }    
     
 
     function youtube($text)
@@ -254,14 +255,15 @@ class Message
         $pattern1 = '/deezer\.com\/[^\/]+\/track\//i';
         $pattern2 = '/deezer\.com\/[^\/]+\/artist\//i';
         $pattern3 = '/deezer\.com\/[^\/]+\/album\//i';
+        $pattern4 = '/deezer\.com\/[^\/]+\/playlist\//i'; // New playlist pattern
     
-        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text)) {
+        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text) || preg_match($pattern4, $text)) {
             return true;
         } else {
             return false;
         }
-    }    
-
+    }
+        
     public function __toString(): string
     {
         return $this->msg;
