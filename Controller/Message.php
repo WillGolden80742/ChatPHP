@@ -5,8 +5,11 @@ class Message
     private $msg;
     function __construct($msg)
     {
-        $this->msg = htmlspecialchars($msg, ENT_QUOTES);
-        $this->msg = $this->links($this->msg);
+        $this->msg = $msg;
+        if (!$this->isTwitterEmbed($msg)) {
+            $this->msg = htmlspecialchars($msg, ENT_QUOTES);
+            $this->msg = $this->links($this->msg);
+        }
     }
 
     function setSession($key, $value)
@@ -42,63 +45,63 @@ class Message
     {
         // Define a expressão regular para encontrar URLs
         $pattern = '/(?:https?:\/\/(?:www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}(?:\/\S*)?|www\.[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}(?:\/\S*)?)/';
-    
+
         // Substitui todas as URLs no texto por links HTML
         $text = preg_replace_callback($pattern, function ($matches) {
             $url = $matches[0];
-    
+
             // Adiciona "https://" se não houver prefixo
             if (!preg_match('/^https?:\/\//', $url)) {
                 $url = 'https://' . $url;
             }
-    
+
             self::$countLinks++;
             $linkId = self::$countLinks . uniqid();
             return "<a class='linkMsg' id='$linkId' href='$url' target='_blank'>$url</a>";
         }, $text);
-    
+
         return $text;
     }
-    
+
 
     function spotify($text)
     {
         // Remova "https://" ou "http://"
         $text = preg_replace('/^(https?:\/\/)/i', '', $text);
-    
+
         // Remova parâmetros irrelevantes, como "?si=..."
         $text = preg_replace('/\?.*$/i', '', $text);
-    
+
         // Verifique todos os estilos de URL
         $pattern1 = '/open\.spotify\.com\/([^\/]+)\/track\/([^?]+)/i';
         $pattern2 = '/open\.spotify\.com\/track\/([^?]+)/i';
         $pattern3 = '/open\.spotify\.com\/playlist\/([^?]+)/i';
-    
+
         // Verifique se o padrão 1, padrão 2 ou padrão 3 corresponde à URL
         if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches)) {
             // Se corresponder a qualquer um dos padrões, use o grupo correspondente
             $id = isset($matches[3]) ? $matches[3] : (isset($matches[2]) ? $matches[2] : $matches[1]);
-    
+
             // Construa a URL desejada
             $embeddedText = '<iframe class="spotify_embed" src="https://open.spotify.com/embed/' . (strpos($text, 'playlist') !== false ? 'playlist' : 'track') . '/' . $id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
-    
+
             return $embeddedText;
         }
-    
+
         // Se a URL não corresponder a nenhum dos padrões, retorne o texto original
         return $text;
     }
-    
+
 
 
     function youtube($text)
     {
         $urlY1 = "youtube.com/";
         $urlY2 = "youtu.be/";
-    
+
         // Remove "&feature=youtu.be" and "?si=..."
         $text = preg_replace("/[&?]feature=youtu\.be|si=.*/", "", $text);
-    
+
         // Separate "&t=" if present
         $timeParameter = "";
         if (str_contains($text, "&t=")) {
@@ -106,7 +109,7 @@ class Message
             $text = $splitText[0];
             $timeParameter = "&t=" . $splitText[1];
         }
-    
+
         // Extract video ID from the link
         $id = "";
         if (str_contains($text, "/live/")) {
@@ -133,23 +136,23 @@ class Message
             // Handle youtu.be link
             $id = explode("youtu.be/", $text)[1];
         }
-    
+
         $id = str_replace("?", "", $id);
         $id = str_replace(["\r", "\n"], "", $id);
         $id = explode("&", $id)[0];
-    
+
         // Generate thumbnail and embed links
         $thumbLink = "https://img.youtube.com/vi/" . $id . "/0.jpg";
-    
+
         $text .= "<style id=\"embed\"> .thumb-video #$id { background-image:url(\"$thumbLink\"); } </style>";
         $link = "<div class='thumb-video' id=\"thumb-video$id\"><div class=\"center\"><a><img  id=\"$id\" onClick=\"embedYoutube('$id')\" height=100% src=\"Images/play.svg\"/></a></div></div>";
-    
+
         // Reconcatenate "&t=" parameter
         $text .= $link . $timeParameter;
-    
+
         return $text;
     }
-    
+
 
     function splitLink($link)
     {
@@ -169,10 +172,10 @@ class Message
     {
         $urlY1 = "youtube.com/";
         $urlY2 = "youtu.be/";
-    
+
         // Check for the presence of YouTube URLs
         if (str_contains($text, $urlY1) || str_contains($text, $urlY2)) {
-    
+
             // Check for specific cases that should not be treated as YouTube embeddable
             $nonEmbeddablePatterns = [
                 "/youtube\.com\/(channel|@)/",  // Exclude channel and @username
@@ -181,18 +184,25 @@ class Message
                 "/youtube\.com\/$/",                // Exclude just the base URL for youtu.be
                 "/\/studio\.youtube\.com\//",   // Exclude studio.youtube.com in the path
             ];
-    
+
             foreach ($nonEmbeddablePatterns as $pattern) {
                 if (preg_match($pattern, $text)) {
                     return false;
                 }
             }
-    
+
             // If none of the exclusion patterns match, consider it as YouTube embeddable
             return true;
         } else {
             return false;
         }
+    }
+
+    function isTwitterEmbed($text)
+    {
+        $pattern = '/<blockquote class="twitter-tweet"[^>]*>.*<\/blockquote>\s*<script async src="https:\/\/platform\.twitter\.com\/widgets\.js"[^>]*><\/script>/i';
+
+        return preg_match($pattern, $text) ? true : false;
     }
 
 
@@ -201,14 +211,14 @@ class Message
         $pattern1 = '/open\.spotify\.com\/[^\/]+\/track\//i';
         $pattern2 = '/open\.spotify\.com\/track\//i';
         $pattern3 = '/open\.spotify\.com\/playlist\//i';
-    
+
         if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text)) {
             return true;
         } else {
             return false;
         }
     }
-    
+
 
 
     public function __toString(): string
