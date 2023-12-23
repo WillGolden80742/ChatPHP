@@ -138,62 +138,56 @@ class Message
 
     function youtube($text)
     {
-        $urlY1 = "youtube.com/";
-        $urlY2 = "youtu.be/";
-
         // Remove "&feature=youtu.be" and "?si=..."
         $text = preg_replace("/[&?]feature=youtu\.be|si=.*/", "", $text);
-
+    
         // Separate "&t=" if present
         $timeParameter = "";
-        if (str_contains($text, "&t=")) {
-            $splitText = explode("&t=", $text);
-            $text = $splitText[0];
-            $timeParameter = "&t=" . $splitText[1];
+        if (strpos($text, "&t=") !== false) {
+            list($text, $timeParameter) = explode("&t=", $text, 2);
+            $timeParameter = "&t=" . $timeParameter;
         }
-
+    
         // Extract video ID from the link
         $id = "";
-        if (str_contains($text, "/live/")) {
+        if (strpos($text, "/live/") !== false) {
             // Handle live link
             $id = explode("/live/", $text)[1];
-        } elseif (str_contains($text, "/shorts/") || str_contains($text, "/shorts?")) {
+        } elseif (strpos($text, "/shorts/") !== false || strpos($text, "/shorts?") !== false) {
             // Handle shorts link
             $id = explode("/shorts/", $text)[1];
             // Handle the case when the link has a query parameter after /shorts
-            if (str_contains($id, "?")) {
-                $id = explode("?", $id)[0];
-            }
-        } elseif (str_contains($text, "&")) {
+            $id = explode("?", $id)[0];
+        } elseif (strpos($text, "&") !== false) {
             // Handle regular YouTube link with parameters
             $text = "https://www.youtube.com/watch?" . parse_url($text, PHP_URL_QUERY);
             $id = explode("v=", parse_url($text, PHP_URL_QUERY))[1];
-        } elseif (str_contains($text, $urlY1)) {
+        } elseif (strpos($text, "youtube.com/") !== false) {
             // Handle regular YouTube link without parameters
             $id = $text;
-            if (str_contains($text, "watch?v=")) {
+            if (strpos($text, "watch?v=") !== false) {
                 $id = explode("watch?v=", $text)[1];
             }
-        } elseif (str_contains($text, $urlY2)) {
+        } elseif (strpos($text, "youtu.be/") !== false) {
             // Handle youtu.be link
             $id = explode("youtu.be/", $text)[1];
         }
-
-        $id = str_replace("?", "", $id);
-        $id = str_replace(["\r", "\n"], "", $id);
+    
+        $id = str_replace(["?", "\r", "\n"], "", $id);
         $id = explode("&", $id)[0];
-
+    
         // Generate thumbnail and embed links
         $thumbLink = "https://img.youtube.com/vi/" . $id . "/0.jpg";
-
+    
         $text .= "<style id=\"embed\"> .thumb-video #$id { background-image:url(\"$thumbLink\"); } </style>";
         $link = "<div class='thumb-video' id=\"thumb-video$id\"><div class=\"center\"><a><img  id=\"$id\" onClick=\"embedYoutube('$id')\" height=100% src=\"Images/play.svg\"/></a></div></div>";
-
+    
         // Reconcatenate "&t=" parameter
         $text .= $link . $timeParameter;
-
+    
         return $text;
     }
+    
 
 
     function splitLink($link)
