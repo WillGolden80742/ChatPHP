@@ -64,33 +64,48 @@ class Message
 
     function spotify($text)
     {
-        // Remova "https://" ou "http://"
+        // Remover "https://" ou "http://"
         $text = preg_replace('/^(https?:\/\/)/i', '', $text);
     
-        // Remova parâmetros irrelevantes, como "?si=..."
+        // Remover parâmetros irrelevantes, como "?si=..."
         $text = preg_replace('/\?.*$/i', '', $text);
     
-        // Verifique todos os estilos de URL
-        $pattern1 = '/open\.spotify\.com\/([^\/]+)\/track\/([^?]+)/i';
-        $pattern2 = '/open\.spotify\.com\/track\/([^?]+)/i';
-        $pattern3 = '/open\.spotify\.com\/playlist\/([^?]+)/i';
-        $pattern4 = '/open\.spotify\.com\/([^\/]+)\/album\/([^?]+)/i'; // Novo padrão para álbuns
+        // Definir padrões de URL
+        $patterns = [
+            '/open\.spotify\.com\/[^\/]+\/track\//i',
+            '/open\.spotify\.com\/track\//i',
+            '/open\.spotify\.com\/playlist\//i',
+            '/open\.spotify\.com\\/[^\/]+\/playlist\//i',
+            '/open\.spotify\.com\/[^\/]+\/album\//i',
+            '/open\.spotify\.com\/album\//i'
+        ];
     
-        // Verifique se o padrão 1, padrão 2, padrão 3 ou padrão 4 corresponde à URL
-        if (preg_match($pattern1, $text, $matches) || preg_match($pattern2, $text, $matches) || preg_match($pattern3, $text, $matches) || preg_match($pattern4, $text, $matches)) {
-            // Se corresponder a qualquer um dos padrões, use o grupo correspondente
-            $id = isset($matches[4]) ? $matches[4] : (isset($matches[3]) ? $matches[3] : (isset($matches[2]) ? $matches[2] : $matches[1]));
+        // Verificar se algum padrão corresponde à URL
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $text)) {
+                // Extrair o ID da URL
+                $id = preg_replace($pattern, '', $text);
     
-            // Construa a URL desejada
-            $type = strpos($text, 'playlist') !== false ? 'playlist' : (strpos($text, 'album') !== false ? 'album' : 'track');
-            $embeddedText = '<iframe class="media_embed" src="https://open.spotify.com/embed/' . $type . '/' . $id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+                // Determinar o tipo com base no padrão
+                if (strpos($pattern, 'playlist') !== false) {
+                    $type = 'playlist';
+                } elseif (strpos($pattern, 'album') !== false) {
+                    $type = 'album';
+                } else {
+                    $type = 'track';
+                }
     
-            return $embeddedText;
+                // Construir a URL desejada
+                $embeddedText = '<iframe class="media_embed" src="https://open.spotify.com/embed/' . $type . '/' . $id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+    
+                return $embeddedText;
+            }
         }
     
-        // Se a URL não corresponder a nenhum dos padrões, retorne o texto original
+        // Se a URL não corresponder a nenhum padrão, retornar o texto original
         return $text;
-    }
+    }    
+    
     
     function deezer($text)
     {
@@ -243,14 +258,25 @@ class Message
         $pattern1 = '/open\.spotify\.com\/[^\/]+\/track\//i';
         $pattern2 = '/open\.spotify\.com\/track\//i';
         $pattern3 = '/open\.spotify\.com\/playlist\//i';
-        $pattern4 = '/open\.spotify\.com\/[^\/]+\/album\//i';
-    
-        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text) || preg_match($pattern4, $text)) {
+        $pattern4 = '/open\.spotify\.com\\/[^\/]+\/playlist\//i';
+        $pattern5 = '/open\.spotify\.com\/[^\/]+\/album\//i';
+        $pattern6 = '/open\.spotify\.com\/album\//i';
+        
+        if (
+            preg_match($pattern1, $text) ||
+            preg_match($pattern2, $text) ||
+            preg_match($pattern3, $text) ||
+            preg_match($pattern4, $text) ||
+            preg_match($pattern5, $text) ||
+            preg_match($pattern6, $text) 
+        ) {
             return true;
         } else {
             return false;
         }
     }
+    
+    
     
 
     function isDeezer($text)
