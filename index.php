@@ -18,7 +18,7 @@ $auth = new AuthenticateModel();
   var nickNameContact = "<?php echo $nickNameContact; ?>";
   const cacheMap = new Map();
   const currentUrl = window.location.href;
-  const home = currentUrl.split("<?php echo $_SERVER['HTTP_HOST']; ?>/")[1];
+  const home = currentUrl.split("twoleafchat.site/")[1];
   if (home.includes('index.php') || home == '') {
     document.title = "CHATPHP";
   } else if (home.includes('editProfile.php')) {
