@@ -59,12 +59,18 @@ $auth = new AuthenticateModel();
     const nickNameTo = '<?php echo $nickNameContact; ?>';
 
     try {
-      if (value.trim() !== '' && nickNameFrom.trim() !== '') {
-        ws.send(JSON.stringify({
-          nickNameFrom: nickNameFrom,
-          nickNameTo: nickNameTo,
-          message: value
-        }));
+      if (ws.readyState === WebSocket.OPEN) {
+        if (value.trim() !== '' && nickNameFrom.trim() !== '') {
+          ws.send(JSON.stringify({
+            nickNameFrom: nickNameFrom,
+            nickNameTo: nickNameTo,
+            message: value
+          }));
+        } else {
+          console.error('Erro ao enviar mensagem via WebSocket: Valor vazio.');
+        }
+      } else {
+        console.error('Erro ao enviar mensagem via WebSocket: Conexão ainda não estabelecida.');
       }
     } catch (error) {
       console.error('Erro ao enviar mensagem via WebSocket:', error);
