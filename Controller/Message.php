@@ -258,17 +258,21 @@ class Message
 
     function isDeezer($text)
     {
-        $pattern1 = '/deezer\.com\/[^\/]+\/track\//i';
-        $pattern2 = '/deezer\.com\/[^\/]+\/artist\//i';
-        $pattern3 = '/deezer\.com\/[^\/]+\/album\//i';
-        $pattern4 = '/deezer\.com\/[^\/]+\/playlist\//i'; // New playlist pattern
+        $patterns = [
+            '/deezer\.com\/[^\/]+\/track\//i',
+            '/deezer\.com\/[^\/]+\/artist\//i',
+            '/deezer\.com\/[^\/]+\/album\//i',
+            '/deezer\.com\/[^\/]+\/playlist\//i', // New playlist pattern
+        ];
     
-        if (preg_match($pattern1, $text) || preg_match($pattern2, $text) || preg_match($pattern3, $text) || preg_match($pattern4, $text)) {
-            return true;
-        } else {
-            return false;
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $text)) {
+                return true;
+            }
         }
-    }
+    
+        return false;
+    }    
         
     public function __toString(): string
     {
