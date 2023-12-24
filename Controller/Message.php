@@ -209,6 +209,10 @@ class Message
         $urlY1 = "youtube.com/";
         $urlY2 = "youtu.be/";
 
+        if (str_contains($text, 'watch?si=')) {
+            return false;
+        }
+
         // Check for the presence of YouTube URLs
         if (str_contains($text, $urlY1) || str_contains($text, $urlY2)) {
 
@@ -220,10 +224,6 @@ class Message
                 "/youtube\.com\/$/",                // Exclude just the base URL for youtu.be
                 "/\/studio\.youtube\.com\//",   // Exclude studio.youtube.com in the path
             ];
-
-            if (str_contains($text, 'watch?si=')) {
-                return false;
-            }
 
             foreach ($nonEmbeddablePatterns as $pattern) {
                 if (preg_match($pattern, $text)) {
