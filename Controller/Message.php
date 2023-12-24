@@ -237,28 +237,23 @@ class Message
 
     function isSpotify($text)
     {
-        $pattern1 = '/open\.spotify\.com\/[^\/]+\/track\//i';
-        $pattern2 = '/open\.spotify\.com\/track\//i';
-        $pattern3 = '/open\.spotify\.com\/playlist\//i';
-        $pattern4 = '/open\.spotify\.com\\/[^\/]+\/playlist\//i';
-        $pattern5 = '/open\.spotify\.com\/[^\/]+\/album\//i';
-        $pattern6 = '/open\.spotify\.com\/album\//i';
-        
-        if (
-            preg_match($pattern1, $text) ||
-            preg_match($pattern2, $text) ||
-            preg_match($pattern3, $text) ||
-            preg_match($pattern4, $text) ||
-            preg_match($pattern5, $text) ||
-            preg_match($pattern6, $text) 
-        ) {
-            return true;
-        } else {
-            return false;
+        $patterns = [
+            '/open\.spotify\.com\/[^\/]+\/track\//i',
+            '/open\.spotify\.com\/track\//i',
+            '/open\.spotify\.com\/playlist\//i',
+            '/open\.spotify\.com\\/[^\/]+\/playlist\//i',
+            '/open\.spotify\.com\/[^\/]+\/album\//i',
+            '/open\.spotify\.com\/album\//i',
+        ];
+    
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $text)) {
+                return true;
+            }
         }
-    }
     
-    
+        return false;
+    }    
     
 
     function isDeezer($text)
