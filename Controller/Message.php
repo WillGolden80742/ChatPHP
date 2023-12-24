@@ -66,10 +66,10 @@ class Message
     {
         // Remove "https://" or "http://"
         $text = preg_replace('/^(https?:\/\/)/i', '', $text);
-    
+
         // Remove irrelevant parameters, such as "?si=..."
         $text = preg_replace('/\?.*$/i', '', $text);
-    
+
         // Define patterns for different Spotify URLs
         $patterns = [
             '/open\.spotify\.com\/[^\/]+\/track\//i' => 'track',
@@ -79,33 +79,33 @@ class Message
             '/open\.spotify\.com\/[^\/]+\/album\//i' => 'album',
             '/open\.spotify\.com\/album\//i' => 'album'
         ];
-    
+
         // Check if any pattern matches the URL
         foreach ($patterns as $pattern => $type) {
             if (preg_match($pattern, $text)) {
                 // Extract the ID from the URL
                 $id = preg_replace($pattern, '', $text);
-    
+
                 // Build the desired URL
                 $embeddedText = '<iframe class="media_embed" src="https://open.spotify.com/embed/' . $type . '/' . $id . '?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
-    
+
                 return $embeddedText;
             }
         }
-    
+
         // If the URL doesn't match any of the patterns, return the original text
         return $text;
     }
-    
-    
+
+
     function deezer($text)
     {
         // Remove "https://" or "http://"
         $text = preg_replace('/^(https?:\/\/)/i', '', $text);
-    
+
         // Remove irrelevant parameters, such as "?si=..."
         $text = preg_replace('/\?.*$/i', '', $text);
-    
+
         // Define patterns for different Deezer URLs
         $patterns = [
             'track' => '/deezer\.com\/([^\/]+)\/track\/([^?]+)/i',
@@ -113,41 +113,41 @@ class Message
             'album' => '/deezer\.com\/([^\/]+)\/album\/([^?]+)/i',
             'playlist' => '/deezer\.com\/([^\/]+)\/playlist\/([^?]+)/i'
         ];
-    
+
         // Check if any pattern matches the URL
         foreach ($patterns as $type => $pattern) {
             if (preg_match($pattern, $text, $matches)) {
                 $id = isset($matches[2]) ? $matches[2] : $matches[3];
                 $widgetType = $type;
-    
+
                 // If it's an artist, append '/top_tracks' to the URL
                 $urlSuffix = ($widgetType === 'artist') ? '/top_tracks' : '';
-    
+
                 // Build the desired URL
                 $embeddedText = '<iframe title="deezer-widget" class="media_embed" src="https://widget.deezer.com/widget/dark/' . $widgetType . '/' . $id . $urlSuffix . '" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write"></iframe>';
-    
+
                 return $embeddedText;
             }
         }
-    
+
         // If the URL doesn't match any of the patterns, return the original text
         return $text;
     }
-    
-    
+
+
 
     function youtube($text)
     {
         // Remove "&feature=youtu.be" and "?si=..."
         $text = preg_replace("/[&?]feature=youtu\.be|si=.*/", "", $text);
-    
+
         // Separate "&t=" if present
         $timeParameter = "";
         if (strpos($text, "&t=") !== false) {
             list($text, $timeParameter) = explode("&t=", $text, 2);
             $timeParameter = "&t=" . $timeParameter;
         }
-    
+
         // Extract video ID from the link
         $id = "";
         if (strpos($text, "/live/") !== false) {
@@ -172,22 +172,22 @@ class Message
             // Handle youtu.be link
             $id = explode("youtu.be/", $text)[1];
         }
-    
+
         $id = str_replace(["?", "\r", "\n"], "", $id);
         $id = explode("&", $id)[0];
-    
+
         // Generate thumbnail and embed links
         $thumbLink = "https://img.youtube.com/vi/" . $id . "/0.jpg";
-    
+
         $text .= "<style id=\"embed\"> .thumb-video #$id { background-image:url(\"$thumbLink\"); } </style>";
         $link = "<div class='thumb-video' id=\"thumb-video$id\"><div class=\"center\"><a><img  id=\"$id\" onClick=\"embedYoutube('$id')\" height=100% src=\"Images/play.svg\"/></a></div></div>";
-    
+
         // Reconcatenate "&t=" parameter
         $text .= $link . $timeParameter;
-    
+
         return $text;
     }
-    
+
 
 
     function splitLink($link)
@@ -221,6 +221,10 @@ class Message
                 "/\/studio\.youtube\.com\//",   // Exclude studio.youtube.com in the path
             ];
 
+            if (str_contains($text, 'watch?si=')) {
+                return false;
+            }
+
             foreach ($nonEmbeddablePatterns as $pattern) {
                 if (preg_match($pattern, $text)) {
                     return false;
@@ -245,16 +249,16 @@ class Message
             '/open\.spotify\.com\/[^\/]+\/album\//i',
             '/open\.spotify\.com\/album\//i',
         ];
-    
+
         foreach ($patterns as $pattern) {
             if (preg_match($pattern, $text)) {
                 return true;
             }
         }
-    
+
         return false;
-    }    
-    
+    }
+
 
     function isDeezer($text)
     {
@@ -264,16 +268,16 @@ class Message
             '/deezer\.com\/[^\/]+\/album\//i',
             '/deezer\.com\/[^\/]+\/playlist\//i', // New playlist pattern
         ];
-    
+
         foreach ($patterns as $pattern) {
             if (preg_match($pattern, $text)) {
                 return true;
             }
         }
-    
+
         return false;
-    }    
-        
+    }
+
     public function __toString(): string
     {
         return $this->msg;
