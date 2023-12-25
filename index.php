@@ -17,8 +17,9 @@ $auth = new AuthenticateModel();
   ?>
   var nickNameContact = "<?php echo $nickNameContact; ?>";
   const cacheMap = new Map();
-  const currentUrl = window.location.href;
-  const home = currentUrl.split("<?php echo $_SERVER['HTTP_HOST']; ?>/")[1];
+  let customWebSocketServer = "<?php echo $_SERVER['HTTP_HOST']; ?>";
+  const currentUrl = customWebSocketServer;
+  const home = currentUrl.split(customWebSocketServer)[1];
   if (home.includes('index.php') || home == '') {
     document.title = "CHATPHP";
   } else if (home.includes('editProfile.php')) {
@@ -35,13 +36,11 @@ $auth = new AuthenticateModel();
   // Prompt the user to choose WebSocket server address
   const changeServer = confirm("Do you want to change the WebSocket server address?");
 
-  let customWebSocketServer;
-
   if (changeServer) {
     customWebSocketServer = prompt("Enter the new WebSocket Server Address:");
   }
 
-  const ws = new WebSocket(customWebSocketServer || `ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080`);
+  const ws = new WebSocket("ws://"+customWebSocketServer+":8080");
 
   ws.onopen = () => {
     console.log('Connection established.');
