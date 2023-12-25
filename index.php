@@ -56,18 +56,18 @@ $auth = new AuthenticateModel();
   };
 
   function setServer() {
-    const newServer = prompt('Digite o endereço do novo servidor:');
-    if (newServer !== null) {
-      // Remove 'http://' or 'https://'
-      const formattedServer = newServer.replace(/^https?:\/\//, '');
-      server = formattedServer;
-      ws.close(); // Close the current connection
-      // Reconnect with the new server address
-      const newWs = new WebSocket(`ws://${server}:8080`);
-      // Update the ws variable to the new WebSocket instance
-      ws = newWs;
-    }
+  const newServer = prompt('Digite o endereço do novo servidor:');
+  if (newServer !== null) {
+    // Remove 'http://' or 'https://' from the beginning and '/' from the end
+    const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '');
+    server = formattedServer;
+    ws.close(); // Close the current connection
+    // Reconnect with the new server address
+    const newWs = new WebSocket(`ws://${server}:8080`);
+    // Update the ws variable to the new WebSocket instance
+    ws = newWs;
   }
+}
 
   function sendSocket(value) {
     const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
