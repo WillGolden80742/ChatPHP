@@ -22,7 +22,7 @@ $auth = new AuthenticateModel();
   if (home.includes('index.php') || home == '') {
     document.title = "CHATPHP";
   } else if (home.includes('editProfile.php')) {
-    document.title = "Edit Profile";
+    document.title = "Edite Perfil";
   }
   document.addEventListener("DOMContentLoaded", function() {
     var nickNameContact = <?php echo json_encode($nickNameContact); ?>;
@@ -32,19 +32,10 @@ $auth = new AuthenticateModel();
     }
   });
 
-  // Prompt the user to choose WebSocket server address
-  const changeServer = confirm("Do you want to change the WebSocket server address?");
-
-  let customWebSocketServer;
-
-  if (changeServer) {
-    customWebSocketServer = prompt("Enter the new WebSocket Server Address:");
-  }
-
-  const ws = new WebSocket(customWebSocketServer || `ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080`);
+  const ws = new WebSocket(`ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080`);
 
   ws.onopen = () => {
-    console.log('Connection established.');
+    console.log('Conexão estabelecida.');
     sendSocket("online");
   };
 
@@ -56,8 +47,8 @@ $auth = new AuthenticateModel();
   };
 
   ws.onclose = () => {
-    console.log('Connection closed.');
-    const reload = confirm('The connection to the server failed. Do you want to reload the page to try again?');
+    console.log('Conexão fechada.');
+    const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
     if (reload) {
       location.reload();
     }
@@ -76,14 +67,11 @@ $auth = new AuthenticateModel();
         }));
       }
     } catch (error) {
-      console.error('Error sending message via WebSocket:', error);
-      // You can add additional handling here if needed.
+      console.error('Erro ao enviar mensagem via WebSocket:', error);
+      // Você pode adicionar tratamentos adicionais aqui, se necessário.
     }
   }
 </script>
-
-
-
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/md5.min.js"></script>
 <script src="assets/js/javascript.js"></script>
