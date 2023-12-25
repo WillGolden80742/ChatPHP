@@ -19,7 +19,7 @@ $auth = new AuthenticateModel();
   const cacheMap = new Map();
   let customWebSocketServer = "<?php echo $_SERVER['HTTP_HOST']; ?>";
   const currentUrl = customWebSocketServer;
-  const home = currentUrl.split(customWebSocketServer)[1];
+  const home = currentUrl.split("<?php echo $_SERVER['HTTP_HOST']; ?>")[1];
   if (home.includes('index.php') || home == '') {
     document.title = "CHATPHP";
   } else if (home.includes('editProfile.php')) {
