@@ -6,6 +6,9 @@ $auth = new AuthenticateModel();
 ?>
 
 <link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/md5.min.js"></script>
+<script src="assets/js/javascript.js"></script>
 <script>
   <?php
   $nickNameContact = "";
@@ -32,8 +35,16 @@ $auth = new AuthenticateModel();
     }
   });
 
-  let server = "<?php echo $_SERVER['HTTP_HOST']; ?>";
-  const ws = new WebSocket(`ws://${server}:8080`);
+  function getServer () {
+    if (hasCache('server')) {
+      return getCache('server');
+    } else {
+      return "<?php echo $_SERVER['HTTP_HOST']; ?>";
+    }
+  }
+
+  let server = getServer();
+  let ws = new WebSocket(`ws://${server}:8080`);
 
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
@@ -56,18 +67,14 @@ $auth = new AuthenticateModel();
   };
 
   function setServer() {
-  const newServer = prompt('Digite o endereço do novo servidor:');
-  if (newServer !== null) {
-    // Remove 'http://' or 'https://' from the beginning and '/' from the end
-    const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '');
-    server = formattedServer;
-    ws.close(); // Close the current connection
-    // Reconnect with the new server address
-    const newWs = new WebSocket(`ws://${server}:8080`);
-    // Update the ws variable to the new WebSocket instance
-    ws = newWs;
+    const newServer = prompt('Digite o endereço do novo servidor:');
+    if (newServer !== null) {
+      // Remove 'http://' or 'https://' from the beginning and '/' from the end
+      const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '');
+      setCache('server', formattedServer);
+      location.reload();
+    }
   }
-}
 
   function sendSocket(value) {
     const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
@@ -87,9 +94,6 @@ $auth = new AuthenticateModel();
     }
   }
 </script>
-<script src="assets/js/jquery-3.6.0.min.js"></script>
-<script src="assets/js/md5.min.js"></script>
-<script src="assets/js/javascript.js"></script>
 
 <style id="styleIndex">
 
