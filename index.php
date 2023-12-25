@@ -32,7 +32,8 @@ $auth = new AuthenticateModel();
     }
   });
 
-  const ws = new WebSocket(`ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8080`);
+  let server = "<?php echo $_SERVER['HTTP_HOST']; ?>";
+  const ws = new WebSocket(`ws://${server}:8080`);
 
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
@@ -53,6 +54,20 @@ $auth = new AuthenticateModel();
       location.reload();
     }
   };
+
+  function setServer() {
+    const newServer = prompt('Digite o endereço do novo servidor:');
+    if (newServer !== null) {
+      // Remove 'http://' or 'https://'
+      const formattedServer = newServer.replace(/^https?:\/\//, '');
+      server = formattedServer;
+      ws.close(); // Close the current connection
+      // Reconnect with the new server address
+      const newWs = new WebSocket(`ws://${server}:8080`);
+      // Update the ws variable to the new WebSocket instance
+      ws = newWs;
+    }
+  }
 
   function sendSocket(value) {
     const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
