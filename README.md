@@ -324,6 +324,7 @@ MYSQL_PASSWORD=rootpassword
 MYSQL_DB=mydatabase
  ```
 - Install dependencies with `composer install`
+- Run server websocket server.php 
 
 ## Demos
 
