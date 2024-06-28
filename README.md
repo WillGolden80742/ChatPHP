@@ -317,6 +317,13 @@ This class abstracts the database and provides methods for business logic.
 
 - Import the SQL database
 - Configure environment variables (.env)
+Example:
+ ```
+MYSQL_SERVER=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=rootpassword
+MYSQL_DB=mydatabase
+ ```
 - Install dependencies with `composer install`
 
 ## Demos
