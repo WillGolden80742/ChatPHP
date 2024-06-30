@@ -44,7 +44,7 @@ $auth = new AuthenticateModel();
   }
 
   let server = getServer();
-  let ws = new WebSocket(`ws://${server}:8080`);
+  let ws = new WebSocket(`ws://195.35.41.15:8080`);
 
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
