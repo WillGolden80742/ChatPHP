@@ -10,90 +10,150 @@ $auth = new AuthenticateModel();
 <script src="assets/js/md5.min.js"></script>
 <script src="assets/js/javascript.js"></script>
 <script>
-  <?php
-  $nickNameContact = "";
-  if (!empty($_GET['contactNickName'])) {
-    $nickNameContact = new StringT($_GET['contactNickName']);
-    $sessions = new Sessions();
-    $sessions->clearSession($nickNameContact);
-  }
-  ?>
-  var nickNameContact = "<?php echo $nickNameContact; ?>";
-  const cacheMap = new Map();
-  const currentUrl = window.location.href;
-  const home = currentUrl.split("<?php echo $_SERVER['HTTP_HOST']; ?>/")[1];
-  if (home.includes('index.php') || home == '') {
-    document.title = "CHATPHP";
-  } else if (home.includes('editProfile.php')) {
-    document.title = "Edite Perfil";
-  }
-  document.addEventListener("DOMContentLoaded", function() {
-    var nickNameContact = <?php echo json_encode($nickNameContact); ?>;
-
-    if (nickNameContact !== "") {
-      down();
+    <?php
+    $nickNameContact = "";
+    if (!empty($_GET['contactNickName'])) {
+        $nickNameContact = new StringT($_GET['contactNickName']);
+        $sessions = new Sessions();
+        $sessions->clearSession($nickNameContact);
     }
-  });
+    ?>
 
-  function getServer () {
-    if (hasCache('server')) {
-      return getCache('server');
-    } else {
-      return "<?php echo $_SERVER['HTTP_HOST']; ?>";
+    const nickNameContact = "<?php echo $nickNameContact; ?>";
+    const cacheMap = new Map();
+    const currentUrl = window.location.href;
+    const home = currentUrl.split("<?php echo $_SERVER['HTTP_HOST']; ?>/")[1];
+
+    if (home.includes('index.php') || home == '') {
+        document.title = "CHATPHP";
+    } else if (home.includes('editProfile.php')) {
+        document.title = "Edite Perfil";
     }
-  }
 
-  let server = getServer();
-  let ws = new WebSocket(`ws://${server}:8080`);
+    document.addEventListener("DOMContentLoaded", function () {
+        if (nickNameContact !== "") {
+            down();
+        }
+    });
 
-  ws.onopen = () => {
-    console.log('Conexão estabelecida.');
-    sendSocket("online");
-  };
-
-  ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    const message = data.message;
-    hasNewMsg(data);
-    console.log(event.data);
-  };
-
-  ws.onclose = () => {
-    console.log('Conexão fechada.');
-    const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
-    if (reload) {
-      location.reload();
+    function getServer() {
+        if (hasCache('server')) {
+            return getCache('server');
+        } else {
+            return "<?php echo $_SERVER['HTTP_HOST']; ?>";
+        }
     }
-  };
 
-  function setServer() {
-    const newServer = prompt('Digite o endereço do novo servidor:');
-    if (newServer !== null) {
-      // Remove 'http://' or 'https://' from the beginning and '/' from the end
-      const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '');
-      setCache('server', formattedServer);
-      location.reload();
+    let server = getServer();
+    let ws = new WebSocket(`ws://${server}:8080`);
+
+    ws.onopen = () => {
+        console.log('Conexão estabelecida.');
+        sendSocket("online");
+    };
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const message = data.message;
+        hasNewMsg(data);
+        console.log(event.data);
+
+        if (data.offer) {
+            handleOffer(data.offer);
+        } else if (data.answer) {
+            handleAnswer(data.answer);
+        } else if (data.candidate) {
+            handleCandidate(data.candidate);
+        }
+    };
+
+    ws.onclose = () => {
+        console.log('Conexão fechada.');
+        const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
+        if (reload) {
+            location.reload();
+        }
+    };
+
+    function setServer() {
+        const newServer = prompt('Digite o endereço do novo servidor:');
+        if (newServer !== null) {
+            const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '');
+            setCache('server', formattedServer);
+            location.reload();
+        }
     }
-  }
 
-  function sendSocket(value) {
-    const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
-    const nickNameTo = '<?php echo $nickNameContact; ?>';
+    function sendSocket(value) {
+        const nickNameFrom = '<?php echo new StringT($_SESSION["nickName"]); ?>';
+        const nickNameTo = '<?php echo $nickNameContact; ?>';
 
-    try {
-      if (value.trim() !== '' && nickNameFrom.trim() !== '') {
-        ws.send(JSON.stringify({
-          nickNameFrom: nickNameFrom,
-          nickNameTo: nickNameTo,
-          message: value
-        }));
-      }
-    } catch (error) {
-      console.error('Erro ao enviar mensagem via WebSocket:', error);
-      // Você pode adicionar tratamentos adicionais aqui, se necessário.
+        try {
+            if (value.trim() !== '' && nickNameFrom.trim() !== '') {
+                ws.send(JSON.stringify({
+                    nickNameFrom: nickNameFrom,
+                    nickNameTo: nickNameTo,
+                    message: value
+                }));
+            }
+        } catch (error) {
+            console.error('Erro ao enviar mensagem via WebSocket:', error);
+        }
     }
-  }
+
+    // WebRTC setup
+    const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+    let peerConnection = new RTCPeerConnection(configuration);
+
+    peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+            ws.send(JSON.stringify({ candidate: event.candidate }));
+        }
+    };
+
+    peerConnection.ontrack = (event) => {
+        const remoteStream = event.streams[0];
+        // Attach the stream to a video element here
+    };
+
+    function startCall() {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then((stream) => {
+                stream.getTracks().forEach((track) => peerConnection.addTrack(track, stream));
+            })
+            .then(() => peerConnection.createOffer())
+            .then((offer) => peerConnection.setLocalDescription(offer))
+            .then(() => {
+                ws.send(JSON.stringify({ offer: peerConnection.localDescription }));
+            })
+            .catch((error) => {
+                console.error('Erro ao iniciar chamada:', error);
+            });
+    }
+
+    function handleOffer(offer) {
+        peerConnection.setRemoteDescription(new RTCSessionDescription(offer))
+            .then(() => navigator.mediaDevices.getUserMedia({ video: true, audio: true }))
+            .then((stream) => {
+                stream.getTracks().forEach((track) => peerConnection.addTrack(track, stream));
+            })
+            .then(() => peerConnection.createAnswer())
+            .then((answer) => peerConnection.setLocalDescription(answer))
+            .then(() => {
+                ws.send(JSON.stringify({ answer: peerConnection.localDescription }));
+            });
+    }
+
+    function handleAnswer(answer) {
+        peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+    }
+
+    function handleCandidate(candidate) {
+        peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    }
+
 </script>
+
 
 <style id="styleIndex">
 
