@@ -44,7 +44,7 @@ $auth = new AuthenticateModel();
   }
 
   let server = getServer();
-  let ws = new WebSocket(`ws://${server}:8080`);
+  let ws = new WebSocket(`ws:vigilant-system-wjjr75pq44xfg5ww-8080.app.github.dev:8080`);
 
   ws.onopen = () => {
     console.log('Conexão estabelecida.');
