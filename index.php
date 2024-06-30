@@ -102,7 +102,7 @@ $auth = new AuthenticateModel();
 
 <?php
 
-echo "<div  class=\"header\"><h2>";
+echo "<div  class=\"header\"><h2>BATATA";
 echo "<a class='logout' href='logout.php' ><img src=\"Images/logout.svg\" /></a>";
 echo "<a class='back' onclick='toggle();' ><img src=\"Images/left-arrow.svg\" /></a>";
 if (!empty($nickNameContact)) {
