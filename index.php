@@ -68,7 +68,6 @@ $auth = new AuthenticateModel();
   function setServer() {
     const newServer = prompt('Digite o endereço do novo servidor:');
     if (newServer !== null) {
-      // Remove 'http://' or 'https://' from the beginning and '/' from the end
       const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '')+"/";
       setCache('server', formattedServer);
       location.reload();
@@ -89,7 +88,6 @@ $auth = new AuthenticateModel();
       }
     } catch (error) {
       console.error('Erro ao enviar mensagem via WebSocket:', error);
-      // Você pode adicionar tratamentos adicionais aqui, se necessário.
     }
   }
 </script>
