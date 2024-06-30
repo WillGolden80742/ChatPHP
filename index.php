@@ -69,8 +69,8 @@ $auth = new AuthenticateModel();
     const newServer = prompt('Digite o endereço do novo servidor:');
     if (newServer !== null) {
       // Remove 'http://' or 'https://' from the beginning and '/' from the end
-      const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '');
-      setCache('server', formattedServer+"/");
+      const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '')+"/";
+      setCache('server', formattedServer);
       location.reload();
     }
   }
