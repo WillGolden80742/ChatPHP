@@ -15,12 +15,12 @@ class AuthenticateModel
     function checkLogin(StringT $nick, $pass)
     {
         $connection = $this->conFactoryPDO;
-        $query = $connection->query("SELECT * FROM clientes WHERE nickName = :nick AND senha = :pass");
+        $query = $connection->query("SELECT * FROM clientes WHERE LOWER(nickName) = LOWER(:nick) AND senha = :pass");
         $query->bindParam(':nick', $nick, PDO::PARAM_STR);
         $query->bindParam(':pass', $pass, PDO::PARAM_STR);
         return $connection->execute($query)->rowCount();
     }
-
+    
 
     function signUp($name, StringT $nick, $pass)
     {
@@ -35,10 +35,10 @@ class AuthenticateModel
     function checkNick(StringT $nick)
     {
         $connection = $this->conFactoryPDO;
-        $query = $connection->query("SELECT * FROM clientes WHERE nickName = :nick");
+        $query = $connection->query("SELECT * FROM clientes WHERE LOWER(nickName) = LOWER(:nick)");
         $query->bindParam(':nick', $nick, PDO::PARAM_STR);
         return $connection->execute($query)->rowCount();
-    }
+    }    
 
     function createToken()
     {
