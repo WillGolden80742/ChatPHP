@@ -77,7 +77,9 @@ class Message
             '/open\.spotify\.com\/playlist\//i' => 'playlist',
             '/open\.spotify\.com\\/[^\/]+\/playlist\//i' => 'playlist',
             '/open\.spotify\.com\/[^\/]+\/album\//i' => 'album',
-            '/open\.spotify\.com\/album\//i' => 'album'
+            '/open\.spotify\.com\/album\//i' => 'album',
+            '/open\.spotify\.com\/[^\/]+\/artist\//i' => 'artist', 
+            '/open\.spotify\.com\/artist\//i' => 'artist',      
         ];
 
         // Check if any pattern matches the URL
@@ -248,6 +250,8 @@ class Message
             '/open\.spotify\.com\\/[^\/]+\/playlist\//i',
             '/open\.spotify\.com\/[^\/]+\/album\//i',
             '/open\.spotify\.com\/album\//i',
+            '/open\.spotify\.com\/[^\/]+\/artist\//i',
+            '/open\.spotify\.com\/artist\//i'  
         ];
 
         foreach ($patterns as $pattern) {
