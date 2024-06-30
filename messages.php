@@ -4,7 +4,7 @@ $userNickName = "";
 $contactNickName = new StringT("");
 $userNickName = new StringT($_SESSION['nickName']);
 if (!empty($_GET['contactNickName'])) {
-  $contactNickName = new StringT($_GET['contactNickName']);
+  $contactNickName = new StringT(strtolower($_GET['contactNickName']));
 }
 ?>
 <style id="styleMsg">
