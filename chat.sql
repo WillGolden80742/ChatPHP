@@ -99,7 +99,7 @@ INSERT INTO `clientes` (`nomeCliente`, `nickName`, `senha`) VALUES
 ('Alyssom', 'ally77', '0e3a1b6281353561aa19e3423d9737168e4247aae6194a3c366d09ef75be3e26a814a61420974cfc99534a79e5114af4d6aee63028a2203e2d06d4e3fe08dadd'),
 ('Гуммо', 'gvmmo', '73ff16a44c59b42ffaaedebd4958b46c31b0081690fe4f7c2eddbb4afc17929d50daab5a17157d38d8d2e3e8f29808f8a8fa6ec97b99337c4b852c1bd56a3368'),
 ('Eloa', 'lola', '4b92d552c953acd11c6370b4f107518c00df07e6ca99269a1dae70bdb7d1747966e1fd25c28e2d265a46851b02d3ef36ceb131d6c70b7e51ddb26aed92a9415c'),
-('Уилл Голден', 'willGolden', 'a8d853d9087fe946983f10db963a28488a1ee6474a0684ad29111d5c948b431b5fa0d1f5a33335ebf0615fc3c540ecaec687783f62ff58c48ed6cb2badb8f4e4');
+('Уилл Голден', 'willGolden', 'd6267868582bfe4eda5e83b57dd9faf72188000ab78b2b94f5bdf0f21774284a54d1bcb5fe84dc8979e086c6749bb5e8228f7ceead35adbe1333596f709d589e');
 
 -- --------------------------------------------------------
 
