@@ -61,10 +61,8 @@ $auth = new AuthenticateModel();
 
   ws.onclose = () => {
     console.log('Conexão fechada.');
-    const reload = confirm('A conexão com o servidor falhou. Deseja recarregar a página para tentar novamente?');
-    if (reload) {
-      location.reload();
-    }
+    const reload = confirm('A conexão com o servidor falhou.');
+    setServer()
   };
 
   function setServer() {
@@ -72,7 +70,7 @@ $auth = new AuthenticateModel();
     if (newServer !== null) {
       // Remove 'http://' or 'https://' from the beginning and '/' from the end
       const formattedServer = newServer.replace(/^(https?:\/\/)|(\/)$/g, '');
-      setCache('server', formattedServer);
+      setCache('server', formattedServer+"/");
       location.reload();
     }
   }
