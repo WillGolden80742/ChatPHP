@@ -39,6 +39,7 @@ $auth = new AuthenticateModel();
     if (hasCache('server')) {
       return getCache('server');
     } else {
+      setServer();
       return "<?php echo $_SERVER['HTTP_HOST']; ?>";
     }
   }
