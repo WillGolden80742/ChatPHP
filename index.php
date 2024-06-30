@@ -61,7 +61,7 @@ $auth = new AuthenticateModel();
 
   ws.onclose = () => {
     console.log('Conexão fechada.');
-    const reload = confirm('A conexão com o servidor websocket falhou');
+    const reload = confirm('A conexão com o servidor websocket falhou.\nPressione \"OK\" para inserir novo servidor');
     if (reload) {
       setServer()
     }
