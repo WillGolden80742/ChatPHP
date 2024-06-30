@@ -120,7 +120,7 @@
     switch ($action) {
         case 'login':
             if (!empty($_POST["nickLogin"]) && !empty($_POST["passLogin"])) {
-                $nick = $_POST["nickLogin"];
+                $nick = strtolower($_POST["nickLogin"]);
                 $pass = $_POST["passLogin"];
                 $user->login(new StringT($nick), $pass);
                 echo "<script>showLogin();</script>";
@@ -128,7 +128,7 @@
             break;
         case 'signUp':
             if (!empty($_POST["name"]) && !empty($_POST["nick"]) && !empty($_POST["pass"]) && !empty($_POST["passConfirmation"])) {
-                $user->signUp($_POST["name"], $_POST["nick"], $_POST["pass"], $_POST["passConfirmation"]);
+                $user->signUp($_POST["name"], strtolower($_POST["nick"]), $_POST["pass"], $_POST["passConfirmation"]);
                 echo "<script>showSignUp();</script>";
             }
             break;

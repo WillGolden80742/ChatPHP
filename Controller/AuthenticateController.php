@@ -11,7 +11,7 @@ class AuthenticateController
     function login(StringT $nick, $pass)
     {
         if ($this->checkLogin($nick, $pass)) {
-            $_SESSION['nickName'] = strtolower($nick);
+            $_SESSION['nickName'] = $nick;
             $this->authModel->createToken();
             header("Location: index.php");
             die();
@@ -22,7 +22,7 @@ class AuthenticateController
 
     function checkLogin(StringT $nick, $pass)
     {
-        $result = $this->authModel->checkLogin($nick, $this->encrypt(strtolower($nick) . $pass));
+        $result = $this->authModel->checkLogin($nick, $this->encrypt($nick . $pass));
         if (($result) > 0) {
             return true;
         } else {
@@ -38,7 +38,7 @@ class AuthenticateController
         $passCertification = $this->passCertification($pass, $passConfirmation);
 
         if ($nameCertification === "" && $nickCertification === "" && $passCertification === "") {
-            if ($this->authModel->signUp($name, new StringT(strtolower($nick)), $this->encrypt(strtolower($nick) . $pass))) {
+            if ($this->authModel->signUp($name, new StringT($nick), $this->encrypt($nick . $pass))) {
                 $this->login(new StringT($nick), $pass);
             }
         } else {
