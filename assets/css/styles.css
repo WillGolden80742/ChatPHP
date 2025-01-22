@@ -526,6 +526,9 @@
     animation-delay: 0.25s;
   }
 
+  .inputSubmit, .inputPassword, .inputText, .inputNick .text {
+    color: black;
+  }
 
   ::-webkit-scrollbar {
     width: 20px;
