@@ -29,7 +29,7 @@ class Chat implements MessageComponentInterface
     public function onMessage(ConnectionInterface $from, $msg)
     {
         $data = json_decode($msg, true);
-        $nickNameFrom = $data['nickNameFrom'];
+        $nickNameFrom = strtolower($data['nickNameFrom']); // Convert to lowercase
 
         // Check message rate limit
         if (!$this->isMessageAllowed($nickNameFrom)) {
@@ -38,12 +38,12 @@ class Chat implements MessageComponentInterface
 
         $this->nickNameMap[$nickNameFrom] = $from;
         if (isset($data['nickNameFrom']) && isset($data['nickNameTo']) && isset($data['message'])) {
-            $nickNameTo = $data['nickNameTo'];
+            $nickNameTo = strtolower($data['nickNameTo']); // Convert to lowercase
             $message = $data['message'];
             if (isset($this->nickNameMap[$nickNameTo])) {
                 $client = $this->nickNameMap[$nickNameTo];
                 $client->send(json_encode([
-                    'from' => $nickNameFrom,
+                    'from' => $data['nickNameFrom'], // Send original case for display
                     'message' => $message
                 ]));
             }
@@ -70,6 +70,19 @@ class Chat implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn)
     {
         $this->clients->detach($conn);
+
+        // Remove from nickNameMap if present
+        $nickNameToRemove = null;
+        foreach ($this->nickNameMap as $nickName => $client) {
+            if ($client === $conn) {
+                $nickNameToRemove = $nickName;
+                break;
+            }
+        }
+        if ($nickNameToRemove !== null) {
+            unset($this->nickNameMap[$nickNameToRemove]);
+        }
+
         echo "Conexão {$conn->resourceId} foi fechada\n";
     }
 
