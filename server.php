@@ -29,24 +29,30 @@ class Chat implements MessageComponentInterface
     public function onMessage(ConnectionInterface $from, $msg)
     {
         $data = json_decode($msg, true);
-        $nickNameFrom = $data['nickNameFrom'];
 
-        // Check message rate limit
+        if (!isset($data['nickNameFrom'], $data['nickNameTo'], $data['message'])) {
+            return; // Mensagem inválida, ignorar
+        }
+
+        $nickNameFrom = strtolower($data['nickNameFrom']); // Converter para minúsculas
+        $nickNameTo = strtolower($data['nickNameTo']);     // Converter para minúsculas
+        $message = $data['message'];
+
+        // Verificar limite de mensagens
         if (!$this->isMessageAllowed($nickNameFrom)) {
             return;
         }
 
+        // Mapear conexão ao apelido
         $this->nickNameMap[$nickNameFrom] = $from;
-        if (isset($data['nickNameFrom']) && isset($data['nickNameTo']) && isset($data['message'])) {
-            $nickNameTo = $data['nickNameTo'];
-            $message = $data['message'];
-            if (isset($this->nickNameMap[$nickNameTo])) {
-                $client = $this->nickNameMap[$nickNameTo];
-                $client->send(json_encode([
-                    'from' => $nickNameFrom,
-                    'message' => $message
-                ]));
-            }
+
+        // Verificar se o destinatário está conectado
+        if (isset($this->nickNameMap[$nickNameTo])) {
+            $client = $this->nickNameMap[$nickNameTo];
+            $client->send(json_encode([
+                'from' => $nickNameFrom, // Apelido já em minúsculas
+                'message' => $message
+            ]));
         }
     }
 
@@ -70,6 +76,19 @@ class Chat implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn)
     {
         $this->clients->detach($conn);
+
+        // Remover do nickNameMap se presente
+        $nickNameToRemove = null;
+        foreach ($this->nickNameMap as $nickName => $client) {
+            if ($client === $conn) {
+                $nickNameToRemove = $nickName;
+                break;
+            }
+        }
+        if ($nickNameToRemove !== null) {
+            unset($this->nickNameMap[$nickNameToRemove]);
+        }
+
         echo "Conexão {$conn->resourceId} foi fechada\n";
     }
 
