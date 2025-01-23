@@ -2,13 +2,11 @@
 include 'Controller/AuthenticateController.php';
 include 'Controller/Sessions.php';
 include 'Controller/Message.php';
-
 class UsersModel
 {
     private $conFactory;
     private $conFactoryPDO;
     private $auth;
-
     function __construct()
     {
         $this->conFactory = new ConnectionFactory();
@@ -17,9 +15,10 @@ class UsersModel
         $this->auth->isLogged();
     }
 
+
     function uploadFile($file, $msg, $nickName, $contactNickName)
     {
-        if (strcasecmp($contactNickName, $nickName) !== 0) {
+        if (strcmp($contactNickName, $nickName) !== 0) {
             if (!empty($msg)) {
                 $this->createMessage($msg, new StringT($contactNickName), new StringT($nickName));
             } else {
@@ -47,14 +46,14 @@ class UsersModel
                 }
 
                 // Verificar se existe um anexo referenciando a um arquivo Idmessage que pertença ao MsgTo ($contactNickName)
-                $query = $connection->query("SELECT anexoId FROM anexo WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE LOWER(MsgTo) = LOWER(:msgTo))");
+                $query = $connection->query("SELECT anexoId FROM anexo WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE MsgTo = :msgTo)");
                 $query->bindParam(':arquivo', $nomeHash);
                 $query->bindParam(':msgTo', $contactNickName);
                 $connection->execute($query);
 
                 if ($query->rowCount() > 0) {
                     // Atualizar o anexo existente com o ID da última mensagem enviada
-                    $query = $connection->query("UPDATE anexo SET mensagem = :mensagem WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE LOWER(MsgTo) = LOWER(:msgTo))");
+                    $query = $connection->query("UPDATE anexo SET mensagem = :mensagem WHERE arquivo = :arquivo AND mensagem IN (SELECT Idmessage FROM messages WHERE MsgTo = :msgTo)");
                     $query->bindParam(':mensagem', $row['LastID']);
                     $query->bindParam(':arquivo', $nomeHash);
                     $query->bindParam(':msgTo', $contactNickName);
@@ -85,6 +84,7 @@ class UsersModel
         $query->bindParam(':nomeHash', $nomeHash, PDO::PARAM_STR);
         $resultado = $connection->execute($query)->fetchAll();
 
+
         foreach ($resultado as $r) {
             return $r['arquivo'];
         }
@@ -96,10 +96,10 @@ class UsersModel
     {
         // Recomendado uso de prepare statement 
         $connection = $this->conFactoryPDO;
-        $query = $connection->query("DELETE FROM profilepicture WHERE LOWER(clienteId) = LOWER(:nick)");
+        $query = $connection->query("DELETE FROM profilepicture WHERE clienteId = :nick");
         $query->bindParam(':nick', $nick, PDO::PARAM_STR);
         $connection->execute($query);
-        $query = $connection->query("INSERT INTO profilepicture (clienteId,picture,format) VALUES (LOWER(:nick),'" . $pic . "',:format)");
+        $query = $connection->query("INSERT INTO profilepicture (clienteId,picture,format) VALUES (:nick,'" . $pic . "',:format)");
         $query->bindParam(':nick', $nick, PDO::PARAM_STR);
         $query->bindParam(':format', $format, PDO::PARAM_STR);
         $connection->execute($query);
@@ -109,7 +109,7 @@ class UsersModel
     {
         // Recomendado uso de prepare statement 
         $connection = $this->conFactoryPDO;
-        $query = $connection->query("UPDATE clientes SET nickName = LOWER(:newNick), nomeCliente = :name, senha = :pass WHERE LOWER(nickName) = LOWER(:nick) ");
+        $query = $connection->query("UPDATE clientes SET nickName = :newNick, nomeCliente = :name, senha = :pass WHERE nickName = :nick ");
         $query->bindParam(':newNick', $newNick);
         $query->bindParam(':name', $name);
         $query->bindParam(':pass', $pass);
@@ -121,17 +121,18 @@ class UsersModel
     {
         // Recomendado uso de prepare statement 
         $connection = $this->conFactoryPDO;
-        $query = $connection->query("UPDATE clientes SET senha = :newPass WHERE LOWER(nickName) = LOWER(:nick) ");
+        $query = $connection->query("UPDATE clientes SET senha = :newPass WHERE nickName = :nick ");
         $query->bindParam(':newPass', $newPass);
         $query->bindParam(':nick', $nick);
         return $connection->execute($query);
     }
 
+
     function name(StringT $nick)
     {
         // Recomendado uso de prepare statement 
         $connection = $this->conFactoryPDO;
-        $query = $connection->query("SELECT nomeCliente FROM clientes WHERE LOWER(nickName) = LOWER(:user) ");
+        $query = $connection->query("SELECT nomeCliente FROM clientes WHERE nickName = :user ");
         $query->bindParam(':user', $nick, PDO::PARAM_STR);
         return $connection->execute($query)->fetch(PDO::FETCH_ASSOC);
     }
@@ -140,7 +141,7 @@ class UsersModel
     {
         // Recomendado uso de prepare statement 
         $connection = $this->conFactoryPDO;
-        $query = $connection->query("SELECT * FROM profilepicture WHERE LOWER(clienteId) = LOWER(:user)");
+        $query = $connection->query("SELECT * FROM profilepicture WHERE clienteId = :user");
         $query->bindParam(':user', $contactNickName, PDO::PARAM_STR);
         return $connection->execute($query)->fetchAll();
     }
@@ -148,13 +149,13 @@ class UsersModel
     function searchContact(StringT $nick)
     {
         // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call searchContato(LOWER('" . $nick . "'))");
+        return $this->conFactory->query("call searchContato('" . $nick . "')");
     }
 
     function contacts(StringT $nick)
     {
         // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call contatos(LOWER('" . $nick . "'))");
+        return $this->conFactory->query("call contatos('" . $nick . "')");
     }
     // MESSAGES 
 
@@ -162,58 +163,58 @@ class UsersModel
     {
         $connection = $this->conFactoryPDO;
         // Excluir entrada em new_messages onde sender é $contactNickName e receiver é $nickName
-        $deleteQuery = $connection->query("DELETE FROM new_messages WHERE LOWER(sender) = LOWER(:contactNickName) AND LOWER(receiver) = LOWER(:nickName)");
+        $deleteQuery = $connection->query("DELETE FROM new_messages WHERE sender = :contactNickName AND receiver = :nickName");
         $deleteQuery->bindParam(':contactNickName', $contactNickName);
         $deleteQuery->bindParam(':nickName', $nickName);
         $connection->execute($deleteQuery);
         // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call messagePaginated(LOWER('" . $nickName . "'),LOWER('" . $contactNickName . "'),$pag)");
+        return $this->conFactory->query("call messagePaginated('" . $nickName . "','" . $contactNickName . "',$pag)");
     }
 
     function lastMessage(StringT $nickName, StringT $contactNickName)
     {
         // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call  lastMessage(LOWER('" . $nickName . "'),LOWER('" . $contactNickName . "'))");
+        return $this->conFactory->query("call  lastMessage('" . $nickName . "','" . $contactNickName . "')");
     }
 
     function messageByID(StringT $nickName, StringT $contactNickName, StringT $id)
     {
         // Recomendado uso de prepare statement 
-        return $this->conFactory->query("call  messageByID(LOWER('" . $nickName . "'),LOWER('" . $contactNickName . "'), '".$id."')");
+        return $this->conFactory->query("call  messageByID('" . $nickName . "','" . $contactNickName . "', '".$id."')");
     }
 
     function lasIdMessage($nick, $contactNickName)
     {
-        return $this->conFactory->query("SELECT MAX(messages.Idmessage) as LastID From messages WHERE LOWER(MsgFrom) = LOWER('$nick') AND LOWER(MsgTo) = LOWER('$contactNickName')");
+        return $this->conFactory->query("SELECT MAX(messages.Idmessage) as LastID From messages WHERE MsgFrom = '$nick' AND MsgTo = '$contactNickName'");
     }
 
     function createMessage($msg, StringT $contactNickName, StringT $nick)
     {
-        if (strcasecmp($contactNickName, $nick) !== 0) {
+        if (strcmp($contactNickName, $nick) !== 0) {
             $connection = $this->conFactoryPDO;
     
             // Insert message into the 'messages' table
-            $messageQuery = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, LOWER(:nick), LOWER(:contactNickName))");
+            $messageQuery = $connection->query("INSERT INTO messages (Messages, MsgFrom, MsgTo) VALUES (:msg, :nick, :contactNickName)");
             $messageQuery->bindParam(':msg', $msg);
             $messageQuery->bindParam(':nick', $nick);
             $messageQuery->bindParam(':contactNickName', $contactNickName);
             $connection->execute($messageQuery);
     
             // Check if a row already exists in 'new_messages' table
-            $checkQuery = $connection->query("SELECT * FROM new_messages WHERE LOWER(sender) = LOWER(:nick) AND LOWER(receiver) = LOWER(:contactNickName)");
+            $checkQuery = $connection->query("SELECT * FROM new_messages WHERE sender = :nick AND receiver = :contactNickName");
             $checkQuery->bindParam(':nick', $nick);
             $checkQuery->bindParam(':contactNickName', $contactNickName);
             $connection->execute($checkQuery);
     
             if ($checkQuery->rowCount() > 0) {
                 // If a row exists, update the message_count
-                $updateQuery = $connection->query("UPDATE new_messages SET message_count = message_count + 1 WHERE LOWER(sender) = LOWER(:nick) AND LOWER(receiver) = LOWER(:contactNickName)");
+                $updateQuery = $connection->query("UPDATE new_messages SET message_count = message_count + 1 WHERE sender = :nick AND receiver = :contactNickName");
                 $updateQuery->bindParam(':nick', $nick);
                 $updateQuery->bindParam(':contactNickName', $contactNickName);
                 $connection->execute($updateQuery);
             } else {
                 // If no row exists, create a new row
-                $insertQuery = $connection->query("INSERT INTO new_messages (sender, receiver) VALUES (LOWER(:nick), LOWER(:contactNickName))");
+                $insertQuery = $connection->query("INSERT INTO new_messages (sender, receiver) VALUES (:nick, :contactNickName)");
                 $insertQuery->bindParam(':nick', $nick);
                 $insertQuery->bindParam(':contactNickName', $contactNickName);
                 $connection->execute($insertQuery);
@@ -225,7 +226,7 @@ class UsersModel
         $connection = $this->conFactoryPDO;
     
         // Select new messages from table where receiver is $myNickName
-        $getMessagesQuery = $connection->query("SELECT message_count FROM new_messages WHERE LOWER(sender) = LOWER(:contactNickName) AND LOWER(receiver) = LOWER(:myNickName)");
+        $getMessagesQuery = $connection->query("SELECT message_count FROM new_messages WHERE sender = :contactNickName AND receiver = :myNickName");
         $getMessagesQuery->bindParam(':contactNickName', $contactNickName);
         $getMessagesQuery->bindParam(':myNickName', $myNickName);
         $connection->execute($getMessagesQuery);
@@ -258,8 +259,9 @@ class UsersModel
         }
 
         // Apagar a mensagem
-        $this->conFactory->query("DELETE FROM messages WHERE Idmessage = " . $id . " AND LOWER(MsgFrom) = LOWER('" . $nick . "') AND LOWER(MsgTo) = LOWER('" . $contactNickName . "')");
+        $this->conFactory->query("DELETE FROM messages WHERE Idmessage = " . $id . " AND MsgFrom = '" . $nick . "' AND MsgTo = '" . $contactNickName . "'");
     }
+
 
     function getNumberOfAttachments($lasIdMessage)
     {
