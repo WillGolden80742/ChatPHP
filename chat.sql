@@ -1,48 +1,32 @@
+
 DELIMITER $$
+--
+-- Procedimentos
+--
+CREATE PROCEDURE `contatos` (IN `userNickName` VARCHAR(20))  NO SQL select clientes.nickName as nickNameContato, clientes.nomeCliente AS Contato, messages.Messages, max(messages.date) as DateFormated FROM clientes INNER JOIN messages on messages .MsgFrom = clientes.nickName or messages.MsgTo = clientes.nickName WHERE (messages.MsgFrom = userNickName AND clientes.nickName != userNickName) OR  (messages.MsgTo = userNickName AND clientes.nickName != userNickName) GROUP BY nickNameContato ORDER BY DateFormated DESC$$
 
-CREATE PROCEDURE `contatos` (IN `userNickName` VARCHAR(20))
-NO SQL
-SELECT LOWER(clientes.nickName) as nickNameContato, LOWER(clientes.nomeCliente) AS Contato, messages.Messages, MAX(messages.date) as DateFormated
-FROM clientes
-INNER JOIN messages ON LOWER(messages.MsgFrom) = LOWER(clientes.nickName) OR LOWER(messages.MsgTo) = LOWER(clientes.nickName)
-WHERE (LOWER(messages.MsgFrom) = LOWER(userNickName) AND LOWER(clientes.nickName) != LOWER(userNickName))
-   OR (LOWER(messages.MsgTo) = LOWER(userNickName) AND LOWER(clientes.nickName) != LOWER(userNickName))
-GROUP BY nickNameContato
-ORDER BY DateFormated DESC$$
+CREATE PROCEDURE `deleteMessage` (IN `idMsg` INT(20), IN `nickName` VARCHAR(20))   DELETE FROM messages WHERE messages.Idmessage = idMsg and messages.MsgFrom = nickName$$
 
-CREATE PROCEDURE `deleteMessage` (IN `idMsg` INT(20), IN `nickName` VARCHAR(20))
-NO SQL
-DELETE FROM messages
-WHERE messages.Idmessage = idMsg AND LOWER(messages.MsgFrom) = LOWER(nickName)$$
-
-CREATE PROCEDURE `lastMessage` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))
-NO SQL
-BEGIN
+CREATE PROCEDURE `lastMessage` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL BEGIN
     SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
     FROM messages m
     LEFT JOIN anexo an ON m.Idmessage = an.mensagem
-    WHERE (LOWER(m.MsgFrom) = LOWER(contactNickName) AND LOWER(m.MsgTo) = LOWER(nickName))
-       OR (LOWER(m.MsgFrom) = LOWER(nickName) AND LOWER(m.MsgTo) = LOWER(contactNickName))
+    WHERE (m.MsgFrom = contactNickName AND m.MsgTo = nickName) OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName)
     ORDER BY m.date DESC
     LIMIT 1;
 END$$
 
-CREATE PROCEDURE `messageByID` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20), IN `messageId` INT)
-NO SQL
-BEGIN
+CREATE PROCEDURE `messageByID` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20), IN `messageId` INT)  NO SQL BEGIN
     SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
     FROM messages m
     LEFT JOIN anexo an ON m.Idmessage = an.mensagem
-    WHERE ((LOWER(m.MsgFrom) = LOWER(contactNickName) AND LOWER(m.MsgTo) = LOWER(nickName))
-        OR (LOWER(m.MsgFrom) = LOWER(nickName) AND LOWER(m.MsgTo) = LOWER(contactNickName)))
+    WHERE ((m.MsgFrom = contactNickName AND m.MsgTo = nickName) OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName))
         AND m.Idmessage = messageId
     ORDER BY m.date DESC
     LIMIT 1;
 END$$
 
-CREATE PROCEDURE `messagePaginated` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20), IN `partNumber` INT)
-NO SQL
-BEGIN
+CREATE PROCEDURE `messagePaginated` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20), IN `partNumber` INT)  NO SQL BEGIN
     DECLARE startIdx INT;
     DECLARE pageSize INT;
     
@@ -55,27 +39,19 @@ BEGIN
            an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
     FROM messages m
     LEFT JOIN anexo an ON m.Idmessage = an.mensagem
-    WHERE (LOWER(m.MsgFrom) = LOWER(contactNickName) AND LOWER(m.MsgTo) = LOWER(nickName))
-       OR (LOWER(m.MsgFrom) = LOWER(nickName) AND LOWER(m.MsgTo) = LOWER(contactNickName))
+    WHERE (m.MsgFrom = contactNickName AND m.MsgTo = nickName)
+       OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName)
     ORDER BY m.date DESC -- Ordena por data mais recente primeiro
     LIMIT startIdx, pageSize;
 END$$
 
-CREATE PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))
-NO SQL
-SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
+CREATE PROCEDURE `messages` (IN `nickName` VARCHAR(20), IN `contactNickName` VARCHAR(20))  NO SQL SELECT m.*, DATE_FORMAT(m.date, '%H:%i') AS HourMsg, an.nome AS nome_anexo, an.arquivo AS arquivo_anexo
 FROM messages m
 LEFT JOIN anexo an ON m.Idmessage = an.mensagem
-WHERE (LOWER(m.MsgFrom) = LOWER(contactNickName) AND LOWER(m.MsgTo) = LOWER(nickName))
-   OR (LOWER(m.MsgFrom) = LOWER(nickName) AND LOWER(m.MsgTo) = LOWER(contactNickName))
+WHERE (m.MsgFrom = contactNickName AND m.MsgTo = nickName) OR (m.MsgFrom = nickName AND m.MsgTo = contactNickName)
 ORDER BY DATE_FORMAT(m.date, '%Y/%m/%d %H:%i:%s') ASC$$
 
-CREATE PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))
-NO SQL
-SELECT LOWER(clientes.nomeCliente) as Contato, LOWER(clientes.nickName) as nickNameContato
-FROM clientes
-WHERE LOWER(clientes.nickName) LIKE CONCAT("%", LOWER(contactNickName), "%")
-   OR LOWER(clientes.nomeCliente) LIKE CONCAT("%", LOWER(contactNickName), "%")$$
+CREATE PROCEDURE `searchContato` (IN `contactNickName` VARCHAR(20))   SELECT clientes.nomeCliente as Contato, clientes.nickName as nickNameContato FROM clientes WHERE clientes.nickName LIKE CONCAT("%",contactNickName,"%") OR clientes.nomeCliente LIKE CONCAT("%",contactNickName,"%")$$
 
 DELIMITER ;
 

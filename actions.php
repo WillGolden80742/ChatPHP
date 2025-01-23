@@ -25,7 +25,7 @@ switch ($action) {
     case 'deleteMessage':
         include 'Controller/UsersController.php';
         $user = new UsersController();
-        $user->deleteMessage(new StringT($_POST['id']), new StringT($_POST['nickNameContact']));
+        echo json_encode($user->deleteMessage(new StringT($_POST['id']), new StringT($_POST['nickNameContact'])));
         break;
     case 'downloadFile':
         include 'Controller/UsersController.php';
